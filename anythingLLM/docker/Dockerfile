@@ -52,14 +52,16 @@ RUN cd ./frontend/ && yarn install && yarn cache clean
 # Install server dependencies
 FROM base as server-deps
 COPY ./server/package.json ./server/yarn.lock ./server/
-RUN cd ./server/ && yarn install --production && yarn cache clean && \
+RUN --mount=type=cache,target=/root/.cache/yarn cd ./server/ && \
+    yarn install --production && yarn cache clean && \
     rm /app/server/node_modules/vectordb/x86_64-apple-darwin.node && \
     rm /app/server/node_modules/vectordb/aarch64-apple-darwin.node
 
 # Build the frontend
 FROM frontend-deps as build-stage
-COPY ./frontend/ ./frontend/
-RUN cd ./frontend/ && yarn build && yarn cache clean
+# to avoid permission errors with bundleinspector.html 
+COPY --chown=anythingllm:anythingllm ./frontend/ ./frontend/ 
+RUN --mount=type=cache,target=/root/.cache/yarn cd ./frontend/ && yarn build && yarn cache clean
 
 # Setup the server
 FROM server-deps as production-stage
@@ -72,10 +74,14 @@ COPY --from=build-stage /app/frontend/dist ./server/public
 COPY --chown=anythingllm:anythingllm ./collector/ ./collector/
 
 # Install collector dependencies
-RUN cd /app/collector && \
+
+RUN --mount=type=cache,target=/tmp/pip_cache cd /app/collector && \
     python3 -m virtualenv v-env && \
     . v-env/bin/activate && \
-    pip install --no-cache-dir -r requirements.txt
+    pip install -r requirements.txt && \
+    # pip install --no-cache-dir -r requirements.txt
+    rm -rf /tmp/pip_cache/*
+USER anythingllm
 
 # Migrate and Run Prisma against known schema
 RUN cd ./server && npx prisma generate --schema=./prisma/schema.prisma

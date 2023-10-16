@@ -1,0 +1,36 @@
+version: '3.9'
+
+name: 3lm
+
+services:
+  llama:
+    container_name: llama-cont
+    image: llama:v1
+    platform: linux/amd64
+    environment:
+      HOST: "0.0.0.0"
+      PORT: "3003"
+      # CMAKE_ARGS: "-DLLAMA_BLAS=ON -DLLAMA_BLAS_VENDOR=OpenBLAS"
+      # FORCE_CMAKE: 1
+
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      args:
+        DOCKER_BUILDKIT: 1  # enable buildkit
+    volumes:
+      - "../../model-store:/app/model-store" 
+    ports:
+      - "3003:3003"
+    ulimits:
+      memlock:
+        soft: 17179869184
+        hard: 17179869184      
+        # soft: 8589934592
+        # hard: 8589934592
+    networks:
+      - llm-net
+networks:
+  llm-net:
+    name: llm-net
+    external: true

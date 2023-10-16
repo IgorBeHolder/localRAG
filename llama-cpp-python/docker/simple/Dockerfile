@@ -1,11 +1,4 @@
-# Define the image argument and provide a default value
-ARG IMAGE=python:3-slim-bullseye
-
-# Use the image as specified
-FROM ${IMAGE}
-
-# Re-declare the ARG after FROM
-ARG IMAGE
+FROM python:3.11-slim-bullseye
 
 # Update and upgrade the existing packages 
 RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends \
@@ -14,21 +7,25 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
     ninja-build \
     libopenblas-dev \
     build-essential
+# install git to clone the repo (ac=void submodules issue)
+RUN apt-get update && apt-get install -y git
 
 RUN mkdir /app
+RUN git clone https://github.com/abetlen/llama-cpp-python.git /app
 WORKDIR /app
-COPY . /app
+RUN git submodule update --init --recursive
 
 RUN python3 -m pip install --upgrade pip
 
-RUN make deps && make build && make clean
+# Set the environment variable (declared in docker-compose.yml)
+ENV CMAKE_ARGS=${CMAKE_ARGS} 
+RUN --mount=type=cache,target=/root/.cache/pip python3 -m pip install ".[all]" &&\
+    chmod -R 777 /root/.cache/pip && \
+    rm -rf /root/.cache/pip/*
+    # RUN --mount=type=cache,target=/root/.cache/pip python3 -m pip install -e ".[all]"
 
-# Set environment variable for the host
-ENV HOST=0.0.0.0
-ENV PORT=8000
+EXPOSE 3003
 
-# Expose a port for the server
-EXPOSE 8000
+COPY --chmod=755 run.sh /run.sh
+CMD ["/bin/sh", "/run.sh"]
 
-# Run the server start script
-CMD ["/bin/sh", "/app/docker/simple/run.sh"]

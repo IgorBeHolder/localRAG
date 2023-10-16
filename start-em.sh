@@ -17,8 +17,8 @@ echo "Starting the embedding model server..."
 # docker ps -a | grep embed-llm | awk '{print $1}' | xargs docker rm
 cd embed-server &&
 git checkout main  &&
-# docker-compose up --build
-docker-compose up 
+docker-compose up --build
+# docker-compose up 
 ) 
 
 wait

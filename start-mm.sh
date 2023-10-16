@@ -12,9 +12,9 @@
 (
 echo "Building the main model container..."
 cd llama-cpp-python/docker/simple && 
-git checkout llama &&
-# docker-compose up --build
-docker-compose up 
+git checkout main &&
+docker-compose up --build
+# docker-compose up 
 ) 
 
 wait
