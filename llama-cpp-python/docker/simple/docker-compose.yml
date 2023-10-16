@@ -1,7 +1,5 @@
 version: '3.3'
 
-name: 3lm
-
 services:
   llama:
     container_name: llama-cont
