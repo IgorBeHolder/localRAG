@@ -12,7 +12,7 @@ logs/server.log
 *.db
 storage/lancedb
 public/
-
+!storage/anythingllm.db
 # For legacy copies of repo
 documents
 vector-cache
