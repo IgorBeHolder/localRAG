@@ -15,7 +15,7 @@ services:
       context: .
       dockerfile: ./Dockerfile
       args:
-        # DOCKER_BUILDKIT: 1  # enable buildkit
+        DOCKER_BUILDKIT: 1  # enable buildkit
     volumes:
       - "../../model-store:/app/model-store" 
     ports:
