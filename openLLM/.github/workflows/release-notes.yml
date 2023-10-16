@@ -1,0 +1,89 @@
+name: release-notes
+on:
+  workflow_dispatch:
+    inputs:
+      tags:
+        description: 'Tag for releases'
+        required: true
+        type: string
+  workflow_call:
+    inputs:
+      tags:
+        required: true
+        type: string
+env:
+  HATCH_VERBOSE: 2
+defaults:
+  run:
+    shell: bash --noprofile --norc -exo pipefail {0}
+jobs:
+  gen-release-notes:
+    if: github.repository_owner == 'bentoml'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # ratchet:actions/checkout@v4.1.0
+        with:
+          fetch-depth: 0
+          ref: '${{ inputs.tags }}'
+      - uses: bentoml/setup-bentoml-action@862aa8fa0e0c3793fcca4bfe7a62717a497417e4 # ratchet:bentoml/setup-bentoml-action@v1
+        with:
+          bentoml-version: 'main'
+          python-version-file: .python-version-default
+      - name: Create release notes
+        run: ./.github/actions/create_release_and_archive.sh ${{ inputs.tags }}
+      - name: Download Python artifacts
+        uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a # ratchet:actions/download-artifact@v3
+        with:
+          name: python-artefacts
+          path: dist
+      # - name: Download Linux x86_64 compiled artifacts
+      #   uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a # ratchet:actions/download-artifact@v3
+      #   with:
+      #     name: linux-x86_64-mypyc-wheels
+      #     path: dist
+      # - name: Download MacOS x86_64 compiled artifacts
+      #   uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a # ratchet:actions/download-artifact@v3
+      #   with:
+      #     name: macos-x86_64-mypyc-wheels
+      #     path: dist
+      # - name: Download MacOS arm64 compiled artifacts
+      #   uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a # ratchet:actions/download-artifact@v3
+      #   with:
+      #     name: macos-arm64-mypyc-wheels
+      #     path: dist
+      # - name: Download MacOS universal2 compiled artifacts
+      #   uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a # ratchet:actions/download-artifact@v3
+      #   with:
+      #     name: macos-universal2-mypyc-wheels
+      #     path: dist
+      - name: Download binaries
+        uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a # ratchet:actions/download-artifact@v3
+        with:
+          name: standalone
+          path: archives
+      - name: Download standalone MacOS
+        uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a # ratchet:actions/download-artifact@v3
+        with:
+          name: staged-macOS
+          path: archives
+      # TODO: Uncomment me when I decided to bring back Windows support
+      # - name: Download installers
+      #   uses: actions/download-artifact@9bc31d5ccc31df68ecc42ccf4149144866c47d8a # ratchet:actions/download-artifact@v3
+      #   with:
+      #     name: installers
+      #     path: installers
+      - name: Create release
+        uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844 # ratchet:softprops/action-gh-release@v1
+        with:
+          # Use GH feature to populate the changelog automatically
+          generate_release_notes: true
+          body_path: release_notes.txt
+          fail_on_unmatched_files: true
+          tag_name: '${{ inputs.tags }}'
+          # TODO: add instasllers/* once windows support is back
+          files: |-
+            dist/*
+            archives/*
