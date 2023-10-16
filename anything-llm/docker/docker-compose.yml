@@ -14,7 +14,7 @@ services:
       args:
         ARG_UID: ${UID}
         ARG_GID: ${GID}
-        DOCKER_BUILDKIT: 1  # enable buildkit
+        # DOCKER_BUILDKIT: 1  # enable buildkit
     volumes:
       - "../server/storage:/app/server/storage"
       - "../collector/hotdir/:/app/collector/hotdir"
