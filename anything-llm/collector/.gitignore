@@ -5,4 +5,6 @@ hotdir/failed/*
 !hotdir/__HOTDIR__.md
 !hotdir/processed
 !hotdir/failed
+.venv
+v-env
 

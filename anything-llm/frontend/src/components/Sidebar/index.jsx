@@ -81,10 +81,10 @@ export default function Sidebar() {
             <div>
               <div className="flex flex-col gap-y-2">
                 <div className="w-full flex items-center justify-between">
-                  <LLMStatus />
+                  {/* <LLMStatus /> */}
                   <IndexCount />
                 </div>
-                <a
+                {/* <a
                   href={paths.feedback()}
                   target="_blank"
                   className="flex flex-grow w-[100%] h-[36px] gap-x-2 py-[5px] px-4 border border-slate-400 dark:border-transparent rounded-lg text-slate-800 dark:text-slate-200 justify-center items-center hover:bg-slate-100 dark:bg-stone-800 dark:hover:bg-stone-900"
@@ -93,14 +93,14 @@ export default function Sidebar() {
                   <p className="text-slate-800 dark:text-slate-200 text-xs leading-loose font-semibold">
                     Feedback form
                   </p>
-                </a>
-                <ManagedHosting />
+                </a> */}
+                {/* <ManagedHosting /> */}
                 <LogoutButton />
               </div>
 
               {/* Footer */}
               <div className="flex items-end justify-between mt-2">
-                <div className="flex gap-x-1 items-center">
+                {/* <div className="flex gap-x-1 items-center">
                   <a
                     href={paths.github()}
                     className="transition-all duration-300 p-2 rounded-full bg-slate-200 text-slate-400 dark:bg-slate-800 hover:bg-slate-800 hover:text-slate-200 dark:hover:text-slate-200"
@@ -119,13 +119,13 @@ export default function Sidebar() {
                   >
                     <Discord className="h-4 w-4 stroke-slate-400 group-hover:stroke-slate-200 dark:group-hover:stroke-slate-200" />
                   </a>
-                </div>
-                <a
+                </div> */}
+                {/* <a
                   href={paths.mailToMintplex()}
                   className="transition-all duration-300 text-xs text-slate-500 dark:text-slate-600 hover:text-blue-600 dark:hover:text-blue-400"
                 >
                   @MintplexLabs
-                </a>
+                </a> */}
               </div>
             </div>
           </div>
@@ -244,7 +244,7 @@ export function SidebarMobileHeader() {
                     <LLMStatus />
                     <IndexCount />
                   </div>
-                  <a
+                  {/* <a
                     href={paths.feedback()}
                     target="_blank"
                     className="flex flex-grow w-[100%] h-[36px] gap-x-2 py-[5px] px-4 border border-slate-400 dark:border-transparent rounded-lg text-slate-800 dark:text-slate-200 justify-center items-center hover:bg-slate-100 dark:bg-stone-800 dark:hover:bg-stone-900"
@@ -253,7 +253,7 @@ export function SidebarMobileHeader() {
                     <p className="text-slate-800 dark:text-slate-200 text-xs leading-loose font-semibold">
                       Feedback form
                     </p>
-                  </a>
+                  </a> */}
                   <ManagedHosting />
                   <LogoutButton />
                 </div>

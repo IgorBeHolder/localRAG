@@ -163,7 +163,7 @@ const LanceDb = {
       // because we then cannot atomically control our namespace to granularly find/remove documents
       // from vectordb.
       const textSplitter = new RecursiveCharacterTextSplitter({
-        chunkSize: 1000,
+        chunkSize: 800, // reduce from 1000 (embed-server has max_seq_length of 256 tokens)
         chunkOverlap: 20,
       });
       const textChunks = await textSplitter.splitText(pageContent);
