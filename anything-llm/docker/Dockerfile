@@ -78,7 +78,7 @@ COPY --chown=anythingllm:anythingllm ./collector/ ./collector/
 RUN  cd /app/collector && \
     python3 -m virtualenv v-env && \
     . v-env/bin/activate && \
-    pip install -r requirements.txt && 
+    pip install -r requirements.txt 
     # pip install --no-cache-dir -r requirements.txt
    
 USER anythingllm
