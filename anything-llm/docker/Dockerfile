@@ -84,6 +84,7 @@ RUN  cd /app/collector && \
 USER anythingllm
 
 # Migrate and Run Prisma against known schema
+RUN cd ./server && npx prisma generate && npx prisma migrate && npx prisma seed
 RUN cd ./server && npx prisma generate --schema=./prisma/schema.prisma
 RUN cd ./server && npx prisma migrate deploy --schema=./prisma/schema.prisma
 
