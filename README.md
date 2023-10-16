@@ -8,7 +8,7 @@ localGPT (backend server to run GPT-3 locally)
 
 # Production
 ### Initialize the database with the following command:
-`cd anything-llm && git checkout embed && yarn prisma:generate && yarn prisma:migrate && yarn prisma:seed && cd ..`  
+`cd anything-llm && git checkout main && yarn prisma:generate && yarn prisma:migrate && yarn prisma:seed && cd ..`  
 
 ### Create a network for the docker containers to communicate with each other:
 `docker network create llm-net`
@@ -30,8 +30,8 @@ For the given max_seq_length=512 (tokens) the chunk size should be 512/1.5*4.7=1
 But many embed-models were trianed on max_seq_length=256, so we use 800 as a compromise.
 
 ### Document processor (dp) server running on :3005
-While in a container all servers communicate on llm-net network.
-To start DPS in a separate proccess on host machine:
+While in a container all servers communicate using llm-net network.
+To start dp server in a separate proccess on host machine:
 change `anything-llm/server/utils/files/documentProcessor.js`:6 to const PYTHON_API = "http://0.0.0.0:3005";
 and run from root `./start-dp.sh` ('dp' stands for 'document processor')
 In a container it is already set to "http://localhost:3005".
