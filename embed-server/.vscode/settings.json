@@ -1,0 +1,6 @@
+{
+    "python.terminal.activateEnvInCurrentTerminal": true,
+    "python.defaultInterpreterPath": "/Users/velo1/my_projects/3lm/embed-server/venv/bin/python3",
+    "git.terminalGitEditor": true,
+    "terminal.integrated.cwd": "embed-server",
+}

@@ -1,0 +1,56 @@
+Library, Size
+scipy,162M
+numpy,111M
+transformers, 75M
+sympy, 71M
+pip, 16M
+networkx, 16M
+nltk, 13M
+torchvision,9.8M
+tokenizers,7.5M
+setuptools,6.5M
+mpmath,5.0M
+pydantic_core,4.9M
+pylint,4.4M
+pydantic,3.4M
+sentencepiece,3.0M
+astroid,2.6M
+aiohttp,2.5M
+joblib,2.4M
+regex,1.8M
+fsspec,1.7M
+black,1.5M
+greenlet,1.4M
+Jinja2,1.2M
+safetensors,1.2M
+urllib3,972K
+dill,956K
+isort,916K
+anyio,912K
+fastapi,852K
+click,852K
+pyflakes,828K
+starlette,740K
+uvicorn,624K
+tqdm,548K
+idna,528K
+flake8,528K
+h11,524K
+requests,472K
+marshmallow,456K
+tomlkit,436K
+packaging,400K
+langsmith,388K
+certifi,304K
+yarl,268K
+tenacity,176K
+platformdirs,176K
+multidict,172K
+pathspec,160K
+frozenlist,140K
+MarkupSafe, 88K
+filelock, 84K
+InstructorEmbedding, 72K
+attrs, 52K
+sniffio, 40K
+aiosignal, 12K
