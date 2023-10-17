@@ -15,6 +15,7 @@ services:
         ARG_GID: ${GID}
         DOCKER_BUILDKIT: 1  # enable buildkit
     volumes:
+    # ensure all host dirs have the same permissions as the container user
       - "../server/storage:/app/server/storage"
       - "../collector/hotdir/:/app/collector/hotdir"
       - "../collector/outputs/:/app/collector/outputs"
