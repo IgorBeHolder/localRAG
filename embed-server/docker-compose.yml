@@ -15,7 +15,7 @@ services:
       args:
         DOCKER_BUILDKIT: 1  # enable buildkit
     volumes:
-      - "./app/model-store/:/app/model-store"
+      - "../model-store/:/app/model-store"
     ports:
       - "3004:3004"
     networks:
