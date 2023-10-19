@@ -107,4 +107,4 @@ async def get_embeddings_endpoint(data: EmbeddingInput):
 def run():
     import uvicorn
 
-    uvicorn.run("main:app", host=HOST, port=PORT, reload=True)
+    uvicorn.run("main:app", host=HOST, port=PORT, reload=False)
