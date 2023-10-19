@@ -7,7 +7,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
     ninja-build \
     libopenblas-dev \
     build-essential
-# install git to clone the repo (ac=void submodules issue)
+# install git to clone the repo (to avoid submodules issue)
 RUN apt-get update && apt-get install -y git
 
 RUN mkdir /app

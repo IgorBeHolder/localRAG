@@ -6,14 +6,14 @@ services:
     container_name: embed-cont
     image: embed:v1
     restart: always
-    # platform: linux/amd64
+    platform: linux/amd64
     env_file:
       - .env 
     build:
       context: .
       dockerfile: ./Dockerfile
       args:
-        DOCKER_BUILDKIT: 1  # enable buildkit
+        DOCKER_BUILDKIT: 1  
     volumes:
       - "../model-store/:/app/model-store"
     ports:
