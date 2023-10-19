@@ -12,8 +12,12 @@ logs/server.log
 *.db
 storage/lancedb
 public/
-!storage/anythingllm.db
+
+storage/anythingllm.dg
+# !storage/anythingllm.db
+
 # For legacy copies of repo
 documents
 vector-cache
 yarn-error.log
+
