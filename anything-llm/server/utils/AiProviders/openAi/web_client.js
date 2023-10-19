@@ -36,7 +36,10 @@ async function v1_embeddings_openllm(textInput) {
   const base_url = process.env.OPENLLM_ENDPOINT;
   const url = base_url + '/v1/embeddings';
   try {
-    const { data: { data } } = await axios.post(url, textInput, {
+    const { data: { data } } = await axios.post(url, {
+      'model': 'localRAG',
+      'input': textInput
+    }, {
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'

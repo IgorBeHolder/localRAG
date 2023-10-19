@@ -19,10 +19,12 @@ RUN python3 -m pip install --upgrade pip
 
 # Set the environment variable (declared in docker-compose.yml)
 ENV CMAKE_ARGS=${CMAKE_ARGS} 
-RUN python3 -m pip install ".[all]" &&\
-    chmod -R 777 /root/.cache/pip 
-    
-    # RUN --mount=type=cache,target=/root/.cache/pip python3 -m pip install -e ".[all]"
+
+# RUN python3 -m pip install ".[all]" &&\
+RUN --mount=type=cache,target=/root/.cache/pip python3 -m pip install ".[all]" &&\
+    chmod -R 777 /root/.cache/pip && \
+    # cd app
+    rm -rf /root/.cache/pip/*
 
 EXPOSE 3003
 

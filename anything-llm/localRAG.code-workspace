@@ -5,5 +5,8 @@
 			"path": ".."
 		}
 	],
-	"settings": {}
+	"settings": {
+		"python.terminal.activateEnvInCurrentTerminal": true,
+		"python.terminal.executeInFileDir": true
+	}
 }
