@@ -47,13 +47,13 @@ WORKDIR /app
 FROM base as frontend-deps
 
 COPY ./frontend/package.json ./frontend/yarn.lock ./frontend/
-RUN  --mount=type=cache,target=/root/.cache/yarn cd ./frontend/ && \
+RUN  --mount=type=cache,target=/tmp/yarn-cache cd ./frontend/ && \
     yarn install && yarn cache clean
 
 # Install server dependencies
 FROM base as server-deps
 COPY ./server/package.json ./server/yarn.lock ./server/
-RUN  --mount=type=cache,target=/root/.cache/yarn cd ./server/ && \
+RUN  --mount=type=cache,target=/tmp/yarn-cache cd ./server/ && \
     yarn install --production && yarn cache clean && \
     rm /app/server/node_modules/vectordb/x86_64-apple-darwin.node && \
     rm /app/server/node_modules/vectordb/aarch64-apple-darwin.node
@@ -62,9 +62,9 @@ RUN  --mount=type=cache,target=/root/.cache/yarn cd ./server/ && \
 FROM frontend-deps as build-stage
 # to avoid permission errors with bundleinspector.html 
 COPY --chown=anythingllm:anythingllm ./frontend/ ./frontend/ 
-RUN --mount=type=cache,target=/root/.cache/yarn cd ./frontend/ && \
+RUN --mount=type=cache,target=/tmp/yarn-cache cd ./frontend/ && \
     yarn build && yarn cache clean && \
-    rm -rf /root/.cache/yarn/*
+    rm -rf /tmp/yarn-cache/*
 
 # Setup the server
 FROM server-deps as production-stage
