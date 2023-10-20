@@ -25,7 +25,7 @@ services:
       - "../../../model-store:/app/model-store" 
     ports:
     # visible only inside the docker network
-      - "3003" 
+      - "3003:3003" 
     ulimits:
       memlock:
         soft: 17179869184

@@ -17,7 +17,6 @@ services:
     volumes:
       - "../model-store/:/app/model-store"
     ports:
-    # visible only inside docker network
       - "3004:3004"
     networks:
       - llm-net
