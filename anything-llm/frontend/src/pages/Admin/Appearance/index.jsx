@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import Sidebar, { SidebarMobileHeader } from "../../../components/AdminSidebar";
 import { isMobile } from "react-device-detect";
 import Admin from "../../../models/admin";
-import AnythingLLMLight from "../../../media/logo/anything-llm-light.png";
-import AnythingLLMDark from "../../../media/logo/anything-llm-dark.png";
+import AnythingLLMLight from "../../../media/logo/icon_ai.png";
+import AnythingLLMDark from "../../../media/logo/icon_ai.png";
 import usePrefersDarkMode from "../../../hooks/usePrefersDarkMode";
 import useLogo from "../../../hooks/useLogo";
 import System from "../../../models/system";
@@ -102,8 +102,7 @@ export default function Appearance() {
     <div className="w-screen h-screen overflow-hidden bg-orange-100 dark:bg-stone-700 flex">
       {!isMobile && <Sidebar />}
       <div
-        style={{ height: isMobile ? "100%" : "calc(100% - 32px)" }}
-        className="transition-all duration-500 relative md:ml-[2px] md:mr-[8px] md:my-[16px] md:rounded-[26px] bg-white dark:bg-black-900 md:min-w-[82%] p-[18px] h-full overflow-y-scroll"
+        className="main-content transition-all duration-500 relative bg-white dark:bg-black-900 h-full overflow-hidden p-[16px] md:p-[32px] !pb-0"
       >
         {isMobile && <SidebarMobileHeader />}
         <div className="px-1 md:px-8">

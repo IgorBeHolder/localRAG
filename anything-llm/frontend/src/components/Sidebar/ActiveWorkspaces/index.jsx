@@ -51,14 +51,14 @@ export default function ActiveWorkspaces() {
           >
             <a
               href={isActive ? null : paths.workspace.chat(workspace.slug)}
-              className={`flex flex-grow w-[75%] h-[36px] gap-x-2 py-[5px] px-4 border border-slate-400 rounded-lg text-slate-800 dark:text-slate-200 justify-start items-center ${
+              className={`flex flex-grow w-[75%] h-[48px] gap-x-2 py-[5px] px-4 text-white dark:text-slate-200 justify-start items-center ${
                 isActive
-                  ? "bg-gray-100 dark:bg-stone-600"
-                  : "hover:bg-slate-100 dark:hover:bg-stone-900 "
+                  ? "bg-blue-500"
+                  : "hover:bg-blue-500 dark:hover:bg-stone-900"
               }`}
             >
               <Book className="h-4 w-4 flex-shrink-0" />
-              <p className="text-slate-800 dark:text-slate-200 text-xs leading-loose font-semibold whitespace-nowrap overflow-hidden ">
+              <p className="text-sm leading-loose font-semibold whitespace-nowrap overflow-hidden ">
                 {workspace.name}
               </p>
             </a>

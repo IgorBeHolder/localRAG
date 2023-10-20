@@ -1,8 +1,8 @@
 .env.production
 .env.development
 storage/assets/*
-!storage/assets/anything-llm-dark.png
-!storage/assets/anything-llm-light.png
+!storage/assets/icon_ai.png
+!storage/assets/icon_ai.png
 storage/documents/*
 storage/vector-cache/*.json
 storage/exports

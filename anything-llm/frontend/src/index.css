@@ -7,7 +7,7 @@ body {
   padding: 0;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   background-color: white;
 }
 
@@ -57,6 +57,33 @@ a {
   animation-delay: 500ms;
 }
 
+.logo-block {
+  max-width: calc(100% - 40px);
+}
+
+.logo-text {
+  font: 600 16px Roboto, sans-serif;
+}
+
+.main-box {
+  position: relative;
+  z-index: 1;
+}
+
+.main-form {
+  z-index: 1;
+}
+
+.main-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 95px;
+  background: #03a8f3;
+}
+
 @keyframes message {
   0% {
     max-height: 100%;
@@ -94,42 +121,6 @@ a {
     transform: scale(1);
     max-height: 100%;
     overflow: visible;
-  }
-}
-
-@media (prefers-color-scheme: light) {
-  .sidebar-items:after {
-    content: " ";
-    position: absolute;
-    left: 0;
-    right: 0px;
-    height: 4em;
-    top: 69vh;
-    background: linear-gradient(
-      to bottom,
-      rgba(173, 3, 3, 0),
-      rgb(255 255 255) 50%
-    );
-    z-index: 1;
-    pointer-events: none;
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  .sidebar-items:after {
-    content: " ";
-    position: absolute;
-    left: 0;
-    right: 0px;
-    height: 4em;
-    top: 69vh;
-    background: linear-gradient(
-      to bottom,
-      rgba(173, 3, 3, 0),
-      rgb(20 20 20) 50%
-    );
-    z-index: 1;
-    pointer-events: none;
   }
 }
 
