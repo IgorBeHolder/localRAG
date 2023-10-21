@@ -35,7 +35,7 @@ export default function AdminApiKeys() {
             </div>
             <p className="text-sm font-base text-slate-600 dark:text-slate-200">
               API keys allow the holder to programmatically access and manage
-              this AnythingLLM instance.
+              this Sherpa AI Server instance.
             </p>
             <a
               href={paths.apiDocs()}

@@ -43,7 +43,7 @@ export default function AdminSidebar() {
             <div className="flex gap-x-2 p-2 items-center text-slate-500">
               <a
                 href={paths.home()}
-                className="transition-all duration-300 p-2 rounded-full bg-slate-200 text-slate-400 dark:bg-stone-800 hover:bg-slate-800 hover:text-slate-200 dark:hover:text-slate-200"
+                className="transition-all duration-300 p-2 rounded-full bg-slate-200 text-slate-400 dark:bg-stone-800 hover:bg-blue-100 hover:text-blue-600 dark:hover:text-slate-200"
               >
                 <X className="h-4 w-4" />
               </a>
@@ -207,7 +207,7 @@ export function SidebarMobileHeader() {
               <div className="flex gap-x-2 items-center text-slate-500 shrink-0">
                 <a
                   href={paths.home()}
-                  className="transition-all duration-300 p-2 rounded-full bg-slate-200 text-slate-400 dark:bg-stone-800 hover:bg-slate-800 hover:text-slate-200 dark:hover:text-slate-200"
+                  className="transition-all duration-300 p-2 rounded-full bg-slate-200 text-slate-400 dark:bg-stone-800 hover:bg-blue-100 hover:text-blue-600 dark:hover:text-slate-200"
                 >
                   <X className="h-4 w-4" />
                 </a>

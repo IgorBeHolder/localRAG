@@ -47,15 +47,15 @@ export default function SystemSettingsModal({ tab = null, hideModal = noop }) {
           <div className="flex flex-col gap-y-1 border-b dark:border-gray-600 px-4 pt-4 ">
             <div className="flex items-start justify-between rounded-t ">
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                System Settings
+                Настройки системы
               </h3>
               <button
                 onClick={hideModal}
                 type="button"
-                className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                className="transition-all duration-300 text-gray-400 bg-transparent hover:bg-blue-100 hover:text-blue-600 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
                 data-modal-hide="staticModal"
               >
-                <X className="text-gray-300 text-lg" />
+                <X className="text-__gray-300 text-lg" />
               </button>
             </div>
           </div>

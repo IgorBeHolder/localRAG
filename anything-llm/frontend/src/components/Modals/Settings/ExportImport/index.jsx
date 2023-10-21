@@ -1,36 +1,36 @@
-import React, { useState, useEffect, useRef } from "react";
-import { AlertCircle, CheckCircle, Download, Loader, X } from "react-feather";
+import React, {useState, useEffect, useRef} from "react";
+import {AlertCircle, CheckCircle, Download, Loader, X} from "react-feather";
 import System from "../../../../models/system";
-import { API_BASE } from "../../../../utils/constants";
+import {API_BASE} from "../../../../utils/constants";
 import paths from "../../../../utils/paths";
 
 const noop = () => false;
-export default function ExportOrImportData({ hideModal = noop }) {
+export default function ExportOrImportData({hideModal = noop}) {
   return (
     <div className="relative w-full w-full max-h-full">
       <div className="relative bg-white rounded-lg shadow dark:bg-stone-700">
         <div className="flex flex-col items-start justify-between px-6 py-4">
           <p className="text-gray-800 dark:text-stone-200 text-base ">
-            Have multiple AnythingLLM instances or simply want to backup or
-            re-import data from another instance? You can do so here.
-            <br />
+            У вас есть несколько экземпляров Sherpa AI Server или вы просто хотите создать резервную копию или повторно
+            импортировать данные из другого экземпляра? Вы можете сделать это здесь.
+            <br/>
             <i>
-              This will not automatically sync your vector database embeddings!
+              Это не приведет к автоматической синхронизации вложений векторной базы данных!
             </i>
           </p>
           <a
-            className="text-gray-400 dark:text-stone-500 my-2 text-xs"
+            className="text-gray-600 dark:text-stone-500 my-2 text-xs"
             href={paths.exports()}
             target="_blank"
           >
-            View previous exports &rarr;
+            Посмотреть предыдущие экспорты &rarr;
           </a>
         </div>
         <div className="px-6 pb-6 space-y-6 flex h-full w-full">
           <div className="flex flex-col w-full gap-y-2">
-            <ExportData />
-            <div className="h-[1px] bg-slate-400 dark:bg-stone-600 w-full my-2" />
-            <ImportData />
+            <ExportData/>
+            <div className="h-[1px] bg-slate-400 dark:bg-stone-600 w-full my-2"/>
+            <ImportData/>
           </div>
         </div>
         <div className="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
@@ -39,7 +39,7 @@ export default function ExportOrImportData({ hideModal = noop }) {
             type="button"
             className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
           >
-            Close
+            Закрыть
           </button>
         </div>
       </div>
@@ -53,7 +53,7 @@ function ExportData() {
   const [error, setError] = useState(null);
   const exportData = async function () {
     setLoading(true);
-    const { filename, error } = await System.dataExport();
+    const {filename, error} = await System.dataExport();
     setLoading(false);
 
     if (!filename) {
@@ -70,10 +70,11 @@ function ExportData() {
 
   if (loading) {
     return (
-      <div className="w-full flex flex-col gap-y-1 items-center px-6 py-4 border border-gray-200 rounded-lg dark:border-gray-600 bg-slate-200 group animate-pulse">
-        <p className="text-gray-800 text-lg">Exporting....</p>
+      <div
+        className="w-full flex flex-col gap-y-1 items-center px-6 py-4 border border-gray-200 rounded-lg dark:border-gray-600 bg-slate-200 group animate-pulse">
+        <p className="text-gray-800 text-lg">Экспорт....</p>
         <p className="text-gray-800 text-sm italic">
-          A download will start automatically.
+          Загрузка начнется автоматически.
         </p>
       </div>
     );
@@ -98,8 +99,8 @@ function ExportData() {
         href={`${API_BASE}/system/data-exports/${result}`}
         className="w-full flex gap-1 justify-center items-center px-6 py-4 border border-green-200 rounded-lg dark:border-green-600 bg-green-200 group"
       >
-        <Download className="h-4 w-4 text-green-800 " />
-        <p className="text-green-800 text-sm">Download Data Export</p>
+        <Download className="h-4 w-4 text-green-800 "/>
+        <p className="text-green-800 text-sm">Загрузить экспорт данных</p>
       </a>
     );
   }
@@ -111,7 +112,7 @@ function ExportData() {
       className="w-full flex  justify-center px-6 py-4 border border-gray-200 rounded-lg dark:border-gray-600 hover:bg-slate-200 group"
     >
       <p className="text-gray-800 dark:text-stone-200 group-hover:text-gray-800 text-lg">
-        Export AnythingLLM data
+        Экспорт данных Sherpa AI Server
       </p>
     </button>
   );
@@ -140,7 +141,7 @@ function ImportData() {
     setLoading(true);
     const formData = new FormData();
     formData.append("file", file, file.name);
-    const { success, error } = await System.importData(formData);
+    const {success, error} = await System.importData(formData);
     if (!success) {
       setError(error);
     } else {
@@ -153,8 +154,9 @@ function ImportData() {
 
   if (loading) {
     return (
-      <div className="w-full flex flex-col gap-y-1 items-center px-6 py-4 border border-gray-200 rounded-lg dark:border-gray-600 bg-slate-200 group animate-pulse">
-        <p className="text-gray-800 text-lg">Importing....</p>
+      <div
+        className="w-full flex flex-col gap-y-1 items-center px-6 py-4 border border-gray-200 rounded-lg dark:border-gray-600 bg-slate-200 group animate-pulse">
+        <p className="text-gray-800 text-lg">Импорт....</p>
         <p className="text-gray-800 text-sm italic">{file.name}</p>
       </div>
     );
@@ -174,15 +176,16 @@ function ImportData() {
 
   if (!!result) {
     return (
-      <div className="w-full flex flex-col gap-y-1 gap-1 justify-center items-center px-6 py-4 border border-green-200 rounded-lg dark:border-green-600 bg-green-200 group">
+      <div
+        className="w-full flex flex-col gap-y-1 gap-1 justify-center items-center px-6 py-4 border border-green-200 rounded-lg dark:border-green-600 bg-green-200 group">
         <div className="flex items-center gap-x-1">
-          <CheckCircle className="h-4 w-4 text-green-800 " />
+          <CheckCircle className="h-4 w-4 text-green-800 "/>
           <p className="text-green-800 text-sm">
-            Import was completed successfully
+            Импорт успешно завершен
           </p>
         </div>
         <p className="text-green-800 text-xs italic">
-          please reload the page to see the results of the import.
+          перезагрузите страницу, чтобы увидеть результаты импорта.
         </p>
       </div>
     );
@@ -205,10 +208,10 @@ function ImportData() {
         className="w-full flex flex-col gap-y-1 items-center px-6 py-4 border border-gray-200 rounded-lg dark:border-gray-600 hover:bg-slate-200 group"
       >
         <p className="text-gray-800 dark:text-stone-200 group-hover:text-gray-800 text-lg">
-          Import AnythingLLM data
+          Импорт данных Sherpa AI Server
         </p>
         <p className="text-gray-800 dark:text-stone-200 group-hover:text-gray-800 text-xs italic">
-          this must be an export from an AnythingLLM instance.
+          это должен быть экспорт из экземпляра Sherpa AI Server.
         </p>
       </button>
     </>

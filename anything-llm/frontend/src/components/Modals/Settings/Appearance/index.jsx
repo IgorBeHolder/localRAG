@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import useLogo from "../../../../hooks/useLogo";
 import usePrefersDarkMode from "../../../../hooks/usePrefersDarkMode";
 import System from "../../../../models/system";
@@ -8,7 +8,7 @@ import AnythingLLMDark from "../../../../media/logo/icon_ai.png";
 import showToast from "../../../../utils/toast";
 
 export default function Appearance() {
-  const { logo: _initLogo } = useLogo();
+  const {logo: _initLogo} = useLogo();
   const prefersDarkMode = usePrefersDarkMode();
   const [logo, setLogo] = useState("");
   const [hasChanges, setHasChanges] = useState(false);
@@ -19,6 +19,7 @@ export default function Appearance() {
       const messages = await System.getWelcomeMessages();
       setMessages(messages);
     }
+
     fetchMessages();
   }, []);
 
@@ -26,6 +27,7 @@ export default function Appearance() {
     async function setInitLogo() {
       setLogo(_initLogo || "");
     }
+
     setInitLogo();
   }, [_initLogo]);
 
@@ -35,7 +37,7 @@ export default function Appearance() {
 
     const formData = new FormData();
     formData.append("logo", file);
-    const { success, error } = await System.uploadLogo(formData);
+    const {success, error} = await System.uploadLogo(formData);
     if (!success) {
       console.error("Failed to upload logo:", error);
       showToast(`Failed to upload logo: ${error}`, "error");
@@ -48,7 +50,7 @@ export default function Appearance() {
   };
 
   const handleRemoveLogo = async () => {
-    const { success, error } = await System.removeCustomLogo();
+    const {success, error} = await System.removeCustomLogo();
     if (!success) {
       console.error("Failed to remove logo:", error);
       showToast(`Failed to remove logo: ${error}`, "error");
@@ -64,12 +66,12 @@ export default function Appearance() {
     if (type === "user") {
       setMessages([
         ...messages,
-        { user: "Double click to edit...", response: "" },
+        {user: "Double click to edit...", response: ""}
       ]);
     } else {
       setMessages([
         ...messages,
-        { user: "", response: "Double click to edit..." },
+        {user: "", response: "Double click to edit..."}
       ]);
     }
   };
@@ -87,7 +89,7 @@ export default function Appearance() {
   };
 
   const handleMessageSave = async () => {
-    const { success, error } = await System.setWelcomeMessages(messages);
+    const {success, error} = await System.setWelcomeMessages(messages);
     if (!success) {
       showToast(`Failed to update welcome messages: ${error}`, "error");
       return;
@@ -101,18 +103,18 @@ export default function Appearance() {
       <div className="relative bg-white rounded-lg shadow dark:bg-stone-700">
         <div className="flex items-start justify-between px-6 py-4">
           <p className="text-gray-800 dark:text-stone-200 text-base ">
-            Customize the appearance settings of AnythingLLM instance.
+            Настройте параметры внешнего вида экземпляра Sherpa AI Server.
           </p>
         </div>
 
         <div className="px-1 md:px-8 pb-10">
           <div className="mb-6">
-            <div className="flex flex-col gap-y-2">
+            <div className="flex flex-col gap-y-2 mb-4">
               <h2 className="leading-tight font-medium text-black dark:text-white">
-                Custom Logo
+                Пользовательский логотип
               </h2>
               <p className="leading-tight text-sm text-gray-500 dark:text-slate-400">
-                Change the logo that appears in the sidebar.
+                Измените логотип, который появляется на боковой панели.
               </p>
             </div>
             <div className="flex flex-col md:flex-row items-center">
@@ -128,8 +130,9 @@ export default function Appearance() {
               />
               <div className="flex flex-col">
                 <div className="mb-4">
-                  <label className="cursor-pointer text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
-                    Upload Image
+                  <label
+                    className="cursor-pointer text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
+                    Загрузить изображение
                     <input
                       type="file"
                       accept="image/*"
@@ -137,15 +140,17 @@ export default function Appearance() {
                       onChange={handleFileUpload}
                     />
                   </label>
+                </div>
+                <div className="mb-4">
                   <button
                     onClick={handleRemoveLogo}
-                    className="ml-4 cursor-pointer text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+                    className="cursor-pointer text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
                   >
-                    Remove Custom Logo
+                    Удалить собственный логотип
                   </button>
                 </div>
                 <div className="text-sm text-gray-600 dark:text-gray-300">
-                  Upload your logo. Recommended size: 800x200.
+                  Загрузите свой логотип. Рекомендуемый размер: 800x200.
                 </div>
               </div>
             </div>
@@ -153,10 +158,10 @@ export default function Appearance() {
           <div className="mb-6">
             <div className="flex flex-col gap-y-2">
               <h2 className="leading-tight font-medium text-black dark:text-white">
-                Custom Messages
+                Пользовательские сообщения
               </h2>
               <p className="leading-tight text-sm text-gray-500 dark:text-slate-400">
-                Change the default messages that are displayed to the users.
+                Измените сообщения по умолчанию, которые отображаются пользователям.
               </p>
             </div>
             <div className="mt-6 flex flex-col gap-y-6 bg-white dark:bg-black-900 p-4 rounded-lg">
@@ -187,13 +192,13 @@ export default function Appearance() {
                   className="self-end text-orange-500 hover:text-orange-700 transition"
                   onClick={() => addMessage("response")}
                 >
-                  + System Message
+                  + Системное сообщение
                 </button>
                 <button
                   className="self-end text-orange-500 hover:text-orange-700 transition"
                   onClick={() => addMessage("user")}
                 >
-                  + User Message
+                  + Сообщение пользователя
                 </button>
               </div>
             </div>

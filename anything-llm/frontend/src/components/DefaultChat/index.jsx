@@ -37,14 +37,13 @@ export default function DefaultChatContainer() {
         <div
           className="p-4 max-w-full md:max-w-[75%] bg-gray-400 dark:bg-stone-700 rounded-sm xl:rounded-2xl border border-gray-700">
           <p className="text-slate-800 dark:text-slate-200 font-[500] md:font-semibold text-sm md:text-base">
-            Welcome to AnythingLLM, AnythingLLM is an open-source AI tool by
-            Mintplex Labs that turns <i>anything</i> into a trained chatbot you
-            can query and chat with. AnythingLLM is a BYOK (bring-your-own-keys)
-            software so there is no subscription, fee, or charges for this
-            software outside of the services you want to use with it.
+            Добро пожаловать в Sherpa AI Server. Sherpa AI Server — это инструмент с открытым исходным кодом от Mintplex Labs,
+            который превращает <i>любое</i> содержимое в обученного чат-бота, с которым вы можете взаимодействовать.
+            Sherpa AI Server — это программное обеспечение BYOK (принесите свои ключи), поэтому за него не взимается
+            подписка, плата или другие платежи, кроме услуг, которые вы хотите использовать с ним.
           </p>
           <div className="text-right text-xs mt-2">
-            4:16 PM
+            16:16
           </div>
         </div>
       </div>
@@ -59,13 +58,12 @@ export default function DefaultChatContainer() {
         <div
           className="p-4 max-w-full md:max-w-[75%] bg-gray-400 dark:bg-stone-700 rounded-sm xl:rounded-2xl border border-gray-700">
           <p className="text-slate-800 dark:text-slate-200 font-[500] md:font-semibold text-sm md:text-base">
-            AnythingLLM is the easiest way to put powerful AI products like
-            OpenAi, GPT-4, LangChain, PineconeDB, ChromaDB, and other services
-            together in a neat package with no fuss to increase your
-            productivity by 100x.
+            Sherpa AI Server — это самый простой способ объединить мощные продукты искусственного интеллекта, такие как
+            OpenAi, GPT-4, LangChain, PineconeDB, ChromaDB и другие сервисы, в аккуратный пакет без лишних хлопот, чтобы
+            увеличить вашу производительность в 100 раз.
           </p>
           <div className="text-right text-xs mt-2">
-            4:16 PM
+            16:16
           </div>
         </div>
       </div>
@@ -80,12 +78,11 @@ export default function DefaultChatContainer() {
         <div
           className="p-4 max-w-full md:max-w-[75%] bg-gray-400 dark:bg-stone-700 rounded-sm xl:rounded-2xl border border-gray-700">
           <p className="text-slate-800 dark:text-slate-200 font-[500] md:font-semibold text-sm md:text-base">
-            AnythingLLM can run totally locally on your machine with little
-            overhead you wont even notice it's there! No GPU needed. Cloud and
-            on-premises installation is available as well.
+            Sherpa AI Server может полностью работать локально на вашем компьютере с минимальными затратами ресурсов, которые
+            вы даже не заметите! Не требуется GPU. Также доступна установка в облаке и на локальных серверах.
             <br/>
-            The AI tooling ecosystem gets more powerful everyday. AnythingLLM
-            makes it easy to use.
+            Экосистема инструментов искусственного интеллекта становится мощнее каждый день. Sherpa AI Server делает ее
+            использование простым.
           </p>
           <a
             href={paths.github()}
@@ -94,11 +91,11 @@ export default function DefaultChatContainer() {
           >
             <GitMerge className="h-4 w-4"/>
             <p className="text-slate-800 dark:text-slate-200 text-sm md:text-lg leading-loose">
-              Create an issue on Github
+              Создайте задачу на Github
             </p>
           </a>
           <div className="text-right text-xs mt-2">
-            4:16 PM
+            16:16
           </div>
         </div>
       </div>
@@ -113,10 +110,10 @@ export default function DefaultChatContainer() {
         <div
           className="p-4 max-w-full md:max-w-[75%] bg-blue-100 dark:bg-amber-800 rounded-sm xl:rounded-2xl border border-blue-400">
           <p className="text-slate-800 dark:text-slate-200 font-[500] md:font-semibold text-sm md:text-base">
-            How do I get started?!
+            Как начать?
           </p>
           <div className="text-right text-xs mt-2">
-            4:16 PM
+            16:16
           </div>
         </div>
       </div>
@@ -131,13 +128,12 @@ export default function DefaultChatContainer() {
         <div
           className="p-4 max-w-full md:max-w-[75%] bg-gray-400 dark:bg-stone-700 rounded-sm xl:rounded-2xl border border-gray-700">
           <p className="text-slate-800 dark:text-slate-200 font-[500] md:font-semibold text-sm md:text-base">
-            It's simple. All collections are organized into buckets we call{" "}
-            <b>"Workspaces"</b>. Workspaces are buckets of files, documents,
-            images, PDFs, and other files which will be transformed into
-            something LLM's can understand and use in conversation.
+            Это просто. Все коллекции организованы в контейнеры, которые мы называем {" "}
+            <b>"Рабочие пространства"</b>. Рабочие пространства - это контейнеры файлов, документов, изображений, PDF и
+            других файлов, которые будут преобразованы в что-то, что LLM может понимать и использовать в разговоре.
             <br/>
             <br/>
-            You can add and remove files at anytime.
+            Вы можете добавлять и удалять файлы в любое время
           </p>
           <button
             onClick={showNewWsModal}
@@ -145,11 +141,11 @@ export default function DefaultChatContainer() {
           >
             <Plus className="h-4 w-4"/>
             <p className="text-slate-800 dark:text-slate-200 text-sm md:text-lg leading-loose">
-              Create your first workspace
+              Создайте свое первое рабочее пространство
             </p>
           </button>
           <div className="text-right text-xs mt-2">
-            4:16 PM
+            16:16
           </div>
         </div>
       </div>
@@ -164,11 +160,11 @@ export default function DefaultChatContainer() {
         <div
           className="p-4 max-w-full md:max-w-[75%] bg-blue-100 dark:bg-amber-800 rounded-sm xl:rounded-2xl border border-blue-400">
           <p className="text-slate-800 dark:text-slate-200 font-[500] md:font-semibold text-sm md:text-base">
-            Is this like an AI dropbox or something? What about chatting? It is
-            a chatbot isn't it?
+            Это что-то вроде хранилища для ИИ, как Dropbox или что-то в этом роде? А что насчет разговора? Это же
+            чат-бот, верно?
           </p>
           <div className="text-right text-xs mt-2">
-            4:16 PM
+            16:16
           </div>
         </div>
       </div>
@@ -183,27 +179,26 @@ export default function DefaultChatContainer() {
         <div
           className="p-4 max-w-full md:max-w-[75%] bg-gray-400 dark:bg-stone-700 rounded-sm xl:rounded-2xl border border-gray-700">
           <p className="text-slate-800 dark:text-slate-200 font-[500] md:font-semibold text-sm md:text-base">
-            AnythingLLM is more than a smarter Dropbox.
+            Sherpa AI Server — это не просто умное хранилище, как Dropbox.
             <br/>
             <br/>
-            AnythingLLM offers two ways of talking with your data:
+            Sherpa AI Server предлагает два способа общения с вашими данными:
             <br/>
             <br/>
-            <i>Query:</i> Your chats will return data or inferences found with
-            the documents in your workspace it has access to. Adding more
-            documents to the Workspace make it smarter!
+            <i>Запрос:</i> ваши разговоры будут возвращать данные или выводы, найденные в документах вашего
+            рабочего пространства, к которым он имеет доступ. Добавление больше документов в рабочее пространство делает
+            его умнее!
             <br/>
             <br/>
-            <i>Conversational:</i> Your documents + your on-going chat history
-            both contribute to the LLM knowledge at the same time. Great for
-            appending real-time text-based info or corrections and
-            misunderstandings the LLM might have.
+            <i>Разговорный режим:</i> ваши документы и ваша история чата одновременно вносят вклад в знания LLM. Это
+            отлично подходит для добавления информации в реальном времени или коррекции и недопонимания, которые может
+            иметь LLM.
             <br/>
             <br/>
-            You can toggle between either mode <i>in the middle of chatting!</i>
+            Вы можете переключаться между любым из режимов <i>во время чата!</i>
           </p>
           <div className="text-right text-xs mt-2">
-            4:16 PM
+            16:16
           </div>
         </div>
       </div>
@@ -218,10 +213,10 @@ export default function DefaultChatContainer() {
         <div
           className="p-4 max-w-full md:max-w-[75%] bg-blue-100 dark:bg-amber-800 rounded-sm xl:rounded-2xl border border-blue-400">
           <p className="text-slate-800 dark:text-slate-200 font-[500] md:font-semibold text-sm md:text-base">
-            Wow, this sounds amazing, let me try it out already!
+            Вау, это звучит потрясающе, дайте мне уже попробовать!
           </p>
           <div className="text-right text-xs mt-2">
-            4:16 PM
+            16:16
           </div>
         </div>
       </div>
@@ -246,7 +241,7 @@ export default function DefaultChatContainer() {
             >
               <GitHub className="h-4 w-4"/>
               <p className="text-slate-800 dark:text-slate-200 text-sm md:text-lg leading-loose">
-                Star on GitHub
+                Оценить на GitHub
               </p>
             </a>
             <a
@@ -255,12 +250,12 @@ export default function DefaultChatContainer() {
             >
               <Mail className="h-4 w-4"/>
               <p className="text-slate-800 dark:text-slate-200 text-sm md:text-lg leading-loose">
-                Contact Mintplex Labs
+                Свяжитесь с лабораторией Mintplex
               </p>
             </a>
           </div>
           <div className="text-right text-xs mt-2">
-            4:16 PM
+            16:16
           </div>
         </div>
       </div>
@@ -359,19 +354,19 @@ export default function DefaultChatContainer() {
                 className="cursor-text max-h-[100px] md:min-h-[40px] block mx-2 md:mx-4 p-2.5 w-full text-[16px] md:text-sm border bg-white border-gray-300 placeholder-gray-400 text-gray-900 dark:text-white dark:bg-stone-600 dark:border-stone-700 dark:placeholder-stone-400"
                 placeholder={
                   isMobile
-                    ? "Enter your message here."
-                    : "Shift + Enter for newline. Enter to submit."
+                    ? "Введите ваше сообщение здесь."
+                    : "Shift + Enter для новой строки. Войдите, чтобы отправить."
                 }
               />
               <button
                 //ref={formRef}
                 type="submit"
                 //disabled={buttonDisabled}
-                className="inline-flex justify-center p-0 md:p-2 rounded-full cursor-pointer text-black-900 dark:text-slate-200 hover:bg-gray-200 dark:hover:bg-stone-500 group"
+                className="transition-all duration-300 inline-flex justify-center p-0 md:p-2 rounded-full cursor-pointer text-gray-400 dark:text-slate-200 hover:bg-blue-100 hover:text-blue-600 dark:hover:bg-stone-500 group"
               >
                 <svg
                   aria-hidden="true"
-                  className="w-6 h-6 rotate-45 fill-gray-500 dark:fill-slate-500 group-hover:dark:fill-slate-200"
+                  className="w-6 h-6 rotate-45"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                   xmlns="http://www.w3.org/2000/svg"

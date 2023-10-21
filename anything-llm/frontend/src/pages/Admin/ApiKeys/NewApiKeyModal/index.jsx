@@ -47,10 +47,10 @@ export default function NewApiKeyModal() {
             <button
               onClick={hideModal}
               type="button"
-              className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+              className="transition-all duration-300 text-gray-400 bg-transparent hover:bg-blue-100 hover:text-blue-600 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
               data-modal-hide="staticModal"
             >
-              <X className="text-gray-300 text-lg" />
+              <X className="text-__gray-300 text-lg" />
             </button>
           </div>
           <form onSubmit={handleCreate}>
@@ -71,7 +71,7 @@ export default function NewApiKeyModal() {
                 )}
                 <p className="text-gray-800 dark:text-slate-200 text-xs md:text-sm">
                   Once created the API key can be used to programmatically
-                  access and configure this AnythingLLM instance.
+                  access and configure this Sherpa AI Server instance.
                 </p>
                 <a
                   href={paths.apiDocs()}

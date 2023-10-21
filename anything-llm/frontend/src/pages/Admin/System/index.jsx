@@ -62,24 +62,22 @@ export default function AdminSystem() {
                     disabled={saving}
                     className="border border-slate-800 dark:border-slate-200 px-4 py-1 rounded-lg text-slate-800 dark:text-slate-200 text-sm items-center flex gap-x-2 hover:bg-slate-800 hover:text-slate-100 dark:hover:bg-slate-200 dark:hover:text-slate-800"
                   >
-                    {saving ? "Saving..." : "Save changes"}
+                    {saving ? "Сохранение..." : "Сохранить изменения"}
                   </button>
                 )}
               </div>
               <p className="text-sm font-base text-slate-600 dark:text-slate-200">
-                These are the overall settings and configurations of your
-                instance.
+                Это общие настройки и конфигурации вашего экземпляра.
               </p>
             </div>
 
             <div className="my-4">
               <div className="flex flex-col gap-y-2 mb-2.5">
                 <label className="leading-tight font-medium text-black dark:text-white">
-                  Users can delete workspaces
+                  Пользователи могут удалять рабочие области
                 </label>
                 <p className="leading-tight text-sm text-gray-500 dark:text-slate-400">
-                  allow non-admin users to delete workspaces that they are a
-                  part of. This would delete the workspace for everyone.
+                  разрешить пользователям, не являющимся администраторами, удалять рабочие области, частью которых они являются. Это приведет к удалению рабочей области для всех.
                 </p>
               </div>
               <label className="relative inline-flex cursor-pointer items-center">
@@ -98,12 +96,10 @@ export default function AdminSystem() {
             <div className="my-4">
               <div className="flex flex-col gap-y-2 mb-2.5">
                 <label className="leading-tight font-medium text-black dark:text-white">
-                  Limit messages per user per day
+                  Ограничить количество сообщений на пользователя в день
                 </label>
                 <p className="leading-tight text-sm text-gray-500 dark:text-slate-400">
-                  Restrict non-admin users to a number of successful queries or
-                  chats within a 24 hour window. Enable this to prevent users
-                  from running up OpenAI costs.
+                  Ограничьте пользователей, не являющихся администраторами, количеством успешных запросов или чатов в течение 24 часов. Включите это, чтобы пользователи не увеличивали расходы на OpenAI.
                 </p>
               </div>
               <label className="relative inline-flex cursor-pointer items-center">
@@ -127,7 +123,7 @@ export default function AdminSystem() {
             {messageLimit.enabled && (
               <div className="mb-4">
                 <label className=" block flex items-center gap-x-1 font-medium text-black dark:text-white">
-                  Message limit per day
+                  Лимит сообщений в день
                 </label>
                 <div className="relative">
                   <input

@@ -1,9 +1,9 @@
-import React, { useRef, useState } from "react";
-import { X } from "react-feather";
+import React, {useRef, useState} from "react";
+import {X} from "react-feather";
 import Workspace from "../../models/workspace";
 
 const noop = () => false;
-export default function NewWorkspaceModal({ hideModal = noop }) {
+export default function NewWorkspaceModal({hideModal = noop}) {
   const formEl = useRef(null);
   const [error, setError] = useState(null);
   const handleCreate = async (e) => {
@@ -12,13 +12,14 @@ export default function NewWorkspaceModal({ hideModal = noop }) {
     const data = {};
     const form = new FormData(formEl.current);
     for (var [key, value] of form.entries()) data[key] = value;
-    const { workspace, message } = await Workspace.new(data);
+    const {workspace, message} = await Workspace.new(data);
     if (!!workspace) window.location.reload();
     setError(message);
   };
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] h-full bg-black bg-opacity-50 flex items-center justify-center">
+    <div
+      className="fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] h-full bg-black bg-opacity-50 flex items-center justify-center">
       <div
         className="flex fixed top-0 left-0 right-0 w-full h-full"
         onClick={hideModal}
@@ -27,15 +28,15 @@ export default function NewWorkspaceModal({ hideModal = noop }) {
         <div className="relative bg-white rounded-lg shadow dark:bg-stone-700">
           <div className="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
             <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-              Create a New Workspace
+              Создать новое рабочее пространство
             </h3>
             <button
               onClick={hideModal}
               type="button"
-              className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+              className="transition-all duration-300 text-gray-400 bg-transparent hover:bg-blue-100 hover:text-blue-600 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
               data-modal-hide="staticModal"
             >
-              <X className="text-gray-300 text-lg" />
+              <X className="text-__gray-300 text-lg"/>
             </button>
           </div>
           <form ref={formEl} onSubmit={handleCreate}>
@@ -69,7 +70,8 @@ export default function NewWorkspaceModal({ hideModal = noop }) {
                 </p>
               </div>
             </div>
-            <div className="flex w-full justify-between items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
+            <div
+              className="flex w-full justify-between items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
               <button
                 onClick={hideModal}
                 type="button"
@@ -100,5 +102,5 @@ export function useNewWorkspaceModal() {
     setShowing(false);
   };
 
-  return { showing, showModal, hideModal };
+  return {showing, showModal, hideModal};
 }

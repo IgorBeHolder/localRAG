@@ -66,7 +66,7 @@ export default function SettingsOverlay() {
               setTab(null);
               hideOverlay();
             }}
-            className="transition-all duration-300 p-2 rounded-full bg-slate-200 text-slate-400 dark:bg-stone-800 hover:bg-slate-800 hover:text-slate-200 dark:hover:text-slate-200"
+            className="transition-all duration-300 p-2 rounded-full bg-slate-200 text-slate-400 dark:bg-stone-800 hover:bg-blue-100 hover:text-blue-600 dark:hover:text-slate-200"
           >
             <X className="h-4 w-4 " />
           </button>
@@ -76,7 +76,7 @@ export default function SettingsOverlay() {
       <div className="h-[100%] flex flex-col w-full justify-between pt-4 overflow-y-hidden">
         <div className="h-auto sidebar-items dark:sidebar-items">
           <p className="text-sm leading-loose my-2 text-white p-4 dark:text-slate-200 ">
-            Select a setting to configure
+            Выберите параметр
           </p>
           {loading ? (
             <div className="flex flex-col h-[65vh] pb-8 overflow-y-scroll no-scroll">
@@ -91,26 +91,26 @@ export default function SettingsOverlay() {
             <div className="flex flex-col h-[65vh] pb-8 overflow-y-scroll no-scroll">
               {!settings?.MultiUserMode && (
                 <Option
-                  btnText="Appearance"
+                  btnText="Вид"
                   icon={<Eye className="h-4 w-4 flex-shrink-0" />}
                   isActive={tab === "appearance"}
                   onClick={() => selectTab("appearance")}
                 />
               )}
               <Option
-                btnText="LLM Preference"
+                btnText="Настройки LLM"
                 icon={<MessageSquare className="h-4 w-4 flex-shrink-0" />}
                 isActive={tab === "llm"}
                 onClick={() => selectTab("llm")}
               />
               <Option
-                btnText="Vector Database"
+                btnText="База данных векторов"
                 icon={<Database className="h-4 w-4 flex-shrink-0" />}
                 isActive={tab === "vectordb"}
                 onClick={() => selectTab("vectordb")}
               />
               <Option
-                btnText="Export or Import"
+                btnText="Экспорт или импорт"
                 icon={<Archive className="h-4 w-4 flex-shrink-0" />}
                 isActive={tab === "exportimport"}
                 onClick={() => selectTab("exportimport")}
@@ -118,19 +118,19 @@ export default function SettingsOverlay() {
               {!settings?.MultiUserMode && (
                 <>
                   <Option
-                    btnText="Password Protection"
+                    btnText="Защита паролем"
                     icon={<Lock className="h-4 w-4 flex-shrink-0" />}
                     isActive={tab === "password"}
                     onClick={() => selectTab("password")}
                   />
                   <Option
-                    btnText="Multi User Mode"
+                    btnText="Пользователи"
                     icon={<Users className="h-4 w-4 flex-shrink-0" />}
                     isActive={tab === "multiuser"}
                     onClick={() => selectTab("multiuser")}
                   />
                   <Option
-                    btnText="API Key"
+                    btnText="API-ключ"
                     icon={<Key className="h-4 w-4 flex-shrink-0" />}
                     isActive={tab === "apikey"}
                     onClick={() => selectTab("apikey")}

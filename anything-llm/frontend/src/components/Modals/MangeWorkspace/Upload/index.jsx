@@ -171,7 +171,7 @@ function ModalWrapper({ deleteWorkspace, children }) {
             </p>
             <p className="text-gray-600 dark:text-stone-400 text-xs ">
               These files will be uploaded to the document processor running on
-              this AnythingLLM instance. These files are not sent or shared with
+              this Sherpa AI Server instance. These files are not sent or shared with
               a third party.
             </p>
             {process.env.NODE_ENV !== "production" && (

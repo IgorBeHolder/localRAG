@@ -36,10 +36,10 @@ export default function Sidebar() {
           {/* Header Information */}
           <div className="flex w-full items-center justify-between">
             <p className="text-xl font-base text-slate-600 dark:text-slate-200">
-              AnythingLLM
+              Sherpa AI Server
             </p>
             <div className="flex gap-x-2 p-2 items-center text-slate-500">
-              <button className="transition-all duration-300 p-2 rounded-full bg-slate-200 text-slate-400 dark:bg-stone-800 hover:bg-slate-800 hover:text-slate-200 dark:hover:text-slate-200">
+              <button className="transition-all duration-300 p-2 rounded-full bg-slate-200 text-slate-400 dark:bg-stone-800 hover:bg-blue-100 hover:text-blue-600 dark:hover:text-slate-200">
                 <Key className="h-4 w-4 " />
               </button>
             </div>
@@ -53,7 +53,7 @@ export default function Sidebar() {
                   <button className="flex flex-grow w-[75%] h-[48px] gap-x-2 py-[5px] px-4 text-white dark:text-slate-200 justify-start items-center hover:bg-blue-500 dark:hover:bg-stone-900">
                     <Plus className="h-4 w-4" />
                     <p className="text-slate-800 dark:text-slate-200 text-sm leading-loose font-semibold">
-                      New workspace
+                      Новое рабочее пространство
                     </p>
                   </button>
                 </div>

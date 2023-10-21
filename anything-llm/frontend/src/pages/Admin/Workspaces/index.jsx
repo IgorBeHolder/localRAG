@@ -29,7 +29,7 @@ export default function AdminWorkspaces() {
                 }
                 className="border border-slate-800 dark:border-slate-200 px-4 py-1 rounded-lg text-slate-800 dark:text-slate-200 text-sm items-center flex gap-x-2 hover:bg-slate-800 hover:text-slate-100 dark:hover:bg-slate-200 dark:hover:text-slate-800"
               >
-                <BookOpen className="h-4 w-4" /> New Workspace
+                <BookOpen className="h-4 w-4" /> Новое рабочее пространство
               </button>
             </div>
             <p className="text-sm font-base text-slate-600 dark:text-slate-200">

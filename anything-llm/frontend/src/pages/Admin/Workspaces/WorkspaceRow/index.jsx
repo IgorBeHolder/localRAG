@@ -10,7 +10,7 @@ export default function WorkspaceRow({ workspace, users }) {
   const handleDelete = async () => {
     if (
       !window.confirm(
-        `Are you sure you want to delete ${workspace.name}?\nAfter you do this it will be unavailable in this instance of AnythingLLM.\n\nThis action is irreversible.`
+        `Are you sure you want to delete ${workspace.name}?\nAfter you do this it will be unavailable in this instance of Sherpa AI Server.\n\nThis action is irreversible.`
       )
     )
       return false;

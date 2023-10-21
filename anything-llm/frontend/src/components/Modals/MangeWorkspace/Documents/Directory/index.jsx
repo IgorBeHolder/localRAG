@@ -117,7 +117,7 @@ export default function Directory({
                     onClick={() => setShowZap(false)}
                     className="border border-gray-800 text-gray-800 hover:bg-gray-100 px-4 py-1 rounded-lg dark:text-slate-200 dark:border-slate-200 dark:hover:bg-stone-900"
                   >
-                    Close
+                    Закрыть
                   </button>
                 </div>
               </div>

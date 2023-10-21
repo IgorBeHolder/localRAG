@@ -85,22 +85,22 @@ export default function PromptInput({
             className="cursor-text max-h-[100px] md:min-h-[40px] block mx-2 md:mx-4 p-2.5 w-full text-[16px] md:text-sm rounded-lg border bg-gray-50 border-gray-300 placeholder-gray-400 text-gray-900 dark:text-white dark:bg-stone-600 dark:border-stone-700 dark:placeholder-stone-400"
             placeholder={
               isMobile
-                ? "Enter your message here."
-                : "Shift + Enter for newline. Enter to submit."
+                ? "Введите ваше сообщение здесь."
+                : "Shift + Enter для новой строки. Войдите, чтобы отправить."
             }
           />
           <button
             ref={formRef}
             type="submit"
             disabled={buttonDisabled}
-            className="inline-flex justify-center p-0 md:p-2 rounded-full cursor-pointer text-black-900 dark:text-slate-200 hover:bg-gray-200 dark:hover:bg-stone-500 group"
+            className="transition-all duration-300 inline-flex justify-center p-0 md:p-2 rounded-full cursor-pointer text-gray-400 dark:text-slate-200 hover:bg-blue-100 hover:text-blue-600 dark:hover:bg-stone-500 group"
           >
             {buttonDisabled ? (
               <Loader className="w-6 h-6 animate-spin" />
             ) : (
               <svg
                 aria-hidden="true"
-                className="w-6 h-6 rotate-45 fill-gray-500 dark:fill-slate-500 group-hover:dark:fill-slate-200"
+                className="w-6 h-6 rotate-45"
                 fill="currentColor"
                 viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg"

@@ -220,7 +220,7 @@ export default function DocumentSettings({ workspace }) {
             type="submit"
             className="text-slate-200 bg-black-900 px-4 py-2 rounded-lg hover:bg-gray-900 whitespace-nowrap text-sm"
           >
-            {saving ? "Saving..." : "Confirm Changes"}
+            {saving ? "Сохранение..." : "Сохранить изменения"}
           </button>
         </div>
       </div>
