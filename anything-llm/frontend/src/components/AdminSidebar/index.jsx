@@ -30,19 +30,20 @@ export default function AdminSidebar() {
       >
         <div className="w-full h-full flex flex-col overflow-x-hidden items-between">
           {/* Header Information */}
-          <div className="flex w-full items-center justify-between">
-            <div className="flex shrink-0 max-w-[50%] items-center justify-start">
+          <div className="flex w-full items-center justify-between px-2">
+            <div className="logo-block h-[64px] px-2 gap-2 text-gray-200 cursor-pointer whitespace-nowrap user-select-none flex shrink-0 items-center justify-start">
               <img
                 src={logo}
                 alt="Logo"
                 className="rounded max-h-[40px]"
                 style={{ objectFit: "contain" }}
               />
+              <span className="logo-text">Sherpa AI Server</span>
             </div>
-            <div className="flex gap-x-2 items-center text-slate-500">
+            <div className="flex gap-x-2 p-2 items-center text-slate-500">
               <a
                 href={paths.home()}
-                className="transition-all duration-300 p-2 rounded-full bg-slate-200 text-slate-400 dark:bg-stone-800 hover:bg-slate-800 hover:text-slate-200 dark:hover:text-slate-200"
+                className="transition-all duration-300 p-2 rounded-full bg-slate-200 text-slate-400 dark:bg-stone-800 hover:bg-blue-100 hover:text-blue-600 dark:hover:text-slate-200"
               >
                 <X className="h-4 w-4" />
               </a>
@@ -52,40 +53,40 @@ export default function AdminSidebar() {
           {/* Primary Body */}
           <div className="h-[100%] flex flex-col w-full justify-between pt-4 overflow-y-hidden">
             <div className="h-auto sidebar-items dark:sidebar-items">
-              <div className="flex flex-col gap-y-4 h-[65vh] pb-8 overflow-y-scroll no-scroll">
+              <div className="flex flex-col h-[65vh] pb-8 overflow-y-scroll no-scroll">
                 <Option
                   href={paths.admin.system()}
-                  btnText="System Preferences"
+                  btnText="Системные настройки"
                   icon={<Settings className="h-4 w-4 flex-shrink-0" />}
                 />
                 <Option
                   href={paths.admin.invites()}
-                  btnText="Invitation Management"
+                  btnText="Управление приглашениями"
                   icon={<Mail className="h-4 w-4 flex-shrink-0" />}
                 />
                 <Option
                   href={paths.admin.users()}
-                  btnText="User Management"
+                  btnText="Управление пользователями"
                   icon={<Users className="h-4 w-4 flex-shrink-0" />}
                 />
                 <Option
                   href={paths.admin.workspaces()}
-                  btnText="Workspace Management"
+                  btnText="Управление рабочим пространством"
                   icon={<BookOpen className="h-4 w-4 flex-shrink-0" />}
                 />
                 <Option
                   href={paths.admin.chats()}
-                  btnText="Workspace Chat Management"
+                  btnText="Управление чатом в рабочей области"
                   icon={<MessageSquare className="h-4 w-4 flex-shrink-0" />}
                 />
                 <Option
                   href={paths.admin.appearance()}
-                  btnText="Appearance"
+                  btnText="Внешний вид"
                   icon={<Eye className="h-4 w-4 flex-shrink-0" />}
                 />
                 <Option
                   href={paths.admin.apiKeys()}
-                  btnText="API Keys"
+                  btnText="Ключи API"
                   icon={<Key className="h-4 w-4 flex-shrink-0" />}
                 />
               </div>
@@ -170,6 +171,7 @@ export function SidebarMobileHeader() {
             className="rounded w-full max-h-[40px]"
             style={{ objectFit: "contain" }}
           />
+          <span className="logo-text">Sherpa AI Server</span>
         </div>
       </div>
       <div
@@ -200,11 +202,12 @@ export function SidebarMobileHeader() {
                   className="rounded w-full max-h-[40px]"
                   style={{ objectFit: "contain" }}
                 />
+                <span className="logo-text">Sherpa AI Server</span>
               </div>
               <div className="flex gap-x-2 items-center text-slate-500 shrink-0">
                 <a
                   href={paths.home()}
-                  className="transition-all duration-300 p-2 rounded-full bg-slate-200 text-slate-400 dark:bg-stone-800 hover:bg-slate-800 hover:text-slate-200 dark:hover:text-slate-200"
+                  className="transition-all duration-300 p-2 rounded-full bg-slate-200 text-slate-400 dark:bg-stone-800 hover:bg-blue-100 hover:text-blue-600 dark:hover:text-slate-200"
                 >
                   <X className="h-4 w-4" />
                 </a>
@@ -220,37 +223,37 @@ export function SidebarMobileHeader() {
                 >
                   <Option
                     href={paths.admin.system()}
-                    btnText="System Preferences"
+                    btnText="Системные настройки"
                     icon={<Settings className="h-4 w-4 flex-shrink-0" />}
                   />
                   <Option
                     href={paths.admin.invites()}
-                    btnText="Invitation Management"
+                    btnText="Управление приглашениями"
                     icon={<Mail className="h-4 w-4 flex-shrink-0" />}
                   />
                   <Option
                     href={paths.admin.users()}
-                    btnText="User Management"
+                    btnText="Управление пользователями"
                     icon={<Users className="h-4 w-4 flex-shrink-0" />}
                   />
                   <Option
                     href={paths.admin.workspaces()}
-                    btnText="Workspace Management"
+                    btnText="Управление рабочим пространством"
                     icon={<BookOpen className="h-4 w-4 flex-shrink-0" />}
                   />
                   <Option
                     href={paths.admin.chats()}
-                    btnText="Workspace Chat Management"
+                    btnText="Управление чатом в рабочей области"
                     icon={<MessageSquare className="h-4 w-4 flex-shrink-0" />}
                   />
                   <Option
                     href={paths.admin.appearance()}
-                    btnText="Appearance"
+                    btnText="Внешний вид"
                     icon={<Eye className="h-4 w-4 flex-shrink-0" />}
                   />
                   <Option
                     href={paths.admin.apiKeys()}
-                    btnText="API Keys"
+                    btnText="Ключи API"
                     icon={<Key className="h-4 w-4 flex-shrink-0" />}
                   />
                 </div>
@@ -307,14 +310,14 @@ const Option = ({ btnText, icon, href }) => {
     <div className="flex gap-x-2 items-center justify-between">
       <a
         href={href}
-        className={`flex flex-grow w-[75%] h-[36px] gap-x-2 py-[5px] px-4 border border-slate-400 rounded-lg text-slate-800 dark:text-slate-200 justify-start items-center ${
+        className={`flex flex-grow w-[75%] h-[48px] gap-x-2 py-[5px] px-4 text-white dark:text-slate-200 justify-start items-center ${
           isActive
-            ? "bg-gray-100 dark:bg-stone-600"
-            : "hover:bg-slate-100 dark:hover:bg-stone-900 "
+            ? "bg-blue-500"
+            : "hover:bg-blue-500 dark:hover:bg-stone-900"
         }`}
       >
         {icon}
-        <p className="text-slate-800 dark:text-slate-200 text-xs leading-loose font-semibold whitespace-nowrap overflow-hidden ">
+        <p className="text-sm leading-loose font-semibold whitespace-nowrap overflow-hidden ">
           {btnText}
         </p>
       </a>

@@ -19,10 +19,10 @@ export default function ChatHistory({ history = [], workspace }) {
       <div className="flex flex-col h-[89%] md:mt-0 pb-5 w-full justify-center items-center">
         <div className="w-fit flex items-center gap-x-2">
           <Frown className="h-4 w-4 text-slate-400" />
-          <p className="text-slate-400">No chat history found.</p>
+          <p className="text-slate-400">История чата не найдена.</p>
         </div>
         <p className="text-slate-400 text-xs">
-          Send your first message to get started.
+          Отправьте первое сообщение, чтобы начать.
         </p>
       </div>
     );

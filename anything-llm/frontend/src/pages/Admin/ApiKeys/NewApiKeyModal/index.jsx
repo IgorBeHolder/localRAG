@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { X } from "react-feather";
+import React, {useEffect, useState} from "react";
+import {X} from "react-feather";
 import Admin from "../../../../models/admin";
 import paths from "../../../../utils/paths";
+
 const DIALOG_ID = `new-api-key-modal`;
 
 function hideModal() {
@@ -17,7 +18,7 @@ export default function NewApiKeyModal() {
   const handleCreate = async (e) => {
     setError(null);
     e.preventDefault();
-    const { apiKey: newApiKey, error } = await Admin.generateApiKey();
+    const {apiKey: newApiKey, error} = await Admin.generateApiKey();
     if (!!newApiKey) setApiKey(newApiKey);
     setError(error);
   };
@@ -33,6 +34,7 @@ export default function NewApiKeyModal() {
         setCopied(false);
       }, 3000);
     }
+
     resetStatus();
   }, [copied]);
 
@@ -42,15 +44,15 @@ export default function NewApiKeyModal() {
         <div className="relative bg-white rounded-lg shadow dark:bg-stone-700">
           <div className="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
             <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-              Create new API key
+              Создать новый ключ API
             </h3>
             <button
               onClick={hideModal}
               type="button"
-              className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+              className="transition-all duration-300 text-gray-400 bg-transparent hover:bg-blue-100 hover:text-blue-600 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
               data-modal-hide="staticModal"
             >
-              <X className="text-gray-300 text-lg" />
+              <X className="text-__gray-300 text-lg"/>
             </button>
           </div>
           <form onSubmit={handleCreate}>
@@ -58,7 +60,7 @@ export default function NewApiKeyModal() {
               <div className="w-full flex flex-col gap-y-4">
                 {error && (
                   <p className="text-red-600 dark:text-red-400 text-sm">
-                    Error: {error}
+                    Ошибка: {error}
                   </p>
                 )}
                 {apiKey && (
@@ -70,19 +72,20 @@ export default function NewApiKeyModal() {
                   />
                 )}
                 <p className="text-gray-800 dark:text-slate-200 text-xs md:text-sm">
-                  Once created the API key can be used to programmatically
-                  access and configure this AnythingLLM instance.
+                  После создания ключ API можно использовать для программного доступа и настройки этого экземпляра
+                  Sherpa AI Server.
                 </p>
                 <a
                   href={paths.apiDocs()}
                   target="_blank"
                   className="text-blue-600 dark:text-blue-300 hover:underline"
                 >
-                  Read the API documentation &rarr;
+                  Прочтите документацию по API &rarr;
                 </a>
               </div>
             </div>
-            <div className="flex w-full justify-between items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
+            <div
+              className="flex w-full justify-between items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
               {!apiKey ? (
                 <>
                   <button
@@ -90,13 +93,13 @@ export default function NewApiKeyModal() {
                     type="button"
                     className="text-gray-800 hover:bg-gray-100 px-4 py-1 rounded-lg dark:text-slate-200 dark:hover:bg-stone-900"
                   >
-                    Cancel
+                    Отменить
                   </button>
                   <button
                     type="submit"
                     className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-black dark:text-slate-200 dark:border-transparent dark:hover:text-slate-200 dark:hover:bg-gray-900 dark:focus:ring-gray-800"
                   >
-                    Create API key
+                    Создать ключ API
                   </button>
                 </>
               ) : (
@@ -106,7 +109,7 @@ export default function NewApiKeyModal() {
                   disabled={copied}
                   className="w-full disabled:bg-green-200 disabled:text-green-600 text-gray-800 bg-gray-100 px-4 py-2 rounded-lg dark:text-slate-200 dark:bg-stone-900"
                 >
-                  {copied ? "Copied API key" : "Copy API key"}
+                  {copied ? "Ключ API скопирован" : "Копировать ключ API"}
                 </button>
               )}
             </div>

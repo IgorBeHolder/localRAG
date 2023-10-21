@@ -3,8 +3,8 @@ const fs = require("fs");
 const { getType } = require("mime");
 const { v4 } = require("uuid");
 const { SystemSettings } = require("../../models/systemSettings");
-const LIGHT_LOGO_FILENAME = "anything-llm-light.png";
-const DARK_LOGO_FILENAME = "anything-llm-dark.png";
+const LIGHT_LOGO_FILENAME = "icon_ai.png";
+const DARK_LOGO_FILENAME = "icon_ai.png";
 
 function validFilename(newFilename = "") {
   return ![DARK_LOGO_FILENAME, LIGHT_LOGO_FILENAME].includes(newFilename);

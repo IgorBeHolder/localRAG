@@ -1,30 +1,30 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, {useState, useCallback, useEffect} from "react";
 import Workspace from "../../../../models/workspace";
 import paths from "../../../../utils/paths";
 import FileUploadProgress from "./FileUploadProgress";
-import { useDropzone } from "react-dropzone";
-import { v4 } from "uuid";
+import {useDropzone} from "react-dropzone";
+import {v4} from "uuid";
 import System from "../../../../models/system";
-import { Frown } from "react-feather";
+import {Frown} from "react-feather";
 import showToast from "../../../../utils/toast";
 
-export default function UploadToWorkspace({ workspace, fileTypes }) {
+export default function UploadToWorkspace({workspace, fileTypes}) {
   const [ready, setReady] = useState(null);
   const [files, setFiles] = useState([]);
 
   const handleUploadSuccess = () => {
-    showToast("File uploaded successfully", "success");
+    showToast("Файл успешно загружен", "success");
   };
 
   const handleUploadError = (message) => {
-    showToast(`Error uploading file: ${message}`, "error");
+    showToast(`Ошибка загрузки файла: ${message}`, "error");
   };
 
   const onDrop = useCallback(async (acceptedFiles, rejections) => {
     const newAccepted = acceptedFiles.map((file) => {
       return {
         uid: v4(),
-        file,
+        file
       };
     });
     const newRejected = rejections.map((file) => {
@@ -32,7 +32,7 @@ export default function UploadToWorkspace({ workspace, fileTypes }) {
         uid: v4(),
         file: file.file,
         rejected: true,
-        reason: file.errors[0].code,
+        reason: file.errors[0].code
       };
     });
 
@@ -44,20 +44,21 @@ export default function UploadToWorkspace({ workspace, fileTypes }) {
       const online = await System.checkDocumentProcessorOnline();
       setReady(online);
     }
+
     checkProcessorOnline();
   }, []);
 
-  const { getRootProps, getInputProps } = useDropzone({
+  const {getRootProps, getInputProps} = useDropzone({
     onDrop,
     accept: {
-      ...fileTypes,
-    },
+      ...fileTypes
+    }
   });
 
   const deleteWorkspace = async () => {
     if (
       !window.confirm(
-        `You are about to delete your entire ${workspace.name} workspace. This will remove all vector embeddings on your vector database.\n\nThe original source files will remain untouched. This action is irreversible.`
+        `Вы собираетесь удалить всю рабочее пространство ${workspace.name}. Это приведет к удалению всех вложений векторов из вашей векторной базы данных.\n\nИсходные исходные файлы останутся нетронутыми. Это действие необратимо.`
       )
     )
       return false;
@@ -70,13 +71,14 @@ export default function UploadToWorkspace({ workspace, fileTypes }) {
   if (ready === null) {
     return (
       <ModalWrapper deleteWorkspace={deleteWorkspace}>
-        <div className="outline-none transition-all cursor-wait duration-300 bg-stone-400 bg-opacity-20 flex h-[20rem] overflow-y-scroll overflow-x-hidden rounded-lg">
+        <div
+          className="outline-none transition-all cursor-wait duration-300 bg-stone-400 bg-opacity-20 flex h-[20rem] overflow-y-scroll overflow-x-hidden rounded-lg">
           <div className="flex flex-col gap-y-1 w-full h-full items-center justify-center">
             <p className="text-slate-400 text-xs">
-              Checking document processor is online - please wait.
+              Проверка обработчика документов онлайн – подождите.
             </p>
             <p className="text-slate-400 text-xs">
-              this should only take a few moments.
+              это займет всего несколько минут.
             </p>
           </div>
         </div>
@@ -87,14 +89,15 @@ export default function UploadToWorkspace({ workspace, fileTypes }) {
   if (ready === false) {
     return (
       <ModalWrapper deleteWorkspace={deleteWorkspace}>
-        <div className="outline-none transition-all duration-300 bg-red-200 flex h-[20rem] overflow-y-scroll overflow-x-hidden rounded-lg">
+        <div
+          className="outline-none transition-all duration-300 bg-red-200 flex h-[20rem] overflow-y-scroll overflow-x-hidden rounded-lg">
           <div className="flex flex-col gap-y-1 w-full h-full items-center justify-center md:px-0 px-2">
-            <Frown className="w-8 h-8 text-red-800" />
+            <Frown className="w-8 h-8 text-red-800"/>
             <p className="text-red-800 text-xs text-center">
-              Document processor is offline.
+              Обработчик документов отключен.
             </p>
             <p className="text-red-800 text-[10px] md:text-xs text-center">
-              you cannot upload documents from the UI right now
+              вы не можете загружать документы из пользовательского интерфейса прямо сейчас
             </p>
           </div>
         </div>
@@ -128,8 +131,7 @@ export default function UploadToWorkspace({ workspace, fileTypes }) {
                 ></path>
               </svg>
               <p className="mb-2 text-sm text-gray-600 dark:text-slate-300">
-                <span className="font-semibold">Click to upload</span> or drag
-                and drop
+                <span className="font-semibold">Кликните для загрузки</span> или перетащите файл сюда
               </p>
               <p className="text-xs text-gray-600 dark:text-slate-300"></p>
             </div>
@@ -151,8 +153,9 @@ export default function UploadToWorkspace({ workspace, fileTypes }) {
         )}
       </div>
       <p className="text-gray-600 dark:text-stone-400 text-xs ">
-        supported file extensions are{" "}
-        <code className="text-xs bg-gray-200 text-gray-800 dark:bg-stone-800 dark:text-slate-400 font-mono rounded-sm px-1">
+        поддерживаемые расширения файлов:{" "}
+        <code
+          className="text-xs bg-gray-200 text-gray-800 dark:bg-stone-800 dark:text-slate-400 font-mono rounded-sm px-1">
           {Object.values(fileTypes).flat().join(" ")}
         </code>
       </p>
@@ -160,41 +163,42 @@ export default function UploadToWorkspace({ workspace, fileTypes }) {
   );
 }
 
-function ModalWrapper({ deleteWorkspace, children }) {
+function ModalWrapper({deleteWorkspace, children}) {
   return (
     <>
       <div className="p-6 flex h-full w-full max-h-[80vh] overflow-y-scroll">
         <div className="flex flex-col gap-y-1 w-full">
           <div className="flex flex-col mb-2">
             <p className="text-gray-800 dark:text-stone-200 text-base ">
-              Add documents to your workspace.
+              Добавьте документы в свое рабочее пространство.
             </p>
             <p className="text-gray-600 dark:text-stone-400 text-xs ">
-              These files will be uploaded to the document processor running on
-              this AnythingLLM instance. These files are not sent or shared with
-              a third party.
+              Эти файлы будут загружены в процессор документов, работающий на этом экземпляре Sherpa AI Server. Эти
+              файлы не передаются и не передаются третьим лицам.
             </p>
             {process.env.NODE_ENV !== "production" && (
               <div className="mt-2 text-gray-600 dark:text-stone-400 text-xs">
-                <div className="w-[1px] bg-stone-400 w-full" />
-                Local Environment Notice: You must have the{" "}
-                <code className="text-xs bg-gray-200 text-gray-800 dark:bg-stone-800 dark:text-slate-400 font-mono rounded-sm px-1">
-                  python document processor app
-                </code>{" "}
-                running for these documents to process.
+                <div className="w-[1px] bg-stone-400 w-full"/>
+                Информация о локальном рабочем пространстве: для обработки этих документов у вас должно быть
+                запущено{" "}
+                <code
+                  className="text-xs bg-gray-200 text-gray-800 dark:bg-stone-800 dark:text-slate-400 font-mono rounded-sm px-1">
+                  приложение для обработки документов Python
+                </code>
               </div>
             )}
           </div>
           {children}
         </div>
       </div>
-      <div className="flex items-center justify-between p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
+      <div
+        className="flex items-center justify-between p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
         <button
           onClick={deleteWorkspace}
           type="button"
           className="border border-transparent text-gray-500 bg-white hover:bg-red-100 rounded-lg text-sm font-medium px-5 py-2.5 hover:text-red-900 focus:z-10 dark:bg-transparent dark:text-gray-300 dark:hover:text-white dark:hover:bg-red-600"
         >
-          Delete Workspace
+          Удалить рабочее пространство
         </button>
       </div>
     </>

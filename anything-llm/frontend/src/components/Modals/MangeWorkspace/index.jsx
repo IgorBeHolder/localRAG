@@ -41,7 +41,7 @@ export default function ManageWorkspace({
 
   if (!workspace) return null;
 
-  const Component = TABS[selectedTab || "documents"];
+  const Component = TABS[selectedTab || "Документы"];
   return (
     <div className="fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] h-full bg-black bg-opacity-50 flex items-center justify-center">
       <div
@@ -53,15 +53,15 @@ export default function ManageWorkspace({
           <div className="flex flex-col gap-y-1 border-b dark:border-gray-600 px-4 pt-4 ">
             <div className="flex items-start justify-between rounded-t ">
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                Update "{workspace.name}"
+                Обновление "{workspace.name}"
               </h3>
               <button
                 onClick={hideModal}
                 type="button"
-                className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                className="transition-all duration-300 text-gray-400 bg-transparent hover:bg-blue-100 hover:text-blue-600 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
                 data-modal-hide="staticModal"
               >
-                <X className="text-gray-300 text-lg" />
+                <X className="text-__gray-300 text-lg" />
               </button>
             </div>
             <WorkspaceSettingTabs
@@ -86,21 +86,21 @@ function WorkspaceSettingTabs({ selectedTab, changeTab }) {
       <ul className="flex md:flex-wrap overflow-x-scroll no-scroll -mb-px text-sm gap-x-2 font-medium text-center text-gray-500 dark:text-gray-400">
         <WorkspaceTab
           active={selectedTab === "documents"}
-          displayName="Documents"
+          displayName="Документы"
           tabName="documents"
           icon={<Archive className="h-4 w-4 flex-shrink-0" />}
           onClick={changeTab}
         />
         <WorkspaceTab
           active={selectedTab === "upload"}
-          displayName="Upload Docs"
+          displayName="Загрузить документы"
           tabName="upload"
           icon={<UploadCloud className="h-4 w-4 flex-shrink-0" />}
           onClick={changeTab}
         />
         <WorkspaceTab
           active={selectedTab === "settings"}
-          displayName="Settings"
+          displayName="Настройки"
           tabName="settings"
           icon={<Sliders className="h-4 w-4 flex-shrink-0" />}
           onClick={changeTab}

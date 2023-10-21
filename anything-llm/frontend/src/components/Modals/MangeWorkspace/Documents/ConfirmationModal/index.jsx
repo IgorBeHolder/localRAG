@@ -1,12 +1,12 @@
 import React from "react";
-import { dollarFormat } from "../../../../../utils/numbers";
+import {dollarFormat} from "../../../../../utils/numbers";
 
 export default function ConfirmationModal({
-  directories,
-  hideConfirm,
-  additions,
-  updateWorkspace,
-}) {
+                                            directories,
+                                            hideConfirm,
+                                            additions,
+                                            updateWorkspace
+                                          }) {
   function estimateCosts() {
     const cachedTokens = additions.map((filepath) => {
       const [parent, filename] = filepath.split("/");
@@ -14,7 +14,7 @@ export default function ConfirmationModal({
         .find((folder) => folder.name === parent)
         .items.find((file) => file.name === filename);
 
-      const { token_count_estimate = 0, cached = false } = details;
+      const {token_count_estimate = 0, cached = false} = details;
       return cached ? token_count_estimate : 0;
     });
     const tokenEstimates = additions.map((filepath) => {
@@ -23,7 +23,7 @@ export default function ConfirmationModal({
         .find((folder) => folder.name === parent)
         .items.find((file) => file.name === filename);
 
-      const { token_count_estimate = 0 } = details;
+      const {token_count_estimate = 0} = details;
       return token_count_estimate;
     });
 
@@ -34,36 +34,35 @@ export default function ConfirmationModal({
     return {
       dollarValue,
       dollarText:
-        dollarValue < 0.01 ? "< $0.01" : `about ${dollarFormat(dollarValue)}`,
+        dollarValue < 0.01 ? "< $0.01" : `about ${dollarFormat(dollarValue)}`
     };
   }
 
-  const { dollarValue, dollarText } = estimateCosts();
+  const {dollarValue, dollarText} = estimateCosts();
   return (
     <dialog
       open={true}
-      style={{ zIndex: 100 }}
+      style={{zIndex: 100}}
       className="fixed top-0 flex bg-black bg-opacity-50 w-[100vw] h-full items-center justify-center "
     >
-      <div className="w-fit px-10 p-4 min-w-1/2 rounded-lg bg-white shadow dark:bg-stone-700 text-black dark:text-slate-200">
+      <div
+        className="w-fit px-10 p-4 min-w-1/2 rounded-lg bg-white shadow dark:bg-stone-700 text-black dark:text-slate-200">
         <div className="flex flex-col w-full">
           <p className="font-semibold">
-            Are you sure you want to embed these documents?
+            Вы уверены, что хотите встроить эти документы?
           </p>
 
           <div className="flex flex-col gap-y-1">
             {dollarValue <= 0 ? (
               <p className="text-base mt-4">
-                You will be embedding {additions.length} new documents into this
-                workspace.
-                <br />
-                This will not incur any costs for OpenAI credits.
+                Вы будете вставлять новые документы ({additions.length}) в это рабочее пространство.
+                <br/>
+                Это не повлечет за собой никаких затрат на кредиты OpenAI.
               </p>
             ) : (
               <p className="text-base mt-4">
-                You will be embedding {additions.length} new documents into this
-                workspace. <br />
-                This will cost {dollarText} in OpenAI credits.
+                Вы будете вставлять новые документы ({additions.length}) в это рабочее пространство. <br/>
+                Это будет стоить {dollarText} в кредитах OpenAI.
               </p>
             )}
           </div>
@@ -73,13 +72,13 @@ export default function ConfirmationModal({
               onClick={hideConfirm}
               className="text-gray-800 hover:bg-gray-100 px-4 py-1 rounded-lg dark:text-slate-200 dark:hover:bg-stone-900"
             >
-              Cancel
+              Отменить
             </button>
             <button
               onClick={updateWorkspace}
               className="border border-gray-800 text-gray-800 hover:bg-gray-100 px-4 py-1 rounded-lg dark:text-slate-200 dark:border-slate-200 dark:hover:bg-stone-900"
             >
-              Continue
+              Продолжить
             </button>
           </div>
         </div>

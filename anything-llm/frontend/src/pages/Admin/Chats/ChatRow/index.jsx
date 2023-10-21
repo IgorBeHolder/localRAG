@@ -8,7 +8,7 @@ export default function ChatRow({ chat }) {
   const handleDelete = async () => {
     if (
       !window.confirm(
-        `Are you sure you want to delete this chat?\n\nThis action is irreversible.`
+        `Вы уверены, что хотите удалить этот чат?\n\nЭто действие необратимо.`
       )
     )
       return false;
@@ -48,7 +48,7 @@ export default function ChatRow({ chat }) {
             onClick={handleDelete}
             className="font-medium text-red-600 dark:text-red-300 px-2 py-1 rounded-lg hover:bg-red-50 hover:dark:bg-red-800 hover:dark:bg-opacity-20"
           >
-            Delete
+            Удалить
           </button>
         </td>
       </tr>
@@ -72,15 +72,15 @@ const TextPreview = ({ text, modalName }) => {
         <div className="min-w-1/2 relative bg-white rounded-lg shadow dark:bg-stone-700">
           <div className="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
             <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-              Viewing Text
+              Просмотр текста
             </h3>
             <button
               onClick={() => hideModal(modalName)}
               type="button"
-              className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+              className="transition-all duration-300 text-gray-400 bg-transparent hover:bg-blue-100 hover:text-blue-600 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
               data-modal-hide="staticModal"
             >
-              <X className="text-gray-300 text-lg" />
+              <X className="text-__gray-300 text-lg" />
             </button>
           </div>
           <div className="w-full p-4 w-full flex">

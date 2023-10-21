@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import usePrefersDarkMode from "./usePrefersDarkMode";
 import System from "../models/system";
-import AnythingLLMDark from "../media/logo/anything-llm-dark.png";
-import AnythingLLMLight from "../media/logo/anything-llm-light.png";
+import AnythingLLMDark from "../media/logo/icon_ai.png";
+import AnythingLLMLight from "../media/logo/icon_ai.png";
 
 export default function useLogo() {
   const [logo, setLogo] = useState("");

@@ -1,29 +1,29 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import {
   FileMinus,
   FilePlus,
   Folder,
   FolderMinus,
   FolderPlus,
-  Zap,
+  Zap
 } from "react-feather";
-import { nFormatter } from "../../../../../utils/numbers";
+import {nFormatter} from "../../../../../utils/numbers";
 import System from "../../../../../models/system";
 
 export default function Directory({
-  files,
-  parent = null,
-  nested = 0,
-  toggleSelection,
-  isSelected,
-}) {
+                                    files,
+                                    parent = null,
+                                    nested = 0,
+                                    toggleSelection,
+                                    isSelected
+                                  }) {
   const [isExpanded, toggleExpanded] = useState(false);
   const [showDetails, toggleDetails] = useState(false);
   const [showZap, setShowZap] = useState(false);
   const handleDelete = async (name, meta) => {
     if (
       !window.confirm(
-        "Are you sure you want to delete this document?\nThis will require you to re-upload and re-embed it.\nThis document will be removed from any workspace that is currently referencing it.\nThis action is not reversible."
+        "Вы уверены, что хотите удалить этот документ?\nДля этого вам потребуется повторно загрузить и повторно встроить его.\nЭтот документ будет удален из любого рабочего пространства, которая в данный момент ссылается на него.\nЭто действие необратимо."
       )
     )
       return false;
@@ -33,18 +33,18 @@ export default function Directory({
 
   if (files.type === "folder") {
     return (
-      <div style={{ marginLeft: nested }} className="mb-2">
+      <div style={{marginLeft: nested}} className="mb-2">
         <div
           className={`flex items-center hover:bg-gray-100 gap-x-2 text-gray-800 dark:text-stone-200 dark:hover:bg-stone-800 px-2 rounded-lg`}
         >
           {files.items.some((files) => files.type === "folder") ? (
-            <Folder className="w-6 h-6" />
+            <Folder className="w-6 h-6"/>
           ) : (
             <button onClick={() => toggleSelection(files.name)}>
               {isSelected(files.name) ? (
-                <FolderMinus className="w-6 h-6 stroke-red-800 hover:fill-red-500" />
+                <FolderMinus className="w-6 h-6 stroke-red-800 hover:fill-red-500"/>
               ) : (
-                <FolderPlus className="w-6 h-6 hover:stroke-green-800 hover:fill-green-500" />
+                <FolderPlus className="w-6 h-6 hover:stroke-green-800 hover:fill-green-500"/>
               )}
             </button>
           )}
@@ -62,7 +62,7 @@ export default function Directory({
                 {nFormatter(
                   files.items.reduce((a, b) => a + b.token_count_estimate, 0)
                 )}{" "}
-                tokens
+                токенов
               </p>
             )}
           </div>
@@ -82,7 +82,7 @@ export default function Directory({
     );
   }
 
-  const { name, type: _type, ...meta } = files;
+  const {name, type: _type, ...meta} = files;
   return (
     <div className="ml-[20px] my-2" id={meta.id}>
       <div className="flex items-center">
@@ -92,32 +92,33 @@ export default function Directory({
             onClick={() => setShowZap(true)}
             className="rounded-full p-1 hover:bg-stone-500 hover:bg-opacity-75"
           >
-            <Zap className="h-4 w-4 stroke-yellow-500 fill-yellow-400" />
+            <Zap className="h-4 w-4 stroke-yellow-500 fill-yellow-400"/>
           </button>
         )}
         {showZap && (
           <dialog
             open={true}
-            style={{ zIndex: 100 }}
+            style={{zIndex: 100}}
             className="fixed top-0 flex bg-black bg-opacity-50 w-[100vw] h-full items-center justify-center "
           >
-            <div className="w-fit px-10 py-4 w-[25%] rounded-lg bg-white shadow dark:bg-stone-700 text-black dark:text-slate-200">
+            <div
+              className="w-fit px-10 py-4 w-[25%] rounded-lg bg-white shadow dark:bg-stone-700 text-black dark:text-slate-200">
               <div className="flex flex-col w-full">
                 <p className="font-semibold text-xl flex items-center gap-x-1 justify-left">
-                  What does{" "}
-                  <Zap className="h-4 w-4 stroke-yellow-500 fill-yellow-400" />{" "}
-                  mean?
+                  Что{" "}
+                  <Zap className="h-4 w-4 stroke-yellow-500 fill-yellow-400"/>{" "}
+                  значит?
                 </p>
                 <p className="text-base mt-4">
-                  This symbol indicates that you have embed this document before
-                  and will not have to pay to re-embed this document.
+                  Этот символ указывает на то, что вы уже встраивали этот документ ранее и вам не придется платить за
+                  повторное встраивание этого документа.
                 </p>
                 <div className="flex w-full justify-center items-center mt-4">
                   <button
                     onClick={() => setShowZap(false)}
                     className="border border-gray-800 text-gray-800 hover:bg-gray-100 px-4 py-1 rounded-lg dark:text-slate-200 dark:border-slate-200 dark:hover:bg-stone-900"
                   >
-                    Close
+                    Закрыть
                   </button>
                 </div>
               </div>
@@ -130,9 +131,9 @@ export default function Directory({
         >
           <button onClick={() => toggleSelection(`${parent}/${name}`)}>
             {isSelected(`${parent}/${name}`) ? (
-              <FileMinus className="w-6 h-6 stroke-red-800 hover:fill-red-500" />
+              <FileMinus className="w-6 h-6 stroke-red-800 hover:fill-red-500"/>
             ) : (
-              <FilePlus className="w-6 h-6 hover:stroke-green-800 hover:fill-green-500" />
+              <FilePlus className="w-6 h-6 hover:stroke-green-800 hover:fill-green-500"/>
             )}
           </button>
           <div
@@ -140,13 +141,14 @@ export default function Directory({
             onClick={() => toggleDetails(!showDetails)}
           >
             <h3 className="text-sm">{name}</h3>
-            <br />
+            <br/>
           </div>
         </div>
       </div>
       {showDetails && (
         <div className="w-full flex flex-col">
-          <div className="ml-[20px] flex flex-col gap-y-1 my-1 p-2 rounded-md bg-slate-200 font-mono text-sm overflow-x-scroll">
+          <div
+            className="ml-[20px] flex flex-col gap-y-1 my-1 p-2 rounded-md bg-slate-200 font-mono text-sm overflow-x-scroll">
             {Object.entries(meta).map(([key, value], i) => {
               if (key === "cached") return null;
               return (
@@ -161,7 +163,7 @@ export default function Directory({
             className="flex items-center justify-end w-full"
           >
             <button className="text-sm text-slate-400 dark:text-stone-500 hover:text-red-500">
-              Purge Document
+              Очистить документ
             </button>
           </div>
         </div>

@@ -3,8 +3,8 @@
 // so no additional security is needed on the endpoint directly. Auth is done however by the express
 // middleware prior to leaving the node-side of the application so that is good enough >:)
 
-// const PYTHON_API = "http://0.0.0.0:3005";  //  doc server running on host machine
-const PYTHON_API = "http://localhost:3005";  // doc server running in docker container
+const PYTHON_API = "http://0.0.0.0:3005";  //  doc server running on host machine
+// const PYTHON_API = "http://localhost:3005";  // doc server running in docker container
 async function checkPythonAppAlive() {
   return await fetch(`${PYTHON_API}`)
     .then((res) => res.ok)

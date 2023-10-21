@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import Sidebar, { SidebarMobileHeader } from "../../../components/AdminSidebar";
-import { isMobile } from "react-device-detect";
+import React, {useState, useEffect} from "react";
+import Sidebar, {SidebarMobileHeader} from "../../../components/AdminSidebar";
+import {isMobile} from "react-device-detect";
 import Admin from "../../../models/admin";
-import AnythingLLMLight from "../../../media/logo/anything-llm-light.png";
-import AnythingLLMDark from "../../../media/logo/anything-llm-dark.png";
+import AnythingLLMLight from "../../../media/logo/icon_ai.png";
+import AnythingLLMDark from "../../../media/logo/icon_ai.png";
 import usePrefersDarkMode from "../../../hooks/usePrefersDarkMode";
 import useLogo from "../../../hooks/useLogo";
 import System from "../../../models/system";
@@ -11,7 +11,7 @@ import EditingChatBubble from "../../../components/EditingChatBubble";
 import showToast from "../../../utils/toast";
 
 export default function Appearance() {
-  const { logo: _initLogo } = useLogo();
+  const {logo: _initLogo} = useLogo();
   const [logo, setLogo] = useState("");
   const prefersDarkMode = usePrefersDarkMode();
   const [hasChanges, setHasChanges] = useState(false);
@@ -21,6 +21,7 @@ export default function Appearance() {
     async function setInitLogo() {
       setLogo(_initLogo || "");
     }
+
     setInitLogo();
   }, [_initLogo]);
 
@@ -29,6 +30,7 @@ export default function Appearance() {
       const messages = await System.getWelcomeMessages();
       setMessages(messages);
     }
+
     fetchMessages();
   }, []);
 
@@ -38,40 +40,40 @@ export default function Appearance() {
 
     const formData = new FormData();
     formData.append("logo", file);
-    const { success, error } = await Admin.uploadLogo(formData);
+    const {success, error} = await Admin.uploadLogo(formData);
     if (!success) {
-      showToast(`Failed to upload logo: ${error}`, "error");
+      showToast(`Не удалось загрузить логотип: ${error}`, "error");
       return;
     }
 
     const logoURL = await System.fetchLogo();
     setLogo(logoURL);
-    showToast("Image uploaded successfully.", "success");
+    showToast("Изображение успешно загружено.", "success");
   };
 
   const handleRemoveLogo = async () => {
-    const { success, error } = await Admin.removeCustomLogo();
+    const {success, error} = await Admin.removeCustomLogo();
     if (!success) {
-      console.error("Failed to remove logo:", error);
-      showToast(`Failed to remove logo: ${error}`, "error");
+      console.error("Не удалось удалить логотип:", error);
+      showToast(`Не удалось удалить логотип: ${error}`, "error");
       return;
     }
 
     const logoURL = await System.fetchLogo();
     setLogo(logoURL);
-    showToast("Image successfully removed.", "success");
+    showToast("Изображение успешно удалено.", "success");
   };
 
   const addMessage = (type) => {
     if (type === "user") {
       setMessages([
         ...messages,
-        { user: "Double click to edit...", response: "" },
+        {user: "Дважды щелкните, чтобы изменить...", response: ""}
       ]);
     } else {
       setMessages([
         ...messages,
-        { user: "", response: "Double click to edit..." },
+        {user: "", response: "Дважды щелкните, чтобы изменить..."}
       ]);
     }
   };
@@ -89,39 +91,38 @@ export default function Appearance() {
   };
 
   const handleMessageSave = async () => {
-    const { success, error } = await Admin.setWelcomeMessages(messages);
+    const {success, error} = await Admin.setWelcomeMessages(messages);
     if (!success) {
-      showToast(`Failed to update welcome messages: ${error}`, "error");
+      showToast(`Не удалось обновить приветственные сообщения: ${error}`, "error");
       return;
     }
-    showToast("Successfully updated welcome messages.", "success");
+    showToast("Приветственные сообщения успешно обновлены.", "success");
     setHasChanges(false);
   };
 
   return (
     <div className="w-screen h-screen overflow-hidden bg-orange-100 dark:bg-stone-700 flex">
-      {!isMobile && <Sidebar />}
+      {!isMobile && <Sidebar/>}
       <div
-        style={{ height: isMobile ? "100%" : "calc(100% - 32px)" }}
-        className="transition-all duration-500 relative md:ml-[2px] md:mr-[8px] md:my-[16px] md:rounded-[26px] bg-white dark:bg-black-900 md:min-w-[82%] p-[18px] h-full overflow-y-scroll"
+        className="main-content transition-all duration-500 relative bg-white dark:bg-black-900 h-full overflow-hidden p-[16px] md:p-[32px] !pb-0"
       >
-        {isMobile && <SidebarMobileHeader />}
+        {isMobile && <SidebarMobileHeader/>}
         <div className="px-1 md:px-8">
           <div className="mb-6">
             <p className="text-3xl font-semibold text-slate-600 dark:text-slate-200">
-              Appearance Settings
+              Настройки внешнего вида
             </p>
             <p className="mt-2 text-sm font-base text-slate-600 dark:text-slate-200">
-              Customize the appearance settings of your platform.
+              Настройте параметры внешнего вида вашей платформы.
             </p>
           </div>
           <div className="mb-6">
             <div className="flex flex-col gap-y-2">
               <h2 className="leading-tight font-medium text-black dark:text-white">
-                Custom Logo
+                Пользовательский логотип
               </h2>
               <p className="leading-tight text-sm text-gray-500 dark:text-slate-400">
-                Change the logo that appears in the sidebar.
+                Измените логотип, который появляется на боковой панели.
               </p>
             </div>
             <div className="flex md:flex-row flex-col items-center">
@@ -137,8 +138,9 @@ export default function Appearance() {
               />
               <div className="flex flex-col">
                 <div className="mb-4">
-                  <label className="cursor-pointer text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
-                    Upload Image
+                  <label
+                    className="cursor-pointer text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
+                    Загрузить изображение
                     <input
                       type="file"
                       accept="image/*"
@@ -150,11 +152,11 @@ export default function Appearance() {
                     onClick={handleRemoveLogo}
                     className="ml-4 cursor-pointer text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
                   >
-                    Remove Custom Logo
+                    Удалить пользовательский логотип
                   </button>
                 </div>
                 <div className="text-sm text-gray-600 dark:text-gray-300">
-                  Upload your logo. Recommended size: 800x200.
+                  Загрузите свой логотип. Рекомендуемый размер: 800x200.
                 </div>
               </div>
             </div>
@@ -162,10 +164,10 @@ export default function Appearance() {
           <div className="mb-6">
             <div className="flex flex-col gap-y-2">
               <h2 className="leading-tight font-medium text-black dark:text-white">
-                Custom Messages
+                Пользовательские сообщения
               </h2>
               <p className="leading-tight text-sm text-gray-500 dark:text-slate-400">
-                Change the default messages that are displayed to the users.
+                Измените сообщения по умолчанию, которые отображаются пользователям.
               </p>
             </div>
             <div className="mt-6 flex flex-col gap-y-6">
@@ -196,13 +198,13 @@ export default function Appearance() {
                   className="self-end text-orange-500 hover:text-orange-700 transition"
                   onClick={() => addMessage("response")}
                 >
-                  + System Message
+                  + Системное сообщение
                 </button>
                 <button
                   className="self-end text-orange-500 hover:text-orange-700 transition"
                   onClick={() => addMessage("user")}
                 >
-                  + User Message
+                  + Сообщение пользователя
                 </button>
               </div>
             </div>
@@ -212,7 +214,7 @@ export default function Appearance() {
                   className="ml-4 cursor-pointer text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
                   onClick={handleMessageSave}
                 >
-                  Save Messages
+                  Сохранить сообщения
                 </button>
               </div>
             )}

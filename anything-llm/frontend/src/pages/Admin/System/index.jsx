@@ -22,7 +22,7 @@ export default function AdminSystem() {
     });
     setSaving(false);
     setHasChanges(false);
-    showToast("System preferences updated successfully.", "success");
+    showToast("Системные настройки успешно обновлены.", "success");
   };
 
   useEffect(() => {
@@ -42,8 +42,7 @@ export default function AdminSystem() {
     <div className="w-screen h-screen overflow-hidden bg-orange-100 dark:bg-stone-700 flex">
       {!isMobile && <Sidebar />}
       <div
-        style={{ height: isMobile ? "100%" : "calc(100% - 32px)" }}
-        className="transition-all duration-500 relative md:ml-[2px] md:mr-[8px] md:my-[16px] md:rounded-[26px] bg-white dark:bg-black-900 md:min-w-[82%] p-[18px] h-full overflow-y-scroll"
+        className="main-content transition-all duration-500 relative bg-white dark:bg-black-900 h-full overflow-hidden p-[16px] md:p-[32px] !pb-0"
       >
         {isMobile && <SidebarMobileHeader />}
         <form
@@ -51,7 +50,7 @@ export default function AdminSystem() {
           onChange={() => setHasChanges(true)}
           className="flex w-full"
         >
-          <div className="flex flex-col w-full px-1 md:px-8">
+          <div className="main-box flex flex-col w-full h-full p-1 md:p-8 lg:p-[50px] bg-white shadow-md relative overflow-y-auto">
             <div className="w-full flex flex-col gap-y-1">
               <div className="items-center flex gap-x-4">
                 <p className="text-3xl font-semibold text-slate-600 dark:text-slate-200">
@@ -63,24 +62,22 @@ export default function AdminSystem() {
                     disabled={saving}
                     className="border border-slate-800 dark:border-slate-200 px-4 py-1 rounded-lg text-slate-800 dark:text-slate-200 text-sm items-center flex gap-x-2 hover:bg-slate-800 hover:text-slate-100 dark:hover:bg-slate-200 dark:hover:text-slate-800"
                   >
-                    {saving ? "Saving..." : "Save changes"}
+                    {saving ? "Сохранение..." : "Сохранить изменения"}
                   </button>
                 )}
               </div>
               <p className="text-sm font-base text-slate-600 dark:text-slate-200">
-                These are the overall settings and configurations of your
-                instance.
+                Это общие настройки и конфигурации вашего экземпляра.
               </p>
             </div>
 
             <div className="my-4">
               <div className="flex flex-col gap-y-2 mb-2.5">
                 <label className="leading-tight font-medium text-black dark:text-white">
-                  Users can delete workspaces
+                  Пользователи могут удалять рабочие пространства
                 </label>
                 <p className="leading-tight text-sm text-gray-500 dark:text-slate-400">
-                  allow non-admin users to delete workspaces that they are a
-                  part of. This would delete the workspace for everyone.
+                  разрешить пользователям, не являющимся администраторами, удалять рабочие пространства, частью которых они являются. Это приведет к удалению рабочего пространства для всех.
                 </p>
               </div>
               <label className="relative inline-flex cursor-pointer items-center">
@@ -99,12 +96,10 @@ export default function AdminSystem() {
             <div className="my-4">
               <div className="flex flex-col gap-y-2 mb-2.5">
                 <label className="leading-tight font-medium text-black dark:text-white">
-                  Limit messages per user per day
+                  Ограничить количество сообщений на пользователя в день
                 </label>
                 <p className="leading-tight text-sm text-gray-500 dark:text-slate-400">
-                  Restrict non-admin users to a number of successful queries or
-                  chats within a 24 hour window. Enable this to prevent users
-                  from running up OpenAI costs.
+                  Ограничьте пользователей, не являющихся администраторами, количеством успешных запросов или чатов в течение 24 часов. Включите это, чтобы пользователи не увеличивали расходы на OpenAI.
                 </p>
               </div>
               <label className="relative inline-flex cursor-pointer items-center">
@@ -128,7 +123,7 @@ export default function AdminSystem() {
             {messageLimit.enabled && (
               <div className="mb-4">
                 <label className=" block flex items-center gap-x-1 font-medium text-black dark:text-white">
-                  Message limit per day
+                  Лимит сообщений в день
                 </label>
                 <div className="relative">
                   <input

@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import { X } from "react-feather";
+import React, {useState} from "react";
+import {X} from "react-feather";
 import Admin from "../../../../models/admin";
+
 const DIALOG_ID = `new-workspace-modal`;
 
 function hideModal() {
@@ -14,7 +15,7 @@ export default function NewWorkspaceModal() {
     setError(null);
     e.preventDefault();
     const form = new FormData(e.target);
-    const { workspace, error } = await Admin.newWorkspace(form.get("name"));
+    const {workspace, error} = await Admin.newWorkspace(form.get("name"));
     if (!!workspace) window.location.reload();
     setError(error);
   };
@@ -30,10 +31,10 @@ export default function NewWorkspaceModal() {
             <button
               onClick={hideModal}
               type="button"
-              className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+              className="transition-all duration-300 text-gray-400 bg-transparent hover:bg-blue-100 hover:text-blue-600 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
               data-modal-hide="staticModal"
             >
-              <X className="text-gray-300 text-lg" />
+              <X className="text-__gray-300 text-lg"/>
             </button>
           </div>
           <form onSubmit={handleCreate}>
@@ -44,13 +45,13 @@ export default function NewWorkspaceModal() {
                     htmlFor="name"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
-                    Workspace name
+                    Имя рабочего пространства
                   </label>
                   <input
                     name="name"
                     type="text"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-stone-600 dark:border-stone-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="My workspace"
+                    placeholder="Мое рабочее пространство"
                     minLength={4}
                     required={true}
                     autoComplete="off"
@@ -58,28 +59,29 @@ export default function NewWorkspaceModal() {
                 </div>
                 {error && (
                   <p className="text-red-600 dark:text-red-400 text-sm">
-                    Error: {error}
+                    Ошибка: {error}
                   </p>
                 )}
                 <p className="text-gray-800 dark:text-slate-200 text-xs md:text-sm">
-                  After creating this workspace only admins will be able to see
-                  it. You can add users after it has been created.
+                  После создания этого рабочего пространства его смогут видеть только администраторы. Вы можете
+                  добавлять пользователей после его создания.
                 </p>
               </div>
             </div>
-            <div className="flex w-full justify-between items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
+            <div
+              className="flex w-full justify-between items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
               <button
                 onClick={hideModal}
                 type="button"
                 className="text-gray-800 hover:bg-gray-100 px-4 py-1 rounded-lg dark:text-slate-200 dark:hover:bg-stone-900"
               >
-                Cancel
+                Отменить
               </button>
               <button
                 type="submit"
                 className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-black dark:text-slate-200 dark:border-transparent dark:hover:text-slate-200 dark:hover:bg-gray-900 dark:focus:ring-gray-800"
               >
-                Create workspace
+                Создать рабочее пространство
               </button>
             </div>
           </form>

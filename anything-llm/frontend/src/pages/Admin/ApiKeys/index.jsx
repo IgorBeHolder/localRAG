@@ -15,11 +15,10 @@ export default function AdminApiKeys() {
     <div className="w-screen h-screen overflow-hidden bg-orange-100 dark:bg-stone-700 flex">
       {!isMobile && <Sidebar />}
       <div
-        style={{ height: isMobile ? "100%" : "calc(100% - 32px)" }}
-        className="transition-all duration-500 relative md:ml-[2px] md:mr-[8px] md:my-[16px] md:rounded-[26px] bg-white dark:bg-black-900 md:min-w-[82%] p-[18px] h-full overflow-y-scroll"
+        className="main-content transition-all duration-500 relative bg-white dark:bg-black-900 h-full overflow-hidden p-[16px] md:p-[32px] !pb-0"
       >
         {isMobile && <SidebarMobileHeader />}
-        <div className="flex flex-col w-full px-1 md:px-8">
+        <div className="main-box flex flex-col w-full h-full p-1 md:p-8 lg:p-[50px] bg-white shadow-md relative overflow-y-auto">
           <div className="w-full flex flex-col gap-y-1">
             <div className="items-center flex gap-x-4">
               <p className="text-3xl font-semibold text-slate-600 dark:text-slate-200">
@@ -36,7 +35,7 @@ export default function AdminApiKeys() {
             </div>
             <p className="text-sm font-base text-slate-600 dark:text-slate-200">
               API keys allow the holder to programmatically access and manage
-              this AnythingLLM instance.
+              this Sherpa AI Server instance.
             </p>
             <a
               href={paths.apiDocs()}

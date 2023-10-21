@@ -14,15 +14,14 @@ export default function AdminWorkspaces() {
     <div className="w-screen h-screen overflow-hidden bg-orange-100 dark:bg-stone-700 flex">
       {!isMobile && <Sidebar />}
       <div
-        style={{ height: isMobile ? "100%" : "calc(100% - 32px)" }}
-        className="transition-all duration-500 relative md:ml-[2px] md:mr-[8px] md:my-[16px] md:rounded-[26px] bg-white dark:bg-black-900 md:min-w-[82%] p-[18px] h-full overflow-y-scroll"
+        className="main-content transition-all duration-500 relative bg-white dark:bg-black-900 h-full overflow-hidden p-[16px] md:p-[32px] !pb-0"
       >
         {isMobile && <SidebarMobileHeader />}
-        <div className="flex flex-col w-full px-1 md:px-8">
+        <div className="main-box flex flex-col w-full h-full p-1 md:p-8 lg:p-[50px] bg-white shadow-md relative overflow-y-auto">
           <div className="w-full flex flex-col gap-y-1">
             <div className="items-center flex gap-x-4">
               <p className="text-3xl font-semibold text-slate-600 dark:text-slate-200">
-                Instance workspaces
+                Рабочие пространства экземпляра
               </p>
               <button
                 onClick={() =>
@@ -30,12 +29,11 @@ export default function AdminWorkspaces() {
                 }
                 className="border border-slate-800 dark:border-slate-200 px-4 py-1 rounded-lg text-slate-800 dark:text-slate-200 text-sm items-center flex gap-x-2 hover:bg-slate-800 hover:text-slate-100 dark:hover:bg-slate-200 dark:hover:text-slate-800"
               >
-                <BookOpen className="h-4 w-4" /> New Workspace
+                <BookOpen className="h-4 w-4" /> Новое рабочее пространство
               </button>
             </div>
             <p className="text-sm font-base text-slate-600 dark:text-slate-200">
-              These are all the workspaces that exist on this instance. Removing
-              a workspace will delete all of it's associated chats and settings.
+              Это все рабочие пространства, существующие в этом экземпляре. Удаление рабочего пространства приведет к удалению всех связанных с ним чатов и настроек.
             </p>
           </div>
           <WorkspacesContainer />
@@ -82,19 +80,19 @@ function WorkspacesContainer() {
       <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-stone-800 dark:text-gray-400">
         <tr>
           <th scope="col" className="px-6 py-3 rounded-tl-lg">
-            Name
+            Имя
           </th>
           <th scope="col" className="px-6 py-3">
-            Link
+            Связь
           </th>
           <th scope="col" className="px-6 py-3">
-            Users
+            Пользователи
           </th>
           <th scope="col" className="px-6 py-3">
-            Created On
+            Дата создания
           </th>
           <th scope="col" className="px-6 py-3 rounded-tr-lg">
-            Actions
+            Действия
           </th>
         </tr>
       </thead>
