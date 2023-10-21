@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import System from "../../../../models/system";
 import Workspace from "../../../../models/workspace";
 import paths from "../../../../utils/paths";
-import { useParams } from "react-router-dom";
+import {useParams} from "react-router-dom";
 import Directory from "./Directory";
 import ConfirmationModal from "./ConfirmationModal";
-import { AlertTriangle } from "react-feather";
+import {AlertTriangle} from "react-feather";
 import showToast from "../../../../utils/toast";
 
-export default function DocumentSettings({ workspace }) {
-  const { slug } = useParams();
+export default function DocumentSettings({workspace}) {
+  const {slug} = useParams();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -46,7 +46,7 @@ export default function DocumentSettings({ workspace }) {
   const deleteWorkspace = async () => {
     if (
       !window.confirm(
-        `You are about to delete your entire ${workspace.name} workspace. This will remove all vector embeddings on your vector database.\n\nThe original source files will remain untouched. This action is irreversible.`
+        `Вы собираетесь удалить всю рабочее пространство ${workspace.name}. Это приведет к удалению всех вложений векторов из вашей векторной базы данных.\n\nИсходные исходные файлы останутся нетронутыми. Это действие необратимо.`
       )
     )
       return false;
@@ -59,7 +59,7 @@ export default function DocumentSettings({ workspace }) {
   const docChanges = () => {
     const changes = {
       adds: [],
-      deletes: [],
+      deletes: []
     };
 
     selectedFiles.map((doc) => {
@@ -88,23 +88,23 @@ export default function DocumentSettings({ workspace }) {
   const updateWorkspace = async (e) => {
     e.preventDefault();
     setSaving(true);
-    showToast("Updating workspace...", "info", { autoClose: false });
+    showToast("Updating workspace...", "info", {autoClose: false});
     setShowConfirmation(false);
 
     const changes = docChanges();
     await Workspace.modifyEmbeddings(workspace.slug, changes)
       .then((res) => {
         if (res && res.workspace) {
-          showToast("Workspace updated successfully.", "success", {
-            clear: true,
+          showToast("Рабочее пространство успешно обновлено.", "success", {
+            clear: true
           });
         } else {
-          showToast("Workspace update failed.", "error", { clear: true });
+          showToast("Ошибка обновления рабочего пространства.", "error", {clear: true});
         }
       })
       .catch((error) => {
-        showToast(`Workspace update failed: ${error}`, "error", {
-          clear: true,
+        showToast(`Ошибка обновления рабочего пространства: ${error}`, "error", {
+          clear: true
         });
       });
 
@@ -149,7 +149,7 @@ export default function DocumentSettings({ workspace }) {
         <div className="p-6 flex h-full w-full max-h-[80vh] overflow-y-scroll">
           <div className="flex flex-col gap-y-1 w-full">
             <p className="text-slate-200 dark:text-stone-300 text-center">
-              loading workspace files
+              загрузка файлов рабочего пространства
             </p>
           </div>
         </div>
@@ -171,21 +171,21 @@ export default function DocumentSettings({ workspace }) {
       <div className="p-6 flex h-full w-full max-h-[80vh] overflow-y-scroll">
         <div className="flex flex-col gap-y-1 w-full">
           {!hasFiles && (
-            <div className="mb-4 w-full gap-x-2 rounded-lg h-10 border bg-orange-200 border-orange-800 dark:bg-orange-300 text-orange-800 flex  items-center justify-center">
-              <AlertTriangle className="h-6 w-6" />
+            <div
+              className="mb-4 w-full gap-x-2 rounded-lg h-10 border bg-orange-200 border-orange-800 dark:bg-orange-300 text-orange-800 flex  items-center justify-center">
+              <AlertTriangle className="h-6 w-6"/>
               <p className="text-sm">
-                You don't have any files uploaded. Upload a file via the "Upload
-                Docs" tab.
+                У вас нет загруженных файлов. Загрузите файл через вкладку «Загрузить документы».
               </p>
             </div>
           )}
 
           <div className="flex flex-col mb-2">
             <p className="text-gray-800 dark:text-stone-200 text-base ">
-              Select folders to add or remove from workspace.
+              Выберите папки для добавления или удаления из рабочего пространства.
             </p>
             <p className="text-gray-800 dark:text-stone-400 text-xs italic">
-              {selectedFiles.length} documents in workspace selected.
+              Количество выбранных документов: {selectedFiles.length}
             </p>
           </div>
           <div className="w-full h-auto border border-slate-200 dark:border-stone-600 rounded-lg px-4 py-2">
@@ -210,7 +210,7 @@ export default function DocumentSettings({ workspace }) {
           type="button"
           className="border border-transparent text-gray-500 bg-white hover:bg-red-100 rounded-lg whitespace-nowrap text-sm font-medium px-5 py-2.5 hover:text-red-900 focus:z-10 dark:bg-transparent dark:text-gray-300 dark:hover:text-white dark:hover:bg-red-600"
         >
-          Delete Workspace
+          Удалить рабочее пространство
         </button>
 
         <div className="flex items-center">

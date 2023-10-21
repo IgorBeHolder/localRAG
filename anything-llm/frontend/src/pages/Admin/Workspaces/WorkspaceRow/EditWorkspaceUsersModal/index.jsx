@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import { X } from "react-feather";
+import React, {useState} from "react";
+import {X} from "react-feather";
 import Admin from "../../../../../models/admin";
-import { titleCase } from "text-case";
+import {titleCase} from "text-case";
 
 export const EditWorkspaceUsersModalId = (workspace) =>
   `edit-workspace-${workspace.id}-modal`;
-export default function EditWorkspaceUsersModal({ workspace, users }) {
+export default function EditWorkspaceUsersModal({workspace, users}) {
   const [error, setError] = useState(null);
   const hideModal = () => {
     document.getElementById(EditWorkspaceUsersModalId(workspace)).close();
@@ -14,7 +14,7 @@ export default function EditWorkspaceUsersModal({ workspace, users }) {
     setError(null);
     e.preventDefault();
     const data = {
-      userIds: [],
+      userIds: []
     };
     const form = new FormData(e.target);
     for (var [key, value] of form.entries()) {
@@ -23,7 +23,7 @@ export default function EditWorkspaceUsersModal({ workspace, users }) {
         data.userIds.push(+id);
       }
     }
-    const { success, error } = await Admin.updateUsersInWorkspace(
+    const {success, error} = await Admin.updateUsersInWorkspace(
       workspace.id,
       data.userIds
     );
@@ -40,7 +40,7 @@ export default function EditWorkspaceUsersModal({ workspace, users }) {
         <div className="relative bg-white rounded-lg shadow dark:bg-stone-700">
           <div className="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
             <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-              Edit {workspace.name}
+              Редактировать {workspace.name}
             </h3>
             <button
               onClick={hideModal}
@@ -48,7 +48,7 @@ export default function EditWorkspaceUsersModal({ workspace, users }) {
               className="transition-all duration-300 text-gray-400 bg-transparent hover:bg-blue-100 hover:text-blue-600 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
               data-modal-hide="staticModal"
             >
-              <X className="text-__gray-300 text-lg" />
+              <X className="text-__gray-300 text-lg"/>
             </button>
           </div>
           <form onSubmit={handleUpdate}>
@@ -122,29 +122,30 @@ export default function EditWorkspaceUsersModal({ workspace, users }) {
                       });
                     }}
                   >
-                    Deselect All
+                    Отменить выделение
                   </button>
                 </div>
                 {error && (
                   <p className="text-red-600 dark:text-red-400 text-sm">
-                    Error: {error}
+                    Ошибка: {error}
                   </p>
                 )}
               </div>
             </div>
-            <div className="flex w-full justify-between items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
+            <div
+              className="flex w-full justify-between items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
               <button
                 onClick={hideModal}
                 type="button"
                 className="text-gray-800 hover:bg-gray-100 px-4 py-1 rounded-lg dark:text-slate-200 dark:hover:bg-stone-900"
               >
-                Cancel
+                Отменить
               </button>
               <button
                 type="submit"
                 className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-black dark:text-slate-200 dark:border-transparent dark:hover:text-slate-200 dark:hover:bg-gray-900 dark:focus:ring-gray-800"
               >
-                Update workspace
+                Обновить рабочее пространство
               </button>
             </div>
           </form>

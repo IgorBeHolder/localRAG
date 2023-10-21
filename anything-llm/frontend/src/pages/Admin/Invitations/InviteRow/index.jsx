@@ -9,12 +9,12 @@ export default function InviteRow({ invite }) {
   const handleDelete = async () => {
     if (
       !window.confirm(
-        `Are you sure you want to deactivate this invite?\nAfter you do this it will not longer be useable.\n\nThis action is irreversible.`
+        `Вы уверены, что хотите деактивировать это приглашение?\nПосле этого его больше нельзя будет использовать.\n\nЭто действие необратимо.`
       )
     )
       return false;
     if (rowRef?.current) {
-      rowRef.current.children[0].innerText = "Disabled";
+      rowRef.current.children[0].innerText = "Отключен";
     }
     setStatus("disabled");
     await Admin.disableInvite(invite.id);
@@ -63,13 +63,13 @@ export default function InviteRow({ invite }) {
                 disabled={copied}
                 className="font-medium text-blue-600 dark:text-blue-300 px-2 py-1 rounded-lg hover:bg-blue-50 hover:dark:bg-blue-800 hover:dark:bg-opacity-20"
               >
-                {copied ? "Copied" : "Copy Invite Link"}
+                {copied ? "Ссылка скопирована" : "Копировать ссылку-приглашение"}
               </button>
               <button
                 onClick={handleDelete}
                 className="font-medium text-red-600 dark:text-red-300 px-2 py-1 rounded-lg hover:bg-red-50 hover:dark:bg-red-800 hover:dark:bg-opacity-20"
               >
-                Deactivate
+                Деактивировать
               </button>
             </>
           )}

@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import System from "../../../models/system";
-import { AUTH_TOKEN } from "../../../utils/constants";
+import {AUTH_TOKEN} from "../../../utils/constants";
 import useLogo from "../../../hooks/useLogo";
 
 export default function SingleUserAuth() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const { logo: _initLogo } = useLogo();
+  const {logo: _initLogo} = useLogo();
   const handleLogin = async (e) => {
     setError(null);
     setLoading(true);
@@ -15,7 +15,7 @@ export default function SingleUserAuth() {
 
     const form = new FormData(e.target);
     for (var [key, value] of form.entries()) data[key] = value;
-    const { valid, token, message } = await System.requestToken(data);
+    const {valid, token, message} = await System.requestToken(data);
     if (valid && !!token) {
       window.localStorage.setItem(AUTH_TOKEN, token);
       window.location.reload();
@@ -31,9 +31,9 @@ export default function SingleUserAuth() {
       <div className="relative bg-white rounded-lg shadow dark:bg-stone-700">
         <div className="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
           <div className="flex items-center flex-col">
-            <img src={_initLogo} alt="Logo" className="w-1/2" />
+            <img src={_initLogo} alt="Logo" className="w-1/2"/>
             <h3 className="text-md md:text-xl font-semibold text-gray-900 dark:text-white">
-              This instance is password protected.
+              Это рабочее пространство защищено паролем
             </h3>
           </div>
         </div>
@@ -44,7 +44,7 @@ export default function SingleUserAuth() {
                 htmlFor="password"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                Workspace Password
+                Пароль рабочего пространства
               </label>
               <input
                 name="password"
@@ -57,22 +57,23 @@ export default function SingleUserAuth() {
             </div>
             {error && (
               <p className="text-red-600 dark:text-red-400 text-sm">
-                Error: {error}
+                Ошибка: {error}
               </p>
             )}
             <p className="text-gray-800 dark:text-slate-200 md:text-sm text-xs">
-              You will only have to enter this password once. After successful
-              login it will be stored in your browser.
+              Вам нужно будет ввести этот пароль только один раз. После успешного входа в систему он будет сохранен в
+              вашем браузере.
             </p>
           </div>
         </div>
-        <div className="flex items-center justify-end p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
+        <div
+          className="flex items-center justify-end p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
           <button
             disabled={loading}
             type="submit"
             className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
           >
-            {loading ? "Validating..." : "Submit"}
+            {loading ? "Проверка..." : "Отправить"}
           </button>
         </div>
       </div>

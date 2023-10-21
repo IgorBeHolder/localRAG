@@ -10,7 +10,7 @@ export default function WorkspaceRow({ workspace, users }) {
   const handleDelete = async () => {
     if (
       !window.confirm(
-        `Are you sure you want to delete ${workspace.name}?\nAfter you do this it will be unavailable in this instance of Sherpa AI Server.\n\nThis action is irreversible.`
+        `Вы уверены, что хотите удалить ${workspace.name}?\nПосле этого он будет недоступен в этом экземпляре Sherpa AI Server.\n\nЭто действие необратимо.`
       )
     )
       return false;
@@ -47,13 +47,13 @@ export default function WorkspaceRow({ workspace, users }) {
             }
             className="font-medium text-blue-600 dark:text-blue-300 px-2 py-1 rounded-lg hover:bg-blue-50 hover:dark:bg-blue-800 hover:dark:bg-opacity-20"
           >
-            Edit Users
+            Редактировать пользователей
           </button>
           <button
             onClick={handleDelete}
             className="font-medium text-red-600 dark:text-red-300 px-2 py-1 rounded-lg hover:bg-red-50 hover:dark:bg-red-800 hover:dark:bg-opacity-20"
           >
-            Delete
+            Удалить
           </button>
         </td>
       </tr>

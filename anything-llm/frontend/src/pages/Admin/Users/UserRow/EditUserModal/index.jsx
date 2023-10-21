@@ -28,7 +28,7 @@ export default function EditUserModal({ user }) {
         <div className="relative bg-white rounded-lg shadow dark:bg-stone-700">
           <div className="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
             <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-              Edit {user.username}
+              Редактировать пользователя {user.username}
             </h3>
             <button
               onClick={hideModal}
@@ -47,13 +47,13 @@ export default function EditUserModal({ user }) {
                     htmlFor="username"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
-                    Username
+                    Имя пользователя
                   </label>
                   <input
                     name="username"
                     type="text"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-stone-600 dark:border-stone-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="User's username"
+                    placeholder="Имя пользователя"
                     minLength={2}
                     defaultValue={user.username}
                     required={true}
@@ -65,13 +65,13 @@ export default function EditUserModal({ user }) {
                     htmlFor="password"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
-                    New Password
+                    Новый пароль
                   </label>
                   <input
                     name="password"
                     type="text"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-stone-600 dark:border-stone-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder={`${user.username}'s new password`}
+                    placeholder={`Новый пароль для ${user.username}`}
                     minLength={8}
                     autoComplete="off"
                   />
@@ -81,7 +81,7 @@ export default function EditUserModal({ user }) {
                     htmlFor="role"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
-                    Role
+                    Роль
                   </label>
                   <select
                     name="role"
@@ -89,13 +89,13 @@ export default function EditUserModal({ user }) {
                     defaultValue={user.role}
                     className="rounded-lg bg-gray-50 px-4 py-2 text-sm text-gray-800 outline-none dark:text-slate-200 dark:bg-stone-600"
                   >
-                    <option value="default">Default</option>
-                    <option value="admin">Administrator</option>
+                    <option value="default">По умолчанию</option>
+                    <option value="admin">Администратор</option>
                   </select>
                 </div>
                 {error && (
                   <p className="text-red-600 dark:text-red-400 text-sm">
-                    Error: {error}
+                    Ошибка: {error}
                   </p>
                 )}
               </div>
@@ -106,13 +106,13 @@ export default function EditUserModal({ user }) {
                 type="button"
                 className="text-gray-800 hover:bg-gray-100 px-4 py-1 rounded-lg dark:text-slate-200 dark:hover:bg-stone-900"
               >
-                Cancel
+                Отменить
               </button>
               <button
                 type="submit"
                 className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-black dark:text-slate-200 dark:border-transparent dark:hover:text-slate-200 dark:hover:bg-gray-900 dark:focus:ring-gray-800"
               >
-                Update user
+                Обновить пользователя
               </button>
             </div>
           </form>

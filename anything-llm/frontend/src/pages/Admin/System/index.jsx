@@ -74,10 +74,10 @@ export default function AdminSystem() {
             <div className="my-4">
               <div className="flex flex-col gap-y-2 mb-2.5">
                 <label className="leading-tight font-medium text-black dark:text-white">
-                  Пользователи могут удалять рабочие области
+                  Пользователи могут удалять рабочие пространства
                 </label>
                 <p className="leading-tight text-sm text-gray-500 dark:text-slate-400">
-                  разрешить пользователям, не являющимся администраторами, удалять рабочие области, частью которых они являются. Это приведет к удалению рабочей области для всех.
+                  разрешить пользователям, не являющимся администраторами, удалять рабочие пространства, частью которых они являются. Это приведет к удалению рабочего пространства для всех.
                 </p>
               </div>
               <label className="relative inline-flex cursor-pointer items-center">

@@ -1,14 +1,14 @@
-import { useEffect, useRef, useState } from "react";
+import {useEffect, useRef, useState} from "react";
 import Admin from "../../../../models/admin";
 import showToast from "../../../../utils/toast";
 
-export default function ApiKeyRow({ apiKey }) {
+export default function ApiKeyRow({apiKey}) {
   const rowRef = useRef(null);
   const [copied, setCopied] = useState(false);
   const handleDelete = async () => {
     if (
       !window.confirm(
-        `Are you sure you want to deactivate this api key?\nAfter you do this it will not longer be useable.\n\nThis action is irreversible.`
+        `Вы уверены, что хотите деактивировать этот ключ API?\nПосле этого его больше нельзя будет использовать.\n\nЭто действие необратимо.`
       )
     )
       return false;
@@ -16,12 +16,12 @@ export default function ApiKeyRow({ apiKey }) {
       rowRef.current.remove();
     }
     await Admin.deleteApiKey(apiKey.id);
-    showToast("API Key permanently deleted", "info");
+    showToast("Ключ API удален навсегда", "info");
   };
   const copyApiKey = () => {
     if (!apiKey) return false;
     window.navigator.clipboard.writeText(apiKey.secret);
-    showToast("API Key copied to clipboard", "success");
+    showToast("Ключ API скопирован в буфер обмена.", "success");
     setCopied(true);
   };
 
@@ -32,6 +32,7 @@ export default function ApiKeyRow({ apiKey }) {
         setCopied(false);
       }, 3000);
     }
+
     resetStatus();
   }, [copied]);
 
@@ -45,7 +46,7 @@ export default function ApiKeyRow({ apiKey }) {
           {apiKey.secret}
         </td>
         <td className="px-6 py-4">
-          {apiKey.createdBy?.username || "unknown user"}
+          {apiKey.createdBy?.username || "неизвестный пользователь"}
         </td>
         <td className="px-6 py-4">{apiKey.createdAt}</td>
         <td className="px-6 py-4 flex items-center gap-x-6">
@@ -54,13 +55,13 @@ export default function ApiKeyRow({ apiKey }) {
             disabled={copied}
             className="font-medium text-blue-600 dark:text-blue-300 px-2 py-1 rounded-lg hover:bg-blue-50 hover:dark:bg-blue-800 hover:dark:bg-opacity-20"
           >
-            {copied ? "Copied" : "Copy API Key"}
+            {copied ? "Ключ API cкопирован" : "Копировать ключ API"}
           </button>
           <button
             onClick={handleDelete}
             className="font-medium text-red-600 dark:text-red-300 px-2 py-1 rounded-lg hover:bg-red-50 hover:dark:bg-red-800 hover:dark:bg-opacity-20"
           >
-            Deactivate API Key
+            Деактивировать ключ API
           </button>
         </td>
       </tr>

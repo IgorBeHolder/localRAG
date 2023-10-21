@@ -47,26 +47,25 @@ export default function NewWorkspaceModal({hideModal = noop}) {
                     htmlFor="name"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
-                    Workspace Name
+                    Имя рабочего пространства
                   </label>
                   <input
                     name="name"
                     type="text"
                     id="name"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-stone-600 dark:border-stone-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="My Workspace"
+                    placeholder="Мое рабочее пространство"
                     required={true}
                     autoComplete="off"
                   />
                 </div>
                 {error && (
                   <p className="text-red-600 dark:text-red-400 text-sm">
-                    Error: {error}
+                    Ошибка: {error}
                   </p>
                 )}
                 <p className="text-gray-800 dark:text-slate-200 text-xs md:text-sm">
-                  After creating a workspace you will be able to add and remove
-                  documents from it.
+                  После создания рабочего пространства вы сможете добавлять и удалять из него документы.
                 </p>
               </div>
             </div>
@@ -77,13 +76,13 @@ export default function NewWorkspaceModal({hideModal = noop}) {
                 type="button"
                 className="text-gray-800 hover:bg-gray-100 px-4 py-1 rounded-lg dark:text-slate-200 dark:hover:bg-stone-900"
               >
-                Cancel
+                Отмена
               </button>
               <button
                 type="submit"
                 className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-black dark:text-slate-200 dark:border-transparent dark:hover:text-slate-200 dark:hover:bg-gray-900 dark:focus:ring-gray-800"
               >
-                Create Workspace
+                Создать рабочее пространство
               </button>
             </div>
           </form>

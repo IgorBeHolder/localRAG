@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import { X } from "react-feather";
+import React, {useState} from "react";
+import {X} from "react-feather";
 import Admin from "../../../../models/admin";
+
 const DIALOG_ID = `new-user-modal`;
 
 function hideModal() {
@@ -16,7 +17,7 @@ export default function NewUserModal() {
     const data = {};
     const form = new FormData(e.target);
     for (var [key, value] of form.entries()) data[key] = value;
-    const { user, error } = await Admin.newUser(data);
+    const {user, error} = await Admin.newUser(data);
     if (!!user) window.location.reload();
     setError(error);
   };
@@ -27,7 +28,7 @@ export default function NewUserModal() {
         <div className="relative bg-white rounded-lg shadow dark:bg-stone-700">
           <div className="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
             <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-              Add user to instance
+              Добавить пользователя в рабочее пространство
             </h3>
             <button
               onClick={hideModal}
@@ -35,7 +36,7 @@ export default function NewUserModal() {
               className="transition-all duration-300 text-gray-400 bg-transparent hover:bg-blue-100 hover:text-blue-600 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
               data-modal-hide="staticModal"
             >
-              <X className="text-__gray-300 text-lg" />
+              <X className="text-__gray-300 text-lg"/>
             </button>
           </div>
           <form onSubmit={handleCreate}>
@@ -46,13 +47,13 @@ export default function NewUserModal() {
                     htmlFor="username"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
-                    Username
+                    Имя пользователя
                   </label>
                   <input
                     name="username"
                     type="text"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-stone-600 dark:border-stone-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="User's username"
+                    placeholder="Имя пользователя"
                     minLength={2}
                     required={true}
                     autoComplete="off"
@@ -63,13 +64,13 @@ export default function NewUserModal() {
                     htmlFor="password"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
-                    Password
+                    Пароль
                   </label>
                   <input
                     name="password"
                     type="text"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-stone-600 dark:border-stone-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="User's initial password"
+                    placeholder="Пароль пользователя"
                     required={true}
                     minLength={8}
                     autoComplete="off"
@@ -80,7 +81,7 @@ export default function NewUserModal() {
                     htmlFor="role"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
-                    Role
+                    Роль
                   </label>
                   <select
                     name="role"
@@ -88,22 +89,23 @@ export default function NewUserModal() {
                     defaultValue={"default"}
                     className="rounded-lg bg-gray-50 px-4 py-2 text-sm text-gray-800 outline-none dark:text-slate-200 dark:bg-stone-600"
                   >
-                    <option value="default">Default</option>
-                    <option value="admin">Administrator</option>
+                    <option value="default">По умолчанию</option>
+                    <option value="admin">Администратор</option>
                   </select>
                 </div>
                 {error && (
                   <p className="text-red-600 dark:text-red-400 text-sm">
-                    Error: {error}
+                    Ошибка: {error}
                   </p>
                 )}
                 <p className="text-gray-800 dark:text-slate-200 text-xs md:text-sm">
-                  After creating a user they will need to login with their
-                  initial login to get access.
+                  После создания пользователя ему необходимо будет войти в систему, используя свой первоначальный логин,
+                  чтобы получить доступ.
                 </p>
               </div>
             </div>
-            <div className="flex w-full justify-between items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
+            <div
+              className="flex w-full justify-between items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
               <button
                 onClick={hideModal}
                 type="button"

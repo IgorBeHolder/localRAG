@@ -96,7 +96,7 @@ export default function LLMSelection({
                       name="OpenAiKey"
                       disabled={!canDebug}
                       className="bg-gray-50 border border-gray-500 text-gray-900 placeholder-gray-500 text-sm rounded-lg dark:bg-stone-700 focus:border-stone-500 block w-full p-2.5 dark:text-slate-200 dark:placeholder-stone-500 dark:border-slate-200"
-                      placeholder="OpenAI API Key"
+                      placeholder="Ключ OpenAI API"
                       defaultValue={settings?.OpenAiKey ? "*".repeat(20) : ""}
                       required={true}
                       autoComplete="off"
@@ -158,7 +158,7 @@ export default function LLMSelection({
                       name="AzureOpenAiKey"
                       disabled={!canDebug}
                       className="bg-gray-50 border border-gray-500 text-gray-900 placeholder-gray-500 text-sm rounded-lg dark:bg-stone-700 focus:border-stone-500 block w-full p-2.5 dark:text-slate-200 dark:placeholder-stone-500 dark:border-slate-200"
-                      placeholder="Azure OpenAI API Key"
+                      placeholder="Ключ Azure OpenAI API"
                       defaultValue={
                         settings?.AzureOpenAiKey ? "*".repeat(20) : ""
                       }
@@ -177,7 +177,7 @@ export default function LLMSelection({
                       name="AzureOpenAiModelPref"
                       disabled={!canDebug}
                       className="bg-gray-50 border border-gray-500 text-gray-900 placeholder-gray-500 text-sm rounded-lg dark:bg-stone-700 focus:border-stone-500 block w-full p-2.5 dark:text-slate-200 dark:placeholder-stone-500 dark:border-slate-200"
-                      placeholder="Azure OpenAI chat model deployment name"
+                      placeholder="Имя развертывания модели Azure OpenAI"
                       defaultValue={settings?.AzureOpenAiModelPref}
                       required={true}
                       autoComplete="off"
@@ -194,7 +194,7 @@ export default function LLMSelection({
                       name="AzureOpenAiEmbeddingModelPref"
                       disabled={!canDebug}
                       className="bg-gray-50 border border-gray-500 text-gray-900 placeholder-gray-500 text-sm rounded-lg dark:bg-stone-700 focus:border-stone-500 block w-full p-2.5 dark:text-slate-200 dark:placeholder-stone-500 dark:border-slate-200"
-                      placeholder="Azure OpenAI embedding model deployment name"
+                      placeholder="Имя развертывания модели внедрения Azure OpenAI"
                       defaultValue={settings?.AzureOpenAiEmbeddingModelPref}
                       required={true}
                       autoComplete="off"

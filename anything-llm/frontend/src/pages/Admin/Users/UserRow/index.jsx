@@ -1,25 +1,25 @@
-import { useRef, useState } from "react";
-import { titleCase } from "text-case";
+import {useRef, useState} from "react";
+import {titleCase} from "text-case";
 import Admin from "../../../../models/admin";
-import EditUserModal, { EditUserModalId } from "./EditUserModal";
+import EditUserModal, {EditUserModalId} from "./EditUserModal";
 
-export default function UserRow({ currUser, user }) {
+export default function UserRow({currUser, user}) {
   const rowRef = useRef(null);
   const [suspended, setSuspended] = useState(user.suspended === 1);
   const handleSuspend = async () => {
     if (
       !window.confirm(
-        `Are you sure you want to suspend ${user.username}?\nAfter you do this they will be logged out and unable to log back into this instance of Sherpa AI Server until unsuspended by an admin.`
+        `Вы уверены, что хотите приостановить работу ${user.username}?\nПосле того, как вы это сделаете, они выйдут из системы и не смогут снова войти в этот экземпляр Sherpa AI Server, пока администратор не разблокирует их.`
       )
     )
       return false;
     setSuspended(!suspended);
-    await Admin.updateUser(user.id, { suspended: suspended ? 0 : 1 });
+    await Admin.updateUser(user.id, {suspended: suspended ? 0 : 1});
   };
   const handleDelete = async () => {
     if (
       !window.confirm(
-        `Are you sure you want to delete ${user.username}?\nAfter you do this they will be logged out and unable to use this instance of Sherpa AI Server.\n\nThis action is irreversible.`
+        `Вы уверены, что хотите удалить ${user.username}?\nПосле того, как вы это сделаете, они выйдут из системы и не смогут использовать этот экземпляр Sherpa AI Server.\n\nЭто действие необратимо.`
       )
     )
       return false;
@@ -45,7 +45,7 @@ export default function UserRow({ currUser, user }) {
             }
             className="font-medium text-blue-600 dark:text-blue-300 px-2 py-1 rounded-lg hover:bg-blue-50 hover:dark:bg-blue-800 hover:dark:bg-opacity-20"
           >
-            Edit
+            Редактировать
           </button>
           {currUser.id !== user.id && (
             <>
@@ -53,19 +53,19 @@ export default function UserRow({ currUser, user }) {
                 onClick={handleSuspend}
                 className="font-medium text-orange-600 dark:text-orange-300 px-2 py-1 rounded-lg hover:bg-orange-50 hover:dark:bg-orange-800 hover:dark:bg-opacity-20"
               >
-                {suspended ? "Unsuspend" : "Suspend"}
+                {suspended ? "Разблокировать" : "Заблокировать"}
               </button>
               <button
                 onClick={handleDelete}
                 className="font-medium text-red-600 dark:text-red-300 px-2 py-1 rounded-lg hover:bg-red-50 hover:dark:bg-red-800 hover:dark:bg-opacity-20"
               >
-                Delete
+                Удалить
               </button>
             </>
           )}
         </td>
       </tr>
-      <EditUserModal user={user} />
+      <EditUserModal user={user}/>
     </>
   );
 }
