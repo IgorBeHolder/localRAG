@@ -13,11 +13,11 @@ export default function UploadToWorkspace({workspace, fileTypes}) {
   const [files, setFiles] = useState([]);
 
   const handleUploadSuccess = () => {
-    showToast("File uploaded successfully", "success");
+    showToast("Файл успешно загружен", "success");
   };
 
   const handleUploadError = (message) => {
-    showToast(`Error uploading file: ${message}`, "error");
+    showToast(`Ошибка загрузки файла: ${message}`, "error");
   };
 
   const onDrop = useCallback(async (acceptedFiles, rejections) => {

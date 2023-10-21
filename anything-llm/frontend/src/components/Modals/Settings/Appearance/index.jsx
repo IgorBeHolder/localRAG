@@ -39,39 +39,39 @@ export default function Appearance() {
     formData.append("logo", file);
     const {success, error} = await System.uploadLogo(formData);
     if (!success) {
-      console.error("Failed to upload logo:", error);
-      showToast(`Failed to upload logo: ${error}`, "error");
+      console.error("Не удалось загрузить логотип:", error);
+      showToast(`Не удалось загрузить логотип: ${error}`, "error");
       return;
     }
 
     const logoURL = await System.fetchLogo();
     setLogo(logoURL);
-    showToast("Image uploaded successfully.", "success");
+    showToast("Изображение успешно загружено.", "success");
   };
 
   const handleRemoveLogo = async () => {
     const {success, error} = await System.removeCustomLogo();
     if (!success) {
-      console.error("Failed to remove logo:", error);
-      showToast(`Failed to remove logo: ${error}`, "error");
+      console.error("Не удалось удалить логотип:", error);
+      showToast(`Не удалось удалить логотип: ${error}`, "error");
       return;
     }
 
     const logoURL = await System.fetchLogo();
     setLogo(logoURL);
-    showToast("Image successfully removed.", "success");
+    showToast("Изображение успешно удалено.", "success");
   };
 
   const addMessage = (type) => {
     if (type === "user") {
       setMessages([
         ...messages,
-        {user: "Double click to edit...", response: ""}
+        {user: "Дважды щелкните, чтобы изменить...", response: ""}
       ]);
     } else {
       setMessages([
         ...messages,
-        {user: "", response: "Double click to edit..."}
+        {user: "", response: "Дважды щелкните, чтобы изменить..."}
       ]);
     }
   };
@@ -91,10 +91,10 @@ export default function Appearance() {
   const handleMessageSave = async () => {
     const {success, error} = await System.setWelcomeMessages(messages);
     if (!success) {
-      showToast(`Failed to update welcome messages: ${error}`, "error");
+      showToast(`Не удалось обновить приветственные сообщения: ${error}`, "error");
       return;
     }
-    showToast("Successfully updated welcome messages.", "success");
+    showToast("Приветственные сообщения успешно обновлены.", "success");
     setHasChanges(false);
   };
 
@@ -208,7 +208,7 @@ export default function Appearance() {
                   className="ml-4 cursor-pointer text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
                   onClick={handleMessageSave}
                 >
-                  Save Messages
+                  Сохранить сообщения
                 </button>
               </div>
             )}

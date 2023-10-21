@@ -30,7 +30,7 @@ export default function ApiKey() {
       showToast(error, "error");
     } else {
       showToast(
-        isRefresh ? "API key regenerated!" : "API key generated!",
+        isRefresh ? "Ключ API сгенерирован повторно!" : "Ключ API сгенерирован!",
         "info"
       );
       setApiKey(newApiKey);
@@ -42,17 +42,17 @@ export default function ApiKey() {
     setDeleting(true);
     const ok = await System.deleteApiKey();
     if (ok) {
-      showToast("API key deleted from instance.", "info");
+      showToast("Ключ API удален из рабочего пространства.", "info");
       setApiKey(null);
     } else {
-      showToast("API key could not be deleted.", "error");
+      showToast("Ключ API не может быть удален.", "error");
     }
     setDeleting(false);
   };
 
   const copyToClipboard = async () => {
     window.navigator.clipboard.writeText(apiKey.secret);
-    showToast("API key copied to clipboard!", "info");
+    showToast("Ключ API скопирован в буфер обмена!", "info");
     setCopied(true);
     setTimeout(() => {
       setCopied(false);

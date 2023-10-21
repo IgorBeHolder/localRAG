@@ -22,7 +22,7 @@ export default function AdminSystem() {
     });
     setSaving(false);
     setHasChanges(false);
-    showToast("System preferences updated successfully.", "success");
+    showToast("Системные настройки успешно обновлены.", "success");
   };
 
   useEffect(() => {

@@ -32,9 +32,9 @@ export default function LLMSelection({
     for (var [key, value] of form.entries()) data[key] = value;
     const {error} = await System.updateSystem(data);
     if (error) {
-      showToast(`Failed to save LLM settings: ${error}`, "error");
+      showToast(`Не удалось сохранить настройки LLM: ${error}`, "error");
     } else {
-      showToast("LLM settings saved successfully.", "success");
+      showToast("Настройки LLM успешно сохранены.", "success");
     }
     setSaving(false);
     setHasChanges(!!error ? true : false);
@@ -89,7 +89,7 @@ export default function LLMSelection({
                 <>
                   <div>
                     <label className="block mb-2 text-sm font-medium text-gray-800 dark:text-slate-200">
-                      ключ API
+                      Ключ API
                     </label>
                     <input
                       type="text"

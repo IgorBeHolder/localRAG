@@ -88,7 +88,7 @@ export default function DocumentSettings({workspace}) {
   const updateWorkspace = async (e) => {
     e.preventDefault();
     setSaving(true);
-    showToast("Updating workspace...", "info", {autoClose: false});
+    showToast("Обновление рабочего пространства...", "info", {autoClose: false});
     setShowConfirmation(false);
 
     const changes = docChanges();

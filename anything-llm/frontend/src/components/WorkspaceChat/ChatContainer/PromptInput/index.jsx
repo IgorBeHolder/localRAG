@@ -1,15 +1,15 @@
-import React, { useState, useRef, memo, useEffect } from "react";
-import { isMobile } from "react-device-detect";
-import { Loader, Menu, X } from "react-feather";
+import React, {useState, useRef, memo, useEffect} from "react";
+import {isMobile} from "react-device-detect";
+import {Loader, Menu, X} from "react-feather";
 
 export default function PromptInput({
-  workspace,
-  message,
-  submit,
-  onChange,
-  inputDisabled,
-  buttonDisabled,
-}) {
+                                      workspace,
+                                      message,
+                                      submit,
+                                      onChange,
+                                      inputDisabled,
+                                      buttonDisabled
+                                    }) {
   const [showMenu, setShowMenu] = useState(false);
   const formRef = useRef(null);
   const [_, setFocused] = useState(false);
@@ -46,7 +46,7 @@ export default function PromptInput({
       return;
     }
 
-    onChange({ target: { value: `${command} ${message}` } });
+    onChange({target: {value: `${command} ${message}`}});
   };
 
   return (
@@ -67,7 +67,7 @@ export default function PromptInput({
             type="button"
             className="p-2 text-slate-500 bg-transparent rounded-md hover:bg-gray-200 dark:hover:bg-stone-500 dark:hover:text-slate-200"
           >
-            <Menu className="w-4 h-4 md:h-6 md:w-6" />
+            <Menu className="w-4 h-4 md:h-6 md:w-6"/>
           </button>
           <textarea
             onKeyUp={adjustTextArea}
@@ -86,7 +86,7 @@ export default function PromptInput({
             placeholder={
               isMobile
                 ? "Введите ваше сообщение здесь."
-                : "Shift + Enter для новой строки. Войдите, чтобы отправить."
+                : "Shift + Enter для новой строки. Enter, чтобы отправить."
             }
           />
           <button
@@ -96,7 +96,7 @@ export default function PromptInput({
             className="transition-all duration-300 inline-flex justify-center p-0 md:p-2 rounded-full cursor-pointer text-gray-400 dark:text-slate-200 hover:bg-blue-100 hover:text-blue-600 dark:hover:bg-stone-500 group"
           >
             {buttonDisabled ? (
-              <Loader className="w-6 h-6 animate-spin" />
+              <Loader className="w-6 h-6 animate-spin"/>
             ) : (
               <svg
                 aria-hidden="true"
@@ -105,19 +105,20 @@ export default function PromptInput({
                 viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path>
+                <path
+                  d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path>
               </svg>
             )}
-            <span className="sr-only">Send message</span>
+            <span className="sr-only">Отправить сообщение</span>
           </button>
         </div>
-        <Tracking workspaceSlug={workspace.slug} />
+        <Tracking workspaceSlug={workspace.slug}/>
       </form>
     </div>
   );
 }
 
-const Tracking = memo(({ workspaceSlug }) => {
+const Tracking = memo(({workspaceSlug}) => {
   const storageKey = `workspace_chat_mode_${workspaceSlug}`;
   const [chatMode, setChatMode] = useState(
     window.localStorage.getItem(storageKey) ?? "chat"
@@ -130,55 +131,58 @@ const Tracking = memo(({ workspaceSlug }) => {
         try {
           const chatMode = window.localStorage.getItem(storageKey);
           setChatMode(chatMode);
-        } catch {}
+        } catch {
+        }
       });
     }
+
     watchForChatModeChange();
   }, [workspaceSlug]);
 
   return (
     <div className="flex flex-col md:flex-row w-full justify-center items-center gap-2 mb-2 px-4 mx:px-0">
-      <p className="bg-gray-200 dark:bg-stone-600 text-gray-800 dark:text-slate-400 text-xs px-2 rounded-lg font-mono text-center">
+      <p
+        className="bg-gray-200 dark:bg-stone-600 text-gray-800 dark:text-slate-400 text-xs px-2 rounded-lg font-mono text-center">
         Chat mode: {chatMode}
       </p>
       <p className="text-slate-400 text-xs text-center">
-        Responses from system may produce inaccurate or invalid responses - use
-        with caution.
+        Ответы системы могут давать неточные или недействительные ответы — используйте их с осторожностью.
       </p>
     </div>
   );
 });
 
-function CommandMenu({ workspace, show, handleClick, hide }) {
+function CommandMenu({workspace, show, handleClick, hide}) {
   if (!show) return null;
   const COMMANDS = [
     {
       cmd: "/conversation",
-      description: "- switch to chat mode (remembers recent chat history) .",
+      description: "- переключиться в режим чата (запоминает недавнюю историю чата)."
     },
     {
       cmd: "/query",
-      description: "- switch to query mode (does not remember previous chats).",
+      description: "- перейти в режим запроса (не запоминает предыдущие чаты)."
     },
-    { cmd: "/reset", description: "- clear current chat history." },
+    {cmd: "/reset", description: "- очистить текущую историю чата."}
   ];
 
   return (
-    <div className="absolute top-[-25vh] md:top-[-23vh] min-h-[200px] flex flex-col rounded-lg border border-slate-400 p-2 pt-4 bg-gray-50 dark:bg-stone-600">
+    <div
+      className="absolute top-[-25vh] md:top-[-23vh] min-h-[200px] flex flex-col rounded-lg border border-slate-400 p-2 pt-4 bg-gray-50 dark:bg-stone-600">
       <div className="flex justify-between items-center border-b border-slate-400 px-2 py-1 ">
-        <p className="text-gray-800 dark:text-slate-200">Available Commands</p>
+        <p className="text-gray-800 dark:text-slate-200">Доступные команды</p>
         <button
           type="button"
           onClick={hide}
           className="p-2 rounded-lg hover:bg-gray-200 hover:dark:bg-slate-500 rounded-full text-gray-800 dark:text-slate-400"
         >
-          <X className="h-4 w-4" />
+          <X className="h-4 w-4"/>
         </button>
       </div>
 
       <div className="flex flex-col">
         {COMMANDS.map((item, i) => {
-          const { cmd, description } = item;
+          const {cmd, description} = item;
           return (
             <div className="border-b border-slate-400 p-1">
               <button

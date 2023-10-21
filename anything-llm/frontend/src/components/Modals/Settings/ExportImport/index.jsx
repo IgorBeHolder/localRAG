@@ -133,7 +133,7 @@ function ImportData() {
 
     const file = e.target.files?.[0];
     if (!file) {
-      setError("Invalid file upload");
+      setError("Ошибка загрузки файла");
       return false;
     }
 

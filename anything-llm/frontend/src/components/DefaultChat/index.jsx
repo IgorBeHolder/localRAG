@@ -355,7 +355,7 @@ export default function DefaultChatContainer() {
                 placeholder={
                   isMobile
                     ? "Введите ваше сообщение здесь."
-                    : "Shift + Enter для новой строки. Войдите, чтобы отправить."
+                    : "Shift + Enter для новой строки. Enter, чтобы отправить."
                 }
               />
               <button

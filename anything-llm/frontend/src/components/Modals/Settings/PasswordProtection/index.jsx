@@ -27,7 +27,7 @@ export default function PasswordProtection({
 
     const { success, error } = await System.updateSystemPassword(data);
     if (success) {
-      showToast("Your page will refresh in a few seconds.", "success");
+      showToast("Ваша страница обновится через несколько секунд.", "success");
       setSaving(false);
       setTimeout(() => {
         window.localStorage.removeItem(AUTH_USER);
@@ -37,7 +37,7 @@ export default function PasswordProtection({
       }, 3_000);
       return;
     } else {
-      showToast(`Failed to update password: ${error}`, "error");
+      showToast(`Не удалось обновить пароль: ${error}`, "error");
     }
 
     setSaving(false);

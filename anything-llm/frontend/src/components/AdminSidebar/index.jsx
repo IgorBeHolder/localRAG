@@ -56,37 +56,37 @@ export default function AdminSidebar() {
               <div className="flex flex-col h-[65vh] pb-8 overflow-y-scroll no-scroll">
                 <Option
                   href={paths.admin.system()}
-                  btnText="System Preferences"
+                  btnText="Системные настройки"
                   icon={<Settings className="h-4 w-4 flex-shrink-0" />}
                 />
                 <Option
                   href={paths.admin.invites()}
-                  btnText="Invitation Management"
+                  btnText="Управление приглашениями"
                   icon={<Mail className="h-4 w-4 flex-shrink-0" />}
                 />
                 <Option
                   href={paths.admin.users()}
-                  btnText="User Management"
+                  btnText="Управление пользователями"
                   icon={<Users className="h-4 w-4 flex-shrink-0" />}
                 />
                 <Option
                   href={paths.admin.workspaces()}
-                  btnText="Workspace Management"
+                  btnText="Управление рабочим пространством"
                   icon={<BookOpen className="h-4 w-4 flex-shrink-0" />}
                 />
                 <Option
                   href={paths.admin.chats()}
-                  btnText="Workspace Chat Management"
+                  btnText="Управление чатом в рабочей области"
                   icon={<MessageSquare className="h-4 w-4 flex-shrink-0" />}
                 />
                 <Option
                   href={paths.admin.appearance()}
-                  btnText="Appearance"
+                  btnText="Внешний вид"
                   icon={<Eye className="h-4 w-4 flex-shrink-0" />}
                 />
                 <Option
                   href={paths.admin.apiKeys()}
-                  btnText="API Keys"
+                  btnText="Ключи API"
                   icon={<Key className="h-4 w-4 flex-shrink-0" />}
                 />
               </div>
@@ -223,37 +223,37 @@ export function SidebarMobileHeader() {
                 >
                   <Option
                     href={paths.admin.system()}
-                    btnText="System Preferences"
+                    btnText="Системные настройки"
                     icon={<Settings className="h-4 w-4 flex-shrink-0" />}
                   />
                   <Option
                     href={paths.admin.invites()}
-                    btnText="Invitation Management"
+                    btnText="Управление приглашениями"
                     icon={<Mail className="h-4 w-4 flex-shrink-0" />}
                   />
                   <Option
                     href={paths.admin.users()}
-                    btnText="User Management"
+                    btnText="Управление пользователями"
                     icon={<Users className="h-4 w-4 flex-shrink-0" />}
                   />
                   <Option
                     href={paths.admin.workspaces()}
-                    btnText="Workspace Management"
+                    btnText="Управление рабочим пространством"
                     icon={<BookOpen className="h-4 w-4 flex-shrink-0" />}
                   />
                   <Option
                     href={paths.admin.chats()}
-                    btnText="Workspace Chat Management"
+                    btnText="Управление чатом в рабочей области"
                     icon={<MessageSquare className="h-4 w-4 flex-shrink-0" />}
                   />
                   <Option
                     href={paths.admin.appearance()}
-                    btnText="Appearance"
+                    btnText="Внешний вид"
                     icon={<Eye className="h-4 w-4 flex-shrink-0" />}
                   />
                   <Option
                     href={paths.admin.apiKeys()}
-                    btnText="API Keys"
+                    btnText="Ключи API"
                     icon={<Key className="h-4 w-4 flex-shrink-0" />}
                   />
                 </div>

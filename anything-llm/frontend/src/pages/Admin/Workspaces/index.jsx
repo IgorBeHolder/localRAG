@@ -21,7 +21,7 @@ export default function AdminWorkspaces() {
           <div className="w-full flex flex-col gap-y-1">
             <div className="items-center flex gap-x-4">
               <p className="text-3xl font-semibold text-slate-600 dark:text-slate-200">
-                Instance workspaces
+                Рабочие пространства экземпляра
               </p>
               <button
                 onClick={() =>
@@ -33,8 +33,7 @@ export default function AdminWorkspaces() {
               </button>
             </div>
             <p className="text-sm font-base text-slate-600 dark:text-slate-200">
-              These are all the workspaces that exist on this instance. Removing
-              a workspace will delete all of it's associated chats and settings.
+              Это все рабочие пространства, существующие в этом экземпляре. Удаление рабочего пространства приведет к удалению всех связанных с ним чатов и настроек.
             </p>
           </div>
           <WorkspacesContainer />
@@ -81,19 +80,19 @@ function WorkspacesContainer() {
       <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-stone-800 dark:text-gray-400">
         <tr>
           <th scope="col" className="px-6 py-3 rounded-tl-lg">
-            Name
+            Имя
           </th>
           <th scope="col" className="px-6 py-3">
-            Link
+            Связь
           </th>
           <th scope="col" className="px-6 py-3">
-            Users
+            Пользователи
           </th>
           <th scope="col" className="px-6 py-3">
-            Created On
+            Дата создания
           </th>
           <th scope="col" className="px-6 py-3 rounded-tr-lg">
-            Actions
+            Действия
           </th>
         </tr>
       </thead>
