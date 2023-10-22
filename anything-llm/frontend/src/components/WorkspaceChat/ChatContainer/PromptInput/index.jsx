@@ -51,69 +51,72 @@ export default function PromptInput({
 
   return (
     <div className="main-form absolute p-1 md:p-8 lg:p-[50px] position-absolute bottom-0 left-0 right-0 !pb-0">
-      <form
-        onSubmit={handleSubmit}
-        className="flex flex-col gap-y-1 bg-white dark:bg-black-900 md:bg-transparent rounded-t-lg md:w-3/4 w-full mx-auto"
-      >
-        <div className="flex items-center py-2 px-4 rounded-lg">
-          <CommandMenu
-            workspace={workspace}
-            show={showMenu}
-            handleClick={setTextCommand}
-            hide={() => setShowMenu(false)}
-          />
-          <button
-            onClick={() => setShowMenu(!showMenu)}
-            type="button"
-            className="p-2 text-slate-500 bg-transparent rounded-md hover:bg-gray-200 dark:hover:bg-stone-500 dark:hover:text-slate-200"
-          >
-            <Menu className="w-4 h-4 md:h-6 md:w-6"/>
-          </button>
-          <textarea
-            onKeyUp={adjustTextArea}
-            onKeyDown={captureEnter}
-            onChange={onChange}
-            required={true}
-            maxLength={240}
-            disabled={inputDisabled}
-            onFocus={() => setFocused(true)}
-            onBlur={(e) => {
-              setFocused(false);
-              adjustTextArea(e);
-            }}
-            value={message}
-            className="cursor-text max-h-[100px] md:min-h-[40px] block mx-2 md:mx-4 p-2.5 w-full text-[16px] md:text-sm rounded-lg border bg-gray-50 border-gray-300 placeholder-gray-200 text-gray-900 dark:text-white dark:bg-stone-600 dark:border-stone-700 dark:placeholder-stone-400"
-            placeholder={
-              isMobile
-                ? "Введите ваше сообщение здесь."
-                : "Shift + Enter для новой строки. Enter, чтобы отправить."
-            }
-          />
-          <button
-            ref={formRef}
-            type="submit"
-            disabled={buttonDisabled}
-            className="transition-all duration-300 inline-flex justify-center p-0 md:p-2 rounded-full cursor-pointer text-gray-200 dark:text-slate-200 hover:bg-blue-100 hover:text-blue-600 dark:hover:bg-stone-500 group"
-          >
-            {buttonDisabled ? (
-              <Loader className="w-6 h-6 animate-spin"/>
-            ) : (
-              <svg
-                aria-hidden="true"
-                className="w-6 h-6 rotate-45"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path>
-              </svg>
-            )}
-            <span className="sr-only">Отправить сообщение</span>
-          </button>
-        </div>
-        <Tracking workspaceSlug={workspace.slug}/>
-      </form>
+      <div className="bg-white pt-2 pb-8">
+
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col gap-y-1 bg-white dark:bg-black-900 md:bg-transparent rounded-t-lg md:w-3/4 w-full mx-auto"
+        >
+          <div className="flex items-center py-2 px-4 rounded-lg">
+            <CommandMenu
+              workspace={workspace}
+              show={showMenu}
+              handleClick={setTextCommand}
+              hide={() => setShowMenu(false)}
+            />
+            <button
+              onClick={() => setShowMenu(!showMenu)}
+              type="button"
+              className="p-2 text-slate-500 bg-transparent rounded-md hover:bg-gray-200 dark:hover:bg-stone-500 dark:hover:text-slate-200"
+            >
+              <Menu className="w-4 h-4 md:h-6 md:w-6"/>
+            </button>
+            <textarea
+              onKeyUp={adjustTextArea}
+              onKeyDown={captureEnter}
+              onChange={onChange}
+              required={true}
+              maxLength={240}
+              disabled={inputDisabled}
+              onFocus={() => setFocused(true)}
+              onBlur={(e) => {
+                setFocused(false);
+                adjustTextArea(e);
+              }}
+              value={message}
+              className="cursor-text max-h-[100px] md:min-h-[40px] block mx-2 md:mx-4 p-2.5 w-full text-[16px] md:text-sm rounded-lg border bg-gray-50 border-gray-300 placeholder-gray-200 text-gray-900 dark:text-white dark:bg-stone-600 dark:border-stone-700 dark:placeholder-stone-400"
+              placeholder={
+                isMobile
+                  ? "Введите ваше сообщение здесь."
+                  : "Shift + Enter для новой строки. Enter, чтобы отправить."
+              }
+            />
+            <button
+              ref={formRef}
+              type="submit"
+              disabled={buttonDisabled}
+              className="transition-all duration-300 inline-flex justify-center p-0 md:p-2 rounded-full cursor-pointer text-gray-200 dark:text-slate-200 hover:bg-blue-100 hover:text-blue-600 dark:hover:bg-stone-500 group"
+            >
+              {buttonDisabled ? (
+                <Loader className="w-6 h-6 animate-spin"/>
+              ) : (
+                <svg
+                  aria-hidden="true"
+                  className="w-6 h-6 rotate-45"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path>
+                </svg>
+              )}
+              <span className="sr-only">Отправить сообщение</span>
+            </button>
+          </div>
+          <Tracking workspaceSlug={workspace.slug}/>
+        </form>
+      </div>
     </div>
   );
 }
