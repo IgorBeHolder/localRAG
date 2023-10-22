@@ -8,7 +8,7 @@ ARG ARG_GID
 # Install system dependencies
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends \
-        curl libgfortran5 python3 python3-pip tzdata netcat \
+        curl libgfortran5 python3 python3-pip tzdata netcat make\
         libasound2 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 \
         libgcc1 libglib2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libx11-6 libx11-xcb1 libxcb1 \
         libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 \
@@ -46,7 +46,7 @@ WORKDIR /app
 # Install frontend dependencies
 FROM base as frontend-deps
 
-COPY ./frontend/package.json ./frontend/yarn.lock ./frontend/
+COPY --chown=anythingllm:anythingllm ./frontend/package.json ./frontend/yarn.lock ./frontend/
 RUN  --mount=type=cache,target=/tmp/yarn-cache cd ./frontend/ && \
     yarn install && yarn cache clean
 
@@ -62,6 +62,7 @@ RUN  --mount=type=cache,target=/tmp/yarn-cache cd ./server/ && \
 FROM frontend-deps as build-stage
 # to avoid permission errors with bundleinspector.html 
 COPY --chown=anythingllm:anythingllm ./frontend/ ./frontend/ 
+
 RUN --mount=type=cache,target=/tmp/yarn-cache cd ./frontend/ && \
     yarn build && yarn cache clean && \
     rm -rf /tmp/yarn-cache/*
