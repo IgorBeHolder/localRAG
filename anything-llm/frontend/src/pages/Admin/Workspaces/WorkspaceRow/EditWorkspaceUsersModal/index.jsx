@@ -61,7 +61,7 @@ export default function EditWorkspaceUsersModal({workspace, users}) {
                       <div
                         key={`workspace-${workspace.id}-user-${user.id}`}
                         data-workspace={workspace.id}
-                        className="flex items-center pl-4 border border-gray-200 rounded dark:border-gray-400 group hover:bg-stone-600 cursor-pointer"
+                        className="flex items-center pl-4 border border-gray-200 rounded dark:border-gray-400 group hover:bg-gray-100 cursor-pointer"
                         onClick={() => {
                           document
                             .getElementById(
@@ -90,7 +90,7 @@ export default function EditWorkspaceUsersModal({workspace, users}) {
                 <div className="flex items-center gap-x-4">
                   <button
                     type="button"
-                    className="w-full p-4 flex dark:text-slate-200 text-gray-800 items-center pl-4 border border-gray-200 rounded dark:border-gray-400 group hover:bg-stone-600 cursor-pointer"
+                    className="w-full p-4 flex dark:text-slate-200 text-gray-800 items-center pl-4 border border-gray-200 rounded dark:border-gray-400 group hover:bg-gray-100 cursor-pointer"
                     onClick={() => {
                       document
                         .getElementById(`workspace-${workspace.id}-select-all`)
@@ -108,7 +108,7 @@ export default function EditWorkspaceUsersModal({workspace, users}) {
                   </button>
                   <button
                     type="button"
-                    className="w-full p-4 flex dark:text-slate-200 text-gray-800 items-center pl-4 border border-gray-200 rounded dark:border-gray-400 group hover:bg-stone-600 cursor-pointer"
+                    className="w-full p-4 flex dark:text-slate-200 text-gray-800 items-center pl-4 border border-gray-200 rounded dark:border-gray-400 group hover:bg-gray-100 cursor-pointer"
                     onClick={() => {
                       document
                         .getElementById(`workspace-${workspace.id}-select-all`)
