@@ -58,14 +58,21 @@ a {
 }
 
 .logo-block {
+  flex: 0 1 auto;
   max-width: calc(100% - 40px);
 }
 
 .logo-text {
+  max-width: 100%;
+  text-overflow: ellipsis;
   font: 600 16px Roboto, sans-serif;
 }
 
-.main-box,
+.main-box {
+  position: relative;
+  z-index: 1;
+}
+
 .main-form {
   z-index: 1;
 }

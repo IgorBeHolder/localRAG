@@ -45,15 +45,14 @@ export default function Sidebar() {
         <div className="w-full h-full flex flex-col overflow-x-hidden items-between">
           {/* Header Information */}
           <div className="flex w-full items-center justify-between px-2">
-            <div
-              className="logo-block h-[64px] px-2 gap-2 text-gray-200 cursor-pointer whitespace-nowrap user-select-none flex shrink-0 items-center justify-start">
+            <div className="logo-block overflow-hidden h-[64px] px-2 gap-2 text-gray-200 cursor-pointer whitespace-nowrap user-select-none flex shrink-0 items-center justify-start">
               <img
                 src={logo}
                 alt="Logo"
                 className="rounded max-h-[40px]"
                 style={{objectFit: "contain"}}
               />
-              <span className="logo-text">Sherpa AI Server</span>
+              <span className="logo-text overflow-hidden">Sherpa AI Server</span>
             </div>
             <div className="flex gap-x-2 p-2 items-center text-slate-500">
               <AdminHome/>
@@ -132,7 +131,7 @@ export function SidebarMobileHeader() {
             className="rounded w-full max-h-[40px]"
             style={{objectFit: "contain"}}
           />
-          <span className="logo-text">Sherpa AI Server</span>
+          <span className="logo-text overflow-hidden">Sherpa AI Server</span>
         </div>
       </div>
       <div
@@ -164,7 +163,7 @@ export function SidebarMobileHeader() {
                   className="rounded w-full max-h-[40px]"
                   style={{objectFit: "contain"}}
                 />
-                <span className="logo-text">Sherpa AI Server</span>
+                <span className="logo-text overflow-hidden">Sherpa AI Server</span>
               </div>
               <div className="flex gap-x-2 items-center text-slate-500 shink-0">
                 <AdminHome/>
