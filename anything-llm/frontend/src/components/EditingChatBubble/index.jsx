@@ -27,12 +27,10 @@ export default function EditingChatBubble({
         </button>
       )}
       <div
-        className={`p-4 max-w-full md:max-w-[75%] ${
+        className={`p-4 max-w-full md:max-w-[75%] rounded-sm xl:rounded-2xl border ${
           isUser
-            ? "bg-slate-200 dark:bg-amber-800"
-            : "bg-orange-100 dark:bg-stone-700"
-        } rounded-b-2xl ${isUser ? "rounded-tl-2xl" : "rounded-tr-2xl"} ${
-          isUser ? "rounded-tr-sm" : "rounded-tl-sm"
+            ? "bg-blue-100 dark:bg-amber-800 border-blue-400"
+            : "bg-gray-400 dark:bg-stone-700 border-gray-700"
         }`}
         onDoubleClick={() => setIsEditing(true)}
       >

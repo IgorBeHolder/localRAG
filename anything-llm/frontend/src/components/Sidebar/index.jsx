@@ -45,7 +45,8 @@ export default function Sidebar() {
         <div className="w-full h-full flex flex-col overflow-x-hidden items-between">
           {/* Header Information */}
           <div className="flex w-full items-center justify-between px-2">
-            <div className="logo-block h-[64px] px-2 gap-2 text-gray-200 cursor-pointer whitespace-nowrap user-select-none flex shrink-0 items-center justify-start">
+            <div
+              className="logo-block h-[64px] px-2 gap-2 text-gray-200 cursor-pointer whitespace-nowrap user-select-none flex shrink-0 items-center justify-start">
               <img
                 src={logo}
                 alt="Logo"
@@ -76,56 +77,6 @@ export default function Sidebar() {
                   </button>
                 </div>
                 <ActiveWorkspaces/>
-              </div>
-            </div>
-            <div>
-              <div className="flex flex-col gap-y-2">
-                <div className="w-full flex items-center justify-between">
-                  {/* <LLMStatus /> */}
-                  <IndexCount/>
-                </div>
-                {/* <a
-                  href={paths.feedback()}
-                  target="_blank"
-                  className="flex flex-grow w-[100%] h-[36px] gap-x-2 py-[5px] px-4 border border-slate-400 dark:border-transparent rounded-lg text-slate-800 dark:text-slate-200 justify-center items-center hover:bg-slate-100 dark:bg-stone-800 dark:hover:bg-stone-900"
-                >
-                  <AtSign className="h-4 w-4" />
-                  <p className="text-slate-800 dark:text-slate-200 text-xs leading-loose font-semibold">
-                    Feedback form
-                  </p>
-                </a> */}
-                {/* <ManagedHosting /> */}
-                <LogoutButton/>
-              </div>
-
-              {/* Footer */}
-              <div className="flex items-end justify-between mt-2">
-                {/* <div className="flex gap-x-1 items-center">
-                  <a
-                    href={paths.github()}
-                    className="transition-all duration-300 p-2 rounded-full bg-slate-200 text-slate-400 dark:bg-slate-800 hover:bg-slate-800 hover:text-slate-200 dark:hover:text-slate-200"
-                  >
-                    <GitHub className="h-4 w-4 " />
-                  </a>
-                  <a
-                    href={paths.docs()}
-                    className="transition-all duration-300 p-2 rounded-full bg-slate-200 text-slate-400 dark:bg-slate-800 hover:bg-slate-800 hover:text-slate-200 dark:hover:text-slate-200"
-                  >
-                    <BookOpen className="h-4 w-4 " />
-                  </a>
-                  <a
-                    href={paths.discord()}
-                    className="transition-all duration-300 p-2 rounded-full bg-slate-200 dark:bg-slate-800 hover:bg-slate-800 group"
-                  >
-                    <Discord className="h-4 w-4 stroke-slate-400 group-hover:stroke-slate-200 dark:group-hover:stroke-slate-200" />
-                  </a>
-                </div> */}
-                {/* <a
-                  href={paths.mailToMintplex()}
-                  className="transition-all duration-300 text-xs text-slate-500 dark:text-slate-600 hover:text-blue-600 dark:hover:text-blue-400"
-                >
-                  @MintplexLabs
-                </a> */}
               </div>
             </div>
           </div>
@@ -328,11 +279,11 @@ function LogoutButton() {
         window.localStorage.removeItem(AUTH_TIMESTAMP);
         window.location.replace(paths.home());
       }}
-      className="flex flex-grow w-[100%] h-[36px] gap-x-2 py-[5px] px-4 border border-slate-400 dark:border-transparent rounded-lg text-slate-800 dark:text-slate-200 justify-center items-center hover:bg-slate-100 dark:bg-stone-800 dark:hover:bg-stone-900"
+      className="flex flex-grow w-[75%] h-[48px] gap-x-2 py-[5px] px-4 text-white dark:text-slate-200 justify-start items-center hover:bg-blue-500 dark:hover:bg-stone-900"
     >
-      <LogOut className="h-4 w-4"/>
-      <p className="text-slate-800 dark:text-slate-200 text-xs leading-loose font-semibold">
-        Log out of {user.username}
+      <LogOut className="h-4 w-4 flex-shrink-0"/>
+      <p className="text-sm leading-loose font-semibold whitespace-nowrap overflow-hidden ">
+        Выйти из {user.username}
       </p>
     </button>
   );

@@ -58,7 +58,7 @@ export default function UploadToWorkspace({workspace, fileTypes}) {
   const deleteWorkspace = async () => {
     if (
       !window.confirm(
-        `Вы собираетесь удалить всю рабочее пространство ${workspace.name}. Это приведет к удалению всех вложений векторов из вашей векторной базы данных.\n\nИсходные исходные файлы останутся нетронутыми. Это действие необратимо.`
+        `Вы собираетесь удалить всё рабочее пространство ${workspace.name}. Это приведет к удалению всех вложений векторов из вашей векторной базы данных.\n\nИсходные исходные файлы останутся нетронутыми. Это действие необратимо.`
       )
     )
       return false;
@@ -153,7 +153,7 @@ export default function UploadToWorkspace({workspace, fileTypes}) {
         )}
       </div>
       <p className="text-gray-600 dark:text-stone-400 text-xs ">
-        поддерживаемые расширения файлов:{" "}
+        Поддерживаемые расширения файлов:{" "}
         <code
           className="text-xs bg-gray-200 text-gray-800 dark:bg-stone-800 dark:text-slate-400 font-mono rounded-sm px-1">
           {Object.values(fileTypes).flat().join(" ")}
@@ -174,7 +174,7 @@ function ModalWrapper({deleteWorkspace, children}) {
             </p>
             <p className="text-gray-600 dark:text-stone-400 text-xs ">
               Эти файлы будут загружены в процессор документов, работающий на этом экземпляре Sherpa AI Server. Эти
-              файлы не передаются и не передаются третьим лицам.
+              файлы и не передаются третьим лицам.
             </p>
             {process.env.NODE_ENV !== "production" && (
               <div className="mt-2 text-gray-600 dark:text-stone-400 text-xs">

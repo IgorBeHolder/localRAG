@@ -39,10 +39,10 @@ export default function AdminSystem() {
   }, []);
 
   return (
-    <div className="w-screen h-screen overflow-hidden bg-orange-100 dark:bg-stone-700 flex">
+    <div className="w-screen h-screen overflow-hidden bg-gray-400 dark:bg-stone-700 flex">
       {!isMobile && <Sidebar />}
       <div
-        className="main-content transition-all duration-500 relative bg-white dark:bg-black-900 h-full overflow-hidden p-[16px] md:p-[32px] !pb-0"
+        className="main-content w-full transition-all duration-500 relative bg-white dark:bg-black-900 h-full overflow-hidden p-[16px] md:p-[32px] !pb-0"
       >
         {isMobile && <SidebarMobileHeader />}
         <form
@@ -54,7 +54,7 @@ export default function AdminSystem() {
             <div className="w-full flex flex-col gap-y-1">
               <div className="items-center flex gap-x-4">
                 <p className="text-3xl font-semibold text-slate-600 dark:text-slate-200">
-                  System Preferences
+                  Системные настройки
                 </p>
                 {hasChanges && (
                   <button
@@ -77,7 +77,7 @@ export default function AdminSystem() {
                   Пользователи могут удалять рабочие пространства
                 </label>
                 <p className="leading-tight text-sm text-gray-500 dark:text-slate-400">
-                  разрешить пользователям, не являющимся администраторами, удалять рабочие пространства, частью которых они являются. Это приведет к удалению рабочего пространства для всех.
+                  Разрешить пользователям, не являющимся администраторами, удалять рабочие пространства, частью которых они являются. Это приведет к удалению рабочего пространства для всех.
                 </p>
               </div>
               <label className="relative inline-flex cursor-pointer items-center">
@@ -99,7 +99,7 @@ export default function AdminSystem() {
                   Ограничить количество сообщений на пользователя в день
                 </label>
                 <p className="leading-tight text-sm text-gray-500 dark:text-slate-400">
-                  Ограничьте пользователей, не являющихся администраторами, количеством успешных запросов или чатов в течение 24 часов. Включите это, чтобы пользователи не увеличивали расходы на OpenAI.
+                  Ограничьте пользователей, не являющихся администраторами, количеством успешных запросов или чатов в течение 24 часов. Включите это, чтобы пользователи не увеличивали расходы.
                 </p>
               </div>
               <label className="relative inline-flex cursor-pointer items-center">

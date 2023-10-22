@@ -11,10 +11,10 @@ import NewWorkspaceModal, { NewWorkspaceModalId } from "./NewWorkspaceModal";
 
 export default function AdminWorkspaces() {
   return (
-    <div className="w-screen h-screen overflow-hidden bg-orange-100 dark:bg-stone-700 flex">
+    <div className="w-screen h-screen overflow-hidden bg-gray-400 dark:bg-stone-700 flex">
       {!isMobile && <Sidebar />}
       <div
-        className="main-content transition-all duration-500 relative bg-white dark:bg-black-900 h-full overflow-hidden p-[16px] md:p-[32px] !pb-0"
+        className="main-content w-full transition-all duration-500 relative bg-white dark:bg-black-900 h-full overflow-hidden p-[16px] md:p-[32px] !pb-0"
       >
         {isMobile && <SidebarMobileHeader />}
         <div className="main-box flex flex-col w-full h-full p-1 md:p-8 lg:p-[50px] bg-white shadow-md relative overflow-y-auto">
@@ -77,7 +77,7 @@ function WorkspacesContainer() {
 
   return (
     <table className="md:w-3/4 w-full text-sm text-left text-gray-500 dark:text-gray-400 rounded-lg mt-5">
-      <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-stone-800 dark:text-gray-400">
+      <thead className="text-xs text-gray-500 uppercase bg-gray-50 dark:bg-stone-800 dark:text-gray-400">
         <tr>
           <th scope="col" className="px-6 py-3 rounded-tl-lg">
             Имя

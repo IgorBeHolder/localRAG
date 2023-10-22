@@ -1,28 +1,29 @@
-import { useEffect, useState } from "react";
-import Sidebar, { SidebarMobileHeader } from "../../../components/AdminSidebar";
-import { isMobile } from "react-device-detect";
+import {useEffect, useState} from "react";
+import Sidebar, {SidebarMobileHeader} from "../../../components/AdminSidebar";
+import {isMobile} from "react-device-detect";
 import * as Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { UserPlus } from "react-feather";
+import {UserPlus} from "react-feather";
 import usePrefersDarkMode from "../../../hooks/usePrefersDarkMode";
 import Admin from "../../../models/admin";
 import UserRow from "./UserRow";
 import useUser from "../../../hooks/useUser";
-import NewUserModal, { NewUserModalId } from "./NewUserModal";
+import NewUserModal, {NewUserModalId} from "./NewUserModal";
 
 export default function AdminUsers() {
   return (
-    <div className="w-screen h-screen overflow-hidden bg-orange-100 dark:bg-stone-700 flex">
-      {!isMobile && <Sidebar />}
+    <div className="w-screen h-screen overflow-hidden bg-gray-400 dark:bg-stone-700 flex">
+      {!isMobile && <Sidebar/>}
       <div
-        className="main-content transition-all duration-500 relative bg-white dark:bg-black-900 h-full overflow-hidden p-[16px] md:p-[32px] !pb-0"
+        className="main-content w-full transition-all duration-500 relative bg-white dark:bg-black-900 h-full overflow-hidden p-[16px] md:p-[32px] !pb-0"
       >
-        {isMobile && <SidebarMobileHeader />}
-        <div className="main-box flex flex-col w-full h-full p-1 md:p-8 lg:p-[50px] bg-white shadow-md relative overflow-y-auto">
+        {isMobile && <SidebarMobileHeader/>}
+        <div
+          className="main-box flex flex-col w-full h-full p-1 md:p-8 lg:p-[50px] bg-white shadow-md relative overflow-y-auto">
           <div className="w-full flex flex-col gap-y-1">
             <div className="items-center flex gap-x-4">
               <p className="text-3xl font-semibold text-slate-600 dark:text-slate-200">
-                Instance users
+                Пользователи экземпляра
               </p>
               <button
                 onClick={() =>
@@ -30,25 +31,24 @@ export default function AdminUsers() {
                 }
                 className="border border-slate-800 dark:border-slate-200 px-4 py-1 rounded-lg text-slate-800 dark:text-slate-200 text-sm items-center flex gap-x-2 hover:bg-slate-800 hover:text-slate-100 dark:hover:bg-slate-200 dark:hover:text-slate-800"
               >
-                <UserPlus className="h-4 w-4" /> Add user
+                <UserPlus className="h-4 w-4"/> Добавить пользователя
               </button>
             </div>
             <p className="text-sm font-base text-slate-600 dark:text-slate-200">
-              These are all the accounts which have an account on this instance.
-              Removing an account will instantly remove their access to this
-              instance.
+              Это все учетные записи, у которых есть учетная запись в этом экземпляре. Удаление учетной записи мгновенно
+              лишит их доступа к этому экземпляру.
             </p>
           </div>
-          <UsersContainer />
+          <UsersContainer/>
         </div>
-        <NewUserModal />
+        <NewUserModal/>
       </div>
     </div>
   );
 }
 
 function UsersContainer() {
-  const { user: currUser } = useUser();
+  const {user: currUser} = useUser();
   const darkMode = usePrefersDarkMode();
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState([]);
@@ -58,6 +58,7 @@ function UsersContainer() {
       setUsers(_users);
       setLoading(false);
     }
+
     fetchUsers();
   }, []);
 
@@ -77,26 +78,26 @@ function UsersContainer() {
 
   return (
     <table className="md:w-3/4 w-full text-sm text-left text-gray-500 dark:text-gray-400 rounded-lg mt-5">
-      <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-stone-800 dark:text-gray-400">
-        <tr>
-          <th scope="col" className="px-6 py-3 rounded-tl-lg">
-            Username
-          </th>
-          <th scope="col" className="px-6 py-3">
-            Role
-          </th>
-          <th scope="col" className="px-6 py-3">
-            Created On
-          </th>
-          <th scope="col" className="px-6 py-3 rounded-tr-lg">
-            Actions
-          </th>
-        </tr>
+      <thead className="text-xs text-gray-500 uppercase bg-gray-50 dark:bg-stone-800 dark:text-gray-400">
+      <tr>
+        <th scope="col" className="px-6 py-3 rounded-tl-lg">
+          Имя пользователя
+        </th>
+        <th scope="col" className="px-6 py-3">
+          Роль
+        </th>
+        <th scope="col" className="px-6 py-3">
+          Дата создания
+        </th>
+        <th scope="col" className="px-6 py-3 rounded-tr-lg">
+          Действия
+        </th>
+      </tr>
       </thead>
       <tbody>
-        {users.map((user) => (
-          <UserRow key={user.id} currUser={currUser} user={user} />
-        ))}
+      {users.map((user) => (
+        <UserRow key={user.id} currUser={currUser} user={user}/>
+      ))}
       </tbody>
     </table>
   );

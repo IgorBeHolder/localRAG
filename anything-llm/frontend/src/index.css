@@ -65,11 +65,7 @@ a {
   font: 600 16px Roboto, sans-serif;
 }
 
-.main-box {
-  position: relative;
-  z-index: 1;
-}
-
+.main-box,
 .main-form {
   z-index: 1;
 }

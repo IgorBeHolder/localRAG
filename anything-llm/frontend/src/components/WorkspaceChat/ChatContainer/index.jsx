@@ -1,12 +1,12 @@
-import { useState, useEffect } from "react";
+import {useState, useEffect} from "react";
 import ChatHistory from "./ChatHistory";
 import PromptInput from "./PromptInput";
 import Workspace from "../../../models/workspace";
 import handleChat from "../../../utils/chat";
-import { isMobile } from "react-device-detect";
-import { SidebarMobileHeader } from "../../Sidebar";
+import {isMobile} from "react-device-detect";
+import {SidebarMobileHeader} from "../../Sidebar";
 
-export default function ChatContainer({ workspace, knownHistory = [] }) {
+export default function ChatContainer({workspace, knownHistory = []}) {
   const [message, setMessage] = useState("");
   const [loadingResponse, setLoadingResponse] = useState(false);
   const [chatHistory, setChatHistory] = useState(knownHistory);
@@ -21,14 +21,14 @@ export default function ChatContainer({ workspace, knownHistory = [] }) {
 
     const prevChatHistory = [
       ...chatHistory,
-      { content: message, role: "user" },
+      {content: message, role: "user"},
       {
         content: "",
         role: "assistant",
         pending: true,
         userMessage: message,
-        animate: true,
-      },
+        animate: true
+      }
     ];
 
     setChatHistory(prevChatHistory);
@@ -52,7 +52,7 @@ export default function ChatContainer({ workspace, knownHistory = [] }) {
         workspace,
         promptMessage.userMessage,
         window.localStorage.getItem(`workspace_chat_mode_${workspace.slug}`) ??
-          "chat"
+        "chat"
       );
       handleChat(
         chatResult,
@@ -62,17 +62,19 @@ export default function ChatContainer({ workspace, knownHistory = [] }) {
         _chatHistory
       );
     }
+
     loadingResponse === true && fetchReply();
   }, [loadingResponse, chatHistory, workspace]);
 
   return (
     <div
-      style={{ height: isMobile ? "100%" : "calc(100% - 32px)" }}
-      className="transition-all duration-500 relative md:ml-[2px] md:mr-[8px] md:my-[16px] md:rounded-[26px] bg-white dark:bg-black-900 w-full md:min-w-[82%] p-[18px] h-full overflow-y-scroll"
+      className="main-content flex-1 transition-all duration-500 relative bg-white dark:bg-black-900 h-full"
     >
-      {isMobile && <SidebarMobileHeader />}
-      <div className="flex flex-col h-full w-full flex">
-        <ChatHistory history={chatHistory} workspace={workspace} />
+      {isMobile && <SidebarMobileHeader/>}
+      <div className="main-box relative flex flex-col w-full h-full overflow-y-auto p-[16px] md:p-[32px] !pb-0">
+        <div className="flex flex-col w-full bg-white shadow-md relative">
+          <ChatHistory history={chatHistory} workspace={workspace}/>
+        </div>
         <PromptInput
           workspace={workspace}
           message={message}

@@ -50,7 +50,7 @@ export default function PromptInput({
   };
 
   return (
-    <div className="w-full fixed md:absolute bottom-0 left-0 z-10 md:z-0">
+    <div className="main-form absolute p-1 md:p-8 lg:p-[50px] position-absolute bottom-0 left-0 right-0 !pb-0">
       <form
         onSubmit={handleSubmit}
         className="flex flex-col gap-y-1 bg-white dark:bg-black-900 md:bg-transparent rounded-t-lg md:w-3/4 w-full mx-auto"
@@ -82,7 +82,7 @@ export default function PromptInput({
               adjustTextArea(e);
             }}
             value={message}
-            className="cursor-text max-h-[100px] md:min-h-[40px] block mx-2 md:mx-4 p-2.5 w-full text-[16px] md:text-sm rounded-lg border bg-gray-50 border-gray-300 placeholder-gray-400 text-gray-900 dark:text-white dark:bg-stone-600 dark:border-stone-700 dark:placeholder-stone-400"
+            className="cursor-text max-h-[100px] md:min-h-[40px] block mx-2 md:mx-4 p-2.5 w-full text-[16px] md:text-sm rounded-lg border bg-gray-50 border-gray-300 placeholder-gray-200 text-gray-900 dark:text-white dark:bg-stone-600 dark:border-stone-700 dark:placeholder-stone-400"
             placeholder={
               isMobile
                 ? "Введите ваше сообщение здесь."
@@ -93,7 +93,7 @@ export default function PromptInput({
             ref={formRef}
             type="submit"
             disabled={buttonDisabled}
-            className="transition-all duration-300 inline-flex justify-center p-0 md:p-2 rounded-full cursor-pointer text-gray-400 dark:text-slate-200 hover:bg-blue-100 hover:text-blue-600 dark:hover:bg-stone-500 group"
+            className="transition-all duration-300 inline-flex justify-center p-0 md:p-2 rounded-full cursor-pointer text-gray-200 dark:text-slate-200 hover:bg-blue-100 hover:text-blue-600 dark:hover:bg-stone-500 group"
           >
             {buttonDisabled ? (
               <Loader className="w-6 h-6 animate-spin"/>
@@ -143,7 +143,7 @@ const Tracking = memo(({workspaceSlug}) => {
     <div className="flex flex-col md:flex-row w-full justify-center items-center gap-2 mb-2 px-4 mx:px-0">
       <p
         className="bg-gray-200 dark:bg-stone-600 text-gray-800 dark:text-slate-400 text-xs px-2 rounded-lg font-mono text-center">
-        Chat mode: {chatMode}
+        Режим чата: {chatMode}
       </p>
       <p className="text-slate-400 text-xs text-center">
         Ответы системы могут давать неточные или недействительные ответы — используйте их с осторожностью.
@@ -184,7 +184,7 @@ function CommandMenu({workspace, show, handleClick, hide}) {
         {COMMANDS.map((item, i) => {
           const {cmd, description} = item;
           return (
-            <div className="border-b border-slate-400 p-1">
+            <div key={i} className="border-b border-slate-400 p-1">
               <button
                 key={i}
                 type="button"

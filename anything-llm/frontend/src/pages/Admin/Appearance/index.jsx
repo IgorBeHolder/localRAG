@@ -101,10 +101,10 @@ export default function Appearance() {
   };
 
   return (
-    <div className="w-screen h-screen overflow-hidden bg-orange-100 dark:bg-stone-700 flex">
+    <div className="w-screen h-screen overflow-hidden bg-gray-400 dark:bg-stone-700 flex">
       {!isMobile && <Sidebar/>}
       <div
-        className="main-content transition-all duration-500 relative bg-white dark:bg-black-900 h-full overflow-hidden p-[16px] md:p-[32px] !pb-0"
+        className="main-content w-full transition-all duration-500 relative bg-white dark:bg-black-900 h-full overflow-hidden p-[16px] md:p-[32px] !pb-0"
       >
         {isMobile && <SidebarMobileHeader/>}
         <div className="px-1 md:px-8">
@@ -121,7 +121,7 @@ export default function Appearance() {
               <h2 className="leading-tight font-medium text-black dark:text-white">
                 Пользовательский логотип
               </h2>
-              <p className="leading-tight text-sm text-gray-500 dark:text-slate-400">
+              <p className="leading-tight text-sm text-gray-500 dark:text-slate-400 mb-4">
                 Измените логотип, который появляется на боковой панели.
               </p>
             </div>

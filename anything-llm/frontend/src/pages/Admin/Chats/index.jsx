@@ -10,22 +10,21 @@ import ChatRow from "./ChatRow";
 
 export default function AdminChats() {
   return (
-    <div className="w-screen h-screen overflow-hidden bg-orange-100 dark:bg-stone-700 flex">
+    <div className="w-screen h-screen overflow-hidden bg-gray-400 dark:bg-stone-700 flex">
       {!isMobile && <Sidebar />}
       <div
-        className="main-content transition-all duration-500 relative bg-white dark:bg-black-900 h-full overflow-hidden p-[16px] md:p-[32px] !pb-0"
+        className="main-content w-full transition-all duration-500 relative bg-white dark:bg-black-900 h-full overflow-hidden p-[16px] md:p-[32px] !pb-0"
       >
         {isMobile && <SidebarMobileHeader />}
         <div className="main-box flex flex-col w-full h-full p-1 md:p-8 lg:p-[50px] bg-white shadow-md relative overflow-y-auto">
           <div className="w-full flex flex-col gap-y-1">
             <div className="items-center flex gap-x-4">
               <p className="text-3xl font-semibold text-slate-600 dark:text-slate-200">
-                Workspace Chats
+                Чаты рабочего пространства
               </p>
             </div>
             <p className="text-sm font-base text-slate-600 dark:text-slate-200">
-              These are all the recorded chats and messages that have been sent
-              by users ordered by their creation date.
+              Это все записанные чаты и сообщения, отправленные пользователями, упорядоченные по дате их создания.
             </p>
           </div>
           <ChatsContainer />
@@ -88,28 +87,28 @@ function ChatsContainer() {
   return (
     <>
       <table className="md:w-full w-full text-sm text-left text-gray-500 dark:text-gray-400 rounded-lg mt-5">
-        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-stone-800 dark:text-gray-400">
+        <thead className="text-xs text-gray-500 uppercase bg-gray-50 dark:bg-stone-800 dark:text-gray-400">
           <tr>
             <th scope="col" className="px-6 py-3 rounded-tl-lg">
-              Id
+              Идентификатор
             </th>
             <th scope="col" className="px-6 py-3">
-              Sent By
+              Отправлено от
             </th>
             <th scope="col" className="px-6 py-3">
-              Workspace
+              Рабочее пространство
             </th>
             <th scope="col" className="px-6 py-3">
-              Prompt
+              Промпт
             </th>
             <th scope="col" className="px-6 py-3">
-              Response
+              Ответ
             </th>
             <th scope="col" className="px-6 py-3">
-              Sent At
+              Отправлено в
             </th>
             <th scope="col" className="px-6 py-3 rounded-tr-lg">
-              Actions
+              Действия
             </th>
           </tr>
         </thead>

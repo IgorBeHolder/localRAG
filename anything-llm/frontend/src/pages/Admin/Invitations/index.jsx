@@ -1,27 +1,28 @@
-import { useEffect, useState } from "react";
-import Sidebar, { SidebarMobileHeader } from "../../../components/AdminSidebar";
-import { isMobile } from "react-device-detect";
+import {useEffect, useState} from "react";
+import Sidebar, {SidebarMobileHeader} from "../../../components/AdminSidebar";
+import {isMobile} from "react-device-detect";
 import * as Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { Mail } from "react-feather";
+import {Mail} from "react-feather";
 import usePrefersDarkMode from "../../../hooks/usePrefersDarkMode";
 import Admin from "../../../models/admin";
 import InviteRow from "./InviteRow";
-import NewInviteModal, { NewInviteModalId } from "./NewInviteModal";
+import NewInviteModal, {NewInviteModalId} from "./NewInviteModal";
 
 export default function AdminInvites() {
   return (
-    <div className="w-screen h-screen overflow-hidden bg-orange-100 dark:bg-stone-700 flex">
-      {!isMobile && <Sidebar />}
+    <div className="w-screen h-screen overflow-hidden bg-gray-400 dark:bg-stone-700 flex">
+      {!isMobile && <Sidebar/>}
       <div
-        className="main-content transition-all duration-500 relative bg-white dark:bg-black-900 h-full overflow-hidden p-[16px] md:p-[32px] !pb-0"
+        className="main-content w-full transition-all duration-500 relative bg-white dark:bg-black-900 h-full overflow-hidden p-[16px] md:p-[32px] !pb-0"
       >
-        {isMobile && <SidebarMobileHeader />}
-        <div className="main-box flex flex-col w-full h-full p-1 md:p-8 lg:p-[50px] bg-white shadow-md relative overflow-y-auto">
+        {isMobile && <SidebarMobileHeader/>}
+        <div
+          className="main-box flex flex-col w-full h-full p-1 md:p-8 lg:p-[50px] bg-white shadow-md relative overflow-y-auto">
           <div className="w-full flex flex-col gap-y-1">
             <div className="items-center flex gap-x-4">
               <p className="text-3xl font-semibold text-slate-600 dark:text-slate-200">
-                Invitations
+                Приглашения
               </p>
               <button
                 onClick={() =>
@@ -29,17 +30,17 @@ export default function AdminInvites() {
                 }
                 className="border border-slate-800 dark:border-slate-200 px-4 py-1 rounded-lg text-slate-800 dark:text-slate-200 text-sm items-center flex gap-x-2 hover:bg-slate-800 hover:text-slate-100 dark:hover:bg-slate-200 dark:hover:text-slate-800"
               >
-                <Mail className="h-4 w-4" /> Create Invite Link
+                <Mail className="h-4 w-4"/> Создать ссылку-приглашение
               </button>
             </div>
             <p className="text-sm font-base text-slate-600 dark:text-slate-200">
-              Create invitation links for people in your organization to accept
-              and sign up with. Invitations can only be used by a single user.
+              Создайте ссылки для приглашений, чтобы люди в вашей организации могли принять их и зарегистрироваться.
+              Приглашения может использовать только один пользователь.
             </p>
           </div>
-          <InvitationsContainer />
+          <InvitationsContainer/>
         </div>
-        <NewInviteModal />
+        <NewInviteModal/>
       </div>
     </div>
   );
@@ -55,6 +56,7 @@ function InvitationsContainer() {
       setInvites(_invites);
       setLoading(false);
     }
+
     fetchInvites();
   }, []);
 
@@ -74,29 +76,29 @@ function InvitationsContainer() {
 
   return (
     <table className="md:w-3/4 w-full text-sm text-left text-gray-500 dark:text-gray-400 rounded-lg mt-5">
-      <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-stone-800 dark:text-gray-400">
-        <tr>
-          <th scope="col" className="px-6 py-3">
-            Status
-          </th>
-          <th scope="col" className="px-6 py-3 rounded-tl-lg">
-            Accepted By
-          </th>
-          <th scope="col" className="px-6 py-3">
-            Created By
-          </th>
-          <th scope="col" className="px-6 py-3">
-            Created
-          </th>
-          <th scope="col" className="px-6 py-3 rounded-tr-lg">
-            Actions
-          </th>
-        </tr>
+      <thead className="text-xs text-gray-500 uppercase bg-gray-50 dark:bg-stone-800 dark:text-gray-400">
+      <tr>
+        <th scope="col" className="px-6 py-3">
+          Положение дел
+        </th>
+        <th scope="col" className="px-6 py-3 rounded-tl-lg">
+          Принят
+        </th>
+        <th scope="col" className="px-6 py-3">
+          Сделано
+        </th>
+        <th scope="col" className="px-6 py-3">
+          Созданный
+        </th>
+        <th scope="col" className="px-6 py-3 rounded-tr-lg">
+          Действия
+        </th>
+      </tr>
       </thead>
       <tbody>
-        {invites.map((invite) => (
-          <InviteRow key={invite.id} invite={invite} />
-        ))}
+      {invites.map((invite) => (
+        <InviteRow key={invite.id} invite={invite}/>
+      ))}
       </tbody>
     </table>
   );

@@ -67,7 +67,7 @@ export default function ActiveWorkspaces() {
                 setSelectedWs(workspace);
                 showModal();
               }}
-              className="rounded-md bg-stone-200 p-2 h-[36px] w-[15%] flex items-center justify-center text-slate-800 hover:bg-stone-300 group dark:bg-stone-800 dark:text-slate-200 dark:hover:bg-stone-900 dark:border dark:border-stone-800"
+              className="rounded-md bg-stone-200 mr-2 p-2 h-[36px] w-[15%] flex items-center justify-center text-slate-800 hover:bg-stone-300 group dark:bg-stone-800 dark:text-slate-200 dark:hover:bg-stone-900 dark:border dark:border-stone-800"
             >
               <Settings className="h-3.5 w-3.5 transition-all duration-300 group-hover:rotate-90" />
             </button>

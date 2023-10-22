@@ -24,8 +24,7 @@ export default function Sidebar() {
     <>
       <div
         ref={sidebarRef}
-        style={{ height: "calc(100% - 32px)" }}
-        className="transition-all duration-500 relative m-[16px] rounded-[26px] bg-white dark:bg-black-900 min-w-[15.5%] p-[18px] "
+        className="relative transition-all h-full duration-500 relative bg-blue-600 dark:bg-black-900 min-w-[15%] shadow-inner"
       >
         {/* <button onClick={handleWidthToggle} className='absolute -right-[13px] top-[35%] bg-white w-auto h-auto bg-transparent flex items-center'>
         <svg width="16" height="96" viewBox="0 0 16 96" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#141414"><path d="M2.5 0H3C3 20 15 12 15 32V64C15 84 3 76 3 96H2.5V0Z" fill="black" fill-opacity="0.12" stroke="transparent" stroke-width="0px"></path><path d="M0 0H2.5C2.5 20 14.5 12 14.5 32V64C14.5 84 2.5 76 2.5 96H0V0Z" fill="#141414"></path></svg>
@@ -65,65 +64,6 @@ export default function Sidebar() {
                   highlightColor="#4c4948"
                   enableAnimation={true}
                 />
-              </div>
-            </div>
-            <div>
-              <div className="flex flex-col gap-y-2">
-                <div className="w-full flex items-center justify-start">
-                  <div className="flex w-fit items-center justify-end gap-x-2">
-                    <p className="text-slate-400 leading-loose text-sm">LLM</p>
-                    <div className="flex items-center gap-x-1 border border-red-400 px-2 bg-red-200 rounded-full">
-                      <p className="text-red-700 leading-tight text-sm">
-                        offline
-                      </p>
-                      <AlertCircle className="h-3 w-3 stroke-red-100 fill-red-400" />
-                    </div>
-                  </div>
-                </div>
-                <a
-                  href={paths.hosting()}
-                  target="_blank"
-                  className="flex flex-grow w-[100%] h-[36px] gap-x-2 py-[5px] px-4 border border-slate-400 dark:border-transparent rounded-lg text-slate-800 dark:text-slate-200 justify-center items-center hover:bg-slate-100 dark:bg-stone-800 dark:hover:bg-stone-900"
-                >
-                  <Cpu className="h-4 w-4" />
-                  <p className="text-slate-800 dark:text-slate-200 text-xs leading-loose font-semibold">
-                    Managed cloud hosting
-                  </p>
-                </a>
-                <a
-                  href={paths.hosting()}
-                  target="_blank"
-                  className="flex flex-grow w-[100%] h-[36px] gap-x-2 py-[5px] px-4 border border-slate-400 dark:border-transparent rounded-lg text-slate-800 dark:text-slate-200 justify-center items-center hover:bg-slate-100  dark:bg-stone-800 dark:hover:bg-stone-900"
-                >
-                  <Briefcase className="h-4 w-4" />
-                  <p className="text-slate-800 dark:text-slate-200 text-xs leading-loose font-semibold">
-                    Enterprise Installation
-                  </p>
-                </a>
-              </div>
-
-              {/* Footer */}
-              <div className="flex items-end justify-between mt-2">
-                <div className="flex gap-x-1 items-center">
-                  <a
-                    href={paths.github()}
-                    className="transition-all duration-300 p-2 rounded-full bg-slate-200 text-slate-400 dark:bg-slate-800 hover:bg-slate-800 hover:text-slate-200 dark:hover:text-slate-200"
-                  >
-                    <GitHub className="h-4 w-4 " />
-                  </a>
-                  <a
-                    href={paths.docs()}
-                    className="transition-all duration-300 p-2 rounded-full bg-slate-200 text-slate-400 dark:bg-slate-800 hover:bg-slate-800 hover:text-slate-200 dark:hover:text-slate-200"
-                  >
-                    <BookOpen className="h-4 w-4 " />
-                  </a>
-                </div>
-                <a
-                  href={paths.mailToMintplex()}
-                  className="transition-all duration-300 text-xs text-slate-200 dark:text-slate-600 hover:text-blue-600 dark:hover:text-blue-400"
-                >
-                  @MintplexLabs
-                </a>
               </div>
             </div>
           </div>

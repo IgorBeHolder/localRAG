@@ -46,7 +46,7 @@ export default function DocumentSettings({workspace}) {
   const deleteWorkspace = async () => {
     if (
       !window.confirm(
-        `Вы собираетесь удалить всю рабочее пространство ${workspace.name}. Это приведет к удалению всех вложений векторов из вашей векторной базы данных.\n\nИсходные исходные файлы останутся нетронутыми. Это действие необратимо.`
+        `Вы собираетесь удалить всё рабочее пространство ${workspace.name}. Это приведет к удалению всех вложений векторов из вашей векторной базы данных.\n\nИсходные исходные файлы останутся нетронутыми. Это действие необратимо.`
       )
     )
       return false;
@@ -188,7 +188,7 @@ export default function DocumentSettings({workspace}) {
               Количество выбранных документов: {selectedFiles.length}
             </p>
           </div>
-          <div className="w-full h-auto border border-slate-200 dark:border-stone-600 rounded-lg px-4 py-2">
+          <div className="w-full flex flex-col gap-2 h-auto border border-slate-200 dark:border-stone-600 rounded-lg p-2">
             {!!directories && (
               <Directory
                 files={directories}
@@ -218,7 +218,7 @@ export default function DocumentSettings({workspace}) {
             disabled={saving}
             onClick={confirmChanges}
             type="submit"
-            className="text-slate-200 bg-black-900 px-4 py-2 rounded-lg hover:bg-gray-900 whitespace-nowrap text-sm"
+            className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
           >
             {saving ? "Сохранение..." : "Сохранить изменения"}
           </button>

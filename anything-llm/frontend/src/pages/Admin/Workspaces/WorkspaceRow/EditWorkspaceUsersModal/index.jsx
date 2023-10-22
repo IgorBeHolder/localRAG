@@ -104,7 +104,7 @@ export default function EditWorkspaceUsersModal({workspace, users}) {
                       });
                     }}
                   >
-                    Select All
+                    Выбрать всё
                   </button>
                   <button
                     type="button"
