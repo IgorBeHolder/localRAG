@@ -5,8 +5,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 export default function LoadingChat() {
   return (
     <div
-      style={{ height: isMobile ? "100%" : "calc(100% - 32px)" }}
-      className="transition-all duration-500 relative md:ml-[2px] md:mr-[8px] md:my-[16px] md:rounded-[26px] bg-white dark:bg-black-900 w-full md:min-w-[82%] p-[18px] h-full overflow-y-scroll"
+      className="main-content transition-all duration-500 h-full relative bg-white dark:bg-black-900 w-full md:min-w-[82%] p-[18px] h-full overflow-y-scroll"
     >
       <Skeleton.default
         height="100px"

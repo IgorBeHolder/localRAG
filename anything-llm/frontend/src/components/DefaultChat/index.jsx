@@ -37,7 +37,8 @@ export default function DefaultChatContainer() {
         <div
           className="p-4 max-w-full md:max-w-[75%] bg-gray-400 dark:bg-stone-700 rounded-sm xl:rounded-2xl border border-gray-700">
           <p className="text-slate-800 dark:text-slate-200 font-[500] md:font-semibold text-sm md:text-base">
-            Добро пожаловать в Sherpa AI Server. Sherpa AI Server — это инструмент с открытым исходным кодом от Mintplex Labs,
+            Добро пожаловать в Sherpa AI Server. Sherpa AI Server — это инструмент с открытым исходным кодом от Mintplex
+            Labs,
             который превращает <i>любое</i> содержимое в обученного чат-бота, с которым вы можете взаимодействовать.
             Sherpa AI Server — это программное обеспечение BYOK (принесите свои ключи), поэтому за него не взимается
             подписка, плата или другие платежи, кроме услуг, которые вы хотите использовать с ним.
@@ -78,7 +79,8 @@ export default function DefaultChatContainer() {
         <div
           className="p-4 max-w-full md:max-w-[75%] bg-gray-400 dark:bg-stone-700 rounded-sm xl:rounded-2xl border border-gray-700">
           <p className="text-slate-800 dark:text-slate-200 font-[500] md:font-semibold text-sm md:text-base">
-            Sherpa AI Server может полностью работать локально на вашем компьютере с минимальными затратами ресурсов, которые
+            Sherpa AI Server может полностью работать локально на вашем компьютере с минимальными затратами ресурсов,
+            которые
             вы даже не заметите! Не требуется GPU. Также доступна установка в облаке и на локальных серверах.
             <br/>
             Экосистема инструментов искусственного интеллекта становится мощнее каждый день. Sherpa AI Server делает ее
@@ -220,45 +222,6 @@ export default function DefaultChatContainer() {
           </div>
         </div>
       </div>
-    </React.Fragment>,
-
-    <React.Fragment>
-      <div
-        className={`flex w-full mb-2 xl:mb-3 justify-start ${
-          popMsg ? "chat__message" : ""
-        }`}
-      >
-        <div
-          className="p-4 max-w-full md:max-w-[75%] bg-gray-400 dark:bg-stone-700 rounded-sm xl:rounded-2xl border border-gray-700">
-          <p className="text-slate-800 dark:text-slate-200 font-[500] md:font-semibold text-sm md:text-base">
-            Have Fun!
-          </p>
-          <div className="flex flex-col md:flex-row items-start md:items-center gap-1 md:gap-4">
-            <a
-              href={paths.github()}
-              target="_blank"
-              className="mt-4 w-fit flex flex-grow gap-x-2 py-[5px] px-4 border border-slate-400 rounded-lg text-slate-800 dark:text-slate-200 justify-start items-center hover:bg-slate-100 dark:hover:bg-stone-900 dark:bg-stone-900"
-            >
-              <GitHub className="h-4 w-4"/>
-              <p className="text-slate-800 dark:text-slate-200 text-sm md:text-lg leading-loose">
-                Оценить на GitHub
-              </p>
-            </a>
-            <a
-              href={paths.mailToMintplex()}
-              className="mt-4 w-fit flex flex-grow gap-x-2 py-[5px] px-4 border border-slate-400 rounded-lg text-slate-800 dark:text-slate-200 justify-start items-center hover:bg-slate-100 dark:hover:bg-stone-900 dark:bg-stone-900"
-            >
-              <Mail className="h-4 w-4"/>
-              <p className="text-slate-800 dark:text-slate-200 text-sm md:text-lg leading-loose">
-                Свяжитесь с лабораторией Mintplex
-              </p>
-            </a>
-          </div>
-          <div className="text-right text-xs mt-2">
-            16:16
-          </div>
-        </div>
-      </div>
     </React.Fragment>
   ];
 
@@ -289,11 +252,11 @@ export default function DefaultChatContainer() {
 
   return (
     <div
-      className="main-content transition-all duration-500 relative bg-white dark:bg-black-900 h-full"
+      className="main-content flex-1 transition-all duration-500 relative bg-white dark:bg-black-900 h-full"
     >
       {isMobile && <SidebarMobileHeader/>}
-      <div className="main-box flex flex-col w-full h-full overflow-y-auto p-[16px] md:p-[32px] !pb-0">
-        <div className="main-box flex flex-col w-full bg-white shadow-md relative">
+      <div className="main-box relative flex flex-col w-full h-full overflow-y-auto p-[16px] md:p-[32px] !pb-0">
+        <div className="flex flex-col w-full bg-white shadow-md relative">
           <div
             className="flex flex-col w-full flex-grow-1 p-1 md:p-8 lg:p-[50px] relative !pb-[150px]">
             {fetchedMessages.length === 0
@@ -351,7 +314,7 @@ export default function DefaultChatContainer() {
                 //  adjustTextArea(e);
                 //}}
                 //value={message}
-                className="cursor-text max-h-[100px] md:min-h-[40px] block mx-2 md:mx-4 p-2.5 w-full text-[16px] md:text-sm border bg-white border-gray-300 placeholder-gray-400 text-gray-900 dark:text-white dark:bg-stone-600 dark:border-stone-700 dark:placeholder-stone-400"
+                className="cursor-text max-h-[100px] md:min-h-[40px] block mx-2 md:mx-4 p-2.5 w-full text-[16px] md:text-sm border bg-white border-gray-300 placeholder-gray-200 text-gray-900 dark:text-white dark:bg-stone-600 dark:border-stone-700 dark:placeholder-stone-400"
                 placeholder={
                   isMobile
                     ? "Введите ваше сообщение здесь."
@@ -362,7 +325,7 @@ export default function DefaultChatContainer() {
                 //ref={formRef}
                 type="submit"
                 //disabled={buttonDisabled}
-                className="transition-all duration-300 inline-flex justify-center p-0 md:p-2 rounded-full cursor-pointer text-gray-400 dark:text-slate-200 hover:bg-blue-100 hover:text-blue-600 dark:hover:bg-stone-500 group"
+                className="transition-all duration-300 inline-flex justify-center p-0 md:p-2 rounded-full cursor-pointer text-gray-200 dark:text-slate-200 hover:bg-blue-100 hover:text-blue-600 dark:hover:bg-stone-500 group"
               >
                 <svg
                   aria-hidden="true"

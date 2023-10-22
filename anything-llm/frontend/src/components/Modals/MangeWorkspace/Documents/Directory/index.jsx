@@ -33,9 +33,9 @@ export default function Directory({
 
   if (files.type === "folder") {
     return (
-      <div style={{marginLeft: nested}} className="mb-2">
+      <div style={{marginLeft: nested}} className="">
         <div
-          className={`flex items-center hover:bg-gray-100 gap-x-2 text-gray-800 dark:text-stone-200 dark:hover:bg-stone-800 px-2 rounded-lg`}
+          className={`flex items-center p-2 hover:bg-gray-100 gap-x-2 text-gray-800 dark:text-stone-200 dark:hover:bg-stone-800 px-2 rounded-lg`}
         >
           {files.items.some((files) => files.type === "folder") ? (
             <Folder className="w-6 h-6"/>
@@ -50,15 +50,15 @@ export default function Directory({
           )}
 
           <div
-            className="flex gap-x-2 items-center  cursor-pointer w-full"
+            className="flex gap-x-2 items-center  cursor-pointer w-full items-baseline"
             onClick={() => toggleExpanded(!isExpanded)}
           >
             <h2 className="text-base md:text-2xl">{files.name}</h2>
             {files.items.some((files) => files.type === "folder") ? (
-              <p className="text-xs italic">{files.items.length} folders</p>
+              <p className="text-xs italic">{files.items.length} папок</p>
             ) : (
               <p className="text-xs italic">
-                {files.items.length} documents |{" "}
+                {files.items.length} документов |{" "}
                 {nFormatter(
                   files.items.reduce((a, b) => a + b.token_count_estimate, 0)
                 )}{" "}

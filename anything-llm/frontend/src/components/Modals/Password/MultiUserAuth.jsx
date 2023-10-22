@@ -31,10 +31,10 @@ export default function MultiUserAuth() {
     <form onSubmit={handleLogin}>
       <div className="relative bg-white rounded-lg shadow dark:bg-stone-700">
         <div className="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
-          <div className="flex items-center flex-col">
-            <img src={_initLogo} alt="Logo" className="w-1/2"/>
-            <h3 className="text-md md:text-xl font-semibold text-gray-900 dark:text-white">
-              Этот экземпляр защищен паролем.
+          <div className="flex items-center gap-4">
+            <img src={_initLogo} alt="Logo" className="w-1/6"/>
+            <h3 className="text-md md:text-xl font-semibold text-gray-900 dark:text-white pb-1">
+              Sherpa AI Server
             </h3>
           </div>
         </div>
@@ -45,7 +45,7 @@ export default function MultiUserAuth() {
                 htmlFor="username"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                Имя пользователя экземпляра
+                Имя пользователя
               </label>
               <input
                 name="username"
@@ -61,7 +61,7 @@ export default function MultiUserAuth() {
                 htmlFor="password"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                Пароль экземпляра
+                Пароль
               </label>
               <input
                 name="password"
@@ -89,7 +89,7 @@ export default function MultiUserAuth() {
             type="submit"
             className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
           >
-            {loading ? "Проверка..." : "Отправить"}
+            {loading ? "Проверка..." : "Войти"}
           </button>
         </div>
       </div>

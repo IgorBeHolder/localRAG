@@ -53,7 +53,7 @@ async function viewLocalFiles() {
   if (!dirExists) fs.mkdirSync(folder);
 
   const directory = {
-    name: "documents",
+    name: "документы",
     type: "folder",
     items: [],
   };

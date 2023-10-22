@@ -60,6 +60,6 @@ export default function handleChat(
 export function chatPrompt(workspace) {
   return (
     workspace?.openAiPrompt ??
-    "Given the following conversation, relevant context, and a follow up question, reply with an answer to the current question the user is asking. Return only your response to the question given the above information following the users instructions as needed."
+    "Учитывая следующий разговор, соответствующий контекст и дополнительный вопрос, ответьте на текущий вопрос, который задает пользователь. Отправьте только свой ответ на вопрос с учетом приведенной выше информации, следуя инструкциям пользователя по мере необходимости."
   );
 }

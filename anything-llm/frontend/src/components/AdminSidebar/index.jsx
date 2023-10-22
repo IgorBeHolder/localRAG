@@ -25,8 +25,7 @@ export default function AdminSidebar() {
     <>
       <div
         ref={sidebarRef}
-        style={{ height: "calc(100% - 32px)" }}
-        className="transition-all duration-500 relative m-[16px] rounded-[26px] bg-white dark:bg-black-900 min-w-[15.5%] p-[18px] "
+        className="relative transition-all h-full duration-500 relative bg-blue-600 dark:bg-black-900 min-w-[15%] shadow-inner"
       >
         <div className="w-full h-full flex flex-col overflow-x-hidden items-between">
           {/* Header Information */}
@@ -76,7 +75,7 @@ export default function AdminSidebar() {
                 />
                 <Option
                   href={paths.admin.chats()}
-                  btnText="Управление чатом в рабочей области"
+                  btnText="Управление чатом в рабочем пространстве"
                   icon={<MessageSquare className="h-4 w-4 flex-shrink-0" />}
                 />
                 <Option
@@ -89,44 +88,6 @@ export default function AdminSidebar() {
                   btnText="Ключи API"
                   icon={<Key className="h-4 w-4 flex-shrink-0" />}
                 />
-              </div>
-            </div>
-            <div>
-              <div className="flex flex-col gap-y-2">
-                <div className="w-full flex items-center justify-between">
-                  <LLMStatus />
-                  <IndexCount />
-                </div>
-              </div>
-
-              {/* Footer */}
-              <div className="flex items-end justify-between mt-2">
-                <div className="flex gap-x-1 items-center">
-                  <a
-                    href={paths.github()}
-                    className="transition-all duration-300 p-2 rounded-full bg-slate-200 text-slate-400 dark:bg-slate-800 hover:bg-slate-800 hover:text-slate-200 dark:hover:text-slate-200"
-                  >
-                    <GitHub className="h-4 w-4 " />
-                  </a>
-                  <a
-                    href={paths.docs()}
-                    className="transition-all duration-300 p-2 rounded-full bg-slate-200 text-slate-400 dark:bg-slate-800 hover:bg-slate-800 hover:text-slate-200 dark:hover:text-slate-200"
-                  >
-                    <BookOpen className="h-4 w-4 " />
-                  </a>
-                  <a
-                    href={paths.discord()}
-                    className="transition-all duration-300 p-2 rounded-full bg-slate-200 dark:bg-slate-800 hover:bg-slate-800 group"
-                  >
-                    <Discord className="h-4 w-4 stroke-slate-400 group-hover:stroke-slate-200 dark:group-hover:stroke-slate-200" />
-                  </a>
-                </div>
-                <a
-                  href={paths.mailToMintplex()}
-                  className="transition-all duration-300 text-xs text-slate-200 dark:text-slate-600 hover:text-blue-600 dark:hover:text-blue-400"
-                >
-                  @MintplexLabs
-                </a>
               </div>
             </div>
           </div>
@@ -243,7 +204,7 @@ export function SidebarMobileHeader() {
                   />
                   <Option
                     href={paths.admin.chats()}
-                    btnText="Управление чатом в рабочей области"
+                    btnText="Управление чатом в рабочем пространстве"
                     icon={<MessageSquare className="h-4 w-4 flex-shrink-0" />}
                   />
                   <Option

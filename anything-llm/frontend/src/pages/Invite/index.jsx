@@ -31,7 +31,7 @@ export default function InvitePage() {
 
   if (result.status === "loading") {
     return (
-      <div className="w-screen h-screen overflow-hidden bg-orange-100 dark:bg-stone-700 flex">
+      <div className="w-screen h-screen overflow-hidden bg-gray-400 dark:bg-stone-700 flex">
         <FullScreenLoader />
       </div>
     );
@@ -39,7 +39,7 @@ export default function InvitePage() {
 
   if (result.status === "invalid") {
     return (
-      <div className="w-screen h-screen overflow-hidden bg-orange-100 dark:bg-stone-700 flex items-center justify-center">
+      <div className="w-screen h-screen overflow-hidden bg-gray-400 dark:bg-stone-700 flex items-center justify-center">
         <p className="text-red-600 text-lg">{result.message}</p>
       </div>
     );

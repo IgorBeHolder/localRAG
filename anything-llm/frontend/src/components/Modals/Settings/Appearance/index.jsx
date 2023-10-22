@@ -113,7 +113,7 @@ export default function Appearance() {
               <h2 className="leading-tight font-medium text-black dark:text-white">
                 Пользовательский логотип
               </h2>
-              <p className="leading-tight text-sm text-gray-500 dark:text-slate-400">
+              <p className="leading-tight text-sm text-gray-500 dark:text-slate-400 mb-4">
                 Измените логотип, который появляется на боковой панели.
               </p>
             </div>

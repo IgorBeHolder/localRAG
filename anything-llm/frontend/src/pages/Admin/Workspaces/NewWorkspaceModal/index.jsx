@@ -26,7 +26,7 @@ export default function NewWorkspaceModal() {
         <div className="relative bg-white rounded-lg shadow dark:bg-stone-700">
           <div className="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
             <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-              Add workspace to Instance
+              Добавить рабочее пространство в экземпляр
             </h3>
             <button
               onClick={hideModal}
