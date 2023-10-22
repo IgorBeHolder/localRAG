@@ -5,7 +5,7 @@ async function resetMemory(workspace, _message, msgUUID, user = null) {
   return {
     uuid: msgUUID,
     type: "textResponse",
-    textResponse: "Workspace chat memory was reset!",
+    textResponse: "Чат сброшен", //"WorksGthtpace chat memory was reset!",
     sources: [],
     close: true,
     error: false,

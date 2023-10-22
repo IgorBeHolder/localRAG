@@ -83,9 +83,12 @@ async function chatWithWorkspace(
       textResponse: null,
       sources: [],
       close: true,
-      error: `This message was moderated and will not be allowed. Violations for ${reasons.join(
+      // error: `This message was moderated and will not be allowed. Violations for ${reasons.join(
+      //   ", "
+      // )} found.`,
+      error: `Это сообщение не прошло модерацию по причине ${reasons.join(
         ", "
-      )} found.`,
+      )}.`,
     };
   }
 

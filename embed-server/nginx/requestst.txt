@@ -17,3 +17,8 @@ curl -X 'POST' 'http://46.254.21.170:3002/v1/chat/completions' -H 'accept: appli
 
 curl -X 'POST' 'http://46.254.21.170:3002/v1/embeddings' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{"model": "all-MiniLM-L6-v2", "input": ["This is an example sentence", "Each sentence is converted"]}'
 
+curl -X 'POST' 'http://46.254.21.170:3002/v1/completions' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{"model": "all-MiniLM-L6-v2",  "prompt": "\n\n### Instructions:\nWhat is the capital of Ottawa?\n\n### Response:\n",  "stop": ["\n", "###" ]}'
+
+
+
+
