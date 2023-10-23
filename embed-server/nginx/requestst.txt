@@ -24,4 +24,9 @@ Stream:
 curl -X 'POST' 'http://46.254.21.170:3002/v1/completions' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{"model": "llama2", "stream":"true", "prompt": "\n\n### Instructions:\nWhat is the capital of Canada?\n\n### Response:\n",  "stop": ["\n", "###" ]}'
 
 
+MODELS:
+sudo curl -o ./localRAG/model-store/llama-2-7b-chat.Q4_K_M.gguf -L "https://huggingface.co/TheBloke/Llama-2-7b-Chat-GGUF/resolve/main/llama-2-7b-chat.Q4_K_M.gguf"
+
+sudo curl -o ./localRAG/model-store/mistral-7b-instruct-v0.1.Q4_K_M.gguf -L "https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.1-GGUF/resolve/main/mistral-7b-instruct-v0.1.Q4_K_M.gguf"
+
 
