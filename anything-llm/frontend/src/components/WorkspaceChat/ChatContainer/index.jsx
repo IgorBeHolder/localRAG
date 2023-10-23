@@ -72,18 +72,18 @@ export default function ChatContainer({workspace, knownHistory = []}) {
     >
       {isMobile && <SidebarMobileHeader/>}
       <div className="main-box relative flex flex-col w-full h-full overflow-y-auto p-[16px] md:p-[32px] !pb-0">
-        <div className="flex flex-col w-full bg-white shadow-md relative">
+        <div className="flex flex-col flex-1 w-full bg-white shadow-md relative">
           <ChatHistory history={chatHistory} workspace={workspace}/>
         </div>
-        <PromptInput
-          workspace={workspace}
-          message={message}
-          submit={handleSubmit}
-          onChange={handleMessageChange}
-          inputDisabled={loadingResponse}
-          buttonDisabled={loadingResponse}
-        />
       </div>
+      <PromptInput
+        workspace={workspace}
+        message={message}
+        submit={handleSubmit}
+        onChange={handleMessageChange}
+        inputDisabled={loadingResponse}
+        buttonDisabled={loadingResponse}
+      />
     </div>
   );
 }
