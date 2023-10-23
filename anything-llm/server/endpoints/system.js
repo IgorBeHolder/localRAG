@@ -105,7 +105,7 @@ function systemEndpoints(app) {
             user: null,
             valid: false,
             token: null,
-            message: "[001] Invalid login credentials.",
+            message: "[001] Не верные логин-пароль.",
           });
           return;
         }
@@ -116,7 +116,7 @@ function systemEndpoints(app) {
             user: null,
             valid: false,
             token: null,
-            message: "[002] Invalid login credentials.",
+            message: "[002]  Не верные логин-пароль.",
           });
           return;
         }
@@ -126,7 +126,7 @@ function systemEndpoints(app) {
             user: null,
             valid: false,
             token: null,
-            message: "[004] Account suspended by admin.",
+            message: "[004] Аккаунт заблокирован администратором.",
           });
           return;
         }
@@ -147,7 +147,7 @@ function systemEndpoints(app) {
           response.status(401).json({
             valid: false,
             token: null,
-            message: "[003] Invalid password provided",
+            message: "[003] Не правльный пароль",
           });
           return;
         }
@@ -297,7 +297,7 @@ function systemEndpoints(app) {
         if (multiUserModeEnabled) {
           response.status(200).json({
             success: false,
-            error: "Multi-user mode is already enabled.",
+            error: "Многопользовательский режим уже активирован.",
           });
           return;
         }
@@ -354,7 +354,7 @@ function systemEndpoints(app) {
       if (!fs.existsSync(finalDestination)) {
         response.status(404).json({
           error: 404,
-          msg: `File ${request.params.filename} does not exist in exports.`,
+          msg: `Файл ${request.params.filename} отсутствует в "exports".`,
         });
         return;
       }
@@ -363,7 +363,7 @@ function systemEndpoints(app) {
         if (err) {
           response.send({
             error: err,
-            msg: "Problem downloading the file",
+            msg: "Ошибка загрузки файла",
           });
         }
       });
@@ -396,7 +396,7 @@ function systemEndpoints(app) {
       return;
     } catch (error) {
       console.error("Error processing the logo request:", error);
-      response.status(500).json({ message: "Internal server error" });
+      response.status(500).json({ message: "Внутренняя ошибка сервера" });
     }
   });
 
@@ -406,12 +406,12 @@ function systemEndpoints(app) {
     handleLogoUploads.single("logo"),
     async (request, response) => {
       if (!request.file || !request.file.originalname) {
-        return response.status(400).json({ message: "No logo file provided." });
+        return response.status(400).json({ message: "Лого не предоставлено." });
       }
 
       if (!validFilename(request.file.originalname)) {
         return response.status(400).json({
-          message: "Invalid file name. Please choose a different file.",
+          message: "Не правльное имя файла. Выбирете другой файл.",
         });
       }
 
@@ -434,11 +434,11 @@ function systemEndpoints(app) {
         return response.status(success ? 200 : 500).json({
           message: success
             ? "Logo uploaded successfully."
-            : error || "Failed to update with new logo.",
+            : error || "Ошибка обновления лого.",
         });
       } catch (error) {
         console.error("Error processing the logo upload:", error);
-        response.status(500).json({ message: "Error uploading the logo." });
+        response.status(500).json({ message: "Ошибка выгрузки лого." });
       }
     }
   );
@@ -463,12 +463,12 @@ function systemEndpoints(app) {
 
         return response.status(success ? 200 : 500).json({
           message: success
-            ? "Logo removed successfully."
-            : error || "Failed to update with new logo.",
+            ? "Лого успешно удален."
+            : error || "Ошибка обновления лого.",
         });
       } catch (error) {
-        console.error("Error processing the logo removal:", error);
-        response.status(500).json({ message: "Error removing the logo." });
+        console.error("Ошибка обработки:", error);
+        response.status(500).json({ message: "Ошибка при удалении лого." });
       }
     }
   );
@@ -489,10 +489,10 @@ function systemEndpoints(app) {
         const canDelete = await SystemSettings.canDeleteWorkspaces();
         response.status(200).json({ canDelete });
       } catch (error) {
-        console.error("Error fetching can delete workspaces:", error);
+        console.error("Ошибка при удалении рабочего пространства:", error);
         response.status(500).json({
           success: false,
-          message: "Internal server error",
+          message: "Внутренняя ошибка сервера",
           canDelete: false,
         });
       }
@@ -504,10 +504,10 @@ function systemEndpoints(app) {
       const welcomeMessages = await WelcomeMessages.getMessages();
       response.status(200).json({ success: true, welcomeMessages });
     } catch (error) {
-      console.error("Error fetching welcome messages:", error);
+      console.error("Ошибка обработки приветственных сообщений:", error);
       response
         .status(500)
-        .json({ success: false, message: "Internal server error" });
+        .json({ success: false, message: "Внутренняя ошибка сервера" });
     }
   });
 
@@ -527,20 +527,20 @@ function systemEndpoints(app) {
         if (!Array.isArray(messages)) {
           return response.status(400).json({
             success: false,
-            message: "Invalid message format. Expected an array of messages.",
+            message: "Ошибка формата сообщений. Ожидался массив сообщений.",
           });
         }
 
         await WelcomeMessages.saveAll(messages);
         return response.status(200).json({
           success: true,
-          message: "Welcome messages saved successfully.",
+          message: "Привественное сообщение загружено.",
         });
       } catch (error) {
-        console.error("Error processing the welcome messages:", error);
+        console.error("Ошибка обработки приветственного сообщения:", error);
         response.status(500).json({
           success: true,
-          message: "Error saving the welcome messages.",
+          message: "Ошибка при сохранении приветственного сообщения.",
         });
       }
     }
@@ -561,7 +561,7 @@ function systemEndpoints(app) {
       console.error(error);
       response.status(500).json({
         apiKey: null,
-        error: "Could not find an API Key.",
+        error: "Не найден ключ API.",
       });
     }
   });
@@ -585,7 +585,7 @@ function systemEndpoints(app) {
         console.error(error);
         response.status(500).json({
           apiKey: null,
-          error: "Error generating api key.",
+          error: "Ошибка при генерации ключа API.",
         });
       }
     }

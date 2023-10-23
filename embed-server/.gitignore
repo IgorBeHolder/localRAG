@@ -2,3 +2,4 @@ venv/
 .env
 # model-store/
 __pycache__/
+/nginx/.htpasswd

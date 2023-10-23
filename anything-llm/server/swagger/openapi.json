@@ -1607,7 +1607,7 @@
           "content": {
             "application/json": {
               "example": {
-                "message": "What is AnythingLLM?",
+                "message": "What is stability?",
                 "mode": "query | chat"
               }
             }

@@ -8,13 +8,13 @@ ARG ARG_GID
 # Install system dependencies
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends \
-        curl libgfortran5 python3 python3-pip tzdata netcat \
+        curl libgfortran5 python3 python3-pip tzdata netcat make\
         libasound2 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 \
         libgcc1 libglib2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libx11-6 libx11-xcb1 libxcb1 \
         libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 \
         libxss1 libxtst6 ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release \
         xdg-utils && \
-    curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    curl -m 3600 -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
     apt-get install -yq --no-install-recommends nodejs && \
     curl -LO https://github.com/yarnpkg/yarn/releases/download/v1.22.19/yarn_1.22.19_all.deb \
         && dpkg -i yarn_1.22.19_all.deb \
@@ -46,13 +46,14 @@ WORKDIR /app
 # Install frontend dependencies
 FROM base as frontend-deps
 
-COPY ./frontend/package.json ./frontend/yarn.lock ./frontend/
-RUN cd ./frontend/ && yarn install && yarn cache clean
+COPY --chown=anythingllm:anythingllm ./frontend/package.json ./frontend/yarn.lock ./frontend/
+RUN  --mount=type=cache,target=/tmp/yarn-cache cd ./frontend/ && \
+    yarn install && yarn cache clean
 
 # Install server dependencies
 FROM base as server-deps
 COPY ./server/package.json ./server/yarn.lock ./server/
-RUN  cd ./server/ && \
+RUN  --mount=type=cache,target=/tmp/yarn-cache cd ./server/ && \
     yarn install --production && yarn cache clean && \
     rm /app/server/node_modules/vectordb/x86_64-apple-darwin.node && \
     rm /app/server/node_modules/vectordb/aarch64-apple-darwin.node
@@ -61,7 +62,10 @@ RUN  cd ./server/ && \
 FROM frontend-deps as build-stage
 # to avoid permission errors with bundleinspector.html 
 COPY --chown=anythingllm:anythingllm ./frontend/ ./frontend/ 
-RUN  cd ./frontend/ && yarn build && yarn cache clean
+
+RUN --mount=type=cache,target=/tmp/yarn-cache cd ./frontend/ && \
+    yarn build && yarn cache clean && \
+    rm -rf /tmp/yarn-cache/*
 
 # Setup the server
 FROM server-deps as production-stage
@@ -75,12 +79,12 @@ COPY --chown=anythingllm:anythingllm ./collector/ ./collector/
 
 # Install collector dependencies
 
-RUN  cd /app/collector && \
+RUN --mount=type=cache,target=/tmp/pip_cache cd /app/collector && \
     python3 -m virtualenv v-env && \
     . v-env/bin/activate && \
-    pip install -r requirements.txt 
+    pip install -r requirements.txt && \
     # pip install --no-cache-dir -r requirements.txt
-   
+    rm -rf /tmp/pip_cache/*
 USER anythingllm
 
 # Migrate and Run Prisma against known schema

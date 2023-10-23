@@ -8,8 +8,8 @@ services:
     environment:
       HOST: "0.0.0.0"
       PORT: "3003"
-      # CMAKE_ARGS: "-DLLAMA_BLAS=ON -DLLAMA_BLAS_VENDOR=OpenBLAS"
-      # FORCE_CMAKE: 1
+      CMAKE_ARGS: "-DLLAMA_BLAS=ON -DLLAMA_BLAS_VENDOR=OpenBLAS"
+      FORCE_CMAKE: 1
     # deploy:
     #   resources:
     #     limits:
@@ -24,7 +24,8 @@ services:
     volumes:
       - "../../../model-store:/app/model-store" 
     ports:
-      - "3003:3003"
+    # visible only inside the docker network
+      - "3003:3003" 
     ulimits:
       memlock:
         soft: 17179869184

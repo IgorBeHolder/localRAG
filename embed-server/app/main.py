@@ -24,7 +24,7 @@ app = FastAPI(
 )
 
 
-class EmbeddingInput(BaseModel):
+class EmbeddingInput(BaseModel): 
     model: str = Field(default="all-MiniLM-L6-v2")
     input: Union[str, List[str]] = Field(
         default=[
@@ -90,14 +90,14 @@ async def load_model_at_startup():
 
 
 @app.post("/v1/embeddings", response_model=EmbeddingOutput)
-async def get_embeddings_endpoint(text_list: EmbeddingInput = Depends()):
+async def get_embeddings_endpoint(data: EmbeddingInput):
     if embed_model is None:
         raise HTTPException(status_code=500, detail="Model not initialized")
 
     loop = asyncio.get_running_loop()
     try:
         result = await loop.run_in_executor(
-            executor, embed_model.embed_documents, text_list.input
+            executor, embed_model.embed_documents, data.input
         )
         return result
     except Exception as e:
