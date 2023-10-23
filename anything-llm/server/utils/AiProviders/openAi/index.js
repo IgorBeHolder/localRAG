@@ -73,7 +73,8 @@ class OpenAi {
 
     const IS_OFFLINE = true; // process.env.OPEN_MODEL_PREF == "3LM";
     const PROMPT_TEMPLATE = [
-      { role: "system", content: "You are a helpful assistant. Your answers should be accurate concise and not repeat. Do not repeat your previous answers." }, //You are a helpful assistant
+      // { role: "system", content: "You are a helpful assistant. Your answers should be accurate concise and not repeat. Do not repeat your previous answers." }, 
+      { role: "system", content: "You are a helpful assistant. Your answers should be accurate concise and not repeat. Do not repeat your previous answers. Answer in russian only" }, 
       ...chatHistory,
       { role: "user", content: prompt },
     ]; //  chat history with the user's   PROMPT at the END

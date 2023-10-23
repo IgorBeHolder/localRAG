@@ -13,12 +13,20 @@ curl -X 'POST' 'http://localhost:3002/v1/embeddings' -H 'accept: application/jso
 localhost:3002/v1/chat/completions/docs
 
 46.254.21.170
-curl -X 'POST' 'http://46.254.21.170:3002/v1/chat/completions' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{"messages": [{"content": "You are a helpful assistant.", "role": "system"}, {"content": "What is the capital of France?", "role": "user"}]}'
+curl -X 'POST' 'http://46.254.21.170:3002/v1/chat/completions' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{"model": "llama2", "messages": [{"content": "You are a helpful assistant.", "role": "system"}, {"content": "What is the capital of France?", "role": "user"}]}'
 
 curl -X 'POST' 'http://46.254.21.170:3002/v1/embeddings' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{"model": "all-MiniLM-L6-v2", "input": ["This is an example sentence", "Each sentence is converted"]}'
 
-curl -X 'POST' 'http://46.254.21.170:3002/v1/completions' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{"model": "all-MiniLM-L6-v2",  "prompt": "\n\n### Instructions:\nWhat is the capital of Ottawa?\n\n### Response:\n",  "stop": ["\n", "###" ]}'
+curl -X 'POST' 'http://46.254.21.170:3002/v1/completions' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{"model": "llama2",  "prompt": "\n\n### Instructions:\nWhat is the capital of Canada?\n\n### Response:\n",  "stop": ["\n", "###" ]}'
 
 
+Stream:
+curl -X 'POST' 'http://46.254.21.170:3002/v1/completions' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{"model": "llama2", "stream":"true", "prompt": "\n\n### Instructions:\nWhat is the capital of Canada?\n\n### Response:\n",  "stop": ["\n", "###" ]}'
+
+
+MODELS:
+sudo curl -o ./localRAG/model-store/llama-2-7b-chat.Q4_K_M.gguf -L "https://huggingface.co/TheBloke/Llama-2-7b-Chat-GGUF/resolve/main/llama-2-7b-chat.Q4_K_M.gguf"
+
+sudo curl -o ./localRAG/model-store/mistral-7b-instruct-v0.1.Q4_K_M.gguf -L "https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.1-GGUF/resolve/main/mistral-7b-instruct-v0.1.Q4_K_M.gguf"
 
 
