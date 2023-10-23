@@ -171,7 +171,7 @@ function CommandMenu({workspace, show, handleClick, hide}) {
 
   return (
     <div
-      className="absolute top-[-25vh] md:top-[-23vh] min-h-[200px] flex flex-col rounded-lg border border-slate-400 p-2 pt-4 bg-gray-50 dark:bg-stone-600">
+      className="absolute bottom-[100%] min-h-[200px] flex flex-col rounded-lg border border-slate-400 p-2 pt-4 bg-gray-50 dark:bg-stone-600">
       <div className="flex justify-between items-center border-b border-slate-400 px-2 py-1 ">
         <p className="text-gray-800 dark:text-slate-200">Доступные команды</p>
         <button

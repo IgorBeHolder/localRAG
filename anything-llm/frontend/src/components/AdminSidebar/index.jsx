@@ -37,7 +37,7 @@ export default function AdminSidebar() {
                 className="rounded max-h-[40px]"
                 style={{ objectFit: "contain" }}
               />
-              <span className="logo-text overflow-hidden">Sherpa AI Server</span>
+              <span className="logo-text overflow-hidden text-ellipsis">Sherpa AI Server</span>
             </div>
             <div className="flex gap-x-2 p-2 items-center text-slate-500">
               <a
@@ -70,12 +70,12 @@ export default function AdminSidebar() {
                 />
                 <Option
                   href={paths.admin.workspaces()}
-                  btnText="Управление рабочим пространством"
+                  btnText="Рабочие пространства"
                   icon={<BookOpen className="h-4 w-4 flex-shrink-0" />}
                 />
                 <Option
                   href={paths.admin.chats()}
-                  btnText="Управление чатом в рабочем пространстве"
+                  btnText="История чатов"
                   icon={<MessageSquare className="h-4 w-4 flex-shrink-0" />}
                 />
                 <Option
@@ -199,12 +199,12 @@ export function SidebarMobileHeader() {
                   />
                   <Option
                     href={paths.admin.workspaces()}
-                    btnText="Управление рабочим пространством"
+                    btnText="Рабочие пространства"
                     icon={<BookOpen className="h-4 w-4 flex-shrink-0" />}
                   />
                   <Option
                     href={paths.admin.chats()}
-                    btnText="Управление чатом в рабочем пространстве"
+                    btnText="История чатов"
                     icon={<MessageSquare className="h-4 w-4 flex-shrink-0" />}
                   />
                   <Option
@@ -278,7 +278,7 @@ const Option = ({ btnText, icon, href }) => {
         }`}
       >
         {icon}
-        <p className="text-sm leading-loose font-semibold whitespace-nowrap overflow-hidden ">
+        <p className="text-sm leading-loose font-semibold whitespace-nowrap overflow-hidden text-ellipsis">
           {btnText}
         </p>
       </a>
