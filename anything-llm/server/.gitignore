@@ -17,3 +17,5 @@ public/
 documents
 vector-cache
 yarn-error.log
+package-lock.json
+yarn.lock
