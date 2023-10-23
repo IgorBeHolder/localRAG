@@ -52,7 +52,7 @@ export default function Sidebar() {
                 className="rounded max-h-[40px]"
                 style={{objectFit: "contain"}}
               />
-              <span className="logo-text overflow-hidden">Sherpa AI Server</span>
+              <span className="logo-text overflow-hidden text-ellipsis">Sherpa AI Server</span>
             </div>
             <div className="flex gap-x-2 p-2 items-center text-slate-500">
               <AdminHome/>
@@ -131,7 +131,7 @@ export function SidebarMobileHeader() {
             className="rounded w-full max-h-[40px]"
             style={{objectFit: "contain"}}
           />
-          <span className="logo-text overflow-hidden">Sherpa AI Server</span>
+          <span className="logo-text overflow-hidden text-ellipsis">Sherpa AI Server</span>
         </div>
       </div>
       <div
@@ -163,7 +163,7 @@ export function SidebarMobileHeader() {
                   className="rounded w-full max-h-[40px]"
                   style={{objectFit: "contain"}}
                 />
-                <span className="logo-text overflow-hidden">Sherpa AI Server</span>
+                <span className="logo-text overflow-hidden text-ellipsis">Sherpa AI Server</span>
               </div>
               <div className="flex gap-x-2 items-center text-slate-500 shink-0">
                 <AdminHome/>
@@ -281,7 +281,7 @@ function LogoutButton() {
       className="flex flex-grow w-[75%] h-[48px] gap-x-2 py-[5px] px-4 text-white dark:text-slate-200 justify-start items-center hover:bg-blue-500 dark:hover:bg-stone-900"
     >
       <LogOut className="h-4 w-4 flex-shrink-0"/>
-      <p className="text-sm leading-loose font-semibold whitespace-nowrap overflow-hidden ">
+      <p className="text-sm leading-loose font-semibold whitespace-nowrap overflow-hidden text-ellipsis">
         Выйти из {user.username}
       </p>
     </button>

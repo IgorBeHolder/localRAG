@@ -58,7 +58,7 @@ export default function ActiveWorkspaces() {
               }`}
             >
               <Book className="h-4 w-4 flex-shrink-0" />
-              <p className="text-sm leading-loose font-semibold whitespace-nowrap overflow-hidden ">
+              <p className="text-sm leading-loose font-semibold whitespace-nowrap overflow-hidden text-ellipsis">
                 {workspace.name}
               </p>
             </a>
