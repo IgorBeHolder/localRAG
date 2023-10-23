@@ -58,7 +58,7 @@ export default function SettingsOverlay() {
             className="rounded max-h-[40px]"
             style={{ objectFit: "contain" }}
           />
-          <span className="logo-text overflow-hidden">Sherpa AI Server</span>
+          <span className="logo-text overflow-hidden text-ellipsis">Sherpa AI Server</span>
         </div>
         <div className="flex gap-x-2 p-2 items-center text-slate-500">
           <button
@@ -160,7 +160,7 @@ const Option = ({ btnText, icon, isActive, onClick }) => {
         }`}
       >
         {icon}
-        <p className="text-sm leading-loose font-semibold whitespace-nowrap overflow-hidden ">
+        <p className="text-sm leading-loose font-semibold whitespace-nowrap overflow-hidden text-ellipsis">
           {btnText}
         </p>
       </button>
