@@ -11,7 +11,7 @@ def watch_for_changes(directory):
     if filename in ['.DS_Store'] or fileext == '': continue
 
     if fileext not in FILETYPES.keys():
-      print(f"{fileext} not a supported file type for conversion. Removing from hot directory.")
+      print(f"{fileext} не поддерживаются файлы этого типа. Документ удален из горячей папки.")
       move_source(new_destination_filename=raw_doc, failed=True)
       continue
 
