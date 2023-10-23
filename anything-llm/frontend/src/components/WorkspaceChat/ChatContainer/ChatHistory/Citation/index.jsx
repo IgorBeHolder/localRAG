@@ -1,23 +1,23 @@
-import { memo, useState } from "react";
-import { Maximize2, Minimize2 } from "react-feather";
-import { v4 } from "uuid";
-import { decode as HTMLDecode } from "he";
+import {memo, useState} from "react";
+import {Maximize2, Minimize2} from "react-feather";
+import {v4} from "uuid";
+import {decode as HTMLDecode} from "he";
 
 function combineLikeSources(sources) {
   const combined = {};
   sources.forEach((source) => {
-    const { id, title, text } = source;
+    const {id, title, text} = source;
     if (combined.hasOwnProperty(title)) {
       combined[title].text += `\n\n ---- Chunk ${id || ""} ---- \n\n${text}`;
       combined[title].references += 1;
     } else {
-      combined[title] = { title, text, references: 1 };
+      combined[title] = {title, text, references: 1};
     }
   });
   return Object.values(combined);
 }
 
-export default function Citations({ sources = [] }) {
+export default function Citations({sources = []}) {
   if (sources.length === 0) return null;
 
   return (
@@ -25,7 +25,7 @@ export default function Citations({ sources = [] }) {
       <div className="flex flex-col justify-left overflow-x-scroll ">
         <div className="w-full flex overflow-x-scroll items-center gap-4 mt-1 doc__source">
           {combineLikeSources(sources).map((source) => (
-            <Citation id={source?.id || v4()} source={source} />
+            <Citation id={source?.id || v4()} source={source}/>
           ))}
         </div>
       </div>
@@ -36,9 +36,9 @@ export default function Citations({ sources = [] }) {
   );
 }
 
-const Citation = memo(({ source, id }) => {
+const Citation = memo(({source, id}) => {
   const [maximized, setMaximized] = useState(false);
-  const { references = 0, title, text } = source;
+  const {references = 0, title, text} = source;
   if (title?.length === 0 || text?.length === 0) return null;
   const handleMinMax = () => {
     setMaximized(!maximized);
@@ -60,18 +60,19 @@ const Citation = memo(({ source, id }) => {
         maximized ? "md:w-full h-fit pb-4" : ""
       }`}
     >
-      <div className="rounded-t-lg bg-gray-300 dark:bg-stone-900 px-4 py-2 w-full h-fit flex items-center justify-between">
+      <div
+        className="rounded-t-lg bg-gray-300 dark:bg-stone-900 px-4 py-2 w-full h-fit flex items-center justify-between">
         <p className="text-base text-gray-800 dark:text-slate-400 italic truncate w-3/4">
-          {title}
+          {HTMLDecode(title)}
         </p>
         <button
           onClick={handleMinMax}
           className="hover:dark:bg-stone-800 hover:bg-gray-200 dark:text-slate-400 text-gray-800 rounded-full p-1"
         >
           {maximized ? (
-            <Minimize2 className="h-4 w-4" />
+            <Minimize2 className="h-4 w-4"/>
           ) : (
-            <Maximize2 className="h-4 w-4" />
+            <Maximize2 className="h-4 w-4"/>
           )}
         </button>
       </div>
