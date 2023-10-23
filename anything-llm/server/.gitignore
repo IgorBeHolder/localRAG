@@ -13,12 +13,10 @@ logs/server.log
 storage/lancedb
 public/
 
-storage/anythingllm.dg
 # !storage/anythingllm.db
 
 # For legacy copies of repo
-documents
-vector-cache
+
 yarn-error.log
-package-lock.json
-yarn.lock
+anythingllm.db
+
