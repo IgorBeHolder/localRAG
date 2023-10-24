@@ -11,9 +11,9 @@ RUN apt-get update && apt-get install -y git
 
 RUN python3 -m pip install --upgrade pip
 
-RUN git clone https://github.com/vllm-project/vllm.git && 
-    cd vllm &&
-    pip install -e .  # This may take 5-10 minutes.
+RUN git clone https://github.com/vllm-project/vllm.git 
+WORKDIR /vllm
+RUN    pip install -e .  
 
 # USER root
 
