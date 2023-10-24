@@ -1,5 +1,7 @@
 # Constants
-BASE_DIR="/localRAG/model-store/mistralai/Mistral-7B-Instruct-v0.1-AWQ"
+# as we are at localRAG alredy, we can use relative paths:
+BASE_DIR="./model-store/mistralai/Mistral-7B-Instruct-v0.1-AWQ"
+
 BASE_URL="https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.1-AWQ/blob/main"
 LFS_URL="https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.1-AWQ/resolve/main"
 
