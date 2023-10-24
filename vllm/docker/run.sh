@@ -4,7 +4,7 @@ MODEL_NAME="$1"
 test -n "$MODEL_NAME"
 MODEL_DIR="$HOME/localRAG/model-store/$MODEL_NAME"
 echo "MODEL_DIR=$MODEL_DIR"
-echo "MODEL=$HOME/localRAG/model-store/$MODEL_NAME
+echo "MODEL=$HOME/localRAG/model-store/$MODEL_NAME"
 test -d "$MODEL_DIR"
 python3 -O -u -m vllm.entrypoints.openai.api_server \
     --host=$HOST \
