@@ -33,6 +33,11 @@ RUN python3 -m pip install --upgrade pip
 
 RUN pip install vllm
 
+RUN pip3 install git+https://github.com/huggingface/transformers.git@72958fcd3c98a7afdc61f953aa58c544ebda2f79
+
+RUN pip3 install git+https://github.com/casper-hansen/AutoAWQ.git@1c5ccc791fa2cb0697db3b4070df1813f1736208
+
+
 # Copy docker helper scripts
 COPY ./run.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/run.sh 
