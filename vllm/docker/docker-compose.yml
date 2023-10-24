@@ -14,7 +14,7 @@ services:
       args:
         DOCKER_BUILDKIT: 1  
     volumes:
-      - "../model-store/:/model-store"
+      - "../../model-store/:/model-store"
     ports:
       - "3006:3006"
     networks:

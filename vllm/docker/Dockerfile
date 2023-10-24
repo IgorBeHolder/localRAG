@@ -21,4 +21,4 @@ RUN pip install vllm
 # Copy docker helper scripts
 COPY ./run.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/run.sh 
-ENTRYPOINT ["/bin/bash", "/usr/local/bin/run.sh", "mistralai/Mistral-7B-Instruct-v0.1"]
+ENTRYPOINT ["/bin/bash", "/usr/local/bin/run.sh", "mistralai/Mistral-7B-Instruct-v0.1-AWQ"]
