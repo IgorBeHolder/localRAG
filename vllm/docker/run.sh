@@ -16,7 +16,7 @@
     # --tokenizer=hf-internal-testing/llama-tokenizer
     # --download-dir ./model-store &&
 
-python -m vllm.entrypoints.openai.api_server --model /root/localRAG/model-store/mistralai/Mistral-7B-Instruct-v0.1-AWQ --download-dir ./model-store --quantization awq
+python -m vllm.entrypoints.openai.api_server --model ../../model-store/mistralai/Mistral-7B-Instruct-v0.1-AWQ --quantization awq
 
 wait -n
 exit $?
