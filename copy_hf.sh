@@ -1,4 +1,4 @@
-sudo mkdir /localRAG/model-store/mistralai/Mistral-7B-Instruct-v0.1-AWQ
+sudo mkdir -p /localRAG/model-store/mistralai/Mistral-7B-Instruct-v0.1-AWQ
 
 # Base URL for regular files
 base_url="https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.1-AWQ/blob/main"
