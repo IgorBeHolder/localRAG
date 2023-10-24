@@ -2,12 +2,12 @@
 
 MODEL_NAME="$1"
 test -n "$MODEL_NAME"
-MODEL_DIR="$HOME/model-store/$MODEL_NAME"
+MODEL_DIR="$HOME/localRAG/model-store/$MODEL_NAME"
 test -d "$MODEL_DIR"
 python3 -O -u -m vllm.entrypoints.openai.api_server \
     --host=$HOST \
     --port=$PORT \
-    --model=$HOME/model-store/$MODEL_NAME \
+    --model=$HOME/model-store/$MODEL_NAME 
     # --tokenizer=hf-internal-testing/llama-tokenizer
     # --download-dir ./model-store &&
 
