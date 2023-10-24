@@ -19,6 +19,9 @@ curl -X 'POST' 'http://46.254.21.170:3002/v1/embeddings' -H 'accept: application
 
 curl -X 'POST' 'http://46.254.21.170:3002/v1/completions' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{"model": "llama2",  "prompt": "\n\n### Instructions:\nWhat is the capital of Canada?\n\n### Response:\n",  "stop": ["\n", "###" ]}'
 
+vllm
+curl http://localhost:8000/v1/completions -H "Content-Type: application/json" -d '{"model": "meta-llama/Llama-2-7b-hf", "prompt": "San Francisco is a", "max_tokens": 7, "temperature": 0 }'
+
 
 Stream:
 curl -X 'POST' 'http://46.254.21.170:3002/v1/completions' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{"model": "llama2", "stream":"true", "prompt": "\n\n### Instructions:\nWhat is the capital of Canada?\n\n### Response:\n",  "stop": ["\n", "###" ]}'
@@ -29,4 +32,8 @@ sudo curl -o ./localRAG/model-store/llama-2-7b-chat.Q4_K_M.gguf -L "https://hugg
 
 sudo curl -o ./localRAG/model-store/mistral-7b-instruct-v0.1.Q4_K_M.gguf -L "https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.1-GGUF/resolve/main/mistral-7b-instruct-v0.1.Q4_K_M.gguf"
 
+vllm:
+sudo mkdir  /localRAG/model-store/mistralai/Mistral-7B-Instruct-v0.1-AWQ
+sudo curl -o /localRAG/model-store/mistralai/Mistral-7B-Instruct-v0.1-AWQ -L "https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.1-AWQ/resolve/main/Mistral-7B-Instruct-v0.1-AWQ"
 
+mistralai/Mistral-7B-Instruct-v0.1
