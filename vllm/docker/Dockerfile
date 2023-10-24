@@ -1,4 +1,19 @@
-FROM nvcr.io/nvidia/pytorch:22.12-py3
+# FROM nvcr.io/nvidia/pytorch:22.12-py3
+FROM python:3.11-slim-bullseye
+
+# Update and upgrade the existing packages 
+RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends \
+    python3 \
+    python3-pip 
+
+RUN apt-get update && apt-get install -y git
+
+
+RUN python3 -m pip install --upgrade pip
+
+RUN git clone https://github.com/vllm-project/vllm.git && 
+    cd vllm &&
+    pip install -e .  # This may take 5-10 minutes.
 
 # USER root
 
@@ -14,9 +29,9 @@ FROM nvcr.io/nvidia/pytorch:22.12-py3
 
 # Install libraries.
 # ENV PIP_ROOT_USER_ACTION=ignore
-RUN python3 -m pip install --upgrade pip
 
-RUN pip install vllm
+
+# RUN pip install vllm
 
 # Copy docker helper scripts
 COPY ./run.sh /usr/local/bin/
