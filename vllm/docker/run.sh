@@ -11,7 +11,7 @@ python3 -O -u -m vllm.entrypoints.openai.api_server \
     # --model=$MODEL_DIR \
     --host=0.0.0.0 \
     --port=3006 \
-    --model="/root/localRAG/model-store/mistralai/Mistral-7B-Instruct-v0.1-AWQ" \    
+    --model="/root/localRAG/model-store/mistralai/Mistral-7B-Instruct-v0.1-AWQ" \
     --quantization="awq"
     # --tokenizer=hf-internal-testing/llama-tokenizer
     # --download-dir ./model-store &&
