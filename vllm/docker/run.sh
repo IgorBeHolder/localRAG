@@ -9,8 +9,8 @@ python3 -O -u -m vllm.entrypoints.openai.api_server \
     # --host=$HOST \
     # --port=$PORT \
     # --model=$MODEL_DIR \
-    --host=0.0.0.0 \
-    --port=3006 \
+    --host="0.0.0.0" \
+    --port="3003" \
     --model="/root/localRAG/model-store/mistralai/Mistral-7B-Instruct-v0.1-AWQ" \
     --quantization="awq"
     # --tokenizer=hf-internal-testing/llama-tokenizer
