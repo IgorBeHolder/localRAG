@@ -11,9 +11,9 @@ RUN apt-get update && apt-get install -y git
 
 RUN python3 -m pip install --upgrade pip
 
-RUN git clone https://github.com/vllm-project/vllm.git 
-WORKDIR /vllm
-RUN    pip install -e .  
+# RUN git clone https://github.com/vllm-project/vllm.git 
+# WORKDIR /vllm
+# RUN    pip install -e .  
 
 # USER root
 
@@ -31,7 +31,7 @@ RUN    pip install -e .
 # ENV PIP_ROOT_USER_ACTION=ignore
 
 
-# RUN pip install vllm
+RUN pip install vllm
 
 # Copy docker helper scripts
 COPY ./run.sh /usr/local/bin/
