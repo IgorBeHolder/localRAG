@@ -14,8 +14,8 @@ services:
       - "../../model-store/:/model-store"
     ports:
       - "3003:3003"
-    networks:
-      - llm-net
+    # networks:
+    #   - llm-net
     environment:
       HOST: "0.0.0.0"
       PORT: "3003"
