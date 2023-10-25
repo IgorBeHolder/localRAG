@@ -1,7 +1,7 @@
 # Constants
 # as we are at localRAG already, we can use relative paths:
 BASE_DIR="./model-store/mistralai/Mistral-7B-Instruct-v0.1"
-BASE_URL="https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.1/resolve/main"
+BASE_URL="https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.1/resolve/main"
 
 # Create the directory
 sudo mkdir -p "$BASE_DIR"
