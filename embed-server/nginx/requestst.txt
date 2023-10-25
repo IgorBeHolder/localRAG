@@ -43,3 +43,4 @@ curl -X 'POST' 'http://81.94.159.140:3003/v1/chat/completions' -H 'accept: appli
 
 curl -X 'POST' 'http://81.94.159.140:3003/v1/completions' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{"model": "facebook/opt-125m", "stream":"false", "prompt": "\n\n### Instructions:\nWhat is the capital of Canada?\n\n### Response:\n",  "stop": ["\n", "###" ], "max_tokens":"256"}'
 
+curl -X 'POST' 'http://81.94.159.140:8000/v1/completions' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{"model": "facebook/opt-125m", "stream":"false", "prompt": "\n\n### Instructions:\nWhat is the capital of Canada?\n\n### Response:\n",  "stop": ["\n", "###" ], "max_tokens":"256"}'
