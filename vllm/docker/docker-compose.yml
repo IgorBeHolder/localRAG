@@ -20,6 +20,7 @@ services:
       HOST: "0.0.0.0"
       PORT: "3006"
       CUDA_HOME: "/usr/local/cuda"
+      NVIDIA_VISIBLE_DEVICES: all      
     deploy:
       resources:
         reservations:
