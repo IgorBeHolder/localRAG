@@ -13,6 +13,6 @@ git checkout main
 
 # Use Docker Compose V2 to build and run the container
 # The `--project-name` flag is equivalent to `-p` in Docker Compose V1
-docker compose --project-name localrag up --build
+docker compose up --build
 
 ) 
