@@ -20,6 +20,6 @@ git checkout main
 #     --host 0.0.0.0 \
 #     --model="/model-store/mistralai/Mistral-7B-Instruct-v0.1-AWQ/"
 
-docker-compose -p localrag -f vllm/docker/docker-compose-mistral.yml up  --build
+docker-compose -p localrag -f docker-compose-mistral.yml up  --build
 
 ) 
