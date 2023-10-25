@@ -16,10 +16,10 @@
     # --tokenizer=hf-internal-testing/llama-tokenizer
     # --download-dir ./model-store &&
 
-python -m vllm.entrypoints.openai.api_server --model ../../model-store/mistralai/Mistral-7B-Instruct-v0.1-AWQ --quantization awq
-
-wait -n
-exit $?
+# python -m vllm.entrypoints.openai.api_server --model ../../model-store/mistralai/Mistral-7B-Instruct-v0.1-AWQ --quantization awq
+python -m vllm.entrypoints.openai.api_server --model facebook/opt-125m
+# wait -n
+# exit $?
 
 # run script:
 # ./start-vllm.sh mistralai/Mistral-7B-Instruct-v0.1 
