@@ -27,7 +27,7 @@ services:
           devices:
             - capabilities: [gpu]
 
-networks:
-  llm-net:
-    name: llm-net
-    external: true
+# networks:
+#   llm-net:
+#     name: llm-net
+#     external: true
