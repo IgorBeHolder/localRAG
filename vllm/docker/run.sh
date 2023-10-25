@@ -17,7 +17,9 @@
     # --download-dir ./model-store &&
 
 # python -m vllm.entrypoints.openai.api_server --model ../../model-store/mistralai/Mistral-7B-Instruct-v0.1-AWQ --quantization awq
-python -m vllm.entrypoints.openai.api_server --model facebook/opt-125m --port 3003 --host 0.0.0.0
+python -m vllm.entrypoints.openai.api_server \
+    --model ../../model-store/mistralai/Mistral-7B-Instruct-v0.1-AWQ \
+    --port 3003 --host 0.0.0.0 --max-tokens 512 --quantization awq
 # wait -n
 # exit $?
 
