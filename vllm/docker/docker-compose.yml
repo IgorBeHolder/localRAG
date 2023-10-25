@@ -13,12 +13,12 @@ services:
     volumes:
       - "../../model-store/:/model-store"
     ports:
-      - "3006:3006"
+      - "3003:3003"
     networks:
       - llm-net
     environment:
       HOST: "0.0.0.0"
-      PORT: "3006"
+      PORT: "3003"
       CUDA_HOME: "/usr/local/cuda"
       NVIDIA_VISIBLE_DEVICES: all      
     deploy:
