@@ -44,8 +44,11 @@ RUN pip install uvicorn==0.23.2
 RUN pip install pydantic==1.10.12
 
 RUN git clone https://github.com/vllm-project/vllm.git
-RUN cd vllm
-RUN pip install -e .  # This may take 5-10 minutes.
+WORKDIR vllm
+
+ # This may take 5-10 minutes.
+ RUN pip install -e . 
+
 
 # Install Python packages and support for the Mistral-7B-Instruct-v0.1-AWQ model from HuggingFace and AutoAWQ
 
