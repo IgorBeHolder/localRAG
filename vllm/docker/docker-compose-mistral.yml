@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  vllm-service:
+    image: ghcr.io/mistralai/mistral-src/vllm:latest
+    command:
+      - --host
+      - 0.0.0.0
+      - --model=/model-store/mistralai/Mistral-7B-Instruct-v0.1-AWQ/
+    ports:
+      - "3003:3003"
+    volumes:
+      - "../../model-store/:/model-store"
+    environment:
+      HOST: "0.0.0.0"
+      PORT: "3003"
+      CUDA_HOME: "/usr/local/cuda"
+      NVIDIA_VISIBLE_DEVICES: all      
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
