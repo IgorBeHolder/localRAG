@@ -5,8 +5,9 @@ BASE_URL="https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.1-AWQ/resolve/m
 
 # Create the directory
 sudo mkdir -p "$BASE_DIR"
+sudo chmod 755 "$BASE_DIR"
 
-# Download files
+# Download files and set permissions
 declare -a files=(
   ".gitattributes" "README.md" "config.json" 
   "generation_config.json" "quant_config.json" 
@@ -17,9 +18,7 @@ declare -a files=(
 
 for file in "${files[@]}"
 do
-   if [ ! -f "$BASE_DIR/$file" ]; then
-      sudo curl -o "$BASE_DIR/$file" -L "$BASE_URL/$file"
-   else
-      echo "File $BASE_DIR/$file already exists. Skipping download."
-   fi
+   sudo curl -o "$BASE_DIR/$file" -L "$BASE_URL/$file"
+   sudo chmod 644 "$BASE_DIR/$file"
+   echo "Downloaded and set permissions for $BASE_DIR/$file"
 done

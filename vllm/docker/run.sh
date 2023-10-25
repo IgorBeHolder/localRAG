@@ -11,7 +11,7 @@
     # --model=$MODEL_DIR \
     # --host="0.0.0.0" \
     # --port="3003" \
-    # --model="/root/localRAG/model-store/mistralai/Mistral-7B-Instruct-v0.1-AWQ" \
+    # --model="../../model-store/mistralai/Mistral-7B-Instruct-v0.1-AWQ" \
     # --quantization="awq"
     # --tokenizer=hf-internal-testing/llama-tokenizer
     # --download-dir ./model-store &&
