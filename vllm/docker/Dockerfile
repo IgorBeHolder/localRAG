@@ -11,7 +11,11 @@ RUN apt-get update && apt-get install -y git
 
 RUN python3 -m pip install --upgrade pip
 
-# RUN git clone https://github.com/vllm-project/vllm.git 
+# Pull the Docker image with CUDA 11.8.
+# Use `--ipc=host` to make sure the shared memory is large enough.
+# docker run --gpus all -it --rm --ipc=host nvcr.io/nvidia/pytorch:22.12-py3
+
+
 # WORKDIR /vllm
 # RUN    pip install -e .  
 
@@ -33,12 +37,12 @@ RUN python3 -m pip install --upgrade pip
 
 RUN pip install vllm
 
+# transformers with Mistral-7B-v0.1 support
 RUN pip3 install git+https://github.com/huggingface/transformers.git@72958fcd3c98a7afdc61f953aa58c544ebda2f79
-
+# autoAWQ with Mistral support (Compute Capability 7.5, CUDA Toolkit 11.8 and later.)
 RUN pip3 install git+https://github.com/casper-hansen/AutoAWQ.git@1c5ccc791fa2cb0697db3b4070df1813f1736208
 
 
-# Copy docker helper scripts
 COPY ./run.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/run.sh 
 ENTRYPOINT ["/bin/bash", "/usr/local/bin/run.sh", "mistralai/Mistral-7B-Instruct-v0.1-AWQ"]
