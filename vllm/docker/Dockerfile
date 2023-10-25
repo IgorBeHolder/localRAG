@@ -1,8 +1,4 @@
-# Using slim Python image based on Debian bullseye
-# FROM python:3.11-slim-bullseye
-
-# Pull the Docker image with CUDA 11.8.
-FROM nvcr.io/nvidia/pytorch:22.12-py3
+FROM python:3.11-slim-bullseye
 
 # Update packages, install essential tools, and clean up in one step to reduce layer size
 RUN apt-get update && \
