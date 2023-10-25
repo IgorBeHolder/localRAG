@@ -1,18 +1,15 @@
-version: '3.3'
+version: '3.8'
 
 services:
   vllm:
     container_name: vllm-cont
     image: vllm:v1
     restart: always
-    platform: linux/amd64
-    # env_file:
-    #   - .env 
     build:
       context: .
       dockerfile: ./Dockerfile
       args:
-        DOCKER_BUILDKIT: 1  
+        DOCKER_BUILDKIT: 1
     volumes:
       - "../../model-store/:/model-store"
     ports:
@@ -22,21 +19,12 @@ services:
     environment:
       HOST: "0.0.0.0"
       PORT: "3006"
-      # CMAKE_ARGS: "-DLLAMA_BLAS=ON -DLLAMA_BLAS_VENDOR=OpenBLAS"
-      # FORCE_CMAKE: 1
-
-
-#   nginx:
-#     image: nginx:latest 
-#     build: 
-#         context: .
-#         dockerfile: ./Dockerfile_nginx      
-#     ports:
-#       - "3002:3002"
-#     depends_on:
-#       - embed  
-#     networks:
-#       - llm-net   
+      CUDA_HOME: "/usr/local/cuda"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
 
 networks:
   llm-net:
