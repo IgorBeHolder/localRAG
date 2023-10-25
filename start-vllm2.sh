@@ -18,7 +18,7 @@ docker run --gpus all \
     -v /model-store/:/model-store/ \
      ghcr.io/mistralai/mistral-src/vllm:latest \
     --host 0.0.0.0 \
-    --model="/model-store/mistralai/Mistral-7B-Instruct-v0.1-AWQ/"
+    --model="/model-store/mistralai/Mistral-7B-Instruct-v0.1/"
 
 # docker-compose -p localrag -f docker-compose-mistral.yml up  --build
 
