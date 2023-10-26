@@ -3,7 +3,7 @@
 (
 echo "Building the vllm container..."
 
-cd vllm/docker
+# cd vllm/docker
 
 git checkout main
 
