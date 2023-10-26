@@ -1,6 +1,8 @@
 const axios = require('axios');
+const path = require('path');
 
 async function v1_chat_completions(prompt) {
+
   require('dotenv').config({ path: path.resolve(__dirname, '../../../.env') }); 
   const base_url = process.env.COMPLETION_MODEL_ENDPOINT;
   console.log('base_url:', base_url);
