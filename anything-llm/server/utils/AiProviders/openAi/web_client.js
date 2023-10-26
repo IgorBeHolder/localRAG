@@ -2,7 +2,9 @@ const axios = require('axios');
 const path = require('path');
 
 async function v1_chat_completions(prompt) {
+  console.log('**** __dirname ****', __dirname);
   console.log('**** v1_embeddings_openllm ****', path.resolve(__dirname, 'docker/.env'));
+  
   require('dotenv').config({ path: path.resolve(__dirname, 'docker/.env') }); 
   const base_url = process.env.COMPLETION_MODEL_ENDPOINT;
   console.log('base_url:', base_url);
