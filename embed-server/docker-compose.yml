@@ -28,11 +28,6 @@ services:
         dockerfile: ./Dockerfile_nginx      
     ports:
       - "3002:3002"
-    # volumes:
-      # - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-      # - ./nginx/local-rag.conf:/etc/nginx/sites-enabled/local-rag.conf
-      # - ./nginx/nginx/.htpasswd:/etc/nginx/.htpasswd
-      # - ./nginx/ssl:/etc/nginx/ssl
     depends_on:
       - embed  
     networks:
