@@ -24,10 +24,10 @@ services:
       - "3001:3001"
     # extra_hosts:
     #   - "host.docker.internal:host-gateway" # for accessing host:3005 (collector)
-    # environment:
-      # COMPLETION_MODEL_ENDPOINT: "http://llama:3003"
+    environment:
+      COMPLETION_MODEL_ENDPOINT: "http://llama:3003"
       # EMBEDDING_MODEL_ENDPOINT: "http://host.docker.internal:3004"
-      # EMBEDDING_MODEL_ENDPOINT: "http://embed:3004"
+      EMBEDDING_MODEL_ENDPOINT: "http://embed:3004"
     networks:
       - llm-net
 networks:

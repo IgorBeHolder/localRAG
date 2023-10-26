@@ -10,12 +10,6 @@ services:
       PORT: "3003"
       CMAKE_ARGS: "-DLLAMA_BLAS=ON -DLLAMA_BLAS_VENDOR=OpenBLAS"
       FORCE_CMAKE: 1
-    # deploy:
-    #   resources:
-    #     limits:
-    #       cpus: '12'
-    #     reservations:
-    #       cpus: '11'
     build:
       context: .
       dockerfile: ./Dockerfile
@@ -24,7 +18,6 @@ services:
     volumes:
       - "../../../model-store:/app/model-store" 
     ports:
-    # visible only inside the docker network
       - "3003:3003" 
     ulimits:
       memlock:
