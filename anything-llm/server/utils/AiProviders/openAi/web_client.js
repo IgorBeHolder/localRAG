@@ -3,7 +3,7 @@ const path = require('path');
 
 async function v1_chat_completions(prompt) {
 
-  require('dotenv').config({ path: path.resolve(__dirname, '../../../../docker/.env') }); 
+  require('dotenv').config({ path: path.resolve(__dirname, '/docker/.env') }); 
   const base_url = process.env.COMPLETION_MODEL_ENDPOINT;
   console.log('base_url:', base_url);
   const compl_model = process.env.COMPLETION_MODEL_NAME;
@@ -38,7 +38,7 @@ async function v1_chat_completions(prompt) {
 
 
 async function v1_embeddings_openllm(textInput) {
-  require('dotenv').config({ path: path.resolve(__dirname, '../../../../docker/.env') }); 
+  require('dotenv').config({ path: path.resolve(__dirname, '/docker/.env') }); 
   const base_url = process.env.EMBEDDING_MODEL_ENDPOINT;
   console.log('base_url:', base_url);
   const url = base_url + '/v1/embeddings';
