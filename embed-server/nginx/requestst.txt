@@ -43,4 +43,4 @@ curl -X 'POST' 'http://194.135.112.219:3003/v1/chat/completions' -H 'accept: app
 
 curl -X 'POST' 'http://194.135.112.219:3003/v1/completions' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{ "model":"../../model-store/mistralai/Mistral-7B-Instruct-v0.1","stream":"false", "prompt": "\n\n### Instructions:\nWhat is the capital of Canada?\n\n### Response:\n",  "stop": ["\n", "###" ], "max_tokens":"512"}'
 
-curl -X 'POST' 'http://194.135.112.219:3003/v1/completions' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{"model":"../../model-store/mistralai/Mistral-7B-Instruct-v0.1", "stream":"false", "prompt": "\n\n### Instructions:\nКакая разница между воздухом и кислородом?\n\n### Response:\n",  "stop": ["\n", "###" ], "max_tokens":"512"}'
+curl -X 'POST' 'http://194.135.112.219:3003/v1/completions' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{"model":"/model-store/mistralai/Mistral-7B-Instruct-v0.1/", "stream":"false", "prompt": "\n\n### Instructions:\nКакая разница между воздухом и кислородом?\n\n### Response:\n",  "stop": ["\n", "###" ], "max_tokens":"512"}'
