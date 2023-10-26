@@ -12,6 +12,7 @@ RUN python3 -m pip install --upgrade pip
 
 # Install Python packages and support for the Mistral-7B-Instruct-v0.1-AWQ model from HuggingFace and AutoAWQ
 RUN pip install vllm 
+RUN pip install fschat
 # RUN pip install git+https://github.com/huggingface/transformers.git@72958fcd3c98a7afdc61f953aa58c544ebda2f79 
 # RUN pip install git+https://github.com/casper-hansen/AutoAWQ.git@1c5ccc791fa2cb0697db3b4070df1813f1736208
 
@@ -20,4 +21,4 @@ COPY run.sh /usr/local/bin/run.sh
 RUN chmod +x /usr/local/bin/run.sh
 
 # Set the entry point
-ENTRYPOINT ["/usr/local/bin/run.sh"]
+ENTRYPOINT ["/usr/local/bin/run-mistral.sh"]
