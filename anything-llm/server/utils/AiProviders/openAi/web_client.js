@@ -3,9 +3,9 @@ const axios = require('axios');
 async function v1_chat_completions(prompt) {
   require('dotenv').config({ path: '../../../.env' });
   const base_url = process.env.COMPLETION_MODEL_ENDPOINT;
-  log.console('base_url:', base_url);
+  console.log('base_url:', base_url);
   const compl_model = process.env.COMPLETION_MODEL_NAME;
-  log.console('compl_model:', compl_model);
+  console.log('compl_model:', compl_model);
   const url = base_url + '/v1/chat/completions';
   const payload = {
     "model": compl_model,
@@ -40,7 +40,7 @@ async function v1_embeddings_openllm(textInput) {
   const base_url = process.env.EMBEDDING_MODEL_ENDPOINT;
   console.log('base_url:', base_url);
   const url = base_url + '/v1/embeddings';
-  log.console('url:', url);
+  console.log('url:', url);
   try {
     const { data: { data } } = await axios.post(url, {
       'model': 'sentence-transformers/all-MiniLM-L6-v2',
