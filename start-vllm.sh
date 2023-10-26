@@ -9,7 +9,7 @@ git checkout main
 
 docker run --gpus all \
     -p 3003:3003 \
-    -v /model-store:/model-store \
+    -v ./model-store/:/model-store/ \
     --name vllm-cont \
     ghcr.io/mistralai/mistral-src/vllm:latest \
     --host 0.0.0.0 \
