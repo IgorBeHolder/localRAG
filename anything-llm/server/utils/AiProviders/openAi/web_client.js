@@ -2,11 +2,13 @@ const axios = require('axios');
 
 async function v1_chat_completions(prompt) {
   // require('dotenv').config({ path: '../../../.env' });
-  const base_url = process.env.LLAMA_ENDPOINT;
+  const base_url = process.env.COMPLETION_MODEL_ENDPOINT;
+  const compl_model = process.env.COMPLETION_MODEL_NAME;
   const url = base_url + '/v1/chat/completions';
   const payload = {
+    "model": compl_model,
     "messages": prompt,
-    "max_tokens": 250,
+    "max_tokens": 1024,
     "temperature": 0.33
   };
 
@@ -33,11 +35,11 @@ async function v1_chat_completions(prompt) {
 
 async function v1_embeddings_openllm(textInput) {
   // require('dotenv').config({ path: '../../../.env' });
-  const base_url = process.env.OPENLLM_ENDPOINT;
+  const base_url = process.env.EMBEDDING_MODEL_ENDPOINT;
   const url = base_url + '/v1/embeddings';
   try {
     const { data: { data } } = await axios.post(url, {
-      'model': 'localRAG',
+      'model': 'sentence-transformers/all-MiniLM-L6-v2',
       'input': textInput
     }, {
       headers: {
