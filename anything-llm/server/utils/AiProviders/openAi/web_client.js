@@ -4,9 +4,9 @@ const axios = require('axios');
 async function v1_chat_completions(prompt) {
 
   const base_url = process.env.COMPLETION_MODEL_ENDPOINT;
-  console.log('base_url:', base_url);
+  // console.log('base_url:', base_url);
   const compl_model = process.env.COMPLETION_MODEL_NAME;
-  console.log('compl_model:', compl_model);
+  // console.log('compl_model:', compl_model);
   const url = base_url + '/v1/chat/completions';
   const payload = {
     "model": compl_model,
@@ -39,12 +39,13 @@ async function v1_chat_completions(prompt) {
 async function v1_embeddings_openllm(textInput) {
 
   const base_url = process.env.EMBEDDING_MODEL_ENDPOINT;
-  console.log('base_url:', base_url);
+  const model = process.env.EMBEDDING_MODEL_NAME;
+  // console.log('base_url:', base_url);
   const url = base_url + '/v1/embeddings';
-  console.log('url:', url);
+  // console.log('url:', url);
   try {
     const { data: { data } } = await axios.post(url, {
-      'model': 'sentence-transformers/all-MiniLM-L6-v2',
+      'model': model,
       'input': textInput
     }, {
       headers: {
