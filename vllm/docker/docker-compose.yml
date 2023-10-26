@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  vllm:
+    container_name: vllm-cont
+    image: mistral:v3
+    restart: always
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      args:
+        DOCKER_BUILDKIT: 1
+    volumes:
+      - "../../model-store/:/model-store"
+    ports:
+      - "3003:3003"
+    environment:
+      HOST: "0.0.0.0"
+      PORT: "3003"
+      CUDA_HOME: "/usr/local/cuda"
+      NVIDIA_VISIBLE_DEVICES: all      
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]            
+    # networks:
+    #   - llm-net
+    
+# networks:
+#   llm-net:
+#     name: llm-net
+#     external: true
