@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 async function v1_chat_completions(prompt) {
-  // require('dotenv').config({ path: '../../../.env' });
+  require('dotenv').config({ path: '../../../.env' });
   const base_url = process.env.COMPLETION_MODEL_ENDPOINT;
   const compl_model = process.env.COMPLETION_MODEL_NAME;
   const url = base_url + '/v1/chat/completions';
@@ -34,7 +34,7 @@ async function v1_chat_completions(prompt) {
 
 
 async function v1_embeddings_openllm(textInput) {
-  // require('dotenv').config({ path: '../../../.env' });
+  require('dotenv').config({ path: '../../../.env' });
   const base_url = process.env.EMBEDDING_MODEL_ENDPOINT;
   const url = base_url + '/v1/embeddings';
   try {
