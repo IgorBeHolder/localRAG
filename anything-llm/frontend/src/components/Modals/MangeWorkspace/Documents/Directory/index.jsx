@@ -9,7 +9,7 @@ import {
 } from "react-feather";
 import {nFormatter} from "../../../../../utils/numbers";
 import System from "../../../../../models/system";
-import {decode as HTMLDecode} from "he";
+import {fixEncoding} from "../../../../../utils/functions.js";
 
 export default function Directory({
                                     files,
@@ -154,7 +154,7 @@ export default function Directory({
               if (key === "cached") return null;
               return (
                 <p key={i} className="whitespace-pre">
-                  {key}: {HTMLDecode(String(value))}
+                  {key}: {fixEncoding(String(value))}
                 </p>
               );
             })}
