@@ -3,6 +3,7 @@ version: '3.9'
 services:
   anyth:
     container_name: anyth-cont
+    restart: always
     image: anyth:v1
     platform: linux/amd64
     env_file:

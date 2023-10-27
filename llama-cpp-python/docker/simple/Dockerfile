@@ -26,7 +26,7 @@ RUN --mount=type=cache,target=/root/.cache/pip python3 -m pip install ".[all]" &
     # cd app
     rm -rf /root/.cache/pip/*
 
-EXPOSE 3003
+# EXPOSE 3003
 
 COPY --chmod=755 run.sh /run.sh
 CMD ["/bin/sh", "/run.sh"]
