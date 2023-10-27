@@ -3,13 +3,14 @@ version: '3.8'
 services:
   vllm:
     container_name: vllm-cont
-    image: mistral:v3
+    image: ghcr.io/mistralai/mistral-src/vllm:latest
     restart: always
-    build:
-      context: .
-      dockerfile: ./Dockerfile
-      args:
-        DOCKER_BUILDKIT: 1
+    command:
+      - "--host"
+      - "0.0.0.0"
+      - "--port"
+      - "3003"
+      - "--model=/model-store/mistralai/Mistral-7B-Instruct-v0.1"
     volumes:
       - "../../model-store/:/model-store"
     ports:
@@ -25,11 +26,4 @@ services:
           devices:
             - driver: nvidia
               count: all
-              capabilities: [gpu]            
-    # networks:
-    #   - llm-net
-    
-# networks:
-#   llm-net:
-#     name: llm-net
-#     external: true
+              capabilities: [gpu]      
