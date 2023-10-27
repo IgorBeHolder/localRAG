@@ -4,6 +4,7 @@
 echo "Building the vllm container..."
 
 cd vllm/docker
+git checkout main
 docker stop vllm-cont
 docker rm vllm-cont
 docker-compose -p localrag -f docker-compose.yml up  --build

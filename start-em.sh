@@ -6,8 +6,7 @@ echo "Starting the embedding model server..."
 # docker ps -a | grep embed-llm | awk '{print $1}' | xargs docker rm
 cd embed-server &&
 git checkout main  &&
-docker-compose -p localrag up  --build
-# docker-compose -p localrag up
+docker-compose -p localrag up -d --build
+
 ) 
 
-wait
