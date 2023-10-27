@@ -63,7 +63,7 @@ const Citation = memo(({source, id}) => {
       <div
         className="rounded-t-lg bg-gray-300 dark:bg-stone-900 px-4 py-2 w-full h-fit flex items-center justify-between">
         <p className="text-base text-gray-800 dark:text-slate-400 italic truncate w-3/4">
-          {HTMLDecode(title)}
+          {HTMLDecode(String(title))}
         </p>
         <button
           onClick={handleMinMax}
@@ -87,7 +87,7 @@ const Citation = memo(({source, id}) => {
               referenced {references} times.
             </p>
           )}
-          {HTMLDecode(text)}
+          {HTMLDecode(String(text))}
         </p>
         <div
           className={`absolute bottom-0 flex w-full h-[20px] fade-up-border rounded-b-lg ${
