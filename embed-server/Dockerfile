@@ -10,6 +10,6 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 
 COPY ./app ./app
 
-EXPOSE 3004
+# EXPOSE 3004
 
 CMD ["python", "app/bootstrap.py"]
