@@ -5,5 +5,5 @@ RUN rm /etc/nginx/nginx.conf
 COPY nginx/nginx.conf /etc/nginx
 COPY nginx/.htpasswd /etc/nginx
 
-# Copy proxy config
-COPY nginx/local-rag.conf /etc/nginx/sites-enabled/
+# Copy proxy config SCHEMA
+COPY nginx/local-rag-docs.conf /etc/nginx/sites-enabled/
