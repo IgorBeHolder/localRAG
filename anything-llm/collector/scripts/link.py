@@ -52,10 +52,10 @@ def link():
     link['token_count_estimate'] = tokenCount
 
     with open(f"{output_path}/{output_filename}", 'w', encoding='utf-8') as file:
-      json.dump(link, file, ensure_ascii=True, indent=4)
+      json.dump(link, file, ensure_ascii=False, indent=4)
 
     with open(f"{transaction_output_dir}/{transaction_output_filename}", 'w', encoding='utf-8') as file:
-      json.dump(link, file, ensure_ascii=True, indent=4)
+      json.dump(link, file, ensure_ascii=False, indent=4)
   else:
     print("Could not parse any meaningful data from this link or url.")
     exit(1)
@@ -164,10 +164,10 @@ def parse_links(links):
             totalTokens += tokenCount
 
             with open(f"{output_path}/{output_filename}", 'w', encoding='utf-8') as file:
-                json.dump(link, file, ensure_ascii=True, indent=4)
+                json.dump(link, file, ensure_ascii=False, indent=4)
 
             with open(f"{transaction_output_dir}/{transaction_output_filename}", 'w', encoding='utf-8') as file:
-                json.dump(link, file, ensure_ascii=True, indent=4)
+                json.dump(link, file, ensure_ascii=False, indent=4)
 
             req.session.close()
         else:
