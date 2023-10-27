@@ -74,7 +74,21 @@ class OpenAi {
     const IS_OFFLINE = true; // process.env.OPEN_MODEL_PREF == "3LM";
     const PROMPT_TEMPLATE = [
       // <s>[INST] Instruction [/INST] Model answer</s>[INST] Follow-up instruction [/INST]
-      { role: "system", content: "You are a helpful assistant. Your answers should be accurate concise and not repeat. Do not repeat your previous answers. Answer in russian only" }, 
+//       # Mistral template
+// # source: https://docs.mistral.ai/llm/mistral-instruct-v0.1#chat-template
+// register_conv_template(
+//     Conversation(
+//         name="mistral",
+//         system_template="[INST]{system_message}\n",
+//         roles=("[INST]", "[/INST]"),
+//         sep_style=SeparatorStyle.LLAMA2,
+//         sep=" ",
+//         sep2="</s>",
+//     )
+// )
+
+
+      { role: "system", content: "[INST] You are a helpful assistant. Your answers should be accurate and concise. Answer in russian only.\n [/INST]" }, 
       ...chatHistory,
       { role: "user", content: prompt },
     ]; //  chat history with the user's   PROMPT at the END
