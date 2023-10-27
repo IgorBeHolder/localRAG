@@ -154,7 +154,7 @@ export default function Directory({
               if (key === "cached") return null;
               return (
                 <p key={i} className="whitespace-pre">
-                  {key}: {HTMLDecode(value)}
+                  {key}: {HTMLDecode(String(value))}
                 </p>
               );
             })}
