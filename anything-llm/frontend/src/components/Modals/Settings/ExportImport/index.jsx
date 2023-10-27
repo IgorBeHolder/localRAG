@@ -1,5 +1,5 @@
-import React, {useState, useEffect, useRef} from "react";
-import {AlertCircle, CheckCircle, Download, Loader, X} from "react-feather";
+import React, {useState, useRef} from "react";
+import {CheckCircle, Download} from "react-feather";
 import System from "../../../../models/system";
 import {API_BASE} from "../../../../utils/constants";
 import paths from "../../../../utils/paths";
