@@ -1,6 +1,7 @@
 import {memo, useState} from "react";
 import {Maximize2, Minimize2} from "react-feather";
 import {v4} from "uuid";
+import {decode as HTMLDecode} from "he";
 import {fixEncoding} from "../../../../../utils/functions.js";
 
 function combineLikeSources(sources) {
@@ -87,7 +88,7 @@ const Citation = memo(({source, id}) => {
               referenced {references} times.
             </p>
           )}
-          {fixEncoding(String(text))}
+          {HTMLDecode(String(text))}
         </p>
         <div
           className={`absolute bottom-0 flex w-full h-[20px] fade-up-border rounded-b-lg ${
