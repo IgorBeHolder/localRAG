@@ -4,7 +4,6 @@ import truncate from "truncate";
 import { humanFileSize, milliToHms } from "../../../../../utils/numbers";
 import { CheckCircle, XCircle } from "react-feather";
 import { Grid } from "react-loading-icons";
-import {fixEncoding} from "../../../../../utils/functions.js";
 
 function FileUploadProgressComponent({
   slug,
@@ -22,7 +21,7 @@ function FileUploadProgressComponent({
     async function uploadFile() {
       const start = Number(new Date());
       const formData = new FormData();
-      formData.append("file", file, fixEncoding(file.name));
+      formData.append("file", file, encodeURIComponent(file.name));
       const timer = setInterval(() => {
         setTimerMs(Number(new Date()) - start);
       }, 100);
