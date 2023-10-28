@@ -17,7 +17,7 @@ services:
     volumes:
       - "../model-store/:/app/model-store"
     ports:
-      - "3004"
+      - "3004:3004"
     networks:
       - llm-net
 

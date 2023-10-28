@@ -13,10 +13,10 @@ localGPT (backend server to run GPT-3 locally)
 ### Create a network for the docker containers to communicate with each other:
 `docker network create llm-net`
 
-### LLM server (mm):3003
+### LLM server (mm):3003 or external url (defined in "embed-server/nginx/local-rag-docs.conf")
 `./start-mm.sh` ('mm' stands for 'main model')
 
-### Embeddings server (em)  :3004
+### Embeddings server (em)  :3004 (maybe exposed inside the container only, check "embed-server/docker-compose.yml") 
 `./start-em.sh` ('em' stands for 'embeddings model')
 
 ### To launch the main application :3001
@@ -39,29 +39,30 @@ In a container it is already set to "http://localhost:3005".
 
 
 ## Development installation:
-### 1.  anythingllm server
 #### prerequisits:
   Install Docker on your computer or machine.
   access to an LLM like GPT-3.5, GPT-4 (api-key)
 1. `cd anything-llm`  `yarn setup` (creates .env files for you to fill)
-2. `cd docker/` and edit in .env file and update the variables
-3. Set `DISABLE_TELEMETRY` in your server or docker .env settings to "true" to opt out of telemetry.
+1. `cd server/` and edit .env file and update the variables (this is DEVELOPMENT area)
+1. Set `DISABLE_TELEMETRY` in your server or docker .env settings to "true" to opt out of telemetry.
 ```
 DISABLE_TELEMETRY="true"
 ```
-4. `docker-compose up -d --build` to build the image - this will take a few moments.
-Your docker host will show the image as online once the build process is completed.
-This will build the app to http://localhost:3001
 
-### 2. llama server
 1. check unused ports  `lsof -i :3003` (do not use 3000-3001)
-1. copy model file to `llama-cpp-python/models` (e.g. `llama-2-7b-chat.Q4_K_M.gguf`)
-3. `cd llama-cpp-python/docker/simple`
-2. `docker-compose up -d --build` run server
-
-
-
-
+   copy model file to `localRAG/model-store` (e.g. `llama-2-7b-chat.Q4_K_M.gguf`)
+   `./start-mm.sh`  (this will start the main model server on port 3003)
+1. check unused ports  `lsof -i :3004` (do not use 3000-3001)
+   embed-server/docker-compose.yml: 
+    ports:
+      - "3004:3004" (expose port 3004)
+   `./start-em.sh` (this will start the embeddings server on port 3004)
+1. check in 'anything-llm/server/utils/files/documentProcessor.js:6'
+    const PYTHON_API = "http://0.0.0.0:3005";  //  doc server running on host machine
+    `lsof -i :3005 | awk 'NR>1 {print $2}' | xargs kill -9` free port 3005
+   `./start-dp.sh` (this will start the document processor server on port 3005)
+1. `cd anything-llm/server && yarn dev` this will start the backend server on port 3001
+1. `cd anything-llm/client && yarn dev` this will start the client application on port 3000
 
 
 

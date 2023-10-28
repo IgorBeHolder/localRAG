@@ -24,8 +24,6 @@ services:
       memlock:
         soft: 17179869184
         hard: 17179869184      
-        # soft: 8589934592
-        # hard: 8589934592
 
     networks:
       - llm-net
