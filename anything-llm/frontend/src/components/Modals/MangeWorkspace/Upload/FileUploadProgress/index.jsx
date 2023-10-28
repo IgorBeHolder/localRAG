@@ -21,7 +21,7 @@ function FileUploadProgressComponent({
     async function uploadFile() {
       const start = Number(new Date());
       const formData = new FormData();
-      formData.append("file", file, encodeURIComponent(file.name));
+      formData.append("file", file, file.name);
       const timer = setInterval(() => {
         setTimerMs(Number(new Date()) - start);
       }, 100);

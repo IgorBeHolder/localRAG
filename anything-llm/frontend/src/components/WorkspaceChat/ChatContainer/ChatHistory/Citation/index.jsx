@@ -25,8 +25,8 @@ export default function Citations({sources = []}) {
     <div className="flex flex-col mt-4 justify-left">
       <div className="flex flex-col justify-left overflow-x-scroll ">
         <div className="w-full flex overflow-x-scroll items-center gap-4 mt-1 doc__source">
-          {combineLikeSources(sources).map((source) => (
-            <Citation id={source?.id || v4()} source={source}/>
+          {combineLikeSources(sources).map((source, index) => (
+            <Citation id={source?.id || v4()} key={index} source={source}/>
           ))}
         </div>
       </div>
