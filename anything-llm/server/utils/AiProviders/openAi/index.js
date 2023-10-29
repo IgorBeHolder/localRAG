@@ -87,10 +87,11 @@ class OpenAi {
 //     )
 // )
 
-
-      { role: "system", content: "[INST] You are a helpful assistant. Your answers should be accurate and concise. Answer in russian only.\n [/INST]" }, 
+    { role: "system", content: "You are a helpful assistant. Your answers should be accurate and concise in russian language only." }, 
+      // { role: "system", content: "<s>[INST]You are a helpful assistant. Your answers should be accurate and concise in russian language only.\n\n [/INST]" }, 
       ...chatHistory,
-      { role: "user", content: prompt },
+
+      { role: "user", content: prompt},
     ]; //  chat history with the user's   PROMPT at the END
 
     let textResponse;

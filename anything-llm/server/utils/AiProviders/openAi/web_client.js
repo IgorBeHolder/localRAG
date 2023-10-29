@@ -2,7 +2,7 @@ const axios = require('axios');
 
 
 async function v1_chat_completions(prompt) {
-
+ 
   const base_url = process.env.COMPLETION_MODEL_ENDPOINT;
   // console.log('base_url:', base_url);
   const compl_model = process.env.COMPLETION_MODEL_NAME;
@@ -11,8 +11,11 @@ async function v1_chat_completions(prompt) {
   const payload = {
     "model": compl_model,
     "messages": prompt,
-    "max_tokens": 1024,
-    "temperature": 0.33
+    // "max_tokens": 512,
+    "temperature": 0.1,
+    // "top_p": 0.95,
+    // "presence_penalty": 0,
+    // "frequency_penalty": 0
   };
 
   try {
