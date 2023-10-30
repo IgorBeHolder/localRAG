@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   anyth:
-    container_name: anyth-cont
+    container_name: anyth
     restart: always
     image: anyth:v1
     platform: linux/amd64

@@ -2,7 +2,7 @@ version: '3.3'
 
 services:
   llama:
-    container_name: llama-cont
+    container_name: llama
     restart: always
     image: llama:v1
     platform: linux/amd64

@@ -3,12 +3,12 @@ version: '3.3'
 
 services:
   embed:
-    container_name: embed-cont
+    container_name: embed
     image: embed:v1
     restart: always
     platform: linux/amd64
     env_file:
-      - .env 
+      - .embed-env 
     build:
       context: .
       dockerfile: ./Dockerfile

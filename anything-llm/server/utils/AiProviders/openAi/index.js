@@ -85,7 +85,9 @@ class OpenAi {
 //         sep=" ",
 //         sep2="</s>",
 //     )
-// )
+      // )
+
+      // Always assist with care, respect, and truth. Respond with utmost utility yet securely. Avoid harmful, unethical, prejudiced, or negative content. Ensure replies promote fairness and positivity.
 
     { role: "system", content: "You are a helpful assistant. Your answers should be accurate and concise in russian language only." }, 
       // { role: "system", content: "<s>[INST]You are a helpful assistant. Your answers should be accurate and concise in russian language only.\n\n [/INST]" }, 

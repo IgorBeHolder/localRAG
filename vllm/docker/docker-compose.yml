@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   vllm:
-    container_name: vllm-cont
+    container_name: vllm
     image: ghcr.io/mistralai/mistral-src/vllm:latest
     restart: always
     command:
