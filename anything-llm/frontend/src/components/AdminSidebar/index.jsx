@@ -1,104 +1,20 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {
   BookOpen,
   Eye,
-  GitHub,
   Key,
   Mail,
   Menu,
   MessageSquare,
   Settings,
   Users,
-  X,
+  X
 } from "react-feather";
-import IndexCount from "../Sidebar/IndexCount";
-import LLMStatus from "../Sidebar/LLMStatus";
 import paths from "../../utils/paths";
-import Discord from "../Icons/Discord";
 import useLogo from "../../hooks/useLogo";
 
-export default function AdminSidebar() {
-  const { logo } = useLogo();
-  const sidebarRef = useRef(null);
-
-  return (
-    <>
-      <div
-        ref={sidebarRef}
-        className="relative transition-all h-full duration-500 relative bg-blue-600 dark:bg-black-900 min-w-[15%] shadow-inner"
-      >
-        <div className="w-full h-full flex flex-col overflow-x-hidden items-between">
-          {/* Header Information */}
-          <div className="flex w-full items-center justify-between px-2">
-            <div className="logo-block overflow-hidden h-[64px] px-2 gap-2 text-gray-200 cursor-pointer whitespace-nowrap user-select-none flex shrink-0 items-center justify-start">
-              <img
-                src={logo}
-                alt="Logo"
-                className="rounded max-h-[40px]"
-                style={{ objectFit: "contain" }}
-              />
-              <span className="logo-text overflow-hidden text-ellipsis">Sherpa AI Server</span>
-            </div>
-            <div className="flex gap-x-2 p-2 items-center text-slate-500">
-              <a
-                href={paths.home()}
-                className="transition-all duration-300 p-2 rounded-full bg-slate-200 text-slate-400 dark:bg-stone-800 hover:bg-blue-100 hover:text-blue-600 dark:hover:text-slate-200"
-              >
-                <X className="h-4 w-4" />
-              </a>
-            </div>
-          </div>
-
-          {/* Primary Body */}
-          <div className="h-[100%] flex flex-col w-full justify-between pt-4 overflow-y-hidden">
-            <div className="h-auto sidebar-items dark:sidebar-items">
-              <div className="flex flex-col h-[65vh] pb-8 overflow-y-scroll no-scroll">
-                <Option
-                  href={paths.admin.system()}
-                  btnText="Системные настройки"
-                  icon={<Settings className="h-4 w-4 flex-shrink-0" />}
-                />
-                <Option
-                  href={paths.admin.invites()}
-                  btnText="Управление приглашениями"
-                  icon={<Mail className="h-4 w-4 flex-shrink-0" />}
-                />
-                <Option
-                  href={paths.admin.users()}
-                  btnText="Управление пользователями"
-                  icon={<Users className="h-4 w-4 flex-shrink-0" />}
-                />
-                <Option
-                  href={paths.admin.workspaces()}
-                  btnText="Рабочие пространства"
-                  icon={<BookOpen className="h-4 w-4 flex-shrink-0" />}
-                />
-                <Option
-                  href={paths.admin.chats()}
-                  btnText="История чатов"
-                  icon={<MessageSquare className="h-4 w-4 flex-shrink-0" />}
-                />
-                <Option
-                  href={paths.admin.appearance()}
-                  btnText="Внешний вид"
-                  icon={<Eye className="h-4 w-4 flex-shrink-0" />}
-                />
-                <Option
-                  href={paths.admin.apiKeys()}
-                  btnText="Ключи API"
-                  icon={<Key className="h-4 w-4 flex-shrink-0" />}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
-  );
-}
-
 export function SidebarMobileHeader() {
-  const { logo } = useLogo();
+  const {logo} = useLogo();
   const sidebarRef = useRef(null);
   const [showSidebar, setShowSidebar] = useState(false);
   const [showBgOverlay, setShowBgOverlay] = useState(false);
@@ -113,31 +29,117 @@ export function SidebarMobileHeader() {
         setShowBgOverlay(false);
       }
     }
+
     handleBg();
   }, [showSidebar]);
 
   return (
     <>
-      <div className="flex justify-between relative top-0 left-0 w-full rounded-b-lg px-2 pb-4 bg-white dark:bg-black-900 text-slate-800 dark:text-slate-200">
+      <div
+        className="flex lg:hidden justify-between relative top-0 left-0 w-full p-2 bg-white dark:bg-black-900 text-slate-800 dark:text-slate-200 z-100 shadow shadow-blue-500">
         <button
-          onClick={() => setShowSidebar(true)}
+          onClick={() => setShowSidebar(!showSidebar)}
           className="rounded-md bg-stone-200 p-2 flex items-center justify-center text-slate-800 hover:bg-stone-300 group dark:bg-stone-800 dark:text-slate-200 dark:hover:bg-stone-900 dark:border dark:border-stone-800"
         >
-          <Menu className="h-6 w-6" />
+          <Menu className="h-6 w-6"/>
         </button>
-        <div className="flex shrink-0 w-fit items-center justify-start">
+        <div className="flex shrink-0 w-fit items-center justify-center flex-1 mr-[40px] gap-2 px-2">
           <img
             src={logo}
             alt="Logo"
-            className="rounded w-full max-h-[40px]"
-            style={{ objectFit: "contain" }}
+            className="rounded max-h-[40px]"
+            style={{objectFit: "contain"}}
           />
           <span className="logo-text">Sherpa AI Server</span>
         </div>
       </div>
+
       <div
         style={{
-          transform: showSidebar ? `translateX(0vw)` : `translateX(-100vw)`,
+          transform: showSidebar ? `translateX(0vw)` : `translateX(-100vw)`
+        }}
+        ref={sidebarRef}
+        className="aside-menu top-0 left-0 z-99 fixed lg:relative lg:!transform-none transition-all lg:transition-none h-full duration-500 bg-blue-600 dark:bg-black-900 min-w-[15%] shadow-inner pt-[56px] lg:pt-0"
+      >
+        <div
+          className={`${
+            showBgOverlay
+              ? "transition-all opacity-1"
+              : "transition-none opacity-0"
+          } lg:hidden duration-500 fixed top-0 left-0 bg-black-900 bg-opacity-75 w-screen h-screen`}
+          onClick={() => setShowSidebar(false)}
+        />
+        <div className="w-full h-full flex flex-col overflow-x-hidden items-between relative">
+          {/* Header Information */}
+          <div className="flex w-full items-center justify-between px-2">
+            <div
+              className="logo-block overflow-hidden h-[64px] px-2 gap-2 text-gray-200 cursor-pointer whitespace-nowrap user-select-none flex shrink-0 items-center justify-start">
+              <img
+                src={logo}
+                alt="Logo"
+                className="rounded max-h-[40px]"
+                style={{objectFit: "contain"}}
+              />
+              <span className="logo-text overflow-hidden whitespace-nowrap text-ellipsis">Sherpa AI Server</span>
+            </div>
+            <div className="flex gap-x-2 p-2 items-center text-slate-500">
+              <a
+                href={paths.home()}
+                className="transition-all duration-300 p-2 rounded-full bg-slate-200 text-slate-400 dark:bg-stone-800 hover:bg-blue-100 hover:text-blue-600 dark:hover:text-slate-200"
+              >
+                <X className="h-4 w-4"/>
+              </a>
+            </div>
+          </div>
+
+          {/* Primary Body */}
+          <div className="h-[100%] flex flex-col w-full justify-between overflow-y-hidden">
+            <div className="h-auto sidebar-items dark:sidebar-items">
+              <div className="flex flex-col h-[65vh] pb-8 overflow-y-scroll no-scroll">
+                <Option
+                  href={paths.admin.system()}
+                  btnText="Системные настройки"
+                  icon={<Settings className="h-4 w-4 flex-shrink-0"/>}
+                />
+                <Option
+                  href={paths.admin.invites()}
+                  btnText="Управление приглашениями"
+                  icon={<Mail className="h-4 w-4 flex-shrink-0"/>}
+                />
+                <Option
+                  href={paths.admin.users()}
+                  btnText="Управление пользователями"
+                  icon={<Users className="h-4 w-4 flex-shrink-0"/>}
+                />
+                <Option
+                  href={paths.admin.workspaces()}
+                  btnText="Рабочие пространства"
+                  icon={<BookOpen className="h-4 w-4 flex-shrink-0"/>}
+                />
+                <Option
+                  href={paths.admin.chats()}
+                  btnText="История чатов"
+                  icon={<MessageSquare className="h-4 w-4 flex-shrink-0"/>}
+                />
+                <Option
+                  href={paths.admin.appearance()}
+                  btnText="Внешний вид"
+                  icon={<Eye className="h-4 w-4 flex-shrink-0"/>}
+                />
+                <Option
+                  href={paths.admin.apiKeys()}
+                  btnText="Ключи API"
+                  icon={<Key className="h-4 w-4 flex-shrink-0"/>}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+{/*      <div
+        style={{
+          transform: showSidebar ? `translateX(0vw)` : `translateX(-100vw)`
         }}
         className={`z-99 fixed top-0 left-0 transition-all duration-500 w-[100vw] h-[100vh]`}
       >
@@ -151,121 +153,93 @@ export function SidebarMobileHeader() {
         />
         <div
           ref={sidebarRef}
-          className="h-[100vh] fixed top-0 left-0  rounded-r-[26px] bg-white dark:bg-black-900 w-[80%] p-[18px] "
+          className="h-[100vh] fixed top-0 left-0 rounded-r-[26px] bg-blue-600 dark:bg-black-900 w-[80%]"
         >
           <div className="w-full h-full flex flex-col overflow-x-hidden items-between">
-            {/* Header Information */}
-            <div className="flex w-full items-center justify-between gap-x-4">
-              <div className="flex shrink-1 w-fit items-center justify-start">
+             Header Information
+            <div className="flex w-full items-center justify-between gap-x-4 px-2">
+              <div
+                className="logo-block h-[64px] px-2 flex shrink-1 w-fit items-center justify-start gap-2 text-gray-200">
                 <img
                   src={logo}
                   alt="Logo"
-                  className="rounded w-full max-h-[40px]"
-                  style={{ objectFit: "contain" }}
+                  className="rounded max-h-[40px]"
+                  style={{objectFit: "contain"}}
                 />
-                <span className="logo-text">Sherpa AI Server</span>
+                <span className="logo-text overflow-hidden whitespace-nowrap text-ellipsis">Sherpa AI Server</span>
               </div>
               <div className="flex gap-x-2 items-center text-slate-500 shrink-0">
                 <a
                   href={paths.home()}
                   className="transition-all duration-300 p-2 rounded-full bg-slate-200 text-slate-400 dark:bg-stone-800 hover:bg-blue-100 hover:text-blue-600 dark:hover:text-slate-200"
                 >
-                  <X className="h-4 w-4" />
+                  <X className="h-4 w-4"/>
                 </a>
               </div>
             </div>
 
-            {/* Primary Body */}
-            <div className="h-full flex flex-col w-full justify-between pt-4 overflow-y-hidden ">
+             Primary Body
+            <div className="h-full flex flex-col w-full justify-between overflow-y-hidden ">
               <div className="h-auto md:sidebar-items md:dark:sidebar-items">
                 <div
-                  style={{ height: "calc(100vw - -3rem)" }}
-                  className=" flex flex-col gap-y-4 pb-8 overflow-y-scroll no-scroll"
+                  style={{height: "calc(100vw - -3rem)"}}
+                  className=" flex flex-col pb-8 overflow-y-scroll no-scroll"
                 >
                   <Option
                     href={paths.admin.system()}
                     btnText="Системные настройки"
-                    icon={<Settings className="h-4 w-4 flex-shrink-0" />}
+                    icon={<Settings className="h-4 w-4 flex-shrink-0"/>}
                   />
                   <Option
                     href={paths.admin.invites()}
                     btnText="Управление приглашениями"
-                    icon={<Mail className="h-4 w-4 flex-shrink-0" />}
+                    icon={<Mail className="h-4 w-4 flex-shrink-0"/>}
                   />
                   <Option
                     href={paths.admin.users()}
                     btnText="Управление пользователями"
-                    icon={<Users className="h-4 w-4 flex-shrink-0" />}
+                    icon={<Users className="h-4 w-4 flex-shrink-0"/>}
                   />
                   <Option
                     href={paths.admin.workspaces()}
                     btnText="Рабочие пространства"
-                    icon={<BookOpen className="h-4 w-4 flex-shrink-0" />}
+                    icon={<BookOpen className="h-4 w-4 flex-shrink-0"/>}
                   />
                   <Option
                     href={paths.admin.chats()}
                     btnText="История чатов"
-                    icon={<MessageSquare className="h-4 w-4 flex-shrink-0" />}
+                    icon={<MessageSquare className="h-4 w-4 flex-shrink-0"/>}
                   />
                   <Option
                     href={paths.admin.appearance()}
                     btnText="Внешний вид"
-                    icon={<Eye className="h-4 w-4 flex-shrink-0" />}
+                    icon={<Eye className="h-4 w-4 flex-shrink-0"/>}
                   />
                   <Option
                     href={paths.admin.apiKeys()}
                     btnText="Ключи API"
-                    icon={<Key className="h-4 w-4 flex-shrink-0" />}
+                    icon={<Key className="h-4 w-4 flex-shrink-0"/>}
                   />
-                </div>
-              </div>
-              <div>
-                <div className="flex flex-col gap-y-2">
-                  <div className="w-full flex items-center justify-between">
-                    <LLMStatus />
-                    <IndexCount />
-                  </div>
-                </div>
-
-                {/* Footer */}
-                <div className="flex items-end justify-between mt-2">
-                  <div className="flex gap-x-1 items-center">
-                    <a
-                      href={paths.github()}
-                      className="transition-all duration-300 p-2 rounded-full bg-slate-200 text-slate-400 dark:bg-slate-800 hover:bg-slate-800 hover:text-slate-200 dark:hover:text-slate-200"
-                    >
-                      <GitHub className="h-4 w-4 " />
-                    </a>
-                    <a
-                      href={paths.docs()}
-                      className="transition-all duration-300 p-2 rounded-full bg-slate-200 text-slate-400 dark:bg-slate-800 hover:bg-slate-800 hover:text-slate-200 dark:hover:text-slate-200"
-                    >
-                      <BookOpen className="h-4 w-4 " />
-                    </a>
-                    <a
-                      href={paths.discord()}
-                      className="transition-all duration-300 p-2 rounded-full bg-slate-200 dark:bg-slate-800 hover:bg-slate-800 group"
-                    >
-                      <Discord className="h-4 w-4 stroke-slate-400 group-hover:stroke-slate-200 dark:group-hover:stroke-slate-200" />
-                    </a>
-                  </div>
-                  <a
-                    href={paths.mailToMintplex()}
-                    className="transition-all duration-300 text-xs text-slate-200 dark:text-slate-600 hover:text-blue-600 dark:hover:text-blue-400"
-                  >
-                    @MintplexLabs
-                  </a>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </div>*/}
     </>
   );
 }
 
-const Option = ({ btnText, icon, href }) => {
+export default function AdminSidebar() {
+  const {logo} = useLogo();
+  const sidebarRef = useRef(null);
+
+  return (
+    <SidebarMobileHeader/>
+  );
+}
+
+const Option = ({btnText, icon, href}) => {
   const isActive = window.location.pathname === href;
   return (
     <div className="flex gap-x-2 items-center justify-between">

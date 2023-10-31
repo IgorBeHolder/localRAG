@@ -11,6 +11,7 @@ import {
 import * as Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import paths from "../../../utils/paths";
+import {SidebarMobileHeader} from "../../AdminSidebar/index.jsx";
 
 export default function Sidebar() {
   const sidebarRef = useRef(null);
@@ -22,9 +23,10 @@ export default function Sidebar() {
 
   return (
     <>
+      <SidebarMobileHeader/>
       <div
         ref={sidebarRef}
-        className="relative transition-all h-full duration-500 relative bg-blue-600 dark:bg-black-900 min-w-[15%] shadow-inner"
+        className="top-0 left-0 z-99 absolute lg:relative transition-all h-full duration-500 bg-blue-600 dark:bg-black-900 min-w-[15%] shadow-inner"
       >
         {/* <button onClick={handleWidthToggle} className='absolute -right-[13px] top-[35%] bg-white w-auto h-auto bg-transparent flex items-center'>
         <svg width="16" height="96" viewBox="0 0 16 96" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#141414"><path d="M2.5 0H3C3 20 15 12 15 32V64C15 84 3 76 3 96H2.5V0Z" fill="black" fill-opacity="0.12" stroke="transparent" stroke-width="0px"></path><path d="M0 0H2.5C2.5 20 14.5 12 14.5 32V64C14.5 84 2.5 76 2.5 96H0V0Z" fill="#141414"></path></svg>
@@ -45,7 +47,7 @@ export default function Sidebar() {
           </div>
 
           {/* Primary Body */}
-          <div className="h-[100%] flex flex-col w-full justify-between pt-4 overflow-y-hidden">
+          <div className="h-[100%] flex flex-col w-full justify-between overflow-y-hidden">
             <div className="h-auto sidebar-items dark:sidebar-items">
               <div className="flex flex-col h-[65vh] pb-8 overflow-y-scroll no-scroll">
                 <div className="flex gap-x-2 items-center justify-between">

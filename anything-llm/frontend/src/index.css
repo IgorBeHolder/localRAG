@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+html:root {
+  --aside-size: 280px;
+}
+
 html,
 body {
   padding: 0;
@@ -74,6 +78,15 @@ a {
 
 .main-form {
   z-index: 1;
+}
+
+.aside-menu {
+  width: var(--aside-size);
+}
+
+.main-content {
+  --max-content: calc(100vw - var(--aside-size));
+  height: calc(100% - 56px);
 }
 
 .main-content::before {
@@ -254,6 +267,10 @@ a {
   /* IE and Edge */
   scrollbar-width: none !important;
   /* Firefox */
+}
+
+.z-100 {
+  z-index: 100;
 }
 
 .z-99 {

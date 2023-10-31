@@ -130,7 +130,7 @@ export default function ApiKey() {
 
         <div className="md:px-8 pb-10">
           <div className="mb-6">
-            <div className="flex flex-col md:flex-row items-center">
+            <div className="flex flex-col md:flex-row items-center gap-6">
               <div className="flex md:flex-row flex-col gap-y-2 w-full gap-x-2 items-center px-4 md:px-0">
                 <input
                   key={apiKey.secret}

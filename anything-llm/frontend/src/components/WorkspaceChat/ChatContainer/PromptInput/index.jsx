@@ -55,7 +55,7 @@ export default function PromptInput({
 
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col gap-y-1 bg-white dark:bg-black-900 md:bg-transparent rounded-t-lg md:w-3/4 w-full mx-auto"
+          className="flex flex-col gap-y-1 bg-white dark:bg-black-900 lg:w-3/4 w-full mx-auto"
         >
           <div className="flex items-center py-2 px-4 rounded-lg">
             <CommandMenu
@@ -195,12 +195,12 @@ function CommandMenu({workspace, show, handleClick, hide}) {
                   handleClick(cmd);
                   hide();
                 }}
-                className="w-full px-4 py-2 flex items-center rounded-lg hover:bg-gray-300 hover:dark:bg-slate-500 gap-x-1 disabled:cursor-not-allowed"
+                className="w-full px-4 py-2 flex items-baseline rounded-lg hover:bg-gray-300 hover:dark:bg-slate-500 gap-x-2 disabled:cursor-not-allowed"
               >
                 <p className="text-gray-800 dark:text-slate-200 font-semibold">
                   {cmd}
                 </p>
-                <p className="text-gray-800 dark:text-slate-300 text-sm">
+                <p className="text-gray-800 dark:text-slate-300 text-sm text-left">
                   {description}
                 </p>
               </button>

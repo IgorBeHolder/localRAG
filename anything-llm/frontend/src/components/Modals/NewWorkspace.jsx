@@ -19,7 +19,7 @@ export default function NewWorkspaceModal({hideModal = noop}) {
 
   return (
     <div
-      className="fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] h-full bg-black bg-opacity-50 flex items-center justify-center">
+      className="fixed z-100 top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] h-full bg-black bg-opacity-50 flex items-center justify-center">
       <div
         className="flex fixed top-0 left-0 right-0 w-full h-full"
         onClick={hideModal}
@@ -96,9 +96,11 @@ export function useNewWorkspaceModal() {
   const [showing, setShowing] = useState(false);
   const showModal = () => {
     setShowing(true);
+    return false;
   };
   const hideModal = () => {
     setShowing(false);
+    return false;
   };
 
   return {showing, showModal, hideModal};

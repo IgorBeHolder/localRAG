@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { Archive, Sliders, UploadCloud, X } from "react-feather";
+import React, {useState, useEffect} from "react";
+import {Archive, Sliders, UploadCloud, X} from "react-feather";
 import DocumentSettings from "./Documents";
 import WorkspaceSettings from "./Settings";
-import { useParams } from "react-router-dom";
+import {useParams} from "react-router-dom";
 import Workspace from "../../../models/workspace";
 import System from "../../../models/system";
 import UploadToWorkspace from "./Upload";
@@ -10,15 +10,15 @@ import UploadToWorkspace from "./Upload";
 const TABS = {
   documents: DocumentSettings,
   settings: WorkspaceSettings,
-  upload: UploadToWorkspace,
+  upload: UploadToWorkspace
 };
 
 const noop = () => false;
 export default function ManageWorkspace({
-  hideModal = noop,
-  providedSlug = null,
-}) {
-  const { slug } = useParams();
+                                          hideModal = noop,
+                                          providedSlug = null
+                                        }) {
+  const {slug} = useParams();
   const [selectedTab, setSelectedTab] = useState("documents");
   const [workspace, setWorkspace] = useState(null);
   const [fileTypes, setFileTypes] = useState(null);
@@ -28,6 +28,7 @@ export default function ManageWorkspace({
       const acceptedTypes = await System.acceptedDocumentTypes();
       setFileTypes(acceptedTypes ?? {});
     }
+
     checkSupportedFiletypes();
   }, []);
 
@@ -36,6 +37,7 @@ export default function ManageWorkspace({
       const workspace = await Workspace.bySlug(providedSlug ?? slug);
       setWorkspace(workspace);
     }
+
     fetchWorkspace();
   }, [selectedTab, slug]);
 
@@ -43,7 +45,8 @@ export default function ManageWorkspace({
 
   const Component = TABS[selectedTab || "Документы"];
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] h-full bg-black bg-opacity-50 flex items-center justify-center">
+    <div
+      className="fixed top-0 left-0 right-0 z-100 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] h-full bg-black bg-opacity-50 flex items-center justify-center">
       <div
         className="flex fixed top-0 left-0 right-0 w-full h-full"
         onClick={hideModal}
@@ -61,7 +64,7 @@ export default function ManageWorkspace({
                 className="transition-all duration-300 text-gray-400 bg-transparent hover:bg-blue-100 hover:text-blue-600 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
                 data-modal-hide="staticModal"
               >
-                <X className="text-__gray-300 text-lg" />
+                <X className="text-__gray-300 text-lg"/>
               </button>
             </div>
             <WorkspaceSettingTabs
@@ -80,29 +83,30 @@ export default function ManageWorkspace({
   );
 }
 
-function WorkspaceSettingTabs({ selectedTab, changeTab }) {
+function WorkspaceSettingTabs({selectedTab, changeTab}) {
   return (
     <div>
-      <ul className="flex md:flex-wrap overflow-x-scroll no-scroll -mb-px text-sm gap-x-2 font-medium text-center text-gray-500 dark:text-gray-400">
+      <ul
+        className="flex md:flex-wrap overflow-x-scroll no-scroll -mb-px text-sm gap-x-2 font-medium text-center text-gray-500 dark:text-gray-400">
         <WorkspaceTab
           active={selectedTab === "documents"}
           displayName="Документы"
           tabName="documents"
-          icon={<Archive className="h-4 w-4 flex-shrink-0" />}
+          icon={<Archive className="h-4 w-4 flex-shrink-0"/>}
           onClick={changeTab}
         />
         <WorkspaceTab
           active={selectedTab === "upload"}
           displayName="Загрузить документы"
           tabName="upload"
-          icon={<UploadCloud className="h-4 w-4 flex-shrink-0" />}
+          icon={<UploadCloud className="h-4 w-4 flex-shrink-0"/>}
           onClick={changeTab}
         />
         <WorkspaceTab
           active={selectedTab === "settings"}
           displayName="Настройки"
           tabName="settings"
-          icon={<Sliders className="h-4 w-4 flex-shrink-0" />}
+          icon={<Sliders className="h-4 w-4 flex-shrink-0"/>}
           onClick={changeTab}
         />
       </ul>
@@ -111,12 +115,12 @@ function WorkspaceSettingTabs({ selectedTab, changeTab }) {
 }
 
 function WorkspaceTab({
-  active = false,
-  displayName,
-  tabName,
-  icon = "",
-  onClick,
-}) {
+                        active = false,
+                        displayName,
+                        tabName,
+                        icon = "",
+                        onClick
+                      }) {
   const classes = active
     ? "text-blue-600 border-blue-600 active dark:text-blue-400 dark:border-blue-400 bg-blue-500 bg-opacity-5"
     : "border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300";
@@ -140,10 +144,12 @@ export function useManageWorkspaceModal() {
   const [showing, setShowing] = useState(false);
   const showModal = () => {
     setShowing(true);
+    return false;
   };
   const hideModal = () => {
     setShowing(false);
+    return false;
   };
 
-  return { showing, showModal, hideModal };
+  return {showing, showModal, hideModal};
 }

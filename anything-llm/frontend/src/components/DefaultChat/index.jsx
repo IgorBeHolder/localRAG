@@ -5,7 +5,6 @@ import NewWorkspaceModal, {
 } from "../Modals/NewWorkspace";
 import paths from "../../utils/paths";
 import {isMobile} from "react-device-detect";
-import {SidebarMobileHeader} from "../Sidebar";
 import ChatBubble from "../ChatBubble";
 import System from "../../models/system";
 
@@ -252,10 +251,10 @@ export default function DefaultChatContainer() {
 
   return (
     <div
-      className="main-content flex-1 transition-all duration-500 relative bg-white dark:bg-black-900 h-full"
+      className="main-content flex-1 lg:max-w-[var(--max-content)] relative bg-white dark:bg-black-900 lg:h-full"
     >
-      {isMobile && <SidebarMobileHeader/>}
-      <div className="main-box relative flex flex-col w-full h-full overflow-y-auto p-[16px] md:p-[32px] !pb-0">
+
+      <div className="main-box relative flex flex-col w-full h-full overflow-y-auto p-[16px] lg:p-[32px] !pb-0">
         <div className="flex flex-col flex-1 w-full bg-white shadow-md relative">
           <div
             className="flex flex-col w-full flex-grow-1 p-1 md:p-8 lg:p-[50px] relative !pb-[150px]">

@@ -200,9 +200,9 @@ export default function DocumentSettings({workspace}) {
         </div>
       </div>
       <div
-        className={`flex items-center ${
+        className={`flex items-center flex-wrap ${
           canDelete ? "justify-between" : "justify-end"
-        } p-4 md:p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600`}
+        } p-4 md:p-6 space-x-4 border-t border-gray-200 rounded-b dark:border-gray-600`}
       >
         <button
           hidden={!canDelete}
