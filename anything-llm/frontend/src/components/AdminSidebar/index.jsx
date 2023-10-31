@@ -132,7 +132,7 @@ export function SidebarMobileHeader() {
         className={`${
           showBgOverlay
             ? "transition-all opacity-1"
-            : "transition-none opacity-0"
+            : "transition-none opacity-0 pointer-events-none"
         } z-98 lg:hidden duration-500 fixed top-0 left-0 bg-black-900 bg-opacity-75 w-screen h-screen`}
         onClick={() => setShowSidebar(false)}
       />
