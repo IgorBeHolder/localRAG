@@ -249,7 +249,7 @@ const LanceDb = {
       })
       .join("")}` + " [/INST]</s>",
     };
-    const memory = [ {role: "system", content: chatPrompt(workspace)}, prompt, { role: "user", content: input + "Answer in russsian." }];
+    const memory = [ {role: "system", content: chatPrompt(workspace)}, prompt, { role: "user", content: input + "\n Answer in russsian language only." }];
     const responseText = await LLMConnector.getChatCompletion(memory, {
       temperature: workspace?.openAiTemp ?? 0.7,
     });
