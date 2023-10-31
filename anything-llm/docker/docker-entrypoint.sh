@@ -3,6 +3,8 @@
 node /app/server/index.js &
 
 # Set the bind address based on MODE
+echo "*************************************$MODE"
+
 if [ "$MODE" = "production" ]; then
   BIND_ADDRESS="localhost:3005"
 else

@@ -3,9 +3,7 @@
 // so no additional security is needed on the endpoint directly. Auth is done however by the express
 // middleware prior to leaving the node-side of the application so that is good enough >:)
 
-// require('dotenv').config({ path: '../../../../docker/.env' });
 const mode = process.env.MODE;
-console.log('mode:*********************', mode);
 
 let PYTHON_API;
 if (mode == 'production') {
