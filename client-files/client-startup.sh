@@ -9,8 +9,8 @@ echo "current directory: $(pwd)"
 
 # set permissions for document processor folders
 sudo chmod -R 777 ../localRAG/anything-llm/server/storage
-sudo chmod -R 755 ../localRAG/anything-llm/collector/hotdir
-sudo chmod -R 755 ../localRAG/anything-llm/collector/outputs
+sudo chmod -R 777 ../localRAG/anything-llm/collector/hotdir
+sudo chmod -R 777 ../localRAG/anything-llm/collector/outputs
 
 (
 echo "Starting the embedding model server..."
@@ -48,12 +48,12 @@ docker run -d --restart always \
 (
 echo "Starting the main model server..."
 
-if docker ps -a | grep -q "llama"; then
-  docker stop llama
-  docker rm llama
+if docker ps -a | grep -q "llm-server"; then
+  docker stop llm-server
+  docker rm llm-server
 fi
 docker run -d \
-  --name llama \
+  --name llm-server \
   --platform linux/amd64 \
   -e HOST=0.0.0.0 \
   -e PORT=3003 \
@@ -61,7 +61,7 @@ docker run -d \
   -p 3003:3003 \
   --ulimit memlock=17179869184:17179869184 \
   --network llm-net \
-  llama:v1
+  llm-server:v1
 ) &&
 
 (

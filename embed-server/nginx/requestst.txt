@@ -7,7 +7,7 @@ sudo curl -o ./localRAG/model-store/mistral-7b-instruct-v0.1.Q4_K_M.gguf -L "htt
 
 
 inside docker container:********************************************************************************************************************
-curl -X 'POST' 'http://llama:3003/v1/chat/completions' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{"messages": [{"content": "You are a helpful assistant.", "role": "system"}, {"content": "What is the capital of France?", "role": "user"}]}'
+curl -X 'POST' 'http://llm-server:3003/v1/chat/completions' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{"messages": [{"content": "You are a helpful assistant.", "role": "system"}, {"content": "What is the capital of France?", "role": "user"}]}'
 curl -X 'POST' 'http://embed:3004/v1/embeddings' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{"model": "all-MiniLM-L6-v2", "input": ["This is an example sentence", "Each sentence is converted"]}'
 
 
