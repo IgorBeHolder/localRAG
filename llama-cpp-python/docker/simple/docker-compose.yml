@@ -4,7 +4,7 @@ services:
   llm-server:
     container_name: llm-server
     restart: always
-    image: llm-server:v1
+    image: llm-server-cpu:v1
     platform: linux/amd64
     environment:
       HOST: "0.0.0.0"
