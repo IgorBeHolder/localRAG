@@ -172,7 +172,7 @@ function chatPrompt(workspace) {
     // "<s>[INST] You are a helpful assistant. Given the following conversation, relevant context, and a follow up question, reply with an answer to the current question the user is asking. Return only your response to the question given the above information following the users instructions as needed.\n"
     // "<s>[INST] You are a helpful assistant. \nGiven the relevant context, and a follow up question, reply with an answer to the current question the user is asking. Return only your response to the question given the above information following the users instructions as needed.\n"
     // "Answer the question based only on the following context:"
-    "<s>[INST] You are a helpful assistant who answers users queries using the context provided. If the question cannot be answered using the information provided say 'I don't know'.\n [/INST]"
+    "<s>[INST] You are a helpful assistant who answers users questions using the context provided. If the question cannot be answered using the information provided say 'I don't know'.\n [/INST]"
   );
 }
 
