@@ -121,14 +121,6 @@ export function SidebarMobileHeader() {
                          hideModal={hideModalSettings}
                          setLoading={setLoading}
                          loading={loading}/>
-        <div
-          className={`${
-            showBgOverlay
-              ? "transition-all opacity-1"
-              : "transition-none opacity-0"
-          } lg:hidden duration-500 fixed top-0 left-0 bg-black-900 bg-opacity-75 w-screen h-screen`}
-          onClick={() => setShowSidebar(false)}
-        />
         <div className="w-full h-full flex flex-col overflow-x-hidden items-between relative">
           {/* Header Information */}
           <div className="flex w-full items-center justify-between px-2">
@@ -149,9 +141,9 @@ export function SidebarMobileHeader() {
           </div>
 
           {/* Primary Body */}
-          <div className="h-[100%] flex flex-col w-full justify-between overflow-y-hidden">
-            <div className="h-auto sidebar-items dark:sidebar-items">
-              <div className="flex flex-col h-[65vh] pb-8 overflow-y-scroll no-scroll">
+          <div className="flex flex-1 flex-col w-full justify-between overflow-y-auto">
+            <div className="h-auto sidebar-items dark:sidebar-items mb-auto">
+              <div className="flex flex-col max-h-[65vh] pb-8 overflow-y-scroll no-scroll">
                 <div className="flex gap-x-2 items-center justify-between">
                   <button
                     onClick={showNewWsModal}
@@ -167,6 +159,8 @@ export function SidebarMobileHeader() {
                                   workspaces={workspaces} showModal={showModal}/>
               </div>
             </div>
+            <ManagedHosting/>
+            <LogoutButton/>
           </div>
         </div>
       </div>
@@ -180,6 +174,15 @@ export function SidebarMobileHeader() {
       {showingSettings && !!tab && (
         <SystemSettingsModal tab={tab} hideModal={handleModalClose}/>
       )}
+
+      <div
+        className={`${
+          showBgOverlay
+            ? "transition-all opacity-1"
+            : "transition-none opacity-0"
+        } z-98 lg:hidden duration-500 fixed top-0 left-0 bg-black-900 bg-opacity-75 w-screen h-screen`}
+        onClick={() => setShowSidebar(false)}
+      />
     </>
   );
 }
@@ -210,7 +213,7 @@ function LogoutButton() {
         window.localStorage.removeItem(AUTH_TIMESTAMP);
         window.location.replace(paths.home());
       }}
-      className="flex flex-grow w-[75%] h-[48px] gap-x-2 py-[5px] px-4 text-white dark:text-slate-200 justify-start items-center hover:bg-blue-500 dark:hover:bg-stone-900"
+      className="flex h-[48px] gap-x-2 py-[5px] px-4 text-white dark:text-slate-200 justify-start items-center hover:bg-blue-500 dark:hover:bg-stone-900"
     >
       <LogOut className="h-4 w-4 flex-shrink-0"/>
       <p className="text-sm leading-loose font-semibold whitespace-nowrap overflow-hidden text-ellipsis">
@@ -240,11 +243,11 @@ function ManagedHosting() {
     <a
       href={paths.hosting()}
       target="_blank"
-      className="flex flex-grow w-[100%] h-[36px] gap-x-2 py-[5px] px-4 border border-slate-400 dark:border-transparent rounded-lg text-slate-800 dark:text-slate-200 justify-center items-center hover:bg-slate-100 dark:bg-stone-800 dark:hover:bg-stone-900"
+      className="flex h-[48px] gap-x-2 py-[5px] px-4 text-white dark:text-slate-200 justify-start items-center hover:bg-blue-500 dark:hover:bg-stone-900"
     >
       <Package className="h-4 w-4"/>
-      <p className="text-slate-800 dark:text-slate-200 text-xs leading-loose font-semibold">
-        Managed cloud hosting
+      <p className="text-sm leading-loose font-semibold">
+        Управляемый облачный хостинг
       </p>
     </a>
   );

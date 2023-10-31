@@ -75,13 +75,13 @@ export default function SettingsOverlay({
         </div>
       </div>
 
-      <div className="h-[100%] flex flex-col w-full justify-between overflow-y-hidden">
-        <div className="h-auto sidebar-items dark:sidebar-items">
+      <div className="flex flex-1 flex-col w-full justify-between overflow-y-auto">
+        <div className="h-auto sidebar-items dark:sidebar-items mb-auto">
           <p className="text-sm leading-loose my-2 text-white p-4 dark:text-slate-200 ">
             Выберите параметр
           </p>
           {loading ? (
-            <div className="flex flex-col h-[65vh] pb-8 overflow-y-scroll no-scroll">
+            <div className="flex flex-col max-h-[65vh] pb-8 overflow-y-scroll no-scroll">
               <div className="rounded-lg w-[90%] h-[36px] bg-stone-600 animate-pulse"/>
               <div className="rounded-lg w-[90%] h-[36px] bg-stone-600 animate-pulse"/>
               <div className="rounded-lg w-[90%] h-[36px] bg-stone-600 animate-pulse"/>
@@ -90,7 +90,7 @@ export default function SettingsOverlay({
               <div className="rounded-lg w-[90%] h-[36px] bg-stone-600 animate-pulse"/>
             </div>
           ) : (
-            <div className="flex flex-col h-[65vh] pb-8 overflow-y-scroll no-scroll">
+            <div className="flex flex-col max-h-[65vh] pb-8 overflow-y-scroll no-scroll">
               {!settings?.MultiUserMode && (
                 <Option
                   btnText="Вид"

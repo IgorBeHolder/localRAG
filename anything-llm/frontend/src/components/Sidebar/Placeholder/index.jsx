@@ -47,9 +47,9 @@ export default function Sidebar() {
           </div>
 
           {/* Primary Body */}
-          <div className="h-[100%] flex flex-col w-full justify-between overflow-y-hidden">
-            <div className="h-auto sidebar-items dark:sidebar-items">
-              <div className="flex flex-col h-[65vh] pb-8 overflow-y-scroll no-scroll">
+          <div className="flex flex-1 flex-col w-full justify-between overflow-y-auto">
+            <div className="h-auto sidebar-items dark:sidebar-items mb-auto">
+              <div className="flex flex-col max-h-[65vh] pb-8 overflow-y-scroll no-scroll">
                 <div className="flex gap-x-2 items-center justify-between">
                   <button className="flex flex-grow w-[75%] h-[48px] gap-x-2 py-[5px] px-4 text-white dark:text-slate-200 justify-start items-center hover:bg-blue-500 dark:hover:bg-stone-900">
                     <Plus className="h-4 w-4" />
