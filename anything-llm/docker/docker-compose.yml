@@ -2,19 +2,19 @@ version: '3.9'
 
 services:
   anyth:
-    container_name: anyth-cont
+    container_name: anyth
     restart: always
-    image: anyth:v1
+    image: anyth-cpu:v1
     platform: linux/amd64
     env_file:
-      - .env 
+      - ../../client-files/.env 
     build:
       context: ../.
       dockerfile: ./docker/Dockerfile
       args:
         ARG_UID: ${UID}
         ARG_GID: ${GID}
-        DOCKER_BUILDKIT: 1  # enable buildkit
+        DOCKER_BUILDKIT: 1  
     volumes:
     # ensure all host dirs have the same permissions as the container user
       - "../server/storage:/app/server/storage"
@@ -23,12 +23,6 @@ services:
     user: "${UID}:${GID}"
     ports:
       - "3001:3001"
-    # extra_hosts:
-    #   - "host.docker.internal:host-gateway" # for accessing host:3005 (collector)
-    # environment:
-    #   COMPLETION_MODEL_ENDPOINT: "http://llama:3003"
-      # EMBEDDING_MODEL_ENDPOINT: "http://host.docker.internal:3004"
-      # EMBEDDING_MODEL_ENDPOINT: "http://embed:3004"
     networks:
       - llm-net
 networks:

@@ -96,9 +96,6 @@ RUN cd ./server && npx prisma migrate deploy --schema=./prisma/schema.prisma
 ENV NODE_ENV=production
 ENV PATH=/app/collector/v-env/bin:$PATH
 
-# Expose the server port
-EXPOSE 3001
-
 # Setup the healthcheck
 HEALTHCHECK --interval=1m --timeout=10s --start-period=1m \
   CMD /bin/bash /usr/local/bin/docker-healthcheck.sh || exit 1

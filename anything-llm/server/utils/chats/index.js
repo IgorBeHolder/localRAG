@@ -28,7 +28,7 @@ function convertToChatHistory(history = []) {
 
   return formattedHistory.flat();
 }
-
+//
 function convertToPromptHistory(history = []) {
   const formattedHistory = [];
   history.forEach((history) => {
@@ -118,7 +118,7 @@ async function chatWithWorkspace(
       close: true,
       error: null,
     };
-  } else {
+  } else {    //  has vectorized space
     var messageLimit = workspace?.openAiHistory;
 
     const rawHistory = await WorkspaceChats.forWorkspace(
@@ -162,13 +162,17 @@ async function chatWithWorkspace(
       close: true,
       error,
     };
-  }
+  } // end has vectorized space
 }
 
 function chatPrompt(workspace) {
   return (
     workspace?.openAiPrompt ??
-    "Given the following conversation, relevant context, and a follow up question, reply with an answer to the current question the user is asking. Return only your response to the question given the above information following the users instructions as needed."
+    // "<s>[INST] You are a helpful assistant. [/INST]" 
+    // "<s>[INST] You are a helpful assistant. Given the following conversation, relevant context, and a follow up question, reply with an answer to the current question the user is asking. Return only your response to the question given the above information following the users instructions as needed.\n"
+    // "<s>[INST] You are a helpful assistant. \nGiven the relevant context, and a follow up question, reply with an answer to the current question the user is asking. Return only your response to the question given the above information following the users instructions as needed.\n"
+    // "Answer the question based only on the following context:"
+    "<s>[INST] You are a helpful assistant who answers users queries using the context provided. If the question cannot be answered using the information provided say 'I don't know'.\n [/INST]"
   );
 }
 

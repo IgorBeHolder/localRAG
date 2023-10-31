@@ -138,23 +138,23 @@ const LanceDb = {
 
       console.log("Adding new vectorized document into namespace", namespace);
       const cacheResult = await cachedVectorInformation(fullFilePath);
-      if (cacheResult.exists) {
+      if (cacheResult.exists) {     // If the cached information exists
         const { client } = await this.connect();
         const { chunks } = cacheResult;
         const documentVectors = [];
         const submissions = [];
 
         for (const chunk of chunks) {
-          chunk.forEach((chunk) => {
+          chunk.forEach((chunk) => {  // loops through each chunk of the cached information
             const id = uuidv4();
             const { id: _id, ...metadata } = chunk.metadata;
-            documentVectors.push({ docId, vectorId: id });
+            documentVectors.push({ docId, vectorId: id }); // pushes a new object into the documentVectors array
             submissions.push({ id: id, vector: chunk.values, ...metadata });
           });
         }
 
-        await this.updateOrCreateCollection(client, submissions, namespace);
-        await DocumentVectors.bulkInsert(documentVectors);
+        await this.updateOrCreateCollection(client, submissions, namespace); //update a database with the information stored in the submissions array
+        await DocumentVectors.bulkInsert(documentVectors); // and insert the information stored in the documentVectors array into a separate table.
         return true;
       }
 
@@ -175,7 +175,7 @@ const LanceDb = {
       const submissions = [];
       const vectorValues = await LLMConnector.embedChunks(textChunks);
 
-      if (!!vectorValues && vectorValues.length > 0) {
+      if (!!vectorValues && vectorValues.length > 0) {  // If the vectorValues array is not empty
         for (const [i, vector] of vectorValues.entries()) {
           const vectorRecord = {
             id: uuidv4(),
@@ -200,9 +200,9 @@ const LanceDb = {
         );
       }
 
-      if (vectors.length > 0) {
+      if (vectors.length > 0) { // If the vectors array is not empty
         const chunks = [];
-        for (const chunk of toChunks(vectors, 500)) chunks.push(chunk);
+        for (const chunk of toChunks(vectors, 400)) chunks.push(chunk);
 
         console.log("Inserting vectorized chunks into LanceDB collection.");
         const { client } = await this.connect();
@@ -232,23 +232,24 @@ const LanceDb = {
     }
 
     const LLMConnector = getLLMProvider();
-    const queryVector = await LLMConnector.embedTextInput(input);
+    const queryVector = await LLMConnector.embedTextInput(input); // the vector representation of the input text.
     const { contextTexts, sourceDocuments } = await this.similarityResponse(
+      // retrieves similar documents from a database based on the vector representation of the input text.
       client,
       namespace,
       queryVector
     );
     const prompt = {
-      role: "system",
-      content: `${chatPrompt(workspace)}
-    Context:
+      role: "assistant",
+      content: 
+      `<s>[INST]Context: \n\n
     ${contextTexts
       .map((text, i) => {
         return `[CONTEXT ${i}]:\n${text}\n[END CONTEXT ${i}]\n\n`;
       })
-      .join("")}`,
+      .join("")}` + " [/INST]</s>",
     };
-    const memory = [prompt, { role: "user", content: input }];
+    const memory = [ {role: "system", content: chatPrompt(workspace)}, prompt, { role: "user", content: input + "\n If the question cannot be answered using the information provided say 'No information in the context'. Answer in russsian language only." }];
     const responseText = await LLMConnector.getChatCompletion(memory, {
       temperature: workspace?.openAiTemp ?? 0.7,
     });
