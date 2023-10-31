@@ -27,3 +27,9 @@ services:
             - driver: nvidia
               count: all
               capabilities: [gpu]      
+    networks:
+      - llm-net
+networks:
+  llm-net:
+    name: llm-net
+    external: true              
