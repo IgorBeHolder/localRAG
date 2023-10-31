@@ -6,9 +6,9 @@ node /app/server/index.js &
 echo "*************************************$MODE"
 
 if [ "$MODE" = "production" ]; then
-  BIND_ADDRESS="localhost:3005"
+  BIND_ADDRESS=localhost:3005
 else
-  BIND_ADDRESS="0.0.0.0:3005"
+  BIND_ADDRESS=0.0.0.0:3005
 fi
 
 # Start Python Flask server
