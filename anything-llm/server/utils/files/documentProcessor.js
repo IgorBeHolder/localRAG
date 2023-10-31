@@ -5,6 +5,7 @@
 
 // require('dotenv').config({ path: '../../../../docker/.env' });
 const mode = process.env.MODE;
+console.log('mode:*********************', mode);
 
 let PYTHON_API;
 if (mode == 'production') {
