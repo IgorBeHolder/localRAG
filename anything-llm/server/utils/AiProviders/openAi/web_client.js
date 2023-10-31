@@ -11,7 +11,7 @@ async function v1_chat_completions(prompt) {
   const payload = {
     "model": compl_model,
     "messages": prompt,
-    // "max_tokens": 512,
+    "max_tokens": 512,
     "temperature": 0.1,
     // "top_p": 0.95,
     // "presence_penalty": 0,
