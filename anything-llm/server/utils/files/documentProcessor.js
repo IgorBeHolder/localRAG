@@ -13,6 +13,8 @@ if (mode == 'production') {
   PYTHON_API = "http://0.0.0.0:3005";  //  doc server running on host machine
 }
 
+console.log('PYTHON_API:*********************', PYTHON_API);
+
 async function checkPythonAppAlive() {
   return await fetch(`${PYTHON_API}`)
     .then((res) => res.ok)
