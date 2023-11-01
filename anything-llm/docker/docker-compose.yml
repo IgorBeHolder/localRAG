@@ -12,8 +12,8 @@ services:
       context: ../.
       dockerfile: ./docker/Dockerfile
       args:
-        ARG_UID: ${APP_UID}
-        ARG_GID: ${APP_GID}
+        ARG_UID: ${ARG_UID}
+        ARG_GID: ${ARG_GID}
         DOCKER_BUILDKIT: 1  
     volumes:
     # ensure all host dirs have the same permissions as the container user
