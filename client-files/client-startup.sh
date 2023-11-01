@@ -117,7 +117,7 @@ docker run -d --restart always \
   --name anyth \
   --platform linux/amd64 \
   --env-file ./client-files/.env \
-  --user "${APP_UID}:${APP_GID}" \
+  --user "${ARG_UID}:${ARG_GID}" \
   -v ./anything-llm/server/storage:/app/server/storage \
   -v ./anything-llm/collector/hotdir/:/app/collector/hotdir \
   -v ./anything-llm/collector/outputs/:/app/collector/outputs \
