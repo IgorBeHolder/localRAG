@@ -4,9 +4,9 @@ const { v1_chat_completions, v1_embeddings_openllm } = require('./web_client'); 
 class OpenAi {
   constructor() {
     const { Configuration, OpenAIApi } = require("openai");
-    // const config = new Configuration({
-    //   apiKey: process.env.OPEN_AI_KEY,
-    // });
+    const config = new Configuration({
+      apiKey: process.env.OPEN_AI_KEY,
+    });
     const openai = new OpenAIApi(config);
     this.openai = openai;
   }

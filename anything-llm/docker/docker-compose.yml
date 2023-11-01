@@ -12,15 +12,15 @@ services:
       context: ../.
       dockerfile: ./docker/Dockerfile
       args:
-        ARG_UID: ${UID}
-        ARG_GID: ${GID}
+        ARG_UID: ${APP_UID}
+        ARG_GID: ${APP_GID}
         DOCKER_BUILDKIT: 1  
     volumes:
     # ensure all host dirs have the same permissions as the container user
       - "../server/storage:/app/server/storage"
       - "../collector/hotdir/:/app/collector/hotdir"
       - "../collector/outputs/:/app/collector/outputs"
-    user: "${UID}:${GID}"
+    user: "${APP_UID}:${APP_GID}"
     ports:
       - "3001:3001"
     networks:

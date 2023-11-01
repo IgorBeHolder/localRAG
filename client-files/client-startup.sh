@@ -50,7 +50,7 @@ echo -e "Embedding model server started.\n-----------------------------"
 
 if [ "$DEVICE" = "cpu" ]; then
   (
-  echo "Starting the main model server..."
+  echo "Starting the main model server CPU ..."
 
   container_id=$(docker ps -a -q -f name=^/llm-server$)
   if [ ! -z "$container_id" ]; then
@@ -72,7 +72,7 @@ if [ "$DEVICE" = "cpu" ]; then
   )
 else
   (
-  echo "Starting the vllm container..."
+  echo "Starting the vllm container GPU..."
   container_id=$(docker ps -a -q -f name=^/vllm$)
   if [ ! -z "$container_id" ]; then
     docker stop "$container_id"
@@ -113,7 +113,7 @@ if [ ! -z "$container_id" ]; then
   docker rm "$container_id"
 fi
 
-docker run -d \
+docker run -d --restart always \
   --name anyth \
   --platform linux/amd64 \
   --env-file ./client-files/.env \
