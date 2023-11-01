@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import Sidebar, { SidebarMobileHeader } from "../../../components/AdminSidebar";
-import { isMobile } from "react-device-detect";
+import Sidebar from "../../../components/AdminSidebar";
 import Admin from "../../../models/admin";
 import showToast from "../../../utils/toast";
 
@@ -39,18 +38,18 @@ export default function AdminSystem() {
   }, []);
 
   return (
-    <div className="w-screen h-screen overflow-hidden bg-gray-400 dark:bg-stone-700 flex">
-      {!isMobile && <Sidebar />}
+    <div className="w-screen h-screen overflow-hidden bg-gray-400 dark:bg-stone-700 lg:flex">
+      <Sidebar />
       <div
-        className="main-content w-full transition-all duration-500 relative bg-white dark:bg-black-900 h-full overflow-hidden p-[16px] md:p-[32px] !pb-0"
+        className="main-content flex-1 lg:max-w-[var(--max-content)] relative bg-white dark:bg-black-900 lg:h-full  p-[16px] md:p-[32px] !pb-0"
       >
-        {isMobile && <SidebarMobileHeader />}
+
         <form
           onSubmit={handleSubmit}
           onChange={() => setHasChanges(true)}
           className="flex w-full"
         >
-          <div className="main-box flex flex-col w-full h-full p-1 md:p-8 lg:p-[50px] bg-white shadow-md relative overflow-y-auto">
+          <div className="main-box flex flex-col w-full h-full p-2 md:p-6 lg:p-[50px] bg-white shadow-md relative overflow-y-auto">
             <div className="w-full flex flex-col gap-y-1">
               <div className="items-center flex gap-x-4">
                 <p className="text-3xl font-semibold text-slate-600 dark:text-slate-200">

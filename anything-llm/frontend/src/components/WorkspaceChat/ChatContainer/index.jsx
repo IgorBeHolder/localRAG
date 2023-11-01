@@ -3,8 +3,6 @@ import ChatHistory from "./ChatHistory";
 import PromptInput from "./PromptInput";
 import Workspace from "../../../models/workspace";
 import handleChat from "../../../utils/chat";
-import {isMobile} from "react-device-detect";
-import {SidebarMobileHeader} from "../../Sidebar";
 
 export default function ChatContainer({workspace, knownHistory = []}) {
   const [message, setMessage] = useState("");
@@ -68,10 +66,10 @@ export default function ChatContainer({workspace, knownHistory = []}) {
 
   return (
     <div
-      className="main-content flex-1 transition-all duration-500 relative bg-white dark:bg-black-900 h-full"
+      className="main-content flex-1 lg:max-w-[var(--max-content)] relative bg-white dark:bg-black-900 lg:h-full"
     >
-      {isMobile && <SidebarMobileHeader/>}
-      <div className="main-box relative flex flex-col w-full h-full overflow-y-auto p-[16px] md:p-[32px] !pb-0">
+
+      <div className="main-box relative flex flex-col w-full h-full overflow-y-auto p-[16px] lg:p-[32px] !pb-0">
         <div className="flex flex-col flex-1 w-full bg-white shadow-md relative">
           <ChatHistory history={chatHistory} workspace={workspace}/>
         </div>

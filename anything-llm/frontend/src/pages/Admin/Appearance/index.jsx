@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from "react";
-import Sidebar, {SidebarMobileHeader} from "../../../components/AdminSidebar";
-import {isMobile} from "react-device-detect";
+import Sidebar from "../../../components/AdminSidebar";
 import Admin from "../../../models/admin";
 import AnythingLLMLight from "../../../media/logo/icon_ai.png";
 import AnythingLLMDark from "../../../media/logo/icon_ai.png";
@@ -101,13 +100,12 @@ export default function Appearance() {
   };
 
   return (
-    <div className="w-screen h-screen overflow-hidden bg-gray-400 dark:bg-stone-700 flex">
-      {!isMobile && <Sidebar/>}
+    <div className="w-screen h-screen overflow-hidden bg-gray-400 dark:bg-stone-700 lg:flex">
+      <Sidebar/>
       <div
-        className="main-content w-full transition-all duration-500 relative bg-white dark:bg-black-900 h-full overflow-hidden p-[16px] md:p-[32px] !pb-0"
+        className="main-content flex-1 lg:max-w-[var(--max-content)] relative bg-white dark:bg-black-900 lg:h-full  p-[16px] md:p-[32px] !pb-0"
       >
-        {isMobile && <SidebarMobileHeader/>}
-        <div className="px-1 md:px-8">
+        <div className="main-box flex flex-col w-full h-full p-2 md:p-6 lg:p-[50px] bg-white shadow-md relative overflow-y-auto px-1 md:px-8">
           <div className="mb-6">
             <p className="text-3xl font-semibold text-slate-600 dark:text-slate-200">
               Настройки внешнего вида
@@ -125,11 +123,11 @@ export default function Appearance() {
                 Измените логотип, который появляется на боковой панели.
               </p>
             </div>
-            <div className="flex md:flex-row flex-col items-center">
+            <div className="flex flex-col md:flex-row items-center gap-6">
               <img
                 src={logo}
                 alt="Uploaded Logo"
-                className="w-48 h-48 object-contain mr-6"
+                className="w-48 h-48 object-contain"
                 onError={(e) =>
                   (e.target.src = prefersDarkMode
                     ? AnythingLLMLight
@@ -139,7 +137,7 @@ export default function Appearance() {
               <div className="flex flex-col">
                 <div className="mb-4">
                   <label
-                    className="cursor-pointer text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
+                    className="inline-flex cursor-pointer text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
                     Загрузить изображение
                     <input
                       type="file"
@@ -148,9 +146,11 @@ export default function Appearance() {
                       onChange={handleFileUpload}
                     />
                   </label>
+                </div>
+                <div className="mb-4">
                   <button
                     onClick={handleRemoveLogo}
-                    className="ml-4 cursor-pointer text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+                    className="inline-flex cursor-pointer text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
                   >
                     Удалить пользовательский логотип
                   </button>
@@ -211,7 +211,7 @@ export default function Appearance() {
             {hasChanges && (
               <div className="flex justify-center py-6">
                 <button
-                  className="ml-4 cursor-pointer text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+                  className="inline-flex cursor-pointer text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
                   onClick={handleMessageSave}
                 >
                   Сохранить сообщения

@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from "react";
-import { Book, Settings } from "react-feather";
+import React, {useState, useEffect} from "react";
+import {Book, Settings} from "react-feather";
 import * as Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import Workspace from "../../../models/workspace";
 import ManageWorkspace, {
-  useManageWorkspaceModal,
+  useManageWorkspaceModal
 } from "../../Modals/MangeWorkspace";
 import paths from "../../../utils/paths";
-import { useParams } from "react-router-dom";
+import {useParams} from "react-router-dom";
 
-export default function ActiveWorkspaces() {
-  const { slug } = useParams();
+export default function ActiveWorkspaces({setSelectedWs, selectedWs, setWorkspaces, workspaces, showModal}) {
+  const {slug} = useParams();
   const [loading, setLoading] = useState(true);
-  const [workspaces, setWorkspaces] = useState([]);
-  const [selectedWs, setSelectedWs] = useState(null);
-  const { showing, showModal, hideModal } = useManageWorkspaceModal();
+  //const [workspaces, setWorkspaces] = useState([]);
+  //const [selectedWs, setSelectedWs] = useState(null);
+  //const {showing, showModal, hideModal} = useManageWorkspaceModal();
 
   useEffect(() => {
     async function getWorkspaces() {
@@ -22,6 +22,7 @@ export default function ActiveWorkspaces() {
       setLoading(false);
       setWorkspaces(workspaces);
     }
+
     getWorkspaces();
   }, []);
 
@@ -57,7 +58,7 @@ export default function ActiveWorkspaces() {
                   : "hover:bg-blue-500 dark:hover:bg-stone-900"
               }`}
             >
-              <Book className="h-4 w-4 flex-shrink-0" />
+              <Book className="h-4 w-4 flex-shrink-0"/>
               <p className="text-sm leading-loose font-semibold whitespace-nowrap overflow-hidden text-ellipsis">
                 {workspace.name}
               </p>
@@ -69,14 +70,14 @@ export default function ActiveWorkspaces() {
               }}
               className="rounded-md bg-stone-200 mr-2 p-2 h-[36px] w-[15%] flex items-center justify-center text-slate-800 hover:bg-stone-300 group dark:bg-stone-800 dark:text-slate-200 dark:hover:bg-stone-900 dark:border dark:border-stone-800"
             >
-              <Settings className="h-3.5 w-3.5 transition-all duration-300 group-hover:rotate-90" />
+              <Settings className="h-3.5 w-3.5 transition-all duration-300 group-hover:rotate-90"/>
             </button>
           </div>
         );
       })}
-      {showing && !!selectedWs && (
+      {/*      {showing && !!selectedWs && (
         <ManageWorkspace hideModal={hideModal} providedSlug={selectedWs.slug} />
-      )}
+      )}*/}
     </>
   );
 }

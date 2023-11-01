@@ -47,7 +47,7 @@ const PromptReply = forwardRef(
       <div key={uuid} ref={ref} className="mb-4 flex justify-start items-end">
         <Jazzicon size={30} user={{uid: workspace.slug}}/>
         <div
-          className="ml-2 p-4 max-w-full md:max-w-[75%] bg-gray-400 dark:bg-stone-700 rounded-sm xl:rounded-2xl border border-gray-700">
+          className="ml-2 p-4 max-w-[75%] bg-gray-400 dark:bg-stone-700 rounded-sm xl:rounded-2xl border border-gray-700">
           <span
             className="whitespace-pre-line text-slate-800 dark:text-slate-200 flex flex-col gap-y-1 font-[500] md:font-semibold text-sm md:text-base"
             dangerouslySetInnerHTML={{__html: renderMarkdown(reply)}}

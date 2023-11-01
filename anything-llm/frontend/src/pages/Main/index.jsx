@@ -16,8 +16,8 @@ export default function Main() {
   }
 
   return (
-    <div className="w-screen h-screen overflow-hidden bg-gray-100 dark:bg-stone-700 flex">
-      {!isMobile && <Sidebar />}
+    <div className="w-screen h-screen overflow-hidden bg-gray-100 dark:bg-stone-700 relative lg:flex">
+      <Sidebar />
       <DefaultChatContainer />
     </div>
   );
