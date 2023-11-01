@@ -159,7 +159,6 @@ export function SidebarMobileHeader() {
                                   workspaces={workspaces} showModal={showModal}/>
               </div>
             </div>
-            <ManagedHosting/>
             <LogoutButton/>
           </div>
         </div>
@@ -234,21 +233,5 @@ function SettingsButton({onClick}) {
     >
       <Tool className="h-4 w-4 "/>
     </button>
-  );
-}
-
-function ManagedHosting() {
-  if (window.location.origin.includes(".useanything.com")) return null;
-  return (
-    <a
-      href={paths.hosting()}
-      target="_blank"
-      className="flex h-[48px] gap-x-2 py-[5px] px-4 text-white dark:text-slate-200 justify-start items-center hover:bg-blue-500 dark:hover:bg-stone-900"
-    >
-      <Package className="h-4 w-4"/>
-      <p className="text-sm leading-loose font-semibold">
-        Управляемый облачный хостинг
-      </p>
-    </a>
   );
 }
