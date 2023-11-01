@@ -20,7 +20,7 @@ services:
       - "../server/storage:/app/server/storage"
       - "../collector/hotdir/:/app/collector/hotdir"
       - "../collector/outputs/:/app/collector/outputs"
-    user: "${APP_UID}:${APP_GID}"
+    user: "${ARG_UID}:${ARG_GID}"
     ports:
       - "3001:3001"
     networks:
