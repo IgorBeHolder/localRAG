@@ -12,7 +12,7 @@ echo "Current directory: $(pwd)"
 docker network ls | grep -q "llm-net" || docker network create "llm-net"
 
 # echo "Untar sherpa-aiserver tar files..."
-tar -xzvf models.tar.gz
+# tar -xzvf models.tar.gz
 
 # echo "Loading sherpa-aiserver docker images..."
 # docker load -i docker-images-cpu.tar
