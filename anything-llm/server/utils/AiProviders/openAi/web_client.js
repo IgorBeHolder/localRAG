@@ -43,9 +43,9 @@ async function v1_embeddings_openllm(textInput) {
 
   const base_url = process.env.EMBEDDING_MODEL_ENDPOINT;
   const model = process.env.EMBEDDING_MODEL_NAME;
-  // console.log('base_url:', base_url);
+  console.log('base_url:', base_url);
   const url = base_url + '/v1/embeddings';
-  // console.log('url:', url);
+  console.log('url:', url);
   try {
     const { data: { data } } = await axios.post(url, {
       'model': model,
