@@ -36,8 +36,39 @@ export default function DefaultChatContainer() {
         <div
           className="p-4 max-w-full md:max-w-[75%] bg-gray-400 dark:bg-stone-700 rounded-sm xl:rounded-2xl border border-gray-700">
           <p className="text-slate-800 dark:text-slate-200 font-[500] md:font-semibold text-sm md:text-base">
-            Добро пожаловать в чат Sherpa AI Server! <br/> Чем я могу вам помочь?
+            Добро пожаловать в чат Sherpa AI Server!
           </p>
+          <div className="text-right text-xs mt-2">
+            16:16
+          </div>
+        </div>
+      </div>
+    </React.Fragment>,
+    <React.Fragment>
+      <div
+        className={`flex w-full mb-2 xl:mb-3 justify-start ${
+          popMsg ? "chat__message" : ""
+        }`}
+      >
+        <div
+          className="p-4 max-w-full md:max-w-[75%] bg-gray-400 dark:bg-stone-700 rounded-sm xl:rounded-2xl border border-gray-700">
+          <p className="text-slate-800 dark:text-slate-200 font-[500] md:font-semibold text-sm md:text-base">
+            Все коллекции организованы в контейнеры, которые мы называем {" "}
+            <b>"Рабочие пространства"</b>. Рабочие пространства - это контейнеры файлов, документов, изображений, PDF и
+            других файлов, которые будут преобразованы в что-то, что LLM может понимать и использовать в разговоре.
+            <br/>
+            <br/>
+            Вы можете добавлять и удалять файлы в любое время
+          </p>
+          <button
+            onClick={showNewWsModal}
+            className="mt-4 w-fit flex flex-grow gap-x-2 py-[5px] px-4 border border-slate-400 rounded-lg text-slate-800 dark:text-slate-200 justify-start items-center hover:bg-slate-100 dark:hover:bg-stone-900 dark:bg-stone-900"
+          >
+            <Plus className="h-4 w-4"/>
+            <p className="text-slate-800 dark:text-slate-200 text-sm md:text-lg leading-loose">
+              Создайте свое первое рабочее пространство
+            </p>
+          </button>
           <div className="text-right text-xs mt-2">
             16:16
           </div>
@@ -139,7 +170,6 @@ export default function DefaultChatContainer() {
     <div
       className="main-content flex-1 lg:max-w-[var(--max-content)] relative bg-white dark:bg-black-900 lg:h-full"
     >
-
       <div className="main-box relative flex flex-col w-full h-full overflow-y-auto p-[16px] lg:p-[32px] !pb-0">
         <div className="flex flex-col flex-1 w-full bg-white shadow-md relative">
           <div
