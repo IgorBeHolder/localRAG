@@ -61,8 +61,7 @@ export default function ConfirmationModal({
               </p>
             ) : (
               <p className="text-base mt-4">
-                Вы будете вставлять новые документы ({additions.length}) в это рабочее пространство. <br/>
-                Это будет стоить {dollarText} в кредитах OpenAI.
+                Вы будете вставлять новые документы ({additions.length}) в это рабочее пространство.
               </p>
             )}
           </div>

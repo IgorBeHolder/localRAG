@@ -90,13 +90,6 @@ export default function ApiKey() {
               <p>
                 Ключ API для этого экземпляра не существует. Создайте его, нажав кнопку ниже.
               </p>
-              <a
-                href={paths.apiDocs()}
-                target="_blank"
-                className="dark:text-blue-300 text-blue-600 hover:underline"
-              >
-                Просмотр документации по подключению &rarr;
-              </a>
             </div>
             <button
               disabled={generating}
@@ -119,13 +112,6 @@ export default function ApiKey() {
           <p className="text-gray-800 dark:text-stone-200 text-base ">
             Используйте этот ключ API для программного взаимодействия с вашим экземпляром Sherpa AI Server.
           </p>
-          <a
-            href={paths.apiDocs()}
-            target="_blank"
-            className="dark:text-blue-300 text-blue-600 hover:underline"
-          >
-            Просмотр документации по подключению &rarr;
-          </a>
         </div>
 
         <div className="md:px-8 pb-10">

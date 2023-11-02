@@ -113,7 +113,7 @@ export function SidebarMobileHeader() {
                   btnText="История чатов"
                   icon={<MessageSquare className="h-4 w-4 flex-shrink-0"/>}
                 />
-                <Option
+{/*                <Option
                   href={paths.admin.appearance()}
                   btnText="Внешний вид"
                   icon={<Eye className="h-4 w-4 flex-shrink-0"/>}
@@ -122,7 +122,7 @@ export function SidebarMobileHeader() {
                   href={paths.admin.apiKeys()}
                   btnText="Ключи API"
                   icon={<Key className="h-4 w-4 flex-shrink-0"/>}
-                />
+                />*/}
               </div>
             </div>
           </div>

@@ -136,7 +136,7 @@ export function SidebarMobileHeader() {
             </div>
             <div className="flex gap-x-2 p-2 items-center text-slate-500">
               <AdminHome/>
-              <SettingsButton onClick={showOverlay}/>
+              {/*<SettingsButton onClick={showOverlay}/>*/}
             </div>
           </div>
 
