@@ -1,0 +1,53 @@
+Dependencies:
+react-dom: 8952K
+react-feather: 3008K
+markdown-it: 1392K
+react-router-dom: 1288K
+react-dropzone: 1128K
+react-toastify: 1080K
+react-loading-icons: 792K
+react: 736K
+uuid: 696K
+node-globals-polyfill: 336K
+he: 264K
+buffer: 208K
+react-device-detect: 152K
+react-loading-skeleton: 120K
+truncate: 72K
+jazzicon: 64K
+pluralize: 56K
+text-case: 56K
+
+DevDependencies:
+prettier: 22096K
+tailwindcss: 12016K
+react-dom: 8952K
+eslint: 7632K
+vite: 6472K
+react-feather: 3008K
+eslint-plugin-react: 2792K
+markdown-it: 1392K
+react-router-dom: 1288K
+rollup-plugin-visualizer: 1248K
+react-dropzone: 1128K
+react-toastify: 1080K
+autoprefixer: 872K
+react-loading-icons: 792K
+react: 776K
+react: 736K
+uuid: 696K
+postcss: 664K
+node-globals-polyfill: 336K
+eslint-plugin-react-hooks: 264K
+he: 264K
+buffer: 208K
+react-device-detect: 152K
+react-loading-skeleton: 120K
+react-dom: 104K
+plugin-react: 88K
+truncate: 72K
+jazzicon: 64K
+text-case: 56K
+pluralize: 56K
+eslint-plugin-react-refresh: 40K
+
