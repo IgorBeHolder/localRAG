@@ -247,9 +247,10 @@ const LanceDb = {
       .map((text, i) => {
         return `[CONTEXT ${i}]:\n${text}\n[END CONTEXT ${i}]\n\n`;
       })
-      .join("")}` + " [/INST]</s>",
+      .join("")}` + " [/INST]",
     };
-    const memory = [ {role: "system", content: chatPrompt(workspace)}, prompt, { role: "user", content: input + "\n If the question cannot be answered using the information provided say 'No information in the context'. Answer in russsian language only." }];
+    const memory = [{ role: "system", content: chatPrompt(workspace) }, prompt,
+    { role: "user", content: input + "</s>"}];
     const responseText = await LLMConnector.getChatCompletion(memory, {
       temperature: workspace?.openAiTemp ?? 0.7,
     });
