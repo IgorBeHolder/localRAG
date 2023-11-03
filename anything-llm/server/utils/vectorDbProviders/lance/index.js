@@ -242,7 +242,7 @@ const LanceDb = {
     const prompt = {
       role: "assistant",
       content: 
-      `<s>[INST]Context: \n\n
+      `<s>[INST] Context: \n\n
     ${contextTexts
       .map((text, i) => {
         return `[CONTEXT ${i}]:\n${text}\n[END CONTEXT ${i}]\n\n`;
