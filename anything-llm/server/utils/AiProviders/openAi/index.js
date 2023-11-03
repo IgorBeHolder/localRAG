@@ -75,13 +75,11 @@ class OpenAi {
     const PROMPT_TEMPLATE = [
       {
         role: "system",
-        // content: `<s>[INST]Вы полезный помощник.
-        content: `Вы полезный помощник.
+        content: `<s>[INST]Вы полезный помощник.
         Ваши ответы должны быть точными, краткими и вежливыми.
-        Отвечайте на вопросы пользователей на русском языке.`
+        Отвечайте на вопросы пользователей на русском языке.[/INST]`
       },
       
-      // { role: "system", content: "<s>[INST] You are a helpful assistant. Your answers should be accurate and concise in russian language only.\n\n [/INST]" }, 
       ...chatHistory,
 
       { role: "user", content: prompt }, // + "Не повторяй ответы и отвечай на русском языке."
