@@ -91,7 +91,7 @@ export default function SettingsOverlay({
             </div>
           ) : (
             <div className="flex flex-col max-h-[65vh] pb-8 overflow-y-scroll no-scroll">
-              {!settings?.MultiUserMode && (
+{/*              {!settings?.MultiUserMode && (
                 <Option
                   btnText="Вид"
                   icon={<Eye className="h-4 w-4 flex-shrink-0"/>}
@@ -116,7 +116,7 @@ export default function SettingsOverlay({
                 icon={<Archive className="h-4 w-4 flex-shrink-0"/>}
                 isActive={tab === "exportimport"}
                 onClick={() => selectTab("exportimport")}
-              />
+              />*/}
               {!settings?.MultiUserMode && (
                 <>
                   <Option

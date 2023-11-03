@@ -114,7 +114,7 @@ export default function Appearance() {
               Настройте параметры внешнего вида вашей платформы.
             </p>
           </div>
-          <div className="mb-6">
+{/*          <div className="mb-6">
             <div className="flex flex-col gap-y-2">
               <h2 className="leading-tight font-medium text-black dark:text-white">
                 Пользовательский логотип
@@ -160,7 +160,7 @@ export default function Appearance() {
                 </div>
               </div>
             </div>
-          </div>
+          </div>*/}
           <div className="mb-6">
             <div className="flex flex-col gap-y-2">
               <h2 className="leading-tight font-medium text-black dark:text-white">

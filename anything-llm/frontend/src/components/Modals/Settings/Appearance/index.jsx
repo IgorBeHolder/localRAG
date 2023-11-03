@@ -108,7 +108,7 @@ export default function Appearance() {
         </div>
 
         <div className="px-1 md:px-8 pb-10">
-          <div className="mb-6">
+          {/*<div className="mb-6">
             <div className="flex flex-col gap-y-2 mb-4">
               <h2 className="leading-tight font-medium text-black dark:text-white">
                 Пользовательский логотип
@@ -154,7 +154,7 @@ export default function Appearance() {
                 </div>
               </div>
             </div>
-          </div>
+          </div>*/}
           <div className="mb-6">
             <div className="flex flex-col gap-y-2">
               <h2 className="leading-tight font-medium text-black dark:text-white">

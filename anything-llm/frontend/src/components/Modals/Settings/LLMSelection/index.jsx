@@ -37,7 +37,7 @@ export default function LLMSelection({
       showToast("Настройки LLM успешно сохранены.", "success");
     }
     setSaving(false);
-    setHasChanges(!!error ? true : false);
+    setHasChanges(!!error);
   };
   return (
     <div className="relative w-full w-full max-h-full">
