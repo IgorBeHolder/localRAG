@@ -15,7 +15,7 @@ async function v1_chat_completions(prompt) {
     "temperature": 0.33,
     // "top_p": 0.95,
     // "presence_penalty": 0,
-    "frequency_penalty": 1.1
+    "frequency_penalty": 1.18
   };
 
   try {
