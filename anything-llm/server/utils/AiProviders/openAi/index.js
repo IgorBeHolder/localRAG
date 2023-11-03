@@ -71,7 +71,7 @@ class OpenAi {
         `OpenAI chat: ${model} is not valid for chat completion!`
       );
 
-    const IS_OFFLINE = true; // process.env.OPEN_MODEL_PREF == "3LM";
+    const IS_OFFLINE = true; 
     const PROMPT_TEMPLATE = [
       // <s>[INST] Instruction [/INST] Model answer</s>[INST] Follow-up instruction [/INST]
 //       # Mistral template
@@ -91,7 +91,7 @@ class OpenAi {
 
       {
         role: "system",
-        content: `<s>[INST] Вы полезный помощник.
+        content: `<s>[INST]Вы полезный помощник.
         Ваши ответы должны быть очень точными, краткими и вежливыми.
         Отвечай на вопросы пользователей только на русском языке. [/INST][/s]`
       },
@@ -99,7 +99,7 @@ class OpenAi {
       // { role: "system", content: "<s>[INST] You are a helpful assistant. Your answers should be accurate and concise in russian language only.\n\n [/INST]" }, 
       ...chatHistory,
 
-      { role: "user", content: prompt + " [INST] Избегай повторов и отвечай на русском языке. [/INST]"},
+      { role: "user", content: prompt + "Избегай повторов и отвечай на русском языке."},
     ]; //  chat history with the user's   PROMPT at the END
 
     let textResponse;
@@ -110,7 +110,8 @@ class OpenAi {
             model,
             temperature: Number(workspace?.openAiTemp ?? 0.7),
             n: 1, // only one completion/response will be generated
-            messages: PROMPT_TEMPLATE
+            messages: PROMPT_TEMPLATE,
+            frequency_penalty: 0.5
           });
 
         const res = json.data; // the response from online chat completion service (openai)
