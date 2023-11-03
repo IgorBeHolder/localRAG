@@ -82,7 +82,7 @@ class OpenAi {
       
       ...chatHistory,
 
-      { role: "user", content: prompt }, // + "Не повторяй ответы и отвечай на русском языке."
+      { role: "user", content: prompt + "Отвечай на русском языке." }, // + "Не повторяй ответы и отвечай на русском языке."
     ]; //  chat history with the user's   PROMPT at the END
 
     let textResponse;
