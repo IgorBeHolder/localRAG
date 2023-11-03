@@ -93,7 +93,7 @@ class OpenAi {
         role: "system",
         content: `<s>[INST] Вы полезный помощник.
         Ваши ответы должны быть очень точными, краткими и вежливыми.
-        Отвечай на вопросы пользователей только на русском языке. [/INST]`
+        Отвечай на вопросы пользователей только на русском языке. [/INST][/s]`
       },
       
       // { role: "system", content: "<s>[INST] You are a helpful assistant. Your answers should be accurate and concise in russian language only.\n\n [/INST]" }, 
