@@ -73,27 +73,11 @@ class OpenAi {
 
     const IS_OFFLINE = true; 
     const PROMPT_TEMPLATE = [
-      // <s>[INST] Instruction [/INST] Model answer</s>[INST] Follow-up instruction [/INST]
-//       # Mistral template
-// # source: https://docs.mistral.ai/llm/mistral-instruct-v0.1#chat-template
-// register_conv_template(
-//     Conversation(
-//         name="mistral",
-//         system_template="[INST]{system_message}\n",
-//         roles=("[INST]", "[/INST]"),
-//         sep_style=SeparatorStyle.LLAMA2,
-//         sep=" ",
-//         sep2="</s>",
-//     )
-      // )
-
-      // Always assist with care, respect, and truth. Respond with utmost utility yet securely. Avoid harmful, unethical, prejudiced, or negative content. Ensure replies promote fairness and positivity.
-
       {
         role: "system",
         content: `<s>[INST]Вы полезный помощник.
-        Ваши ответы должны быть очень точными, краткими и вежливыми.
-        Отвечай на вопросы пользователей только на русском языке. [/INST][/s]`
+        Ваши ответы должны быть точными, краткими и вежливыми.
+        Отвечайте на вопросы пользователей на русском языке.[/INST][/s]`
       },
       
       // { role: "system", content: "<s>[INST] You are a helpful assistant. Your answers should be accurate and concise in russian language only.\n\n [/INST]" }, 
@@ -111,7 +95,6 @@ class OpenAi {
             temperature: Number(workspace?.openAiTemp ?? 0.7),
             n: 1, // only one completion/response will be generated
             messages: PROMPT_TEMPLATE,
-            frequency_penalty: 0.5
           });
 
         const res = json.data; // the response from online chat completion service (openai)
@@ -132,7 +115,7 @@ class OpenAi {
       }
     } else {
 
-      textResponse = await v1_chat_completions(PROMPT_TEMPLATE);
+      textResponse = await v1_chat_completions(PROMPT_TEMPLATE, Number(workspace?.openAiTemp ?? 0.7));
     }
 
     return textResponse;
