@@ -5,6 +5,7 @@ from typing import Any, Dict, List, Union
 from dotenv import load_dotenv
 from sentence_transformers import SentenceTransformer
 from langchain.embeddings import HuggingFaceInstructEmbeddings
+from langchain.embeddings.huggingface import HuggingFaceEmbeddings
 
 load_dotenv()
 
@@ -39,11 +40,11 @@ class ModelManager:
             # return SentenceTransformer(str(model_path))
         
         # if EMBEDDING_MODEL_NAME in [""]:
+        model = HuggingFaceEmbeddings(model_name=EMBEDDING_MODEL_NAME)
+        # model = HuggingFaceInstructEmbeddings(
+        #     model_name=EMBEDDING_MODEL_NAME,
+        #     model_kwargs={"device": DEVICE}, )
 
-        model = HuggingFaceInstructEmbeddings(
-            model_name=EMBEDDING_MODEL_NAME,
-            model_kwargs={"device": DEVICE},
-        )
         # model = SentenceTransformer(EMBEDDING_MODEL_NAME)
         # model.save(path=str(model_path))
         return model
