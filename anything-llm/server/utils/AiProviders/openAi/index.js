@@ -62,7 +62,8 @@ class OpenAi {
 
 
   // used in 
-  // 1. anything-llm / server / utils / chats / index.js:97 (if there is no vectorized space (hasVectorizedSpace is false) or if the number of embeddings is zero. )
+  // 1. anything-llm/server/utils/chats/index.js:100 (if there is no vectorized space (hasVectorizedSpace is false) 
+  // or if the number of embeddings is zero. )
   // 2. anything-llm/frontend/src/models/workspace.js:60 (set as a property of Workspace)  
   async sendChat(chatHistory = [], prompt, workspace = {}) {
     const model = process.env.OPEN_MODEL_PREF;
@@ -71,20 +72,18 @@ class OpenAi {
         `OpenAI chat: ${model} is not valid for chat completion!`
       );
 
-    const IS_OFFLINE = true; 
+    const IS_OFFLINE = true;
     const PROMPT_TEMPLATE = [
       {
         role: "system",
-        content: `<s>[INST]Вы полезный помощник.
-        Ваши ответы должны быть точными, краткими и вежливыми.
-        Отвечайте на вопросы пользователей на русском языке.[/INST]`
+        content: `<s>[INST]Вы полезный помощник. Ваши ответы должны быть точными и краткими. Отвечайте на вопросы пользователей на русском языке.[/INST]`
       },
-      
+
       ...chatHistory,
 
-      { role: "user", content: prompt + "Отвечай на русском языке." }, // + "Не повторяй ответы и отвечай на русском языке."
+      { role: "user",  content:  prompt}, // "[INST]Ответь на русском языке:[/INST]" + prompt
     ]; //  chat history with the user's   PROMPT at the END
-
+    console.log('memory:', PROMPT_TEMPLATE);
     let textResponse;
     if (!IS_OFFLINE) {
       try {
@@ -114,7 +113,7 @@ class OpenAi {
       }
     } else {
 
-      textResponse = await v1_chat_completions(PROMPT_TEMPLATE, Number(workspace?.openAiTemp ?? 0.7));
+      textResponse = await v1_chat_completions(PROMPT_TEMPLATE, Number(workspace?.openAiTemp ?? 0.33));
     }
 
     return textResponse;
@@ -122,10 +121,10 @@ class OpenAi {
 
 
   // used in:
-  // anything-llm/server/utils/vectorDbProviders/lance/index.js:252  in LanceDB.query()
-  // anything-llm/server/utils/vectorDbProviders/lance/index.js:302  in LanceDB.chat()
-  async getChatCompletion(messages = [], { temperature = 0.7 }) {
-    const IS_OFFLINE = true; // process.env.OPEN_MODEL_PREF == "3LM";
+  // anything-llm/server/utils/vectorDbProviders/lance/index.js:254  in LanceDB.query()
+  // anything-llm/server/utils/vectorDbProviders/lance/index.js:304  in LanceDB.chat()
+  async getChatCompletion(messages = [], { temperature = 0.33 }) {
+    const IS_OFFLINE = true; 
     const model = process.env.OPEN_MODEL_PREF || "gpt-3.5-turbo";
 
     if (!IS_OFFLINE) {
@@ -143,10 +142,10 @@ class OpenAi {
         throw new Error("OpenAI chat: No results length!");
       }
 
-      return data.choices[0].message.content; // the COMPLETION text from OPENAI
+      return data.choices[0].message.content; 
 
     } else {
-      return await v1_chat_completions(messages);// the COMPLETION text from 3LM
+      return await v1_chat_completions(messages);
     }
   }
 
@@ -159,9 +158,9 @@ class OpenAi {
   }
 
   async embedChunks(textChunks = []) {
-    const IS_OFFLINE = true; //process.env.OPEN_MODEL_PREF == "3LM";
+    const IS_OFFLINE = true; 
 
-    if (IS_OFFLINE) {  // get embeddings from openllm
+    if (IS_OFFLINE) {  // get embeddings from local LLM
       if (typeof textChunks === 'string') {
         textChunks = [textChunks];
       }

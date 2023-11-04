@@ -163,8 +163,8 @@ const LanceDb = {
       // because we then cannot atomically control our namespace to granularly find/remove documents
       // from vectordb.
       const textSplitter = new RecursiveCharacterTextSplitter({
-        chunkSize: 800, // reduce from 1000 (embed-server has max_seq_length of 256 tokens)
-        chunkOverlap: 20,
+        chunkSize: 512, // reduce from 1000 (embed-server has max_seq_length of 256 tokens)
+        chunkOverlap: 10,
       });
       const textChunks = await textSplitter.splitText(pageContent);
 
@@ -202,7 +202,7 @@ const LanceDb = {
 
       if (vectors.length > 0) { // If the vectors array is not empty
         const chunks = [];
-        for (const chunk of toChunks(vectors, 400)) chunks.push(chunk);
+        for (const chunk of toChunks(vectors, 500)) chunks.push(chunk);
 
         console.log("Inserting vectorized chunks into LanceDB collection.");
         const { client } = await this.connect();
@@ -241,16 +241,18 @@ const LanceDb = {
     );
     const prompt = {
       role: "assistant",
-      content: 
-      `<s>[INST] Context: \n\n
+      content:
+        `CONTEXT: \n\n
     ${contextTexts
-      .map((text, i) => {
-        return `[CONTEXT ${i}]:\n${text}\n[END CONTEXT ${i}]\n\n`;
-      })
-      .join("")}` + " [/INST]",
+          .map((text, i) => {
+            return `[CONTEXT ${i}]:\n${text}\n[END CONTEXT ${i}]\n\n`;
+          })
+          // .join("")} + "[/INST]"`,     
+          .join("")}`,
     };
     const memory = [{ role: "system", content: chatPrompt(workspace) }, prompt,
-    { role: "user", content: input + "[INST] Отвечай по-русски [/INST]</s>"}];
+      { role: "user", content: input + '\nОтвечайте на русском языке.' }];
+    console.log('memory:', memory);
     const responseText = await LLMConnector.getChatCompletion(memory, {
       temperature: workspace?.openAiTemp ?? 0.33,
     });
@@ -293,16 +295,17 @@ const LanceDb = {
     const prompt = {
       role: "system",
       content: `${chatPrompt(workspace)}
-    Context:
+      КОНТЕКСТ:
     ${contextTexts
-      .map((text, i) => {
-        return `[CONTEXT ${i}]:\n${text}\n[END CONTEXT ${i}]\n\n`;
-      })
-      .join("")}`,
+          .map((text, i) => {
+            return `[КОНТЕКСТ ${i}]:\n${text}\n[КОНЕЦ КОНТЕКСТА ${i}]\n\n`;
+          })
+          .join("")}`,
     };
     const memory = [prompt, ...chatHistory, { role: "user", content: input }];
+
     const responseText = await LLMConnector.getChatCompletion(memory, {
-      temperature: workspace?.openAiTemp ?? 0.7,
+      temperature: workspace?.openAiTemp ?? 0.2,
     });
 
     return {

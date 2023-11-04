@@ -32,6 +32,7 @@ async function acceptedFileTypes() {
 
 async function processDocument(filename = "") {
   if (!filename) return false;
+  // send filename to python app: 
   return await fetch(`${PYTHON_API}/process`, {
     method: "POST",
     headers: {

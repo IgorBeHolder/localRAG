@@ -94,6 +94,7 @@ async function chatWithWorkspace(
 
   const hasVectorizedSpace = await VectorDb.hasNamespace(workspace.slug);
   const embeddingsCount = await VectorDb.namespaceCount(workspace.slug);
+   //  has NO vectorized space
   if (!hasVectorizedSpace || embeddingsCount === 0) {
     const rawHistory = await WorkspaceChats.forWorkspace(workspace.id);
     const chatHistory = convertToPromptHistory(rawHistory);
@@ -102,7 +103,7 @@ async function chatWithWorkspace(
       message,
       workspace
     );
-    const data = { text: response, sources: [], type: "chat" };
+    const data = { text: response, sources: [], type: "query" };
 
     await WorkspaceChats.new({
       workspaceId: workspace.id,
@@ -118,7 +119,10 @@ async function chatWithWorkspace(
       close: true,
       error: null,
     };
-  } else {    //  has vectorized space
+
+
+    
+  } else {    //  HAS vectorized space
     var messageLimit = workspace?.openAiHistory;
 
     const rawHistory = await WorkspaceChats.forWorkspace(
@@ -168,13 +172,8 @@ async function chatWithWorkspace(
 function chatPrompt(workspace) {
   return (
     workspace?.openAiPrompt ??
-    // "<s>[INST] You are a helpful assistant. [/INST]" 
-    // "<s>[INST] You are a helpful assistant. Given the following conversation, relevant context, and a follow up question, reply with an answer to the current question the user is asking. Return only your response to the question given the above information following the users instructions as needed.\n"
-    // "<s>[INST] You are a helpful assistant. \nGiven the relevant context, and a follow up question, reply with an answer to the current question the user is asking. Return only your response to the question given the above information following the users instructions as needed.\n"
-    // "Answer the question based only on the following context:"
-    `<s>[INST] Вы полезный помощник, который отвечает на вопросы пользователей,
-    используя предоставленный контекст. Избегай повторов в ответе. Если на вопрос невозможно ответить,
-    используя предоставленную информацию, ответь по-русски: Я не знаю.[/INST]`
+    // "<s>[INST]Вы полезный помощник, который отвечает на вопросы пользователей, используя предоставленный CONTEXT. Если на вопрос невозможно ответить, используя предоставленную информацию, ответь по-русски: Я не знаю.[/INST]"
+    "Вы полезный помощник, который отвечает на вопросы пользователей, используя предоставленный КОНТЕКСТ. Если на вопрос невозможно ответить, используя предоставленную информацию, ответь по-русски: Я не знаю."
   );
 }
 
