@@ -45,7 +45,7 @@ class ModelManager:
             model_kwargs={"device": DEVICE},
         )
         # model = SentenceTransformer(EMBEDDING_MODEL_NAME)
-        model.save(path=str(model_path))
+        # model.save(path=str(model_path))
         return model
 
     def embed_documents(self, text_list: Union[str, List[str]]) -> Dict[str, Any]:
