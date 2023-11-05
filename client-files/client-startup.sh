@@ -40,7 +40,7 @@ fi
 docker run -d --restart always \
   --name embed \
   --platform linux/amd64 \
-  --env-file ./client-files/.embed-env \
+  --env-file ./client-files/.env \
   -v ./model-store/:/app/model-store \
   -p 3004:3004 \
   --network llm-net \
