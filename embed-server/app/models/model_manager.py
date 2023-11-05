@@ -3,10 +3,7 @@ import pathlib
 from typing import Any, Dict, List, Union
 
 from dotenv import load_dotenv
-# from sentence_transformers import SentenceTransformer
-# from langchain.embeddings import HuggingFaceInstructEmbeddings
-# from langchain.embeddings.huggingface import HuggingFaceEmbeddings
-from InstructorEmbedding import INSTRUCTOR
+from sentence_transformers import SentenceTransformer
 
 load_dotenv()
 
@@ -32,24 +29,17 @@ class ModelManager:
         model_folder = parts[1] if len(parts) > 1 else parts[0]
         return dest_folder / subfolder / model_folder
 
-    def _load_model(self) -> Any:
+    def _load_model(self) -> SentenceTransformer:
         """Load or download the Sentence Transformer model."""
         model_path = self._get_model_path()
 
         if model_path.exists():
             print(f"{EMBEDDING_MODEL_NAME} is found on the local device")
-            # return SentenceTransformer(str(model_path))
+            return SentenceTransformer(str(model_path))
         
-        # if EMBEDDING_MODEL_NAME in [""]:
-        # model = HuggingFaceEmbeddings(model_name=EMBEDDING_MODEL_NAME)
-        # model = HuggingFaceInstructEmbeddings(
-        #     model_name=EMBEDDING_MODEL_NAME,
-        #     model_kwargs={"device": DEVICE}, )
 
-        
-        model = INSTRUCTOR(EMBEDDING_MODEL_NAME)
-        # model = SentenceTransformer(EMBEDDING_MODEL_NAME)
-        # model.save(path=str(model_path))
+        model = SentenceTransformer(EMBEDDING_MODEL_NAME)
+        model.save(path=str(model_path))
         return model
 
     def embed_documents(self, text_list: Union[str, List[str]]) -> Dict[str, Any]:
