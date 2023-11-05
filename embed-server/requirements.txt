@@ -7,3 +7,4 @@ uvicorn
 pydantic_settings
 lru_cache
 torch
+numpy
