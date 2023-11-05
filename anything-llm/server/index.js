@@ -2,6 +2,9 @@ process.env.NODE_ENV === "development"
   ? require("dotenv").config({ path: `.env.${process.env.NODE_ENV}` })
   : require("dotenv").config();
 console.log("COMPLETION_MODEL_ENDPOINT", process.env.COMPLETION_MODEL_ENDPOINT);
+console.log("COMPLETION_MODEL_NAME", process.env.COMPLETION_MODEL_NAME);
+console.log("EMBEDDING_MODEL_ENDPOINT", process.env.EMBEDDING_MODEL_ENDPOINT);
+console.log("EMBEDDING_MODEL_NAME", process.env.EMBEDDING_MODEL_NAME);
 
 const express = require("express");
 const bodyParser = require("body-parser");

@@ -40,6 +40,7 @@ class ModelManager:
 
         model = SentenceTransformer(EMBEDDING_MODEL_NAME)
         model.save(path=str(model_path))
+        print(f"{EMBEDDING_MODEL_NAME} is downloaded and saved to {model_path}")
         return model
 
     def embed_documents(self, text_list: Union[str, List[str]]) -> Dict[str, Any]:

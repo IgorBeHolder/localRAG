@@ -1,6 +1,5 @@
 asyncio
 fastapi
-InstructorEmbedding
 pydantic
 python-dotenv
 uvicorn

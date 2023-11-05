@@ -163,7 +163,7 @@ const LanceDb = {
       // because we then cannot atomically control our namespace to granularly find/remove documents
       // from vectordb.
       const textSplitter = new RecursiveCharacterTextSplitter({
-        chunkSize: 512, // reduce from 1000 (embed-server has max_seq_length of 256 tokens)
+        chunkSize: 128, // reduce from 1000 (embed-server has max_seq_length of 256 tokens)
         chunkOverlap: 10,
       });
       const textChunks = await textSplitter.splitText(pageContent);
@@ -245,9 +245,9 @@ const LanceDb = {
         `CONTEXT: \n\n
     ${contextTexts
           .map((text, i) => {
-            return `[CONTEXT ${i}]:\n${text}\n[END CONTEXT ${i}]\n\n`;
-          })
-          // .join("")} + "[/INST]"`,     
+            return `${i}\n${text}\n\n`;            
+            // return `[CONTEXT ${i}]:\n${text}\n[END CONTEXT ${i}]\n\n`;
+          })  
           .join("")}`,
     };
     const memory = [{ role: "system", content: chatPrompt(workspace) }, prompt,

@@ -9,10 +9,16 @@ from models.model_manager import ModelManager
 from pydantic import BaseModel, Field
 from services.x_auth_token import get_x_token_key
 
-load_dotenv()
+# load environment variables from specific .env file by its path
+
+
+
+
+load_dotenv('../../client-files/.embed-env')
 
 PORT = int(os.getenv("PORT", 3004))
 HOST = os.getenv("HOST", "0.0.0.0")
+EMBEDDING_MODEL_NAME = os.getenv("EMBEDDING_MODEL_NAME")
 
 app = FastAPI(
     # dependencies=[Depends(get_x_token_key)],
@@ -24,7 +30,7 @@ app = FastAPI(
 
 
 class EmbeddingInput(BaseModel): 
-    model: str = Field(default="all-MiniLM-L6-v2")
+    model: str = Field(default=EMBEDDING_MODEL_NAME)
     input: Union[str, List[str]] = Field(
         default=[
             "This is an example sentence",
