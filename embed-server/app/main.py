@@ -5,9 +5,8 @@ from typing import Dict, List, Optional, Union
 
 from dotenv import load_dotenv
 from fastapi import Depends, FastAPI, HTTPException
-from pydantic import BaseModel, Field
-
 from models.model_manager import ModelManager
+from pydantic import BaseModel, Field
 from services.x_auth_token import get_x_token_key
 
 load_dotenv()

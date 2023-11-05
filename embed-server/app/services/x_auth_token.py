@@ -1,5 +1,6 @@
 """Fast API X-ACCESS-TOKEN authentication"""
 import os
+
 from fastapi import HTTPException, Request, Security
 from fastapi.security import APIKeyHeader
 from starlette.status import HTTP_403_FORBIDDEN

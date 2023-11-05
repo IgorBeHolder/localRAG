@@ -3,7 +3,7 @@ import pathlib
 from typing import Any, Dict, List, Union
 
 from dotenv import load_dotenv
-from sentence_transformers import SentenceTransformer
+# from sentence_transformers import SentenceTransformer
 # from langchain.embeddings import HuggingFaceInstructEmbeddings
 # from langchain.embeddings.huggingface import HuggingFaceEmbeddings
 from InstructorEmbedding import INSTRUCTOR
