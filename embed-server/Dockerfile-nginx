@@ -3,7 +3,7 @@ FROM nginx:latest
 RUN rm /etc/nginx/nginx.conf
 # Copy the modified Nginx conf
 COPY nginx/nginx.conf /etc/nginx
-COPY nginx/.htpasswd /etc/nginx
+COPY nginx/.htpasswd /etc/nginx/.htpasswd
 
 # Copy proxy config SCHEMA
 COPY nginx/local-rag-docs.conf /etc/nginx/sites-enabled/
