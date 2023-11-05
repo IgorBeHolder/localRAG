@@ -41,7 +41,7 @@ class ModelManager:
             # return SentenceTransformer(str(model_path))
         
         # if EMBEDDING_MODEL_NAME in [""]:
-        model = HuggingFaceEmbeddings(model_name=EMBEDDING_MODEL_NAME)
+        # model = HuggingFaceEmbeddings(model_name=EMBEDDING_MODEL_NAME)
         # model = HuggingFaceInstructEmbeddings(
         #     model_name=EMBEDDING_MODEL_NAME,
         #     model_kwargs={"device": DEVICE}, )
