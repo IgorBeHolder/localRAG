@@ -134,6 +134,7 @@ async function chatWithWorkspace(
       response,
       sources,
       message: error,
+// 
     } = await VectorDb[chatMode]({
       namespace: workspace.slug,
       input: message,

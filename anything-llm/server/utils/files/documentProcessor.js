@@ -41,7 +41,7 @@ async function processDocument(filename = "") {
     body: JSON.stringify({ filename }),
   })
     .then((res) => {
-      if (!res.ok) throw new Error("Response could not be completed");
+      if (!res.ok) throw new Error("Запрос не удался");
       return res.json();
     })
     .then((res) => res)

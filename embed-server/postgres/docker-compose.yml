@@ -1,0 +1,27 @@
+version: '3.1'
+
+services:
+  postgres:
+    # build: .  
+    image: pgembeding
+    # image: my-postgres-with-embedding:latest    
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - llm-net   
+
+networks:
+  llm-net:
+    name: llm-net
+    external: true
+
+volumes:
+  pgdata:
+
+# docker-compose -p localrag up --build
+

@@ -163,7 +163,7 @@ const LanceDb = {
       // because we then cannot atomically control our namespace to granularly find/remove documents
       // from vectordb.
       const textSplitter = new RecursiveCharacterTextSplitter({
-        chunkSize: 128, // reduce from 1000 (embed-server has max_seq_length of 256 tokens)
+        chunkSize: 512, // reduce from 1000 (embed-server has max_seq_length of 256 tokens)
         chunkOverlap: 10,
       });
       const textChunks = await textSplitter.splitText(pageContent);
@@ -173,7 +173,10 @@ const LanceDb = {
       const documentVectors = [];
       const vectors = [];
       const submissions = [];
-      const vectorValues = await LLMConnector.embedChunks(textChunks);
+      // const vectorValues = await LLMConnector.embedChunks(textChunks);
+      const textChunksLowercase = textChunks.map(chunk => chunk.toLowerCase());
+      const vectorValues = await LLMConnector.embedChunks(textChunksLowercase);
+
 
       if (!!vectorValues && vectorValues.length > 0) {  // If the vectorValues array is not empty
         for (const [i, vector] of vectorValues.entries()) {
@@ -232,7 +235,8 @@ const LanceDb = {
     }
 
     const LLMConnector = getLLMProvider();
-    const queryVector = await LLMConnector.embedTextInput(input); // the vector representation of the input text.
+    // const queryVector = await LLMConnector.embedTextInput(input);
+    const queryVector = await LLMConnector.embedTextInput(input.toLowerCase()); // the vector representation of the input text.
     const { contextTexts, sourceDocuments } = await this.similarityResponse(
       // retrieves similar documents from a database based on the vector representation of the input text.
       client,
@@ -252,7 +256,7 @@ const LanceDb = {
     };
     const memory = [{ role: "system", content: chatPrompt(workspace) }, prompt,
       { role: "user", content: input + '\nОтвечайте на русском языке.' }];
-    console.log('memory:', memory);
+    console.log('LanceDb:query memory:', memory);
     const responseText = await LLMConnector.getChatCompletion(memory, {
       temperature: workspace?.openAiTemp ?? 0.33,
     });
@@ -286,7 +290,8 @@ const LanceDb = {
     }
 
     const LLMConnector = getLLMProvider();
-    const queryVector = await LLMConnector.embedTextInput(input);
+    // const queryVector = await LLMConnector.embedTextInput(input); 
+    const queryVector = await LLMConnector.embedTextInput(input.toLowerCase()); // address the issue of the chat not working with uppercase letters 'sentence-transformers/all-distilroberta-v1'
     const { contextTexts, sourceDocuments } = await this.similarityResponse(
       client,
       namespace,
@@ -303,7 +308,7 @@ const LanceDb = {
           .join("")}`,
     };
     const memory = [prompt, ...chatHistory, { role: "user", content: input }];
-
+    console.log('LanceDb:chat (from vectorized) memory:', memory);
     const responseText = await LLMConnector.getChatCompletion(memory, {
       temperature: workspace?.openAiTemp ?? 0.2,
     });
