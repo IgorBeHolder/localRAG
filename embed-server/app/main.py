@@ -4,10 +4,10 @@ from concurrent.futures import ThreadPoolExecutor
 from typing import Dict, List, Optional, Union
 
 from dotenv import load_dotenv
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, # Depends
 from models.model_manager import ModelManager
 from pydantic import BaseModel, Field
-from services.x_auth_token import get_x_token_key
+# from services.x_auth_token import get_x_token_key
 
 # load environment variables from specific .env file by its path
 
@@ -107,6 +107,38 @@ async def get_embeddings_endpoint(data: EmbeddingInput):
         return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+class Section(BaseModel):
+    section: str
+
+class DocumentInput(BaseModel):
+    document_title: str
+    structure: List[Section]
+    page_number: int
+    text: str
+    document_path: str
+    metadata: Dict[str, Union[str, int, float]]  # Adjust the Union types based on your actual metadata structure
+
+class DocumentProcessInput(BaseModel):
+    model: str = Field(default=EMBEDDING_MODEL_NAME)
+    input: List[DocumentInput]
+
+@app.post("/text_processor")
+async def text_processor(data: DocumentProcessInput):
+    # Here you would process the input data and store it in the database.
+    # This might involve:
+    # - Calculating embeddings for the text
+    # - Inserting the document, section, and embedding information into your database tables
+    # You will need to implement the actual logic for these steps.
+    
+    # Placeholder for actual database interaction
+    # You would replace this with actual calls to insert data into your database
+    for document in data.input:
+        # Calculate embeddings for the text
+        # Save document, section, and embeddings into the database
+        pass
+
+    return {"message": "Document processing and embedding storage is not yet implemented."}
 
 
 def run():
