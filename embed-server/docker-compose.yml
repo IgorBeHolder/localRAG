@@ -22,6 +22,7 @@ services:
       - llm-net
 
   nginx:
+    container_name: nginx
     image: nginx:latest 
     build: 
         context: .
