@@ -47,6 +47,8 @@ services:
       - pgdata:/var/lib/postgresql/data
     networks:
       - llm-net   
+    depends_on:
+      - nginx  
 
 volumes:
   pgdata:      
