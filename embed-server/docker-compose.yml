@@ -32,7 +32,24 @@ services:
     depends_on:
       - embed  
     networks:
+      - llm-net
+
+  postgres:
+    container_name: postgres
+    build: ./postgres
+    image: pgembeding
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
       - llm-net   
+
+volumes:
+  pgdata:      
 
 networks:
   llm-net:
