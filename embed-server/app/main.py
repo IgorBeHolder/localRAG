@@ -6,10 +6,11 @@ from typing import Dict, List, Optional, Union
 
 from asyncpg import Connection, create_pool
 from db import insert_to_db
-# from dotenv import load_doten
+
 from fastapi import Depends, FastAPI, HTTPException, Request
 from models.model_manager import ModelManager
 from pydantic import BaseModel, Field
+
 # from services.x_auth_token import get_x_token_key
 
 
@@ -25,17 +26,30 @@ async def get_db_connection(request: Request):
         yield connection
 
 
+@asynccontextmanager
+async def app_lifespan(app: FastAPI):
+    global embed_model
+    embed_model = ModelManager()
+    app.state.db_pool = await create_pool(DATABASE_URL)
+    yield
+    await app.state.db_pool.close()
+
+
 app = FastAPI(
+    lifespan=app_lifespan,
     # dependencies=[Depends(get_x_token_key)],
     title="Document Embedding Microservice",
     description="""
-    This microservice creates a list of embedding vectors representing the input document.
+    This microservice uses a LLM to solve NLP related problems.
             """,
 )
 
 
 class EmbeddingInput(BaseModel):
-    model: str = Field(default=EMBEDDING_MODEL_NAME)
+    model: str = Field(
+        default=EMBEDDING_MODEL_NAME,
+        description="Model used to generate the embeddings.",
+    )
     input: Union[str, List[str]] = Field(
         default=[
             "This is an example sentence",
@@ -52,7 +66,8 @@ class EmbeddingInput(BaseModel):
             "This is useful if you want to embed a single sentence.",
             "Or if you want to embed a sentence that is longer than 256 tokens.",
             "This model was trained on the English Wikipedia.",
-        ]
+        ],
+        description="List of text strings to generate embeddings for.",
     )
 
 
@@ -64,9 +79,17 @@ class EmbeddingData(BaseModel):
 
 class EmbeddingOutput(BaseModel):
     object: str = Field(default="list", example="list")
-    data: List[EmbeddingData]
-    model: str
-    usage: Dict[str, int] = Field(default={"prompt_tokens": 0, "total_tokens": 0})
+    data: List[EmbeddingData] = Field(
+        description="List of generated embeddings for the input text."
+    )
+    model: str = Field(
+        default=EMBEDDING_MODEL_NAME,
+        description="Model that was used to generate the embeddings.",
+    )
+    usage: Dict[str, int] = Field(
+        default={"prompt_tokens": 0, "total_tokens": 0},
+        description="Estimated token usage.",
+    )
 
 
 executor = ThreadPoolExecutor(max_workers=os.cpu_count() // 2)
@@ -74,19 +97,10 @@ executor = ThreadPoolExecutor(max_workers=os.cpu_count() // 2)
 embed_model: Optional[ModelManager] = None
 
 
-@app.on_event("startup")
-async def load_model_at_startup():
-    global embed_model
-    embed_model = ModelManager()
-    app.state.db_pool = await create_pool(DATABASE_URL)
-
-
-# @app.on_event("shutdown")
-# async def shutdown():
-#     await app.state.db_pool.close()
-
-
-@app.post("/v1/embeddings", response_model=EmbeddingOutput)
+@app.post(
+    "/v1/embeddings",
+    response_model=EmbeddingOutput,
+)
 async def get_embeddings_endpoint(data: EmbeddingInput):
     if embed_model is None:
         raise HTTPException(status_code=500, detail="Model not initialized")
@@ -101,77 +115,81 @@ async def get_embeddings_endpoint(data: EmbeddingInput):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-# ********** Document Processing **********
-# {
-#   "model": "some-model-name",
-#   "input": [
-#     {
-#       "document_title": "Title 1",
-#       "structure": [
-#         {
-#           "section_id": 1,
-#           "parent_section_id": null,
-#           "text": "Section text"
-#         }
-#         // ... more sections if needed
-#       ],
-#       "page_number": 1,
-#       "text": "Some text here",
-#       "document_path": "/path/to/document",
-#       "metadata": {
-#         "key1": "value1",
-#         "key2": 2
-#         // ... more metadata
-#       }
-#     }
-#     // ... more documents if needed
-#   ]
-# }
+# document processor **************************************************************************************************
 
 
 class Section(BaseModel):
-    section_id: Optional[int]
-    parent_section_id: Optional[int]
-    text: str
+    section_id: Optional[int] = Field(default=None, description="Section ID")
+    parent_section_id: Optional[int] = Field(
+        default=None, description="Parent Section ID"
+    )
+    text: Optional[str] = Field(default=None, description="Section Text")
 
 
 class DocumentInput(BaseModel):
-    document_title: str
-    structure: List[Section]
-    page_number: int
-    text: str
-    document_path: str
-    metadata: Dict[str, Union[str, int, float]]
+    document_title: str = Field(default=None, description="Document Title")
+    structure: Optional[List[Section]] = Field(
+        default=None, description="List representing a document Structure"
+    )
+    tables: Optional[List[str]] = Field(default=None, description="List of tables")
+    images: Optional[List[str]] = Field(default=None, description="List of images")
+    page_number: Optional[str] = Field(default=None, description="Page number")
+    text: Optional[str] = Field(
+        default=None, description="Document Text to be embedded"
+    )
+    document_path: Optional[str] = Field(default=None, description="Document Path")
+    metadata: Dict[str, Union[str, int, float]] = Field(
+        default=None, description="Metadata"
+    )
 
 
 class DocumentProcessInput(BaseModel):
-    model: str = Field(default=EMBEDDING_MODEL_NAME)  # embed_model.model_name
-    input: List[DocumentInput]
+    model: str = Field(
+        default=EMBEDDING_MODEL_NAME, description="Name of the model to be used"
+    )
+    input: List[DocumentInput] = Field(
+        default=None, description="List of documents to be processed"
+    )
 
 
 class DocumentProcessOutput(BaseModel):
-    object: str = Field(default="list", example="list")
-    data: List[EmbeddingData]
-    model: str
-    usage: Dict[str, int] = Field(default={"prompt_tokens": 0, "total_tokens": 0})
+    object: str = Field(default="list")
+    data: List[EmbeddingData] = Field(
+        default=None, description="List of generated embeddings for the input text."
+    )
+    model: str = Field(
+        default=EMBEDDING_MODEL_NAME,
+        description="Model that was used to generate the embeddings.",
+    )
+    usage: Dict[str, int] = Field(
+        default={"prompt_tokens": 0, "total_tokens": 0},
+        description="List of estimated token usage.",
+    )
+    uuid: List[str] = Field(
+        default="uuid", description="List of Unique ID for the documents"
+    )
 
 
-@app.post("/text_processor", response_model=DocumentProcessOutput)
+@app.post(
+    "/text_processor",
+    response_model=DocumentProcessOutput,
+    description="Process a list of documents, store them in the database and return the embeddings and uuid",
+)
 async def text_processor(
     data: DocumentProcessInput, connection: Connection = Depends(get_db_connection)
 ):
     try:
-        embedding_data_results = []
+        embedding_data_list = []
         async with connection.transaction():
             usage = {"prompt_tokens": 0, "total_tokens": 0}
             for document in data.input:
                 embedding_data = await insert_to_db(connection, document, embed_model)
                 usage["prompt_tokens"] += embedding_data["usage"]["prompt_tokens"]
                 usage["total_tokens"] += embedding_data["usage"]["total_tokens"]
-                embedding_data_results.extend(embedding_data)
+                embedding_data_list.extend(embedding_data)
 
         return DocumentProcessOutput(
-            data=embedding_data_results, model=data.model, usage=usage
+            data=embedding_data_list, model=data.model, usage=usage
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

@@ -1,63 +1,79 @@
-import json
-import os
-
 from docx import Document
+from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
+from docx.oxml.ns import qn
+from docx.shared import Pt
+import json
 
-# Define the path to the document
-doc_path = '/Users/velo1/Downloads/Инструкция Focal SW 700(800)V (RUS).txt'
-
-# Load the document
-doc = Document(doc_path)
-
-# Function to check if a paragraph is a heading
 def is_heading(paragraph):
     if paragraph.style.name.startswith('Heading'):
         return True
     return False
 
-# Function to get the text of a paragraph
-def get_paragraph_text(paragraph):
-    return paragraph.text.strip()
+def convert_table_to_csv(table):
+    csv_data = []
+    for row in table.rows:
+        row_data = [cell.text.replace('\n', ' ').strip() for cell in row.cells]
+        csv_data.append(";".join(row_data))
+    return "\n".join(csv_data)
 
-# List to hold chunks of text
-chunks = []
+def summarize_text(text):
+    # This function would need an actual NLP model to perform summarization in a real-world scenario
+    return "Summarized text: " + text[:100]
 
-# Variables to keep track of the document, section, subsection and page number
-document_title = os.path.basename(doc_path)
-current_section = ""
-current_subsection = ""
-page_number = 1
+def process_word_document(doc_path):
+    doc = Document(doc_path)
+    json_structure = []
 
-# Process the document
-for paragraph in doc.paragraphs:
-    if is_heading(paragraph):
-        # Check if it's a new section or subsection
-        if 'Heading 1' in paragraph.style.name:
-            current_section = get_paragraph_text(paragraph)
-            current_subsection = ""  # Reset subsection when a new section starts
-        elif 'Heading 2' in paragraph.style.name:
-            current_subsection = get_paragraph_text(paragraph)
+    section_title = None
+    subsection_title = None
+    current_chunk = None
+
+    for element in doc.element.body:
+        if isinstance(element, CT_P):
+            paragraph = Paragraph(element, doc)
+            if is_heading(paragraph):
+                if current_chunk:
+                    json_structure.append(current_chunk)
+                
+                section_title = paragraph.text.strip()
+                subsection_title = None
+                current_chunk = {
+                    'document_title': os.path.basename(doc_path),
+                    'section_title': section_title,
+                    'subsection_title': subsection_title,
+                    'content': [],
+                    'tables': [],
+                    'images': []
+                }
+            elif current_chunk:
+                current_chunk['content'].append(paragraph.text.strip())
+        
+        elif isinstance(element, CT_Tbl):
+            table = Table(element, doc)
+            if current_chunk:
+                current_chunk['tables'].append(convert_table_to_csv(table))
+
+        elif "graphicData" in element.tag:
+            if current_chunk:
+                current_chunk['images'].append('Image_placeholder')
+
+    if current_chunk:
+        json_structure.append(current_chunk)
+
+    return json_structure
+
+def save_to_json(json_structure, output_filename):
+    json_output = json.dumps(json_structure, ensure_ascii=False, indent=2)
+    with open(output_filename, 'w', encoding='utf-8') as json_file:
+        json_file.write(json_output)
+
+if __name__ == "__main__":
+    import sys
+    if len(sys.argv) < 3:
+        print("Usage: python script.py input.docx output.json")
     else:
-        # If it's not a heading, it's part of a section or subsection
-        if current_section or current_subsection:
-            # Get the text and append it to the chunks list with the document and section info
-            text = get_paragraph_text(paragraph)
-            if text:  # Avoid adding empty paragraphs
-                chunks.append({
-                    "document_title": document_title,
-                    "section": current_section,
-                    "subsection": current_subsection,
-                    "page_number": page_number,
-                    "text": text
-                })
-        # Increase page number if 'page break' is encountered
-        if 'page break' in paragraph.text.lower():
-            page_number += 1
-
-# Construct the output JSON file name based on the input file name
-base_name = os.path.splitext(os.path.basename(doc_path))[0]
-output_json_path = f'/Users/velo1/my_projects/localRAG/embed-server/app/data/{base_name}.json'
-
-# Save the chunks to a JSON file
-with open(output_json_path, 'w', encoding='utf-8') as json_file:
-    json.dump(chunks, json_file, ensure_ascii=False, indent=4)
+        input_docx = sys.argv[1]
+        output_json = sys.argv[2]
+        json_structure = process_word_document(input_docx)
+        save_to_json(json_structure, output_json)
+        print(f"Processed document {input_docx} and saved the output to {output_json}")

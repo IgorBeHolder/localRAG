@@ -77,4 +77,8 @@ async def insert_to_db(connection: Connection, document: Dict, embed_model: Mode
         'embedding': embedding
     }
 
+
     return embedding_data, tokens_usage
+
+
+
