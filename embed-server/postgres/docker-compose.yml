@@ -4,7 +4,6 @@ services:
   postgres:
     # build: .  
     image: pgembeding
-    # image: my-postgres-with-embedding:latest    
     restart: always
     environment:
       POSTGRES_PASSWORD: example

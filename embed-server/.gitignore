@@ -1,4 +1,5 @@
 venv/
+venv-es/
 .env
 # model-store/
 __pycache__/

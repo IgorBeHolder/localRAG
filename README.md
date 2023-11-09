@@ -65,6 +65,23 @@ DISABLE_TELEMETRY="true"
 1. `cd anything-llm/client && yarn dev` this will start the client application on port 3000
 
 
+## Changing the main model
 
+1. copy the model file to `localRAG/model-store` (e.g. `llama-2-7b-chat.Q4_K_M.gguf`)  
+   scripts like `copy-mistral.sh` can help with that
+* **'CPU" case**: edit `localRAG/client-files/.env` and change the `COMPLETION_MODEL_NAME` field to the name of the new    model file
+               define `COMPLETION_MODEL_ENDPOINT` also if you want to use a different endpoint  
+               execute `./start-mm.sh` script to start the main model server
+*   **'GPU" case**: edit `vllm/docker/docker-compose.yml` (change the model name and endpoint)  
+               execute `./start-vllm.sh` script to start the main model server
+
+
+## Changing the embeddings model
+
+1. copy the model file to `localRAG/model-store` (e.g. `sentence-transformers/all-MiniLM-L6-v2`)
+   scripts like `copy-mistral.sh` can help with that
+1. edit `localRAG/client-files/.env` and change the `EMBEDDINGS_MODEL_NAME` field to the name of the new model file
+   define `EMBEDDINGS_MODEL_ENDPOINT` also if you want to use a different endpoint
+1. execute `./start-em.sh` script to start the embeddings model server
 
 

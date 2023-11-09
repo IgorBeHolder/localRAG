@@ -8,7 +8,7 @@ services:
     restart: always
     platform: linux/amd64
     env_file:
-      - .embed-env 
+      - ../client-files/.env 
     build:
       context: .
       dockerfile: Dockerfile

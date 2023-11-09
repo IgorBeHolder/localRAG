@@ -17,7 +17,7 @@ HOST=0.0.0.0
 # EMBEDDING_MODEL_NAME=sentence-transformers/multi-qa-mpnet-base-dot-v1
 # EMBEDDING_MODEL_NAME=sentence-transformers/all-MiniLM-L6-v2
 
-EMBEDDING_MODEL_NAME=sentence-transformers/distiluse-base-multilingual-cased-v1
+EMBEDDING_MODEL_NAME=sentence-transformers/all-distilroberta-v1
 MODELS_PATH=model-store
 DEVICE=cpu
 
