@@ -4,7 +4,7 @@ storage/assets/*
 !storage/assets/icon_ai.png
 !storage/assets/icon_ai.png
 storage/documents/*
-storage/vector-cache/*.json
+storage/vector-cache/
 storage/exports
 storage/imports
 !storage/documents/DOCUMENTS.md
