@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from sentence_transformers import SentenceTransformer
 
 
-load_dotenv("client-files/.env", verbose=True)
+# load_dotenv("client-files/.env", verbose=True)
 EMBEDDING_MODEL_NAME = os.getenv("EMBEDDING_MODEL_NAME")
 MODELS_PATH = os.getenv("MODELS_PATH")
 DEVICE = os.getenv("DEVICE")
