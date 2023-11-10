@@ -1,10 +1,12 @@
 import os
 import pathlib
 from typing import List, Dict, Any, Union
+from dotenv import load_dotenv
 
 from sentence_transformers import SentenceTransformer
 
 
+load_dotenv("client-files/.env", verbose=True)
 EMBEDDING_MODEL_NAME = os.getenv("EMBEDDING_MODEL_NAME")
 MODELS_PATH = os.getenv("MODELS_PATH")
 DEVICE = os.getenv("DEVICE")
@@ -13,17 +15,19 @@ DEFAULT_SUBFOLDER = ""
 print(f"*** EMBEDDING_MODEL_NAME: {EMBEDDING_MODEL_NAME}")
 print(f"*** MODELS_PATH: {MODELS_PATH}")
 
+
 class ModelManager:
     def __init__(self):
         """Initialize the Model Manager."""
-        self.model_name = EMBEDDING_MODEL_NAME.split("/")[-1]
+        model_name = os.getenv("EMBEDDING_MODEL_NAME")
+        self.model_name = model_name.split("/")[-1]
         self.device = DEVICE
         self.model = self._load_model()
 
     def _get_model_path(self) -> pathlib.Path:
         """Determine the model path based on the EMBEDDING_MODEL_NAME."""
         parts = EMBEDDING_MODEL_NAME.split("/")
-        app_folder = pathlib.Path(__file__).parent.parent  
+        app_folder = pathlib.Path(__file__).parent.parent
         # print(f"*** app_folder: {app_folder}")
         dest_folder = app_folder / MODELS_PATH  # app/model-store
         # in a container app/model-store is a volume mounted to localRAG/model-store on host
@@ -44,7 +48,6 @@ class ModelManager:
         print(f"{EMBEDDING_MODEL_NAME} is downloaded and saved to {model_path}")
         return model
 
-
     def embed_documents(self, text_list: Union[str, List[str]]) -> Dict[str, Any]:
         """Generate embeddings for the provided text list and estimate token usage."""
         text_list = [text_list] if isinstance(text_list, str) else text_list
@@ -60,8 +63,5 @@ class ModelManager:
                 for i, embedding in enumerate(embeddings)
             ],
             "model": self.model_name,
-            "usage": {
-                "prompt_tokens": prompt_tokens,
-                "total_tokens": prompt_tokens
-            },
+            "usage": {"prompt_tokens": prompt_tokens, "total_tokens": prompt_tokens},
         }

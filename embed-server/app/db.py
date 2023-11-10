@@ -10,7 +10,7 @@ async def insert_to_db(
     connection: Connection, document: Dict, embed_model: ModelManager
 ) -> Tuple[Dict, Dict]:
     tokens_usage = {"prompt_tokens": 0, "total_tokens": 0}
-    embedding, tokens = await embed_model.embed_text(document["text"])
+    embedding, tokens = await embed_model.embed_documents(document["text"])
     tokens_usage["prompt_tokens"] += tokens["prompt_tokens"]
     tokens_usage["total_tokens"] += tokens["total_tokens"]
 

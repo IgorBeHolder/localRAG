@@ -119,29 +119,78 @@ async def get_embeddings_endpoint(data: EmbeddingInput):
 
 # document processor **************************************************************************
 class Section(BaseModel):
-    section_id: Optional[int] = Field(default=None, description="Section ID")
+    section_id: Optional[int] = Field(default=None, example=1, description="Section ID")
     parent_section_id: Optional[int] = Field(
-        default=None, description="Parent Section ID"
+        default=None, example=0, description="Parent Section ID"
     )
-    text: Optional[str] = Field(default=None, description="Section Text")
+    text: Optional[str] = Field(
+        default=None,
+        example="Стороны договора.",
+        description="Section Text",
+    )
 
 
 class DocumentInput(BaseModel):
-    document_title: str = Field(default=None, description="Document Title")
-    collection_id: Optional[int] = Field(default=None, description="Collection ID")
+    document_title: str = Field(
+        default="",
+        example="Договор на оказание информационных услуг",
+        description="Document Title",
+    )
+    collection_id: Optional[int] = Field(
+        default=None, example=1, description="Collection ID"
+    )
     structure: Optional[List[Section]] = Field(
-        default=None, description="List representing a document Structure"
+        default=None,
+        example=[
+            {"section_id": 2, "parent_section_id": 0, "text": "Стороны договора."}
+        ],
+        description="List representing a document Structure",
     )
-    tables: Optional[List[str]] = Field(default=None, description="List of tables")
-    images: Optional[List[str]] = Field(default=None, description="List of images")
-    page_number: Optional[str] = Field(default=None, description="Page number")
+    tables: Optional[List[str]] = Field(
+        default=None, example=["Table1", "Table2"], description="List of tables"
+    )
+    images: Optional[List[str]] = Field(
+        default=None, example=["Image1.png", "Image2.png"], description="List of images"
+    )
+    page_number: Optional[str] = Field(
+        default=None, example="1", description="Page number"
+    )
     text: Optional[str] = Field(
-        default=None, description="Document Text to be embedded"
+        default=None,
+        example="Сторонами настояшего договора являются:\nИсполнитель - ООО 'Матрешка ИТ', Заказчик - АО 'Пинэпл интернешнл'",
+        description="Document Text to be embedded",
     )
-    document_path: Optional[str] = Field(default=None, description="Document Path")
+    document_path: Optional[str] = Field(
+        default=None, example="/path/to/document.pdf", description="Document Path"
+    )
     metadata: Dict[str, Union[str, int, float]] = Field(
-        default=None, description="Metadata"
+        default=None,
+        example={"author": "Author Name", "created_date": "2023-01-01"},
+        description="Metadata",
     )
+
+    class Config:
+        json_schema_extra = {
+            "examples": [
+                {
+                    "document_title": "Договор на оказание информационных услуг",
+                    "collection_id": 1,
+                    "structure": [
+                        {
+                            "section_id": 2,
+                            "parent_section_id": 0,
+                            "text": "Стороны договора.",
+                        }
+                    ],
+                    "tables": ["Table1", "Table2"],
+                    "images": ["Image1.png", "Image2.png"],
+                    "page_number": "1",
+                    "text": "Сторонами настояшего договора являются:\nИсполнитель - ООО 'Матрешка ИТ', Заказчик - АО 'Пинэпл интернешнл'",
+                    "document_path": "/path/to/document.pdf",
+                    "metadata": {"author": "Author Name", "created_date": "2023-01-01"},
+                }
+            ]
+        }
 
 
 class DocumentProcessInput(BaseModel):
@@ -176,20 +225,21 @@ class DocumentProcessOutput(BaseModel):
     response_model=DocumentProcessOutput,
     description="Process a list of documents, store them in the database and return the embeddings and uuid",
 )
-async def text_processor(
-    data: DocumentProcessInput, connection: Connection = Depends(get_db_connection)
-):
+async def text_processor(data: DocumentProcessInput, request: Request):
     try:
-        response_list = []
-        async with connection.transaction():
-            usage = {"prompt_tokens": 0, "total_tokens": 0}
-            for document in data.input:
-                response = await insert_to_db(connection, document, embed_model)
-                usage["prompt_tokens"] += response["usage"]["prompt_tokens"]
-                usage["total_tokens"] += response["usage"]["total_tokens"]
-                response_list.extend(response)
+        async with get_db_connection(request) as connection:
+            response_list = []
+            async with connection.transaction():
+                usage = {"prompt_tokens": 0, "total_tokens": 0}
+                for document in data.input:
+                    response = await insert_to_db(connection, document, embed_model)
+                    usage["prompt_tokens"] += response["usage"]["prompt_tokens"]
+                    usage["total_tokens"] += response["usage"]["total_tokens"]
+                    response_list.extend(response)
 
-        return DocumentProcessOutput(data=response_list, model=data.model, usage=usage)
+            return DocumentProcessOutput(
+                data=response_list, model=data.model, usage=usage
+            )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -212,4 +262,4 @@ async def get_model_name():
 def run():
     import uvicorn
 
-    uvicorn.run("main:app", host=HOST, port=PORT, reload=False)
+    uvicorn.run("main:app", host=HOST, port=PORT, reload=True)
