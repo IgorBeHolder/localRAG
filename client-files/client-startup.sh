@@ -141,7 +141,6 @@ docker run -d --name postgres \
   -p 5432:5432 \
   -v pgdata:/var/lib/postgresql/data \
   --network llm-net \
-  --build ./postgres \
   pgembeding
 echo -e "Postgres server started.\n-----------------------------"
 )
