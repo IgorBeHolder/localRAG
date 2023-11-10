@@ -37,7 +37,7 @@ async def app_lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    lifespan=app_lifespan,
+    # lifespan=app_lifespan,
     # dependencies=[Depends(get_x_token_key)],
     title="Document Embedding Microservice",
     description="""
