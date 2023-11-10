@@ -12,10 +12,10 @@ echo "Current directory: $(pwd)"
 docker network ls | grep -q "llm-net" || docker network create "llm-net"
 
 # echo "Untar sherpa-aiserver tar files..."
-# tar -xzvf models.tar.gz
+# tar -xzvf models.tar.gz --overwrite
 
 # echo "Loading sherpa-aiserver docker images..."
-# docker load -i docker-images-cpu.tar
+docker load -i docker-images-cpu.tar
 
 # create folders for document processor
 echo "Creating folders for document processor..."
@@ -125,4 +125,23 @@ docker run -d --restart always \
   --network llm-net \
   anyth-cpu:v1
 echo -e "Web server started.\n-----------------------------"
+) &&
+
+(
+echo "Starting the postgres server..."
+container_id=$(docker ps -a -q -f name=^/postgres$)
+if [ ! -z "$container_id" ]; then
+  docker stop "$container_id"
+  docker rm "$container_id"
+fi
+
+docker run -d --name postgres \
+  --restart always \
+  -e POSTGRES_PASSWORD=example \
+  -p 5432:5432 \
+  -v pgdata:/var/lib/postgresql/data \
+  --network llm-net \
+  --build ./postgres \
+  pgembeding
+echo -e "Postgres server started.\n-----------------------------"
 )
