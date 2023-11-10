@@ -216,7 +216,7 @@ class DocumentProcessOutput(BaseModel):
         description="List of estimated token usage.",
     )
     uuid: List[str] = Field(
-sh        default="uuid", description="List of Unique ID for the documents"
+        default="uuid", description="List of Unique ID for the documents"
     )
 
 
