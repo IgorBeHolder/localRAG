@@ -216,32 +216,32 @@ class DocumentProcessOutput(BaseModel):
         description="List of estimated token usage.",
     )
     uuid: List[str] = Field(
-        default="uuid", description="List of Unique ID for the documents"
+sh        default="uuid", description="List of Unique ID for the documents"
     )
 
 
-@app.post(
-    "/text_processor",
-    response_model=DocumentProcessOutput,
-    description="Process a list of documents, store them in the database and return the embeddings and uuid",
-)
-async def text_processor(data: DocumentProcessInput, request: Request):
-    try:
-        async with get_db_connection(request) as connection:
-            response_list = []
-            async with connection.transaction():
-                usage = {"prompt_tokens": 0, "total_tokens": 0}
-                for document in data.input:
-                    response = await insert_to_db(connection, document, embed_model)
-                    usage["prompt_tokens"] += response["usage"]["prompt_tokens"]
-                    usage["total_tokens"] += response["usage"]["total_tokens"]
-                    response_list.extend(response)
+# @app.post(
+#     "/text_processor",
+#     response_model=DocumentProcessOutput,
+#     description="Process a list of documents, store them in the database and return the embeddings and uuid",
+# )
+# async def text_processor(data: DocumentProcessInput, request: Request):
+#     try:
+#         async with get_db_connection(request) as connection:
+#             response_list = []
+#             async with connection.transaction():
+#                 usage = {"prompt_tokens": 0, "total_tokens": 0}
+#                 for document in data.input:
+#                     response = await insert_to_db(connection, document, embed_model)
+#                     usage["prompt_tokens"] += response["usage"]["prompt_tokens"]
+#                     usage["total_tokens"] += response["usage"]["total_tokens"]
+#                     response_list.extend(response)
 
-            return DocumentProcessOutput(
-                data=response_list, model=data.model, usage=usage
-            )
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+#             return DocumentProcessOutput(
+#                 data=response_list, model=data.model, usage=usage
+#             )
+#     except Exception as e:
+#         raise HTTPException(status_code=500, detail=str(e))
 
 
 # model ***************************************************************************************
