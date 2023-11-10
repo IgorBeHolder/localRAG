@@ -262,4 +262,4 @@ async def get_model_name():
 def run():
     import uvicorn
 
-    uvicorn.run("main:app", host=HOST, port=PORT, reload=True)
+    uvicorn.run("main:app", host=HOST, port=PORT, reload=False)
