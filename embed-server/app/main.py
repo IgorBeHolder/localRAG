@@ -8,6 +8,7 @@ from asyncpg import Connection, create_pool
 from db import insert_to_db
 
 from fastapi import Depends, FastAPI, HTTPException, Request
+from fastapi.responses import JSONResponse
 from models.model_manager import ModelManager
 from pydantic import BaseModel, Field
 
@@ -45,6 +46,7 @@ app = FastAPI(
 )
 
 
+# /v1/embeddings ******************************************************************************
 class EmbeddingInput(BaseModel):
     model: str = Field(
         default=EMBEDDING_MODEL_NAME,
@@ -115,9 +117,7 @@ async def get_embeddings_endpoint(data: EmbeddingInput):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-# document processor **************************************************************************************************
-
-
+# document processor **************************************************************************
 class Section(BaseModel):
     section_id: Optional[int] = Field(default=None, description="Section ID")
     parent_section_id: Optional[int] = Field(
@@ -128,6 +128,7 @@ class Section(BaseModel):
 
 class DocumentInput(BaseModel):
     document_title: str = Field(default=None, description="Document Title")
+    collection_id: Optional[int] = Field(default=None, description="Collection ID")
     structure: Optional[List[Section]] = Field(
         default=None, description="List representing a document Structure"
     )
@@ -179,20 +180,33 @@ async def text_processor(
     data: DocumentProcessInput, connection: Connection = Depends(get_db_connection)
 ):
     try:
-        embedding_data_list = []
+        response_list = []
         async with connection.transaction():
             usage = {"prompt_tokens": 0, "total_tokens": 0}
             for document in data.input:
-                embedding_data = await insert_to_db(connection, document, embed_model)
-                usage["prompt_tokens"] += embedding_data["usage"]["prompt_tokens"]
-                usage["total_tokens"] += embedding_data["usage"]["total_tokens"]
-                embedding_data_list.extend(embedding_data)
+                response = await insert_to_db(connection, document, embed_model)
+                usage["prompt_tokens"] += response["usage"]["prompt_tokens"]
+                usage["total_tokens"] += response["usage"]["total_tokens"]
+                response_list.extend(response)
 
-        return DocumentProcessOutput(
-            data=embedding_data_list, model=data.model, usage=usage
-        )
+        return DocumentProcessOutput(data=response_list, model=data.model, usage=usage)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# model ***************************************************************************************
+@app.get(
+    "/model_name",
+    response_model=str,
+    summary="Get the name of the model currently in use.",
+)
+async def get_model_name():
+    """
+    Returns the name of the model currently in use.
+    """
+    if not EMBEDDING_MODEL_NAME:
+        raise HTTPException(status_code=404, detail="Model name not set")
+    return JSONResponse(content={"model_name": EMBEDDING_MODEL_NAME})
 
 
 def run():
