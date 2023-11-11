@@ -85,3 +85,8 @@ DISABLE_TELEMETRY="true"
 1. execute `./start-em.sh` script to start the embeddings model server
 
 
+## Database reset
+
+1. `./db-reset.sh`
+
+
