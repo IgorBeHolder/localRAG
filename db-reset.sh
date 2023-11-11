@@ -24,7 +24,7 @@ remove_dir_if_exists "./anything-llm/server/hotdir/storage/lancedb/"
 remove_dir_if_exists "./anything-llm/server/storage/documents/custom-documents/"
 
 echo "Copying db file..."
-cp ./client-files/storage/anythingllm.db ./anything-llm/server/storage/anythingllm.db
+cp ./client-files/anythingllm.db ./anything-llm/server/storage/anythingllm.db
 chmod 777 ./anything-llm/server/storage/anythingllm.db
 
 echo "Run containers ..."
