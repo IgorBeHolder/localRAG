@@ -4,3 +4,6 @@ model-store/
 .vscode/
 # anything-llm/server/package-lock.json
 # anything-llm/server/yarn.lock
+test/
+*.gz
+*.tar
