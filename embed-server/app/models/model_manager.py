@@ -46,7 +46,7 @@ class ModelManager:
         print(f"{EMBEDDING_MODEL_NAME} is downloaded and saved to {model_path}")
         return model
 
-    def embed_documents(self, text_list: Union[str, List[str]]) -> Dict[str, Any]:
+    async def embed_documents(self, text_list: Union[str, List[str]]) -> Dict[str, Any]:
         """Generate embeddings for the provided text list and estimate token usage."""
         text_list = [text_list] if isinstance(text_list, str) else text_list
         embeddings = self.model.encode(text_list)

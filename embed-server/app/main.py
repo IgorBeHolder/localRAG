@@ -1,4 +1,3 @@
-import asyncio
 import os
 from concurrent.futures import ThreadPoolExecutor
 from contextlib import asynccontextmanager
@@ -11,6 +10,7 @@ from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
 from models.model_manager import ModelManager
 from pydantic import BaseModel, Field
+
 
 # from services.x_auth_token import get_x_token_key
 
@@ -81,6 +81,12 @@ class EmbeddingData(BaseModel):
     object: str = Field(example="embedding")
     embedding: List[float]
     index: int
+    uuid: Optional[str] = Field(
+        default=None, description="List of Unique ID for the documents"
+    )
+    usage: Optional[Dict[str, int]] = Field(
+        default=None, description="List of estimated token usage.",
+    )
 
 
 class EmbeddingOutput(BaseModel):
@@ -111,13 +117,11 @@ async def get_embeddings_endpoint(data: EmbeddingInput):
     if embed_model is None:
         raise HTTPException(status_code=500, detail="Model not initialized")
 
-    loop = asyncio.get_running_loop()
     try:
-        result = await loop.run_in_executor(
-            executor, embed_model.embed_documents, data.input
-        )
+        result = await embed_model.embed_documents(data.input)
         return result
     except Exception as e:
+        print(e)
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -195,9 +199,6 @@ class DocumentProcessOutput(BaseModel):
         default={"prompt_tokens": 0, "total_tokens": 0},
         description="List of estimated token usage.",
     )
-    uuid: List[str] = Field(
-        default="uuid", description="List of Unique ID for the documents"
-    )
 
 
 @app.post(
@@ -208,26 +209,30 @@ class DocumentProcessOutput(BaseModel):
 async def text_processor(data: DocumentProcessInput, request: Request):
     try:
         async with get_db_connection(request) as connection:
-            
             async with connection.transaction():
                 usage = {"prompt_tokens": 0, "total_tokens": 0}
-                embeddings_list = []  # list of responses: embedding, uuid, metadata
+                embeddings_list = []  # list of responses
                 uuids = []
-                for document in data.input:  # iterate over the list of documents
-                    # print(f"*** document: {document}")
-                    response = await insert_to_db(connection, document, embed_model)
-                    usage["prompt_tokens"] += response[1]["prompt_tokens"]
-                    usage["total_tokens"] += response[1]["total_tokens"]
-                    embeddings_list.extend(response[0])
-                    uuids.append(response[2])
+                for idx, document in enumerate(
+                    data.input
+                ):  # iterate over the list of documents
+                    response = await insert_to_db(
+                        connection, document, embed_model, idx
+                    )
+                    # print(f"*** response: {response[0]}")
+                    usage["prompt_tokens"] += response[0]["usage"]["prompt_tokens"]
+                    usage["total_tokens"] += response[0]["usage"]["total_tokens"]
+                    embeddings_list.append(response[0])
+                # print(f"*** embeddings_list: {embeddings_list}")
+                    # uuids.append(response[2])
             return DocumentProcessOutput(
                 object="list",
                 data=embeddings_list,
                 model=embed_model.model_name,
-                usage=usage,
-                uuid=uuids
+                usage=usage
             )
     except Exception as e:
+        print(e)
         raise HTTPException(status_code=500, detail=str(e))
 
 

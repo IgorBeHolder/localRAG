@@ -2,6 +2,7 @@ from typing import Dict, Tuple
 from asyncpg import Connection
 from models.model_manager import ModelManager
 from langchain.text_splitter import RecursiveCharacterTextSplitter
+import json
 
 
 def split_document(document: Dict) -> Dict:
@@ -23,7 +24,7 @@ async def check_for_duplicates(document_title, type, page_number):
 
 
 async def insert_to_db(
-    connection: Connection, document: Dict, embed_model: ModelManager
+    connection: Connection, document: Dict, embed_model: ModelManager, idx: int
 ):
     document_title = document.document_title
     type = document.type
@@ -32,59 +33,61 @@ async def insert_to_db(
     tables = document.tables
     images = document.images
     metadata = document.metadata
-    embedding_list = []
-    usage = {"prompt_tokens": 0, "total_tokens": 0}
-    # embedding_data={"object": "embedding", "embedding": [], "index": 0}
+    embeddings_list = []
 
-    # ToDo: implement the document splitting logic
-    document_for_splitting = document.text_chunk
-    document_chunks = split_document(document_for_splitting)
-    for ids, document_chunk in enumerate(document_chunks):
-        # print(f'************{document_chunk.page_content}')
-        response = embed_model.embed_documents(document_chunk.page_content)
-        embeddings = response["data"][0]["embedding"]
-        embedding_data = {
-            "object": "embedding",  # assuming 'object' is a required field
-            "embedding": embeddings,
-            "index": ids,  # if 'index' is required, provide the value
-            # include other necessary fields of EmbeddingData here
+    # Splitting the document into chunks
+    document_chunks = split_document(document.text_chunk)
+    texts_to_embed = [chunk.page_content for chunk in document_chunks]
+
+    try:
+        response = await embed_model.embed_documents(texts_to_embed)
+    except Exception as e:
+        raise
+
+    document_guid = ""
+
+    # print("*********** metadata", metadata)
+    if not await check_for_duplicates(document_title, type, page_number):
+        # Start transaction
+        async with connection.transaction():
+            # Insert document details and return id and guid
+            inserted_row = await connection.fetchrow(
+                """
+                INSERT INTO documents(document_title, type, text_chunk, page_number, doc_path, tables, images, metadata)
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+                RETURNING id, guid
+                """,
+                document_title,
+                type,
+                document.text_chunk,
+                page_number,
+                doc_path,
+                tables,
+                images,
+                json.dumps(metadata),
+            )
+
+            document_id, document_guid = inserted_row["id"], inserted_row["guid"]
+
+            # Insert embeddings
+            for embedding_data in response["data"]:
+                await connection.execute(
+                    """
+                    INSERT INTO embeddings(document_id, embedding_vector)
+                    VALUES ($1, $2)
+                    """,
+                    document_id,
+                    embedding_data["embedding"],
+                )
+
+    embeddings_list.append(
+        {
+            "object": "embedding",
+            "embedding": response["data"][0]["embedding"],
+            "index": idx,
+            "uuid": str(document_guid),
+            "usage": response["usage"],
         }
-        embedding_list.append(embedding_data)
-        # embedding_data["index"].append(ids)
-        # print(f"************{embedding_data}")
-        tokens_usage = response["usage"]
-        tokens_usage["prompt_tokens"] += response["usage"]["prompt_tokens"]
-        tokens_usage["total_tokens"] += response["usage"]["total_tokens"]
-        # print(f'************{uuids}')
-    # if not await check_for_duplicates():
-    #     # Start transaction
-    #     async with connection.transaction():
-    #         await connection.execute(
-    #             """
-    #                 INSERT INTO documents(text_chunk, type, page_number, doc_path, tables, images, metadata, embedding_vector)
-    #                 VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-    #                 """,
-    #             document_title,
-    #             type,
-    #             page_number,
-    #             doc_path,
-    #             tables,
-    #             images,
-    #             metadata,
-    #             embedding_vector,
-    #         )
+    )
 
-    # Insert embeddings for the entire document if necessary
-    # await connection.execute(
-    #     """
-    #     INSERT INTO embeddings(id, embedding_vector)
-    #     VALUES ($1, $2)
-    #     """,
-    #     collection_id,  # Assuming the document's collection ID is used for embeddings
-    #     embedding,
-    # )
-
-    # Return the result data
-    # Construct the embedding_data to return based on the inserted data and embeddings
-
-    return embedding_list, tokens_usage, "my_uuids"
+    return embeddings_list
