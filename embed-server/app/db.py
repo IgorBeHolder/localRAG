@@ -34,6 +34,7 @@ async def insert_to_db(
     images = document.images
     metadata = document.metadata
     embeddings_list = []
+    document_guid = ""
 
     # Splitting the document into chunks
     document_chunks = split_document(document.text_chunk)
@@ -42,12 +43,10 @@ async def insert_to_db(
     try:
         response = await embed_model.embed_documents(texts_to_embed)
     except Exception as e:
-        raise
+        print(f"*** Exception: {e}")
+        raise e
 
-    document_guid = ""
-
-    # print("*********** metadata", metadata)
-    if not await check_for_duplicates(document_title, type, page_number):
+    if await check_for_duplicates(document_title, type, page_number):
         # Start transaction
         async with connection.transaction():
             # Insert document details and return id and guid
