@@ -17,8 +17,12 @@ from pydantic import BaseModel, Field
 
 PORT = int(os.getenv("PORT", 3004))
 HOST = os.getenv("HOST", "0.0.0.0")
-EMBEDDING_MODEL_NAME = os.getenv("EMBEDDING_MODEL_NAME")
-DATABASE_URL = os.getenv("DATABASE_URL")
+EMBEDDING_MODEL_NAME = os.getenv(
+    "EMBEDDING_MODEL_NAME", "sentence-transformers/all-distilroberta-v1"
+)
+DATABASE_URL = os.getenv(
+    "DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/postgres"
+)
 
 
 @asynccontextmanager
@@ -118,33 +122,43 @@ async def get_embeddings_endpoint(data: EmbeddingInput):
 
 
 # document processor **************************************************************************
-class Section(BaseModel):
-    section_id: Optional[int] = Field(default=None, example=1, description="Section ID")
-    parent_section_id: Optional[int] = Field(
-        default=None, example=0, description="Parent Section ID"
-    )
-    text: Optional[str] = Field(
-        default=None,
-        example="Стороны договора.",
-        description="Section Text",
-    )
-
-
 class DocumentInput(BaseModel):
     document_title: str = Field(
         default="",
-        example="Договор на оказание информационных услуг",
+        example="Инструкция по эксплуатации изделия Focal Chorus SW 700/800 V",
         description="Document Title",
     )
-    collection_id: Optional[int] = Field(
-        default=None, example=1, description="Collection ID"
-    )
-    structure: Optional[List[Section]] = Field(
+    type: int = Field(default=1, example=1, description="Document type")
+    text_chunk: Optional[str] = Field(
         default=None,
-        example=[
-            {"section_id": 2, "parent_section_id": 0, "text": "Стороны договора."}
-        ],
-        description="List representing a document Structure",
+        example="""
+        Благодарим Вас за то, что вы выбрали акустику Focal! Focal(r) является зарегистрированной торговой маркой Focal-JMlab -BP 374 -108, rue de l\'Avenir - 42353 La Talaudiere cedex- France - Tel. (+33) 04 77 43 57 00 - Fax (+33) 04 77 43 57 04 - www.focal-fr.com www.focal-audio.ru ИЗГОТОВИТЕЛЬ: Фокал-Джи Эм Лаб, Франция, 42353 Ла Талодьер седекс, рю де л\'Авенир, ВР 374-108, тел. (33) 04 77 43 5700 ИМПОРТЕР: ЭКСКЛЮЗИВНЫЙ ДИСТРИБЬЮТОР ООО "Чернов Аудио". Россия, 123007, Москва, ул. 3-я Магистральная, д. 30, стр. 2, тел. + 7 (495) 721 1381, www.tchernovaudio.ru. Товар сертифицирован Сертификат соответствия № РОСС FR.АЯ46.В14949. Срок действия сертификата по 19.03.2011 г. Адрес органа сертификации (почтовый) : 117418 , Москва, Нахимовский проспект, д.31. Телефон (495) 129 26 00 Страна происхождения : Франция Назначение: Сабвуфер. Излучатель низких частот.
+
+Мы рады поделиться с Вами нашей философией: "the Spirit of Sound". Focal - акустика высокого уровня, которая включает в себя последние разработки компании в сфере дизайна и высоких технологий для максимально достоверного воспроизведения фонограмм.
+
+Восклицательный знак в равностороннем треугольнике предупреждает пользователя о существовании важных инструкций по эксплуатации и обслуживанию (сервису), прилагаемых к изделию. Для того, чтобы получить максимальный результат от прослушивания акустики, мы рекомендуем Вам прочитать данную инструкцию по эксплуатации и сохранить ее, чтобы в дальнейшем обращаться к ней в случае возникновения вопросов. В связи с постоянно прогрессирующей технологией, Focal оставляет за собой право вносить изменения в спецификации без предварительного уведомления. Визуальные изображения могут не точно соответствовать определенному продукту.
+
+Если вы приобрели акустические системы у авторизованного дилера, рекомендуем Вам обратится к его помощи при инсталляции (подключения и настройки основных рабочих параметров) системы с участием его уполномоченного специалиста. Не пользуйтесь услугами лиц, не имеющих достаточной квалификации и опыта работы с дорогостоящей бытовой аудио-видео аппаратурой! В случае, если в районе, где вы проживаете нет авторизованных дилеров или центров по продаже и обслуживанию данной аппаратуры, или вы все же решили подключить систему сами, подробно изучите инструкцию по эксплуатации и проконсультируйтесь у нас по телефону (495) 721 13 81 или 8 800 200 00 81 (бесплатная линия поддержки) с 9 - 30 до 18-30 московского времени.
+
+Внимательно ознакомьтесь с настоящей инструкцией и условиями гарантийного (послегарантийного) обслуживания купленной вами аппаратуры. Только после этого приступайте к подключению!
+
+Запрещается включать АС в сеть переменного тока или трансляционные сети через акустические терминалы! Запрещается использовать бытовые АС с электромузыкальными инструментами в качестве мониторов! Убедитесь, что акустические системы стоят устойчиво и не могут быть опрокинуты! Мы не несем ответственности в случае падения наших систем на людей или домашних животных! Категорически запрещается использовать не оригинальные предохранители других номиналов и типов!
+
+Изображение молнии в равностороннем треугольнике предупреждает о наличии неизолированных токопроводящих частей внутри корпуса изделия, находящихся под напряжением, которое может иметь достаточную величину для возникновения риска поражения человека электричеством.
+
+Предупреждение! Внутри данного изделия отсутствуют части, которые Вы можете самостоятельно обслуживать! Внутри данного изделия есть напряжения опасные для жизни! Категорически запрещено вскрывать данное изделие! В связи с постоянно прогрессирующей технологией, Focal оставляет за собой право вносить изменения в спецификации без предварительного уведомления. Визуальные изображения могут не точно соответствовать определенному продукту.
+
+Динамики, которые используются в акустической системе, являются сложными электромеханическими устройствами и требуют определенного периода "приработки" перед тем, как раскрыть свои лучшие качества. Они должны адаптироваться к температуре и влажности в помещении. Период ввода в эксплуатацию зависит от условий и может длиться до нескольких недель. Для того, чтобы сократить этот период, мы рекомендуем позволить Вашей системе поработать вначале примерно 20 часов. Как только компоненты полностью войдут в рабочий режим, станет возможным насладиться всеми преимуществами Вашей акустической системы.'
+""",
+        description="Document Text to be embedded",
+    )
+    page_number: Optional[int] = Field(
+        default=None, example=1, description="Page number"
+    )
+    doc_path: Optional[str] = Field(
+        default=None,
+        example="/path/to/document.pdf",
+        description="Path of the document",
     )
     tables: Optional[List[str]] = Field(
         default=None, example=["Table1", "Table2"], description="List of tables"
@@ -152,45 +166,11 @@ class DocumentInput(BaseModel):
     images: Optional[List[str]] = Field(
         default=None, example=["Image1.png", "Image2.png"], description="List of images"
     )
-    page_number: Optional[str] = Field(
-        default=None, example="1", description="Page number"
-    )
-    text: Optional[str] = Field(
-        default=None,
-        example="Сторонами настояшего договора являются:\nИсполнитель - ООО 'Матрешка ИТ', Заказчик - АО 'Пинэпл интернешнл'",
-        description="Document Text to be embedded",
-    )
-    document_path: Optional[str] = Field(
-        default=None, example="/path/to/document.pdf", description="Document Path"
-    )
-    metadata: Dict[str, Union[str, int, float]] = Field(
+    metadata: Optional[Dict[str, Union[str, int, float]]] = Field(
         default=None,
         example={"author": "Author Name", "created_date": "2023-01-01"},
-        description="Metadata",
+        description="Metadata in JSONB format",
     )
-
-    class Config:
-        json_schema_extra = {
-            "examples": [
-                {
-                    "document_title": "Договор на оказание информационных услуг",
-                    "collection_id": 1,
-                    "structure": [
-                        {
-                            "section_id": 2,
-                            "parent_section_id": 0,
-                            "text": "Стороны договора.",
-                        }
-                    ],
-                    "tables": ["Table1", "Table2"],
-                    "images": ["Image1.png", "Image2.png"],
-                    "page_number": "1",
-                    "text": "Сторонами настояшего договора являются:\nИсполнитель - ООО 'Матрешка ИТ', Заказчик - АО 'Пинэпл интернешнл'",
-                    "document_path": "/path/to/document.pdf",
-                    "metadata": {"author": "Author Name", "created_date": "2023-01-01"},
-                }
-            ]
-        }
 
 
 class DocumentProcessInput(BaseModel):
@@ -221,24 +201,31 @@ class DocumentProcessOutput(BaseModel):
 
 
 @app.post(
-    "/text_processor",
+    "/ingest",
     response_model=DocumentProcessOutput,
-    description="Process a list of documents, store them in the database and return the embeddings and uuid",
+    description="Process a list of documents, store them in the database and return embeddings and the uuid",
 )
 async def text_processor(data: DocumentProcessInput, request: Request):
     try:
         async with get_db_connection(request) as connection:
-            response_list = []
+            
             async with connection.transaction():
                 usage = {"prompt_tokens": 0, "total_tokens": 0}
-                for document in data.input:
+                embeddings_list = []  # list of responses: embedding, uuid, metadata
+                uuids = []
+                for document in data.input:  # iterate over the list of documents
+                    # print(f"*** document: {document}")
                     response = await insert_to_db(connection, document, embed_model)
-                    usage["prompt_tokens"] += response["usage"]["prompt_tokens"]
-                    usage["total_tokens"] += response["usage"]["total_tokens"]
-                    response_list.extend(response)
-
+                    usage["prompt_tokens"] += response[1]["prompt_tokens"]
+                    usage["total_tokens"] += response[1]["total_tokens"]
+                    embeddings_list.extend(response[0])
+                    uuids.append(response[2])
             return DocumentProcessOutput(
-                data=response_list, model=data.model, usage=usage
+                object="list",
+                data=embeddings_list,
+                model=embed_model.model_name,
+                usage=usage,
+                uuid=uuids
             )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -262,7 +249,12 @@ async def get_model_name():
 def run():
     import uvicorn
 
-    uvicorn.run("main:app", host=HOST, port=PORT, reload=False)
+    uvicorn.run("main:app", host=HOST, port=PORT, reload=True)
+
 
 # to avoid postrges connection error
 # comment line 40: lifespan=app_lifespan,
+
+# changes while debugging in VSC:
+# 1. client-files/.env: change HOST to localhost
+# 2. set reload=True in run() function HERE

@@ -26,4 +26,6 @@ CMD ["postgres"]
 
 
 # docker build -t pgembeding .
+# cd ..
+# docker-compose -p localrag up -d --build
 
