@@ -9,6 +9,7 @@ EMBEDDING_MODEL_NAME = os.getenv("EMBEDDING_MODEL_NAME")
 MODELS_PATH = os.getenv("MODELS_PATH")
 DEVICE = os.getenv("DEVICE")
 DEFAULT_SUBFOLDER = ""
+AVER_WORD_TOKENS = os.getenv("AVER_WORD_TOKENS")
 
 print(f"*** EMBEDDING_MODEL_NAME: {EMBEDDING_MODEL_NAME}")
 print(f"*** MODELS_PATH: {MODELS_PATH}")
@@ -49,17 +50,22 @@ class ModelManager:
     async def embed_documents(self, text_list: Union[str, List[str]]) -> Dict[str, Any]:
         """Generate embeddings for the provided text list and estimate token usage."""
         text_list = [text_list] if isinstance(text_list, str) else text_list
-        embeddings = self.model.encode(text_list)
+        embeddings = self.model.encode(text_list, device=self.device)
 
         # Calculate estimated token usage
-        prompt_tokens = sum(len(text.split()) * 3 for text in text_list)
+        tokens = [len(text.split()) * float(AVER_WORD_TOKENS) for text in text_list]
 
         return {
             "object": "list",
             "data": [
-                {"object": "embedding", "embedding": embedding.tolist(), "index": i}
+                {"object": "embedding",
+                 "embedding": embedding.tolist(),
+                 "index": i,
+                 "usage": {"prompt_tokens": tokens[i],
+                           "total_tokens": tokens[i]}
+                 }
                 for i, embedding in enumerate(embeddings)
             ],
             "model": self.model_name,
-            "usage": {"prompt_tokens": prompt_tokens, "total_tokens": prompt_tokens},
+            "usage": {"prompt_tokens": sum(tokens), "total_tokens": sum(tokens)},
         }

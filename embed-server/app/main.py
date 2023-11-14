@@ -17,26 +17,30 @@ from pydantic import BaseModel, Field
 
 PORT = int(os.getenv("PORT", 3004))
 HOST = os.getenv("HOST", "0.0.0.0")
-EMBEDDING_MODEL_NAME = os.getenv(
-    "EMBEDDING_MODEL_NAME", "sentence-transformers/all-distilroberta-v1"
-)
+EMBEDDING_MODEL_NAME = os.getenv("EMBEDDING_MODEL_NAME", "no_name_model")
 DATABASE_URL = os.getenv(
     "DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/postgres"
 )
 
 
 @asynccontextmanager
-async def get_db_connection(request: Request):
+async def get_db_connection(request: Request) -> Connection:
+    """Asynchronous context manager for acquiring and releasing
+    a database connection from a connection pool
+    """
     async with request.app.state.db_pool.acquire() as connection:
-        yield connection
+        yield connection  # return connection to the pool
 
 
 @asynccontextmanager
-async def app_lifespan(app: FastAPI):
+async def app_lifespan(app: FastAPI) -> None:
+    """Asynchronous context manager for initializing and closing
+    the database connection pool when the application starts and stops
+    """
     global embed_model
     embed_model = ModelManager()
     app.state.db_pool = await create_pool(DATABASE_URL)
-    yield
+    yield  # the FastAPI app runs and serves requests
     await app.state.db_pool.close()
 
 
@@ -52,6 +56,8 @@ app = FastAPI(
 
 # /v1/embeddings ******************************************************************************
 class EmbeddingInput(BaseModel):
+    """Define the input schema for the /v1/embeddings endpoint."""
+
     model: str = Field(
         default=EMBEDDING_MODEL_NAME,
         description="Model used to generate the embeddings.",
@@ -78,18 +84,23 @@ class EmbeddingInput(BaseModel):
 
 
 class EmbeddingData(BaseModel):
+    """Define the output schema for the EmbeddingData.
+    Used in the EmbeddingOutput schema.
+    uuid and usage are optional fields. (v1/ingest endpoint)
+    """
+
     object: str = Field(example="embedding")
     embedding: List[float]
     index: int
-    uuid: Optional[str] = Field(
-        default=None, description="List of Unique ID for the documents"
-    )
     usage: Optional[Dict[str, int]] = Field(
-        default=None, description="List of estimated token usage.",
+        default=None,
+        description="List of estimated token usage.",
     )
 
 
 class EmbeddingOutput(BaseModel):
+    """Define the output schema for the embeddings endpoint."""
+
     object: str = Field(default="list", example="list")
     data: List[EmbeddingData] = Field(
         description="List of generated embeddings for the input text."
@@ -104,6 +115,7 @@ class EmbeddingOutput(BaseModel):
     )
 
 
+# Creates a pool of threads that can execute calls asynchronously
 executor = ThreadPoolExecutor(max_workers=os.cpu_count() // 2)
 
 embed_model: Optional[ModelManager] = None
@@ -113,8 +125,10 @@ embed_model: Optional[ModelManager] = None
     "/v1/embeddings",
     response_model=EmbeddingOutput,
 )
-async def get_embeddings_endpoint(data: EmbeddingInput):
+async def get_embeddings_endpoint(data: EmbeddingInput) -> EmbeddingOutput:
+    """Generate embeddings for the provided text list and estimate token usage."""
     if embed_model is None:
+        print("Model not initialized")
         raise HTTPException(status_code=500, detail="Model not initialized")
 
     try:
@@ -127,6 +141,11 @@ async def get_embeddings_endpoint(data: EmbeddingInput):
 
 # document processor **************************************************************************
 class DocumentInput(BaseModel):
+    """
+    Define the input schema for the /v1/ingest endpoint
+    for the single document
+    """
+
     document_title: str = Field(
         default="",
         example="Инструкция по эксплуатации изделия Focal Chorus SW 700/800 V",
@@ -173,23 +192,32 @@ class DocumentInput(BaseModel):
     metadata: Optional[Dict[str, Union[str, int, float]]] = Field(
         default=None,
         example={"author": "Author Name", "created_date": "2023-01-01"},
-        description="Metadata in JSONB format",
+        description="Metadata in JSONB format (should be serialized to string before storing in DB)",
     )
 
 
 class DocumentProcessInput(BaseModel):
+    """
+    Define the input schema for the '/v1/ingest' endpoint
+    for the list of documents
+    """
+
     model: str = Field(
         default=EMBEDDING_MODEL_NAME, description="Name of the model to be used"
     )
     input: List[DocumentInput] = Field(
-        default=None, description="List of documents to be processed"
+        default=None, description="Text chunk to be processed"
     )
 
 
 class DocumentProcessOutput(BaseModel):
+    """
+    Define the output schema for the /v1/ingest endpoint
+    """
+
     object: str = Field(default="list")
     data: List[EmbeddingData] = Field(
-        default=None, description="List of generated embeddings for the input text."
+        default=None, description="List of generated embeddings for the input texts."
     )
     model: str = Field(
         default=EMBEDDING_MODEL_NAME,
@@ -199,38 +227,25 @@ class DocumentProcessOutput(BaseModel):
         default={"prompt_tokens": 0, "total_tokens": 0},
         description="List of estimated token usage.",
     )
+    uuid: Optional[str] = Field(
+        default=None, description="List of Unique ID for the documents"
+    )
 
 
 @app.post(
-    "/ingest",
+    "/v1/ingest",
     response_model=DocumentProcessOutput,
-    description="Process a list of documents, store them in the database and return embeddings and the uuid",
+    description="""
+    Process a text chunk, store it in the database and return embeddings and the uuid.
+    UUID is generated by the database and is used to retrieve the text chunk from the database.
+    """,
 )
-async def text_processor(data: DocumentProcessInput, request: Request):
+async def text_processor_endpoint(data: DocumentProcessInput, request: Request):
     try:
         async with get_db_connection(request) as connection:
             async with connection.transaction():
-                usage = {"prompt_tokens": 0, "total_tokens": 0}
-                embeddings_list = []  # list of responses
-                uuids = []
-                for idx, document in enumerate(
-                    data.input
-                ):  # iterate over the list of documents
-                    response = await insert_to_db(
-                        connection, document, embed_model, idx
-                    )
-                    # print(f"*** response: {response[0]}")
-                    usage["prompt_tokens"] += response[0]["usage"]["prompt_tokens"]
-                    usage["total_tokens"] += response[0]["usage"]["total_tokens"]
-                    embeddings_list.append(response[0])
-                # print(f"*** embeddings_list: {embeddings_list}")
-                    # uuids.append(response[2])
-            return DocumentProcessOutput(
-                object="list",
-                data=embeddings_list,
-                model=embed_model.model_name,
-                usage=usage
-            )
+                response = await insert_to_db(connection, data.input[0], embed_model)
+            return response
     except Exception as e:
         print(e)
         raise HTTPException(status_code=500, detail=str(e))
@@ -254,7 +269,7 @@ async def get_model_name():
 def run():
     import uvicorn
 
-    uvicorn.run("main:app", host=HOST, port=PORT, reload=False)
+    uvicorn.run("main:app", host=HOST, port=PORT, reload=True)
 
 
 # to avoid postrges connection error

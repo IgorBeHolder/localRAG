@@ -24,7 +24,7 @@ async def check_for_duplicates(document_title, type, page_number):
 
 
 async def insert_to_db(
-    connection: Connection, document: Dict, embed_model: ModelManager, idx: int
+    connection: Connection, document: Dict, embed_model: ModelManager
 ):
     document_title = document.document_title
     type = document.type
@@ -33,14 +33,14 @@ async def insert_to_db(
     tables = document.tables
     images = document.images
     metadata = document.metadata
-    embeddings_list = []
     document_guid = ""
 
-    # Splitting the document into chunks
+    # Splitting the document into smaller text_chunks
     document_chunks = split_document(document.text_chunk)
     texts_to_embed = [chunk.page_content for chunk in document_chunks]
-
+    print(f"*** number of text_chunks: {len(texts_to_embed)}")
     try:
+        # Embedding the text_chunks as one batch
         response = await embed_model.embed_documents(texts_to_embed)
     except Exception as e:
         print(f"*** Exception: {e}")
@@ -58,7 +58,7 @@ async def insert_to_db(
                 """,
                 document_title,
                 type,
-                document.text_chunk,
+                document.text_chunk,  # the whole document text
                 page_number,
                 doc_path,
                 tables,
@@ -79,14 +79,5 @@ async def insert_to_db(
                     embedding_data["embedding"],
                 )
 
-    embeddings_list.append(
-        {
-            "object": "embedding",
-            "embedding": response["data"][0]["embedding"],
-            "index": idx,
-            "uuid": str(document_guid),
-            "usage": response["usage"],
-        }
-    )
-
-    return embeddings_list
+    response["uuid"] = str(document_guid)
+    return response
