@@ -4,7 +4,7 @@ from contextlib import asynccontextmanager
 from typing import Dict, List, Optional, Union
 
 from asyncpg import Connection, create_pool
-from db import insert_to_db
+from db import insert_to_db, get_similar_text
 
 from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
@@ -147,11 +147,15 @@ class DocumentInput(BaseModel):
     """
 
     document_title: str = Field(
-        default="",
+        default=None,
         example="Инструкция по эксплуатации изделия Focal Chorus SW 700/800 V",
         description="Document Title",
     )
-    type: int = Field(default=1, example=1, description="Document type")
+    type: int = Field(
+        default=3,
+        example=3,
+        description="Document type. 0-folder, 1-document, 2-section, 3-text_chunk, 4-question",
+    )
     text_chunk: Optional[str] = Field(
         default=None,
         example="""
@@ -180,7 +184,7 @@ class DocumentInput(BaseModel):
     )
     doc_path: Optional[str] = Field(
         default=None,
-        example="/path/to/document.pdf",
+        example="/Users/velo1/Downloads/Инструкция Focal SW 700(800)V (RUS).txt",
         description="Path of the document",
     )
     tables: Optional[List[str]] = Field(
@@ -246,6 +250,39 @@ async def text_processor_endpoint(data: DocumentProcessInput, request: Request):
             async with connection.transaction():
                 response = await insert_to_db(connection, data.input[0], embed_model)
             return response
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# search ***************************************************************************************
+class SearchRequest(BaseModel):
+    n_top: int = 5
+    text_for_search: str = Field(
+        default=None,
+        example="Какой телефон у торговой марки во Франции?",
+        description="Search string to find similar texts",
+    )
+    search_in_embeddings_only: bool = True
+
+
+class SearchResult(BaseModel):
+    matched_texts: List[str]  # or any other structure you want to return
+
+
+@app.post("/v1/search", response_model=SearchResult)
+async def search_texts(input: SearchRequest, request: Request):
+    try:
+        async with get_db_connection(request) as connection:
+            async with connection.transaction():
+                results = await get_similar_text(
+                    connection=connection,
+                    embed_model=embed_model,
+                    text_for_search=input.text_for_search,
+                    n_top=input.n_top,
+                    search_in_embeddings_only=input.search_in_embeddings_only,
+                )
+            return SearchResult(matched_texts=results)
     except Exception as e:
         print(e)
         raise HTTPException(status_code=500, detail=str(e))
