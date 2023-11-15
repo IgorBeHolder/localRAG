@@ -66,13 +66,15 @@ async def insert_to_db(
     images = document["images"]
     metadata = document["metadata"]
 
-
     # Splitting the document into smaller text_chunks
     document_chunks = split_document(
-        document["text_chunk"], chunk_size=200, chunk_overlap=0, separators=["\n\n"]
+        document["text_chunk"],
+        chunk_size=200,
+        chunk_overlap=20,
+        separators=["\n\n", "\n", ".", " "],
+        keep_separator=True,
     )
     print(f"*** Number of text_chunks: {len(document_chunks)}")
-
 
     for i, text in enumerate(document_chunks):
         print(f"\n*** Text chunk {i}, length: {len(text)}:\n {text}")
@@ -82,7 +84,6 @@ async def insert_to_db(
     except Exception as e:
         print(f"*** Exception during embedding: {e}")
         raise e
-
 
     document_guid = await check_for_duplicates(connection, document["text_chunk"])
     if document_guid is None:
