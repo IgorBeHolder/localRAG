@@ -7,7 +7,8 @@ load_dotenv("../../client-files/.env", verbose=True)  # for production
 # Modify the sys.path first
 add_sys_path([""])  # , "models", "services", "api", ""])
 
-# Now that the path is modified, import and run your main application
+
+# Now that the path is modified, import and run main application
 from app.main import run
 
 if __name__ == "__main__":

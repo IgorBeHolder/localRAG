@@ -1,12 +1,13 @@
 import os
+import uuid
 from concurrent.futures import ThreadPoolExecutor
 from contextlib import asynccontextmanager
 from typing import Dict, List, Optional, Union
 
 from asyncpg import Connection, create_pool
-from db import insert_to_db, get_similar_text
+from db import insert_to_db, get_similar_text, vectorize_document
 
-from fastapi import Depends, FastAPI, HTTPException, Request
+from fastapi import Depends, FastAPI, HTTPException, Request, UploadFile, File
 from fastapi.responses import JSONResponse
 from models.model_manager import ModelManager
 from pydantic import BaseModel, Field
@@ -248,7 +249,9 @@ async def text_processor_endpoint(data: DocumentProcessInput, request: Request):
     try:
         async with get_db_connection(request) as connection:
             async with connection.transaction():
-                response = await insert_to_db(connection, data.input[0], embed_model)
+                # Convert the Pydantic model to a dictionary
+                document_dict = data.input[0].model_dump()
+                response = await insert_to_db(connection, document_dict, embed_model)
             return response
     except Exception as e:
         print(e)
@@ -257,7 +260,7 @@ async def text_processor_endpoint(data: DocumentProcessInput, request: Request):
 
 # search ***************************************************************************************
 class SearchRequest(BaseModel):
-    n_top: int = 5
+    n_top: int = 3
     text_for_search: str = Field(
         default=None,
         example="Какой телефон у торговой марки во Франции?",
@@ -271,7 +274,7 @@ class SearchResult(BaseModel):
 
 
 @app.post("/v1/search", response_model=SearchResult)
-async def search_texts(input: SearchRequest, request: Request):
+async def semantic_search(input: SearchRequest, request: Request):
     try:
         async with get_db_connection(request) as connection:
             async with connection.transaction():
@@ -303,10 +306,40 @@ async def get_model_name():
     return JSONResponse(content={"model_name": EMBEDDING_MODEL_NAME})
 
 
+# ingest_documents ***************************************************************************************
+@app.post("/ingest_document")
+async def ingest_document(request: Request, file: UploadFile = File(...)):
+    try:
+        # Establish a database connection
+        async with get_db_connection(request) as connection:
+            # Generate a unique filename using only UUID
+            # temp_filename = f"temp_{uuid.uuid4()}.txt" 
+            temp_filename = file.filename
+            # Read the file's content as bytes
+            file_content = file.file.read()
+
+            # Save the uploaded file temporarily
+            with open(temp_filename, "w+") as file_object:
+                file_content_str = file_content.decode('utf-8')
+                file_object.write(file_content_str)
+
+            # Process the document
+            await vectorize_document(temp_filename, connection, embed_model)  # Adjust as needed
+
+            # Clean up: Delete the temporary file after processing
+            os.remove(temp_filename)
+
+        return {"message": f"Document {file.filename} processed successfully"}
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+
 def run():
     import uvicorn
 
-    uvicorn.run("main:app", host=HOST, port=PORT, reload=False)
+    uvicorn.run("main:app", host=HOST, port=PORT, reload=True)
 
 
 # to avoid postrges connection error
