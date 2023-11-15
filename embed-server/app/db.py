@@ -69,7 +69,7 @@ async def insert_to_db(
 
     # Splitting the document into smaller text_chunks
     document_chunks = split_document(
-        document["text_chunk"], chunk_size=256, chunk_overlap=0, separators=["\n\n"]
+        document["text_chunk"], chunk_size=200, chunk_overlap=0, separators=["\n\n"]
     )
     print(f"*** Number of text_chunks: {len(document_chunks)}")
 
