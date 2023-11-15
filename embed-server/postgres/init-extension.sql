@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS documents (
     tables TEXT[],
     images TEXT[],     
     metadata JSONB,
-    embedding_vector REAL[384],
+    embedding_vector REAL[768],
     summary TEXT,
     is_deleted BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS documents (
 CREATE TABLE IF NOT EXISTS embeddings (
     id SERIAL PRIMARY KEY,
     document_id INTEGER REFERENCES documents(id) ON DELETE CASCADE,
-    embedding_vector REAL[384] NOT NULL
+    embedding_vector REAL[768] NOT NULL
 );
 
 -- B-tree index for the parent_id column in the documents table
@@ -33,7 +33,7 @@ CREATE INDEX IF NOT EXISTS idx_documents_parent_id ON documents (parent_id);
 
 -- HNSW index for the embedding_vector column in the documents table
 CREATE INDEX IF NOT EXISTS documents_embedding_vector_hnsw_idx ON documents USING hnsw (embedding_vector ann_cos_ops) WITH (
-    dims=384,
+    dims=768,
     m=7,
     efconstruction=64,
     efsearch=64
@@ -41,7 +41,7 @@ CREATE INDEX IF NOT EXISTS documents_embedding_vector_hnsw_idx ON documents USIN
 
 -- HNSW index for the embeddings table
 CREATE INDEX IF NOT EXISTS embeddings_hnsw_idx ON embeddings USING hnsw (embedding_vector ann_cos_ops) WITH (
-    dims=384,
+    dims=768,
     m=7,
     efconstruction=64,
     efsearch=64
