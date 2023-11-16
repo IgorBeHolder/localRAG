@@ -69,7 +69,7 @@ async def insert_to_db(
     # Splitting the document into smaller text_chunks
     document_chunks = split_document(
         document["text_chunk"],
-        chunk_size=128,
+        chunk_size=256,
         chunk_overlap=10,
         separators=["\n\n", "\n", ".", " "],
         keep_separator=True,
