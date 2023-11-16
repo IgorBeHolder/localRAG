@@ -246,13 +246,13 @@ const LanceDb = {
     const prompt = {
       role: "assistant",
       content:
-        `CONTEXT: \n\n
+        `[INST]CONTEXT: \n\n
     ${contextTexts
           .map((text, i) => {
             return `${i}\n${text}\n\n`;            
             // return `[CONTEXT ${i}]:\n${text}\n[END CONTEXT ${i}]\n\n`;
           })  
-          .join("")}`,
+          .join("")}[/INST]</s>`,
     };
     const memory = [{ role: "system", content: chatPrompt(workspace) }, prompt,
       { role: "user", content: input + '\nОтвечайте на русском языке.' }];
