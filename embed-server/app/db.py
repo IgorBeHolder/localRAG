@@ -70,7 +70,7 @@ async def insert_to_db(
     document_chunks = split_document(
         document["text_chunk"],
         chunk_size=256,
-        chunk_overlap=10,
+        chunk_overlap=64,
         separators=["\n\n", "\n", ".", " "],
         keep_separator=True,
     )
