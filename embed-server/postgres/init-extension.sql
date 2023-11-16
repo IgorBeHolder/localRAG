@@ -34,7 +34,7 @@ CREATE INDEX IF NOT EXISTS idx_documents_parent_id ON documents (parent_id);
 -- HNSW index for the embedding_vector column in the documents table
 CREATE INDEX IF NOT EXISTS documents_embedding_vector_hnsw_idx ON documents USING hnsw (embedding_vector ann_cos_ops) WITH (
     dims=384,
-    m=7,
+    m=8,
     efconstruction=64,
     efsearch=64
 );
@@ -42,7 +42,7 @@ CREATE INDEX IF NOT EXISTS documents_embedding_vector_hnsw_idx ON documents USIN
 -- HNSW index for the embeddings table
 CREATE INDEX IF NOT EXISTS embeddings_hnsw_idx ON embeddings USING hnsw (embedding_vector ann_cos_ops) WITH (
     dims=384,
-    m=7,
+    m=8,
     efconstruction=64,
     efsearch=64
 );

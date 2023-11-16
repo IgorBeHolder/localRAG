@@ -313,18 +313,20 @@ async def ingest_document(request: Request, file: UploadFile = File(...)):
         # Establish a database connection
         async with get_db_connection(request) as connection:
             # Generate a unique filename using only UUID
-            # temp_filename = f"temp_{uuid.uuid4()}.txt" 
+            # temp_filename = f"temp_{uuid.uuid4()}.txt"
             temp_filename = file.filename
             # Read the file's content as bytes
             file_content = file.file.read()
 
             # Save the uploaded file temporarily
             with open(temp_filename, "w+") as file_object:
-                file_content_str = file_content.decode('utf-8')
+                file_content_str = file_content.decode("utf-8")
                 file_object.write(file_content_str)
 
             # Process the document
-            await vectorize_document(temp_filename, connection, embed_model)  # Adjust as needed
+            await vectorize_document(
+                temp_filename, connection, embed_model
+            )  # Adjust as needed
 
             # Clean up: Delete the temporary file after processing
             os.remove(temp_filename)
@@ -333,7 +335,6 @@ async def ingest_document(request: Request, file: UploadFile = File(...)):
     except Exception as e:
         print(e)
         raise HTTPException(status_code=500, detail=str(e))
-
 
 
 def run():
