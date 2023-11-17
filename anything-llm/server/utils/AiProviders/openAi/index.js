@@ -90,7 +90,7 @@ class OpenAi {
         const json = await this.openai
           .createChatCompletion({
             model,
-            temperature: Number(workspace?.openAiTemp ?? 0.7),
+            temperature: Number(workspace?.openAiTemp ?? 0.21),
             n: 1, // only one completion/response will be generated
             messages: PROMPT_TEMPLATE,
           });
@@ -113,7 +113,7 @@ class OpenAi {
       }
     } else {
 
-      textResponse = await v1_chat_completions(PROMPT_TEMPLATE, Number(workspace?.openAiTemp ?? 0.33));
+      textResponse = await v1_chat_completions(PROMPT_TEMPLATE, Number(workspace?.openAiTemp ?? 0.22));
     }
 
     return textResponse;
@@ -123,7 +123,7 @@ class OpenAi {
   // used in:
   // anything-llm/server/utils/vectorDbProviders/lance/index.js:254  in LanceDB.query()
   // anything-llm/server/utils/vectorDbProviders/lance/index.js:304  in LanceDB.chat()
-  async getChatCompletion(messages = [], { temperature = 0.33 }) {
+  async getChatCompletion(messages = [], { temperature = 0.23 }) {
     const IS_OFFLINE = true; 
     const model = process.env.OPEN_MODEL_PREF || "gpt-3.5-turbo";
 
@@ -145,7 +145,7 @@ class OpenAi {
       return data.choices[0].message.content; 
 
     } else {
-      return await v1_chat_completions(messages);
+      return await v1_chat_completions(messages, temperature);
     }
   }
 

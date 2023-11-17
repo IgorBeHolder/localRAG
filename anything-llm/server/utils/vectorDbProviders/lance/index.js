@@ -163,8 +163,10 @@ const LanceDb = {
       // because we then cannot atomically control our namespace to granularly find/remove documents
       // from vectordb.
       const textSplitter = new RecursiveCharacterTextSplitter({
-        chunkSize: 512, // reduce from 1000 (embed-server has max_seq_length of 256 tokens)
+        chunkSize: 400, // reduce from 1000 (embed-server has max_seq_length of 256 tokens)
         chunkOverlap: 150,
+        separators: ["\n\n","\n"],
+        keep_separator: false
       });
       const textChunks = await textSplitter.splitText(pageContent);
 
@@ -246,19 +248,19 @@ const LanceDb = {
     const prompt = {
       role: "assistant",
       content:
-        `[INST]CONTEXT: \n\n
+        `[INST]КОНТЕКСТ: \n\n
     ${contextTexts
           .map((text, i) => {
             return `${i}\n${text}\n\n`;            
             // return `[CONTEXT ${i}]:\n${text}\n[END CONTEXT ${i}]\n\n`;
           })  
-          .join("")}[/INST]</s>`,
+          .join("")}[/INST]`,
     };
     const memory = [{ role: "system", content: chatPrompt(workspace) }, prompt,
-      { role: "user", content: input + '\nВ ответе используйте информации только из предоставленного контекста.' }];
+      { role: "user", content: input + '\n[INST]В ответе используйте информацию только из предоставленного контекста. Аргументируй ответ фактами из контекста. Отвечай на русскомх[/INST]</s>' }];
     console.log('LanceDb:query memory:', memory);
     const responseText = await LLMConnector.getChatCompletion(memory, {
-      temperature: workspace?.openAiTemp ?? 0.33,
+      temperature: workspace?.openAiTemp ?? 0.25,
     });
 
     return {
@@ -300,14 +302,15 @@ const LanceDb = {
     const prompt = {
       role: "system",
       content: `${chatPrompt(workspace)}
-      КОНТЕКСТ:
+      [INST]КОНТЕКСТ: \n\n
     ${contextTexts
-          .map((text, i) => {
-            return `[КОНТЕКСТ ${i}]:\n${text}\n[КОНЕЦ КОНТЕКСТА ${i}]\n\n`;
+        .map((text, i) => {
+          return `${i}\n${text}\n\n`;     
+            // return `[КОНТЕКСТ ${i}]:\n${text}\n[КОНЕЦ КОНТЕКСТА ${i}]\n\n`;
           })
-          .join("")}`,
+          .join("")}[/INST]`,
     };
-    const memory = [prompt, ...chatHistory, { role: "user", content: input }];
+    const memory = [prompt, ...chatHistory, { role: "user", content: input + '\n[INST] Аргументируй ответ фактами из контекста. Отвечай на русскомх[/INST]</s>' }];
     console.log('LanceDb:chat (from vectorized) memory:', memory);
     const responseText = await LLMConnector.getChatCompletion(memory, {
       temperature: workspace?.openAiTemp ?? 0.2,

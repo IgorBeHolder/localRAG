@@ -138,7 +138,7 @@ export default function WorkspaceSettings({workspace}) {
                   <br/>
                   Чем выше число (максимум 2.0), тем более случайным будет ответ.
                   <br/>
-                  Рекомендуется: 0.7
+                  Рекомендуется: 0.5
                 </p>
               </div>
               <input
@@ -148,7 +148,7 @@ export default function WorkspaceSettings({workspace}) {
                 max={2.0}
                 step={0.1}
                 onWheel={(e) => e.target.blur()}
-                defaultValue={workspace?.openAiTemp ?? 0.7}
+                defaultValue={workspace?.openAiTemp ?? 0.5}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-stone-600 dark:border-stone-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="0.7"
                 required={true}
