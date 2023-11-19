@@ -257,7 +257,7 @@ const LanceDb = {
           .join("")}[/INST]`,
     };
     const memory = [{ role: "system", content: chatPrompt(workspace) }, prompt,
-      { role: "user", content: input + '\n[INST]В ответе используйте информацию только из предоставленного контекста. Аргументируй ответ фактами из контекста. Отвечай на русскомх[/INST]</s>' }];
+      { role: "user", content: '\n[INST]В ответе используй информацию только из предоставленного контекста. Аргументируй ответ фактами из контекста. Перед ответом изучи весь предоставленный контекст. Отвечай на русском языке[/INST]</s>' + input  }];
     console.log('LanceDb:query memory:', memory);
     const responseText = await LLMConnector.getChatCompletion(memory, {
       temperature: workspace?.openAiTemp ?? 0.25,
