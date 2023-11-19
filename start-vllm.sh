@@ -5,9 +5,19 @@ echo "Building the vllm container..."
 
 cd vllm/docker
 git checkout main
-docker stop vllm-cont
-docker rm vllm-cont
-docker-compose -p localrag -f docker-compose.yml up  --build
+
+# Check if the "vllm-cont" container is running and stop it if it is
+container_id=$(docker ps -a -q -f name=^/vllm-cont$)
+if [ ! -z "$container_id" ]; then
+    echo "Removing existing container with name 'vllm-cont'..."
+    docker rm -f $container_id
+fi
+
+docker-compose -p localrag -f docker-compose.yml up --build
+
+)
+
+
 
 
 # git checkout main
@@ -21,4 +31,4 @@ docker-compose -p localrag -f docker-compose.yml up  --build
 #     --port 3003 \
 #     --model="/model-store/mistralai/Mistral-7B-Instruct-v0.1"
 
-) 
+# ) 
