@@ -49,13 +49,13 @@ export default function ConfirmationModal({
         className="w-fit px-10 p-4 min-w-1/2 rounded-lg bg-white shadow dark:bg-stone-700 text-black dark:text-slate-200">
         <div className="flex flex-col w-full">
           <p className="font-semibold">
-            Вы уверены, что хотите встроить эти документы?
+            Вы уверены, что хотите обработать эти документы?
           </p>
 
           <div className="flex flex-col gap-y-1">
             {dollarValue <= 0 ? (
               <p className="text-base mt-4">
-                Вы будете вставлять новые документы ({additions.length}) в это рабочее пространство.
+                Загруженные документы ({additions.length}) будут обработаны и добавлены в это рабочее пространство.
                 <br/>
                 Это не повлечет за собой никаких затрат на кредиты OpenAI.
               </p>
