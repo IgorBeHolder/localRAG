@@ -124,7 +124,7 @@ export default function PromptInput({
 const Tracking = memo(({workspaceSlug}) => {
   const storageKey = `workspace_chat_mode_${workspaceSlug}`;
   const [chatMode, setChatMode] = useState(
-    window.localStorage.getItem(storageKey) ?? "chat"
+    window.localStorage.getItem(storageKey) ?? "query"
   );
 
   useEffect(() => {
