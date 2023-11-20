@@ -10,6 +10,6 @@ fi
 cd anything-llm
 git checkout main
 cd docker
-docker-compose -p localrag up -d --build
-
+docker-compose --env-file ../../client-files/.env -p localrag up -d --build
+# here we use .env from the common project folder
 )

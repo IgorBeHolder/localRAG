@@ -7,7 +7,7 @@ services:
     image: anyth-cpu:v1
     platform: linux/amd64
     env_file:
-      - .env 
+      - ../../client-files/.env
     build:
       context: ../.
       dockerfile: ./docker/Dockerfile

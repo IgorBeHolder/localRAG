@@ -59,7 +59,7 @@ const LanceDb = {
     const response = await collection
       .search(queryVector)
       .metricType("cosine")
-      .limit(5)
+      .limit(7) // limit the number of results returned. Was 5
       .execute();
 
     response.forEach((item) => {
@@ -163,8 +163,8 @@ const LanceDb = {
       // because we then cannot atomically control our namespace to granularly find/remove documents
       // from vectordb.
       const textSplitter = new RecursiveCharacterTextSplitter({
-        chunkSize: 400, // reduce from 1000 (embed-server has max_seq_length of 256 tokens)
-        chunkOverlap: 150,
+        chunkSize: 500, // reduce from 1000 (embed-server has max_seq_length of 256 tokens)
+        chunkOverlap: 300,
         separators: ["\n\n","\n"],
         keep_separator: false
       });
@@ -248,19 +248,21 @@ const LanceDb = {
     const prompt = {
       role: "assistant",
       content:
-        `[INST]КОНТЕКСТ: \n\n
+        // `[INST]КОНТЕКСТ: \n\n
+        `КОНТЕКСТ: \n\n
     ${contextTexts
           .map((text, i) => {
             return `${i}\n${text}\n\n`;            
             // return `[CONTEXT ${i}]:\n${text}\n[END CONTEXT ${i}]\n\n`;
           })  
-          .join("")}[/INST]`,
+        // .join("")}[/INST]`,
+        .join("")}`,
     };
     const memory = [{ role: "system", content: chatPrompt(workspace) }, prompt,
-      { role: "user", content: '\n[INST]В ответе используй информацию только из предоставленного контекста. Аргументируй ответ фактами из контекста. Перед ответом изучи весь предоставленный контекст. Отвечай на русском языке[/INST]</s>' + input  }];
+      { role: "user", content: '\n[INST]В ответе используй информацию только из предоставленного контекста. Аргументируй ответ фактами из контекста. Перед ответом внимательно изучи весь предоставленный контекст. Отвечай на русском языке[/INST]</s>' + input  }];
     console.log('LanceDb:query memory:', memory);
     const responseText = await LLMConnector.getChatCompletion(memory, {
-      temperature: workspace?.openAiTemp ?? 0.25,
+      temperature: workspace?.openAiTemp ?? 0.2,
     });
 
     return {
