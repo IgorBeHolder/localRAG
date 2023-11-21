@@ -136,9 +136,7 @@ export default function WorkspaceSettings({workspace}) {
                 <p className="text-xs text-gray-600 dark:text-stone-400">
                   Этот параметр определяет, насколько «случайными» или динамичными будут ваши ответы в чате.
                   <br/>
-                  Чем выше число (максимум 2.0), тем более случайным будет ответ.
-                  <br/>
-                  Рекомендуется: 0.5
+                  Чем выше число (максимум 2.0), тем более случайным будет ответ (эффект галлюцинаций).
                 </p>
               </div>
               <input
@@ -148,9 +146,9 @@ export default function WorkspaceSettings({workspace}) {
                 max={2.0}
                 step={0.1}
                 onWheel={(e) => e.target.blur()}
-                defaultValue={workspace?.openAiTemp ?? 0.5}
+                defaultValue={workspace?.openAiTemp ?? 0.2}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-stone-600 dark:border-stone-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="0.7"
+                placeholder="0.5"
                 required={true}
                 autoComplete="off"
                 onChange={() => setHasChanges(true)}
@@ -195,9 +193,9 @@ export default function WorkspaceSettings({workspace}) {
                   История чата
                 </label>
                 <p className="text-xs text-gray-600 dark:text-stone-400">
-                  Количество предыдущих чатов, которые будут включены в кратковременную память ответа.
+                  Количество предыдущих вопрос-ответов, которые будут включены в кратковременную память текущего ответа.
                   <br/>
-                  Рекомендуется 20. Если значение больше 45, это может привести к сбоям в чате в зависимости
+                  При больших значениях увеличивается время на ответ. Если значение больше 20, это может привести к сбоям в чате в зависимости
                   от размера сообщения.
                 </p>
               </div>
@@ -205,12 +203,12 @@ export default function WorkspaceSettings({workspace}) {
                 name="openAiHistory"
                 type="number"
                 min={1}
-                max={45}
+                max={20}
                 step={1}
                 onWheel={(e) => e.target.blur()}
-                defaultValue={workspace?.openAiHistory ?? 20}
+                defaultValue={workspace?.openAiHistory ?? 7}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-stone-600 dark:border-stone-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="20"
+                placeholder="7"
                 required={true}
                 autoComplete="off"
                 onChange={() => setHasChanges(true)}

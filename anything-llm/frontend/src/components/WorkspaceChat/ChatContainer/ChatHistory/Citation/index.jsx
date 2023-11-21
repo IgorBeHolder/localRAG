@@ -9,7 +9,7 @@ function combineLikeSources(sources) {
   sources.forEach((source) => {
     const {id, title, text} = source;
     if (combined.hasOwnProperty(title)) {
-      combined[title].text += `\n\n ---- Chunk ${id || ""} ---- \n\n${text}`;
+      combined[title].text += `\n\n ---- Цитата ${id || ""} ---- \n\n${text}`;
       combined[title].references += 1;
     } else {
       combined[title] = {title, text, references: 1};
