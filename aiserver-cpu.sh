@@ -27,3 +27,5 @@ rm "$tarball_name"
 md5sum "$tarball_name.gz" > "md5sum_$tarball_name.gz.txt"
 
 echo "Script completed successfully."
+
+echo "Script completed successfully."

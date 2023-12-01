@@ -26,4 +26,6 @@ rm "$tarball_name"
 # Generate MD5 checksum and save to a file
 md5sum "$tarball_name.gz" > "md5sum_$tarball_name.gz.txt"
 
+echo "md5sum saved to md5sum_$tarball_name.gz.txt"
+
 echo "Script completed successfully."
