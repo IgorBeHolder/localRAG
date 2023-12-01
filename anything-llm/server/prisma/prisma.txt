@@ -1,0 +1,44 @@
++---------------------+         +---------------------+         +---------------------+
+| workspace_documents |         |       invites       |         |   system_settings   |
++---------------------+         +---------------------+         +---------------------+
+| id: Int (PK)        |         | id: Int (PK)        |         | id: Int (PK)        |
+| docId: String (U)   |         | code: String (U)    |         | label: String (U)  |
+| filename: String    |         | status: String     |         | value: String?     |
+| docpath: String     |         | claimedBy: Int?    |         | createdAt: DateTime|
+| workspaceId: Int    |         | createdAt: DateTime |         | lastUpdatedAt: DateTime|
+| metadata: String?   |         | createdBy: Int     |         +---------------------+
+| createdAt: DateTime |         | lastUpdatedAt: DateTime |
+| lastUpdatedAt: DateTime |      +---------------------+
+| workspace: workspaces|         
++---------------------+
+       
+                                +---------------------+
+                                |        users        |
+                                +---------------------+
+                                | id: Int (PK)        |
+                                | username: String (U)|
+                                | password: String    |
+                                | role: String        |
+                                | suspended: Int       |
+                                | createdAt: DateTime  |
+                                | lastUpdatedAt: DateTime |
+                                +---------------------+
+                                       |
+                   +---------------------+---------------------+
+                   |                 workspace_chats              |
+                   +---------------------+---------------------+
+                   | id: Int (PK)        | workspaceId: Int    |
+                   | prompt: String      | response: String    |
+                   | include: Boolean    | user_id: Int?       |
+                   | createdAt: DateTime  | lastUpdatedAt: DateTime |
+                   +---------------------+---------------------+
+                              |
+                   +---------------------+
+                   |    workspace_users   |
+                   +---------------------+
+                   | id: Int (PK)        |
+                   | user_id: Int         |
+                   | workspace_id: Int    |
+                   | createdAt: DateTime  |
+                   | lastUpdatedAt: DateTime |
+                   +---------------------+

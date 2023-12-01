@@ -1,0 +1,24 @@
+curl 194.135.112.219:8080/generate \
+    -X POST \
+    -d '{"inputs": "[INST]Наташа продала своим друзьям 48 конфет в апреле, затем в мае еще половину от продаж в апреле. Сколько всего конфет продала Наташа? Отвечай на русском языке[/INST]", "parameters": {"max_new_tokens": 128}}' \
+    -H 'Content-Type: application/json'
+    
+
+
+curl 194.135.112.219:8080/generate_stream \
+    -X POST \
+    -d '{"inputs": "[INST] Natalia sold clips to 48 of her friends in April, and then she sold half as many clips in May. How many clips did Natalia sell altogether in April and May? [/INST]", "parameters": {"max_new_tokens": 128}}' \
+    -H 'Content-Type: application/json'
+    
+    
+    
+curl 194.135.112.219:8080/generate \
+    -X POST \
+    -d '{"inputs": "[INST]Наташа продала своим друзьям 48 конфет в апреле, затем в мае еще половину от продаж в апреле. Сколько всего конфет продала Наташа? Отвечай на русском языке[/INST]", "parameters": {"max_new_tokens": 128, "adapter_id": "vineetsharma/qlora-adapter-Mistral-7B-Instruct-v0.1-gsm8k"}}' \
+    -H 'Content-Type: application/json'
+    
+    
+curl 194.135.112.219:8080/generate_stream \
+    -X POST \
+    -d '{"inputs": "[INST] Natalia sold clips to 48 of her friends in April, and then she sold half as many clips in May. How many clips did Natalia sell altogether in April and May? [/INST]", "parameters": {"max_new_tokens": 128, "adapter_id": "vineetsharma/qlora-adapter-Mistral-7B-Instruct-v0.1-gsm8k"}}' \
+    -H 'Content-Type: application/json'
