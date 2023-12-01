@@ -19,6 +19,7 @@ echo "Compressing tarball..."
 tar -czvf "$tarball_name.gz" \
 "$tarball_name"  \
 ./client-files &&
+# vllm.tar
 echo "Tarball compressed."
 
 rm "$tarball_name"
