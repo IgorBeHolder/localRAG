@@ -123,7 +123,7 @@ docker run -d --restart always \
   -v ./anything-llm/collector/outputs/:/app/collector/outputs \
   -p 3001:3001 \
   --network llm-net \
-  anyth-cpu:v1
+  anyth:v1
 echo -e "Web server started.\n-----------------------------"
 ) &&
 

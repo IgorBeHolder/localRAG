@@ -4,7 +4,7 @@ services:
   anyth:
     container_name: anyth
     restart: always
-    image: anyth-cpu:v1
+    image: anyth:v1
     platform: linux/amd64
     env_file:
       - ../../client-files/.env
