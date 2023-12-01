@@ -2,7 +2,7 @@
 set -e
 
 # Set the file name as a variable
-tarball_name="sherpa-aiserver_v0.1.tar"
+tarball_name="sherpa-aiserver-gpu_v0.1.tar"
 
 # save docker images to a tarball
 echo "Saving docker images to a tarball..."
@@ -17,7 +17,7 @@ echo "Docker images saved to a tarball."
 # Create a compressed tarball
 echo "Compressing tarball..."
 tar -czvf "$tarball_name.gz" \
-docker-images-gpu.tar  \
+"$tarball_name"  \
 ./client-files &&
 echo "Tarball compressed."
 
