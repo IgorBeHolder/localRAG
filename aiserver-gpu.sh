@@ -21,6 +21,8 @@ tar -czvf "$tarball_name.gz" \
 ./client-files &&
 echo "Tarball compressed."
 
+rm "$tarball_name"
+
 # Generate MD5 checksum and save to a file
 md5sum "$tarball_name.gz" > "md5sum_$tarball_name.gz.txt"
 
