@@ -20,7 +20,8 @@ class ModelManager:
         """Initialize the Model Manager."""
         model_name = os.getenv("EMBEDDING_MODEL_NAME")
         self.model_name = model_name.split("/")[-1]
-        self.device = DEVICE
+        # self.device = DEVICE
+        self.device = "cpu"
         self.model = self._load_model()
 
     def _get_model_path(self) -> pathlib.Path:
