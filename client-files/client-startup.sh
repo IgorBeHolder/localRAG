@@ -15,7 +15,11 @@ docker network ls | grep -q "llm-net" || docker network create "llm-net"
 # tar -xzvf models.tar.gz --overwrite
 
 # echo "Loading sherpa-aiserver docker images..."
-# docker load -i docker-images-cpu.tar
+if [ "$DEVICE" = "cpu" ]; then
+  docker load -i  sherpa-aiserver-cpu_v0.1.tar
+else
+  docker load -i  sherpa-aiserver-gpu_v0.1.tar
+fi
 
 # create folders for document processor
 echo "Creating folders for document processor..."
