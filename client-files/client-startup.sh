@@ -76,7 +76,7 @@ else
   container_id=$(docker ps -a -q -f name=^/vllm$)
   if [ ! -z "$container_id" ]; then
     docker stop "$container_id"
-    docker rm "$container_id"
+    # docker rm "$container_id"
   fi
   docker run --gpus all --restart always \
       -p 3003:3003 \
