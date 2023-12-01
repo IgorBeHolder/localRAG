@@ -31,7 +31,7 @@ def split_document(
     # split_documents , create_documents
     texts = text_splitter.split_text(document)
     # texts = text_splitter.split_documents(document)
-    # texts = [re.sub(r"\s+", " ", text.strip()) for text in texts]
+    # replace multiple whitespaces with a single whitespace
     texts = [whitespace_pattern.sub(" ", text.strip()) for text in texts]
 
     return texts
@@ -39,15 +39,14 @@ def split_document(
 
 async def check_for_duplicates(connection: Connection, text_chunk) -> str:
     """
-    Check if a document with the same title, type, page number, doc path,
-    and text_chunk already exists in the database and return its UUID.
+    Check if the same text chunk exists in the database.
 
     Returns:
-    - UUID of the duplicate document if it exists, None otherwise
+    - UUID of the duplicate text_chunk if it exists, None otherwise
     """
     query = """
-        SELECT guid FROM documents 
-        WHERE 
+        SELECT guid FROM documents
+        WHERE
             text_chunk = $1
         LIMIT 1
     """
@@ -57,7 +56,12 @@ async def check_for_duplicates(connection: Connection, text_chunk) -> str:
 
 async def insert_to_db(
     connection: Connection, document: Dict, embed_model: ModelManager
-):
+) -> Dict:
+    """
+    Insert the document into the database.
+    Returns:
+    - a dictionary with the UUID of the document and the embeddings
+    """
     document_title = document["document_title"]
     type = document["type"]
     page_number = document["page_number"]
@@ -139,6 +143,11 @@ async def get_similar_text(
     n_top: int,
     search_in_embeddings_only: bool = True,
 ) -> List[str]:
+    """
+    Search for similar text in the database.
+    Returns:
+    - a list of similar text chunks
+    """
     # Step 1: Embed the input text
     try:
         embedding = await embed_model.embed_documents([text_for_search])
@@ -200,7 +209,10 @@ async def get_similar_text(
 
 async def vectorize_document(
     file_path: str, connection: Connection, embed_model: ModelManager
-):
+) -> None:
+    """
+    Vectorize the document and insert it into the database.
+    """
     with open(file_path, "r") as file:
         document_content = file.read()
 
@@ -216,7 +228,7 @@ async def vectorize_document(
         # Process each chunk with insert_to_db
         document = {
             "document_title": None,
-            "type": 3,
+            "type": 3,  # 3 = text_chunk
             "page_number": None,
             "doc_path": file_path,
             "tables": [],

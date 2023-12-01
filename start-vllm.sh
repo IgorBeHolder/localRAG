@@ -14,6 +14,7 @@ if [ ! -z "$container_id" ]; then
 fi
 
 docker-compose -p localrag -f docker-compose.yml up --build
+# docker-compose -p localrag -f docker-compose.yml up -d
 
 )
 
