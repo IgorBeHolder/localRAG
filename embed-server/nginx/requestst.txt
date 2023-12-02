@@ -31,7 +31,7 @@ curl -X 'POST' 'http://46.254.21.170:3002/v1/completions' -H 'accept: applicatio
 Stream:
 curl -X 'POST' 'http://46.254.21.170:3002/v1/completions' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{"model": "llama2", "stream":"true", "prompt": "\n\n### Instructions:\nWhat is the capital of Canada?\n\n### Response:\n",  "stop": ["\n", "###" ]}'
 curl -X 'POST' 'http://194.135.112.219:3003/v1/completions' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{"model": "/model-store/mistralai/Mistral-7B-Instruct-v0.1", "stream":"true", "prompt": "\n\n### Instructions:\nWhat is the capital of Canada?\n\n### Response:\n",  "stop": ["\n", "###" ],"max_tokens":"512"}'
-
+curl -X 'POST' 'http://46.254.21.170:3002/v1/chat/completions' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{"model":"/model-store/mistralai/Mistral-7B-Instruct-v0.1", "messages": [{"content": "You are a helpful assistant.", "role": "system"}, {"content": "Compose a dialog between Einstein and Ghandi. Answer in russian", "role": "user"}], "max_tokens":"2048","stream":"true"}'
 
 
 vllm: ********************************************************************************************************************
