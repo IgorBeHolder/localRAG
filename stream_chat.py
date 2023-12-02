@@ -7,6 +7,7 @@ average_tokens_per_word = 2.4
 
 
 def make_request():
+    start_time = time.time()
     url = "http://46.254.21.170:3002/v1/chat/completions"
     headers = {
         "accept": "application/json",
@@ -17,13 +18,32 @@ def make_request():
         "model": "/model-store/mistralai/Mistral-7B-Instruct-v0.1",
         "messages": [
             {
-                "content": "<s>[INST]Вы полезный помощник. Суммаризируй текст пользователя. Отвечайте на вопросы пользователей на русском языке.[/INST]",
+                "content": "<s>[INST]Вы полезный помощник. Суммаризируй текст пользователя. Отвечайте на вопросы пользователя на русском языке.[/INST]",
                 "role": "system",
             },
             {
                 "content": """
+Text:\n\n
+**Yuri Gagarin: The Man Who Touched the Stars**
 
-ИЗГОТОВИТЕЛЬ: Фокал-Джи Эм Лаб, Франция, 42353 Ла Талодьер седекс, рю де л'Авенир, ВР 374-108, тел. (33) 04 77 43 5700
+In the annals of human history, few names resonate as profoundly as Yuri Gagarin's. On April 12, 1961, this Soviet cosmonaut achieved what had been the stuff of dreams and myths for millennia: he journeyed to space. In doing so, Gagarin didn't just orbit the Earth; he transcended earthly constraints, symbolizing the infinite potential of human endeavor.
+
+Gagarin's journey aboard the Vostok 1 spacecraft was a landmark achievement during the Cold War era. At a time when the United States and the Soviet Union were locked in a relentless Space Race, Gagarin's successful orbit around the Earth was not just a triumph of Soviet space technology but also a powerful assertion of Soviet prowess on the global stage. His flight, which lasted just 108 minutes, was brief, yet it changed the course of history and the way humanity perceived its place in the vast expanse of the universe.
+
+Born on March 9, 1934, in a small village west of Moscow, Gagarin's early life was marked by the struggles of World War II. His family faced hardships under Nazi occupation, and these experiences instilled in him a resilience that would come to define his character. From flying aircraft at a local flying club to his enrollment in the Soviet Air Force, Gagarin showcased exceptional skills and unwavering determination. Yet, even with his evident talent, no one could have predicted that this young pilot would become the first emissary of humankind to the cosmos.
+
+The choice of Gagarin for the historic Vostok 1 mission was based on a combination of his proficiency, his physique (which suited the compact cockpit of the spacecraft), and his impeccable character. The preparation for the mission was shrouded in secrecy, with rigorous training, simulations, and tests. As the countdown for the mission began, Gagarin, with his characteristic grin, reportedly said, "Let's go!" – a statement that showcased not just his own enthusiasm but the collective aspiration of humanity.
+
+His experience in space, though short, was transformative. As Gagarin orbited the Earth, he was moved by the beauty of our planet, a shimmering blue-and-white gem in the vast darkness of space. His descriptions of the Earth from space underscored a deep sense of unity, an understanding that borders, conflicts, and nationalities are transient divisions on the grand scale of the cosmos.
+
+When Gagarin returned to Earth, he was celebrated as a hero, not just in the Soviet Union but globally. Parades, honors, and accolades were showered upon him. But beyond the political and nationalistic overtones of these celebrations, Gagarin's journey held a deeper significance. He had broken the shackles of terrestrial gravity, symbolizing hope and the boundless possibilities of exploration. In him, people saw a reflection of their own aspirations, making Gagarin an eternal symbol of human achievement.
+
+However, the weight of his newfound status was a double-edged sword. While Gagarin continued to work with the Soviet space program and advocate for space exploration, his life post his historic journey was marked by challenges. The Soviet authorities, recognizing his invaluable symbolic stature, often shielded him from further spaceflights, fearing the potential risk to his life. This protective stance, while understandable, weighed heavily on Gagarin, who yearned to return to space.
+
+Tragically, Gagarin's life was cut short in a training jet crash in 1968. His untimely death was mourned globally. Monuments, streets, and even a city were named in his honor, and his legacy was cemented as the first human to journey into space.
+
+In conclusion, Yuri Gagarin's life, marked by its soaring highs and tragic end, remains an embodiment of humanity's quest for the unknown. His voyage to space aboard Vostok 1 was not just a victory for the Soviet Union but a triumph for mankind. Gagarin's legacy serves as a reminder that the spirit of exploration, the desire to push boundaries, and the pursuit of the unknown are intrinsic to the human experience. In looking up at the stars, we remember Gagarin, the man who touched them first, and in doing so, beckoned us all to reach higher, dream bigger, and journey farther.
+Summarization:\n\n
 </s>]
 """,
                 "role": "user",
@@ -40,17 +60,17 @@ def make_request():
             url, headers=headers, json=data, stream=True, timeout=3600
         )
         response.raise_for_status()
-        return response
+        return response, start_time
     except requests.exceptions.RequestException as e:
         print(f"Error making the request: {e}")
         sys.exit(1)
 
 
-def process_response(response):
-    accumulated_text = ""  # Store all received text for metrics
-    current_line = ""  # Buffer for the current line
-    line_length_limit = 96  # Maximum length of a line
-    start_time = time.time()
+def process_response(response, start_time):
+    accumulated_text = ""
+    current_line = ""
+    line_length_limit = 96
+    first_token_time = None  # New variable to track first token generation time
 
     for response_line in response.iter_lines():
         if response_line.startswith(b"data: "):
@@ -65,6 +85,10 @@ def process_response(response):
                     new_text = json_data["choices"][0]["delta"].get("content", "")
 
                     for char in new_text:
+                        if first_token_time is None:
+                            first_token_time = (
+                                time.time()
+                            )  # Set the time of first token generation
                         if char != "\n" and not (
                             char.isspace() and len(current_line) >= line_length_limit
                         ):
@@ -90,13 +114,17 @@ def process_response(response):
                 continue
 
     elapsed_time = time.time() - start_time
-    if current_line:  # Add any remaining text in the buffer
+    start_up_time = (
+        first_token_time - start_time if first_token_time else 0
+    )  # Calculate start-up time
+
+    if current_line:
         accumulated_text += "\n"
 
-    print_metrics(accumulated_text, elapsed_time)
+    print_metrics(accumulated_text, elapsed_time, start_up_time)
 
 
-def print_metrics(accumulated_text, elapsed_time):
+def print_metrics(accumulated_text, elapsed_time, start_up_time):
     word_count = len(accumulated_text.split())
     character_count = len(
         accumulated_text.replace("\n", "")
@@ -106,6 +134,9 @@ def print_metrics(accumulated_text, elapsed_time):
 
     # print("\n\nFinal Accumulated Text:\n" + accumulated_text)
     print("\n\nPerformance Metrics:")
+    print(
+        f" - Start-up Time: {start_up_time:.2f} seconds"
+    )  # Print the new start-up time metric
     print(
         f" - Tokens per second: {words_per_second*average_tokens_per_word:.2f} tokens per second"
     )
@@ -118,8 +149,8 @@ def print_metrics(accumulated_text, elapsed_time):
 
 
 def main():
-    response = make_request()
-    process_response(response)
+    response, start_time = make_request()
+    process_response(response, start_time)
 
 
 if __name__ == "__main__":
