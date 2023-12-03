@@ -13,16 +13,22 @@ def make_request():
         "accept": "application/json",
         "Content-Type": "application/json",
     }
+    BOS, EOS, boi, eoi = "<s>", "</s>", "[INST]", "[/INST]"
 
     data = {
         "model": "/model-store/mistralai/Mistral-7B-Instruct-v0.1",
         "messages": [
             {
-                "content": "<s>[INST]Вы полезный помощник. Суммаризируй текст пользователя. Отвечайте на вопросы пользователя на русском языке.[/INST]",
+                "content": f"{BOS}{boi}Вы полезный помощник. Суммаризируй Text пользователя. Отвечайте на вопросы пользователя на русском языке.\n{eoi}",
                 "role": "system",
             },
+            # {
+            #     "content": f"{BOS}{boi}### Instructions:\n Summarize the user's Text. Answer user questions in Russian.{eoi}",
+            #     "role": "system",
+            # },
             {
-                "content": """
+                "role": "user",
+                "content": f"""{boi}### Response:\n\n
 Text:\n\n
 **Yuri Gagarin: The Man Who Touched the Stars**
 
@@ -38,15 +44,7 @@ His experience in space, though short, was transformative. As Gagarin orbited th
 
 When Gagarin returned to Earth, he was celebrated as a hero, not just in the Soviet Union but globally. Parades, honors, and accolades were showered upon him. But beyond the political and nationalistic overtones of these celebrations, Gagarin's journey held a deeper significance. He had broken the shackles of terrestrial gravity, symbolizing hope and the boundless possibilities of exploration. In him, people saw a reflection of their own aspirations, making Gagarin an eternal symbol of human achievement.
 
-However, the weight of his newfound status was a double-edged sword. While Gagarin continued to work with the Soviet space program and advocate for space exploration, his life post his historic journey was marked by challenges. The Soviet authorities, recognizing his invaluable symbolic stature, often shielded him from further spaceflights, fearing the potential risk to his life. This protective stance, while understandable, weighed heavily on Gagarin, who yearned to return to space.
-
-Tragically, Gagarin's life was cut short in a training jet crash in 1968. His untimely death was mourned globally. Monuments, streets, and even a city were named in his honor, and his legacy was cemented as the first human to journey into space.
-
-In conclusion, Yuri Gagarin's life, marked by its soaring highs and tragic end, remains an embodiment of humanity's quest for the unknown. His voyage to space aboard Vostok 1 was not just a victory for the Soviet Union but a triumph for mankind. Gagarin's legacy serves as a reminder that the spirit of exploration, the desire to push boundaries, and the pursuit of the unknown are intrinsic to the human experience. In looking up at the stars, we remember Gagarin, the man who touched them first, and in doing so, beckoned us all to reach higher, dream bigger, and journey farther.
-Summarization:\n\n
-</s>]
-""",
-                "role": "user",
+Text Summarization:{eoi}{EOS}""",
             },
         ],
         "stream": "true",
