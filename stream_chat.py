@@ -22,15 +22,10 @@ def make_request():
                 "content": f"{BOS}{boi}Вы полезный помощник. Суммаризируй Text пользователя. Отвечайте на вопросы пользователя на русском языке.\n{eoi}",
                 "role": "system",
             },
-            # {
-            #     "content": f"{BOS}{boi}### Instructions:\n Summarize the user's Text. Answer user questions in Russian.{eoi}",
-            #     "role": "system",
-            # },
             {
                 "role": "user",
-                "content": f"""{boi}### Response:\n\n
-Text:\n\n
-**Yuri Gagarin: The Man Who Touched the Stars**
+                # "content": f"""{boi}Text:\n\n
+                "content": f"""{boi}**Yuri Gagarin: The Man Who Touched the Stars**
 
 In the annals of human history, few names resonate as profoundly as Yuri Gagarin's. On April 12, 1961, this Soviet cosmonaut achieved what had been the stuff of dreams and myths for millennia: he journeyed to space. In doing so, Gagarin didn't just orbit the Earth; he transcended earthly constraints, symbolizing the infinite potential of human endeavor.
 
@@ -40,18 +35,19 @@ Born on March 9, 1934, in a small village west of Moscow, Gagarin's early life w
 
 The choice of Gagarin for the historic Vostok 1 mission was based on a combination of his proficiency, his physique (which suited the compact cockpit of the spacecraft), and his impeccable character. The preparation for the mission was shrouded in secrecy, with rigorous training, simulations, and tests. As the countdown for the mission began, Gagarin, with his characteristic grin, reportedly said, "Let's go!" – a statement that showcased not just his own enthusiasm but the collective aspiration of humanity.
 
-His experience in space, though short, was transformative. As Gagarin orbited the Earth, he was moved by the beauty of our planet, a shimmering blue-and-white gem in the vast darkness of space. His descriptions of the Earth from space underscored a deep sense of unity, an understanding that borders, conflicts, and nationalities are transient divisions on the grand scale of the cosmos.
-
-When Gagarin returned to Earth, he was celebrated as a hero, not just in the Soviet Union but globally. Parades, honors, and accolades were showered upon him. But beyond the political and nationalistic overtones of these celebrations, Gagarin's journey held a deeper significance. He had broken the shackles of terrestrial gravity, symbolizing hope and the boundless possibilities of exploration. In him, people saw a reflection of their own aspirations, making Gagarin an eternal symbol of human achievement.
 
 Text Summarization:{eoi}{EOS}""",
             },
         ],
         "stream": "true",
-        "max_tokens": "512",
+        "max_tokens": 512,
         "temperature": 0.22,
         "frequency_penalty": 1.2,
     }
+
+# His experience in space, though short, was transformative. As Gagarin orbited the Earth, he was moved by the beauty of our planet, a shimmering blue-and-white gem in the vast darkness of space. His descriptions of the Earth from space underscored a deep sense of unity, an understanding that borders, conflicts, and nationalities are transient divisions on the grand scale of the cosmos.
+
+# When Gagarin returned to Earth, he was celebrated as a hero, not just in the Soviet Union but globally. Parades, honors, and accolades were showered upon him. But beyond the political and nationalistic overtones of these celebrations, Gagarin's journey held a deeper significance. He had broken the shackles of terrestrial gravity, symbolizing hope and the boundless possibilities of exploration. In him, people saw a reflection of their own aspirations, making Gagarin an eternal symbol of human achievement.
 
     try:
         response = requests.post(
@@ -130,20 +126,17 @@ def print_metrics(accumulated_text, elapsed_time, start_up_time):
     words_per_second = word_count / elapsed_time if elapsed_time > 0 else 0
     characters_per_second = character_count / elapsed_time if elapsed_time > 0 else 0
 
-    # print("\n\nFinal Accumulated Text:\n" + accumulated_text)
     print("\n\nPerformance Metrics:")
+    print(f" - Start-up Time: {start_up_time:.1f} s")
     print(
-        f" - Start-up Time: {start_up_time:.2f} seconds"
-    )  # Print the new start-up time metric
-    print(
-        f" - Tokens per second: {words_per_second*average_tokens_per_word:.2f} tokens per second"
+        f" - Tokens per second: {words_per_second*average_tokens_per_word:.1f} tok/s"
     )
     print(
-        f" - Characters per second: {characters_per_second:.2f} characters per second"
+        f" - Characters per second: {characters_per_second:.1f} ch/s"
     )
-    print(f" - Overall Response Time: {elapsed_time:.2f} seconds")
-    print(f" - Total Tokens: {word_count*average_tokens_per_word:.0f} tokens")
-    print(f" - Total Characters: {character_count:.2f} characters")
+    print(f" - Overall Response Time: {elapsed_time:.1f} s")
+    print(f" - Total : {word_count*average_tokens_per_word:.0f} tokens")
+    print(f" -       : {character_count:.0f} characters")
 
 
 def main():
