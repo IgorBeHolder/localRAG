@@ -10,7 +10,13 @@ git checkout main
 container_id=$(docker ps -a -q -f name=^/vllm$)
 if [ ! -z "$container_id" ]; then
     echo "Removing existing container with name 'vllm'..."
-    # docker rm -f $container_id
+    docker rm -f $container_id
+fi
+# Check if the "llm-server-cpu" container is running and stop it if it is
+container_id=$(docker ps -a -q -f name=^/llm-server-cpu$)
+if [ ! -z "$container_id" ]; then
+    echo "Removing existing container with name 'vllm'..."
+    docker rm -f $container_id
 fi
 
 # docker-compose -p localrag -f docker-compose.yml up --build
