@@ -28,4 +28,4 @@ cp ./client-files/anythingllm.db ./anything-llm/server/storage/anythingllm.db
 chmod 777 ./anything-llm/server/storage/anythingllm.db
 
 echo "Run containers ..."
-./client-files/client-startup.sh
+./start.sh

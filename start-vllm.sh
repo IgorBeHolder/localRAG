@@ -7,14 +7,14 @@ cd vllm/docker
 git checkout main
 
 # Check if the "vllm-cont" container is running and stop it if it is
-container_id=$(docker ps -a -q -f name=^/vllm-cont$)
+container_id=$(docker ps -a -q -f name=^/vllm$)
 if [ ! -z "$container_id" ]; then
-    echo "Removing existing container with name 'vllm-cont'..."
-    docker rm -f $container_id
+    echo "Removing existing container with name 'vllm'..."
+    # docker rm -f $container_id
 fi
 
-docker-compose -p localrag -f docker-compose.yml up --build
-# docker-compose -p localrag -f docker-compose.yml up -d
+# docker-compose -p localrag -f docker-compose.yml up --build
+docker-compose -p localrag -f docker-compose.yml up -d
 
 )
 

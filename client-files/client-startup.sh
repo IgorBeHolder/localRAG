@@ -16,6 +16,7 @@ docker network ls | grep -q "llm-net" || docker network create "llm-net"
 
 # echo "Loading sherpa-aiserver docker images..."
 if [ "$DEVICE" = "cpu" ]; then
+
   docker load -i  sherpa-aiserver-cpu_v0.1.tar
 else
   docker load -i  sherpa-aiserver-gpu_v0.1.tar
@@ -82,14 +83,17 @@ else
     docker stop "$container_id"
     # docker rm "$container_id"
   fi
-  docker run --gpus all --restart always \
-      -p 3003:3003 \
-      -v ./model-store/:/model-store/ \
-      --name vllm \
-      ghcr.io/mistralai/mistral-src/vllm:latest \
-      --host 0.0.0.0 \
-      --port 3003 \
-      --model="/model-store/mistralai/Mistral-7B-Instruct-v0.1"
+  docker-compose -p localrag -f docker-compose.yml up -d
+  # docker run --gpus all --restart always \
+  #     -p 3003:3003 \
+  #     -v ./model-store/:/model-store/ \
+  #     --name vllm \
+  #     ghcr.io/mistralai/mistral-src/vllm:latest \
+  #     --host 0.0.0.0 \
+  #     --port 3003 \
+  #     --model="/model-store/mistralai/Mistral-7B-Instruct-v0.1"
+
+
   echo -e "VLLM container started.\n-----------------------------"
   )
 fi
