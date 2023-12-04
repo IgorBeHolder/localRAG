@@ -13,7 +13,7 @@ if [ ! -z "$container_id" ]; then
     docker rm -f $container_id
 fi
 # Check if the "llm-server-cpu" container is running and stop it if it is
-container_id=$(docker ps -a -q -f name=^/llm-server-cpu.*$)
+container_id=$(docker ps -a -q -f name=^/llm-server$)
 if [ ! -z "$container_id" ]; then
     echo "Removing existing container with name 'llm-server-cpu'..."
     docker rm -f $container_id
