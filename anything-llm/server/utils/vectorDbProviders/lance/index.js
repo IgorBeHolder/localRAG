@@ -59,7 +59,7 @@ const LanceDb = {
     const response = await collection
       .search(queryVector)
       .metricType("cosine")
-      .limit(7) // limit the number of results returned. Was 5
+      .limit(3) // limit the number of results returned. Was 5
       .execute();
 
     response.forEach((item) => {
