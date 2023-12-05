@@ -263,17 +263,15 @@ const LanceDb = {
       context,
       {
         role: "user",
-        content: `
-    [INST]В ответе используй информацию только из предоставленного контекста. Аргументируй ответ фактами из контекста. Перед ответом внимательно изучи весь предоставленный контекст. Отвечай на русском языке
-    ${input}
-    [/INST]
-    `
-      }
+        content: `[INST]В ответе используй информацию только из предоставленного контекста.
+    Аргументируй ответ фактами из контекста. Перед ответом внимательно изучи весь предоставленный контекст.
+    Отвечай на русском языке.
+    ${input}/INST]`
+      }];
     console.log('LanceDb:QUERY memory:270', memory_list);
     const responseText = await LLMConnector.getChatCompletion(memory_list, {
       temperature: workspace?.openAiTemp ?? 0.2,
     });
-
     return {
       response: responseText,
       sources: this.curateSources(sourceDocuments),
