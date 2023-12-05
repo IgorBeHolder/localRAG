@@ -9,7 +9,7 @@ echo "Saving docker images to a tarball..."
 docker save -o "$tarball_name" \
 # anyth:v1 \
 # embed:v1 \
-nginx:latest \
+nginx:latest 
 # pgembeding:latest \
 # ghcr.io/mistralai/mistral-src/vllm:latest &&
 echo "Docker images saved to a tarball."
