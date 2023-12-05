@@ -22,7 +22,7 @@ remove_dir_if_exists() {
 
 echo "Removing db, cache files..."
 remove_if_exists "./anything-llm/server/storage/anythingllm.db"
-remove_dir_if_exists "./anything-llm/server/hotdir/storage/lancedb/"
+remove_dir_if_exists "./anything-llm/server/storage/lancedb/"
 remove_dir_if_exists "./anything-llm/server/storage/documents/custom-documents/"
 remove_dir_if_exists "./anything-llm/server/storage/vector-cache/"
 
