@@ -18,13 +18,13 @@ echo "Docker images saved to a tarball."
 echo "Compressing tarball..."
 tar -czvf "$tarball_name.gz" \
 "$tarball_name"  \
+./vllm/docker/docker-compose.yml \
+./db-reset.sh \
+./client-files/ 
 # ./start.sh \
 # ./start-em.sh \
 # ./start-mm.sh \
 # ./start-vllm.sh \
-./vllm/docker/docker-compose.yml \
-./db-reset.sh \
-./client-files/ &&
 echo "Tarball compressed."
 
 rm "$tarball_name"
