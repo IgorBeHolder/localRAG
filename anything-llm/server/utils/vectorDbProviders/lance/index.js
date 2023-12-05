@@ -7,9 +7,8 @@ const { v4: uuidv4 } = require("uuid");
 const { chatPrompt } = require("../../chats");
 
 const LanceDb = {
-  uri: `${
-    !!process.env.STORAGE_DIR ? `${process.env.STORAGE_DIR}/` : "./storage/"
-  }lancedb`,
+  uri: `${!!process.env.STORAGE_DIR ? `${process.env.STORAGE_DIR}/` : "./storage/"
+    }lancedb`,
   name: "LanceDb",
   connect: async function () {
     if (process.env.VECTOR_DB !== "lancedb")
@@ -165,7 +164,7 @@ const LanceDb = {
       const textSplitter = new RecursiveCharacterTextSplitter({
         chunkSize: 500, // reduce from 1000 (embed-server has max_seq_length of 256 tokens)
         chunkOverlap: 300,
-        separators: ["\n\n","\n"],
+        separators: ["\n\n", "\n"],
         keep_separator: false
       });
       const textChunks = await textSplitter.splitText(pageContent);
@@ -252,14 +251,14 @@ const LanceDb = {
         `КОНТЕКСТ: \n\n
     ${contextTexts
           .map((text, i) => {
-            return `${i}\n${text}\n\n`;            
+            return `${i}\n${text}\n\n`;
             // return `[CONTEXT ${i}]:\n${text}\n[END CONTEXT ${i}]\n\n`;
-          })  
-        // .join("")}[/INST]`,
-        .join("")}`,
+          })
+          // .join("")}[/INST]`,
+          .join("")}`,
     };
     const memory = [{ role: "system", content: chatPrompt(workspace) }, prompt,
-      { role: "user", content: '\n[INST]В ответе используй информацию только из предоставленного контекста. Аргументируй ответ фактами из контекста. Перед ответом внимательно изучи весь предоставленный контекст. Отвечай на русском языке[/INST]</s>' + input  }];
+    { role: "user", content: '\n[INST]В ответе используй информацию только из предоставленного контекста. Аргументируй ответ фактами из контекста. Перед ответом внимательно изучи весь предоставленный контекст. Отвечай на русском языке[/INST]</s>' + input }];
     console.log('LanceDb:query memory:', memory);
     const responseText = await LLMConnector.getChatCompletion(memory, {
       temperature: workspace?.openAiTemp ?? 0.2,
@@ -301,68 +300,73 @@ const LanceDb = {
       namespace,
       queryVector
     );
-    const prompt = {
+    const sys_prompt = {
       role: "system",
-      content: `${chatPrompt(workspace)}
-      КОНТЕКСТ: \n\n
+      content: `${chatPrompt(workspace)}`
+    };
+    
+  const prompt = {
+    role: "assistant",
+    content:
+      `КОНТЕКСТ: \n\n
     ${contextTexts
         .map((text, i) => {
-          return `${i}\n${text}\n\n`;     
-            // return `[КОНТЕКСТ ${i}]:\n${text}\n[КОНЕЦ КОНТЕКСТА ${i}]\n\n`;
-          })
-          .join("")}`,
-    };
-    const memory = [prompt, ...chatHistory, { role: "user", content: input + '\nАргументируй ответ фактами из контекста. Отвечай на русском языке.' }];
-    console.log('LanceDb:chat (from vectorized) memory:', memory);
-    const responseText = await LLMConnector.getChatCompletion(memory, {
-      temperature: workspace?.openAiTemp ?? 0.2,
-    });
+          return `${i}\n${text}\n\n`;
+          // return `[КОНТЕКСТ ${i}]:\n${text}\n[КОНЕЦ КОНТЕКСТА ${i}]\n\n`;
+        })
+        .join("")}`,
+  };
+  const memory = [sys_prompt, prompt, ...chatHistory, { role: "user", content: input + '\nАргументируй ответ фактами из контекста. Отвечай на русском языке.' }];
+  console.log('LanceDb:chat (from vectorized) memory:', memory);
+  const responseText = await LLMConnector.getChatCompletion(memory, {
+    temperature: workspace?.openAiTemp ?? 0.2,
+  });
 
-    return {
-      response: responseText,
-      sources: this.curateSources(sourceDocuments),
-      message: false,
-    };
-  },
-  "namespace-stats": async function (reqBody = {}) {
-    const { namespace = null } = reqBody;
-    if (!namespace) throw new Error("namespace required");
-    const { client } = await this.connect();
-    if (!(await this.namespaceExists(client, namespace)))
-      throw new Error("Namespace by that name does not exist.");
-    const stats = await this.namespace(client, namespace);
-    return stats
-      ? stats
-      : { message: "No stats were able to be fetched from DB for namespace" };
-  },
-  "delete-namespace": async function (reqBody = {}) {
-    const { namespace = null } = reqBody;
-    const { client } = await this.connect();
-    if (!(await this.namespaceExists(client, namespace)))
-      throw new Error("Namespace by that name does not exist.");
+  return {
+    response: responseText,
+    sources: this.curateSources(sourceDocuments),
+    message: false,
+  };
+},
+"namespace-stats": async function (reqBody = {}) {
+  const { namespace = null } = reqBody;
+  if (!namespace) throw new Error("namespace required");
+  const { client } = await this.connect();
+  if (!(await this.namespaceExists(client, namespace)))
+    throw new Error("Namespace by that name does not exist.");
+  const stats = await this.namespace(client, namespace);
+  return stats
+    ? stats
+    : { message: "No stats were able to be fetched from DB for namespace" };
+},
+"delete-namespace": async function (reqBody = {}) {
+  const { namespace = null } = reqBody;
+  const { client } = await this.connect();
+  if (!(await this.namespaceExists(client, namespace)))
+    throw new Error("Namespace by that name does not exist.");
 
-    await this.deleteVectorsInNamespace(client, namespace);
-    return {
-      message: `Namespace ${namespace} was deleted.`,
-    };
-  },
-  reset: async function () {
-    const { client } = await this.connect();
-    const fs = require("fs");
-    fs.rm(`${client.uri}`, { recursive: true }, () => null);
-    return { reset: true };
-  },
-  curateSources: function (sources = []) {
-    const documents = [];
-    for (const source of sources) {
-      const { text, vector: _v, score: _s, ...metadata } = source;
-      if (Object.keys(metadata).length > 0) {
-        documents.push({ ...metadata, text });
-      }
+  await this.deleteVectorsInNamespace(client, namespace);
+  return {
+    message: `Namespace ${namespace} was deleted.`,
+  };
+},
+reset: async function () {
+  const { client } = await this.connect();
+  const fs = require("fs");
+  fs.rm(`${client.uri}`, { recursive: true }, () => null);
+  return { reset: true };
+},
+curateSources: function (sources = []) {
+  const documents = [];
+  for (const source of sources) {
+    const { text, vector: _v, score: _s, ...metadata } = source;
+    if (Object.keys(metadata).length > 0) {
+      documents.push({ ...metadata, text });
     }
+  }
 
-    return documents;
-  },
+  return documents;
+},
 };
 
 module.exports.LanceDb = LanceDb;

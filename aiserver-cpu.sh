@@ -2,7 +2,7 @@
 set -e
 
 # Set the file name as a variable
-tarball_name="sherpa-aiserver-cpu_v0.1.tar"
+tarball_name="sherpa-aiserver-cpu_v0.2.tar"
 
 # save docker images to a tarball
 echo "Saving docker images to a tarball..."
