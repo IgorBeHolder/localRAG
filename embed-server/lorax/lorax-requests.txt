@@ -1,0 +1,54 @@
+curl 194.135.112.219:8080/generate \
+    -X POST \
+    -d '{"inputs": "[INST]Наташа продала своим друзьям 48 конфет в апреле, затем в мае еще половину от продаж в апреле. Сколько всего конфет продала Наташа? Отвечай на русском языке[/INST]", "parameters": {"max_new_tokens": 128}}' \
+    -H 'Content-Type: application/json'
+    
+
+
+curl 194.135.112.219:8080/generate_stream \
+    -X POST \
+    -d '{"inputs": "[INST] Natalia sold clips to 48 of her friends in April, and then she sold half as many clips in May. How many clips did Natalia sell altogether in April and May? [/INST]", "parameters": {"max_new_tokens": 128}}' \
+    -H 'Content-Type: application/json'
+    
+    
+# with lorax adaptor
+curl 194.135.112.219:8080/generate \
+    -X POST \
+    -d '{"inputs": "[INST]Наташа продала своим друзьям 48 конфет в апреле, затем в мае еще половину от продаж в апреле. Сколько всего конфет продала Наташа? Отвечай на русском языке[/INST]", "parameters": {"max_new_tokens": 128, "adapter_id": "vineetsharma/qlora-adapter-Mistral-7B-Instruct-v0.1-gsm8k"}}' \
+    -H 'Content-Type: application/json'
+    
+    
+curl 194.135.112.219:8080/generate_stream \
+    -X POST \
+    -d '{"inputs": "[INST] Natalia sold clips to 48 of her friends in April, and then she sold half as many clips in May. How many clips did Natalia sell altogether in April and May? [/INST]", "parameters": {"max_new_tokens": 128, "adapter_id": "vineetsharma/qlora-adapter-Mistral-7B-Instruct-v0.1-gsm8k"}}' \
+    -H 'Content-Type: application/json'
+
+##############################################
+https://github.com/predibase/lorax
+start lorax container:
+cd lorax/
+./lorax.sh
+
+wait few minutes for lorax to start until you see:
+ubuntu@rag-a10:~/lorax$ ./lorax.sh 
+2023-12-05T07:43:23.083004Z  INFO lorax_launcher: Args { model_id: "mistralai/Mistral-7B-Instruct-v0.1", adapter_id: "", source: "hub", adapter_source: "hub", revision: None, validation_workers: 2, sharded: None, num_shard: None, quantize: None, dtype: None, trust_remote_code: false, max_concurrent_requests: 128, max_best_of: 2, max_stop_sequences: 4, max_input_length: 1024, max_total_tokens: 2048, waiting_served_ratio: 1.2, max_batch_prefill_tokens: 4096, max_batch_total_tokens: None, max_waiting_tokens: 20, hostname: "bd0f356be03b", port: 80, shard_uds_path: "/tmp/lorax-server", master_addr: "localhost", master_port: 29500, huggingface_hub_cache: Some("/data"), weights_cache_override: None, disable_custom_kernels: false, cuda_memory_fraction: 1.0, json_output: false, otlp_endpoint: None, cors_allow_origin: [], watermark_gamma: None, watermark_delta: None, ngrok: false, ngrok_authtoken: None, ngrok_edge: None, env: false, download_only: false }
+2023-12-05T07:43:23.084181Z  INFO download: lorax_launcher: Starting download process.
+2023-12-05T07:43:29.089769Z  INFO lorax_launcher: cli.py:100 Files are already present on the host. Skipping download.
+
+2023-12-05T07:43:29.795733Z  INFO download: lorax_launcher: Successfully downloaded weights.
+2023-12-05T07:43:29.796118Z  INFO shard-manager: lorax_launcher: Starting shard rank=0
+2023-12-05T07:43:39.809763Z  INFO shard-manager: lorax_launcher: Waiting for shard to be ready... rank=0
+2023-12-05T07:43:42.826793Z  INFO lorax_launcher: server.py:254 Server started at unix:///tmp/lorax-server-0
+
+2023-12-05T07:43:42.913826Z  INFO shard-manager: lorax_launcher: Shard ready in 13.116892437s rank=0
+2023-12-05T07:43:42.915895Z  INFO lorax_launcher: Starting Webserver
+2023-12-05T07:43:44.090255Z  WARN lorax_router: router/src/main.rs:349: `--revision` is not set
+2023-12-05T07:43:44.090290Z  WARN lorax_router: router/src/main.rs:350: We strongly advise to set it to a known supported commit.
+2023-12-05T07:43:44.406601Z  INFO lorax_router: router/src/main.rs:371: Serving revision 7ad5799710574ba1c1d953eba3077af582f3a773 of model mistralai/Mistral-7B-Instruct-v0.1
+2023-12-05T07:43:44.417583Z  INFO lorax_router: router/src/main.rs:216: Warming up model
+2023-12-05T07:43:46.157608Z  INFO lorax_router: router/src/main.rs:245: Setting max batch total tokens to 55744
+2023-12-05T07:43:46.157633Z  INFO lorax_router: router/src/main.rs:246: Connected
+2023-12-05T07:43:46.157637Z  WARN lorax_router: router/src/main.rs:251: Invalid hostname, defaulting to 0.0.0.0
+2023-12-05T07:44:12.598225Z  INFO lorax_launcher: server.py:114 No adapter to download for base model. Skipping.
+
+start sending requests to API
