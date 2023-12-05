@@ -260,7 +260,7 @@ const LanceDb = {
     };
     const memory = [{ role: "system", content: chatPrompt(workspace) }, prompt,
       { role: "user", content: '\n[INST]В ответе используй информацию только из предоставленного контекста. Аргументируй ответ фактами из контекста. Перед ответом внимательно изучи весь предоставленный контекст. Отвечай на русском языке[/INST]</s>' + input  }];
-    // console.log('LanceDb:query memory:', memory);
+    console.log('LanceDb:query memory:', memory);
     const responseText = await LLMConnector.getChatCompletion(memory, {
       temperature: workspace?.openAiTemp ?? 0.2,
     });
@@ -304,15 +304,15 @@ const LanceDb = {
     const prompt = {
       role: "system",
       content: `${chatPrompt(workspace)}
-      КОНТЕКСТ: \n\n
+      [INST]КОНТЕКСТ: \n\n
     ${contextTexts
         .map((text, i) => {
           return `${i}\n${text}\n\n`;     
             // return `[КОНТЕКСТ ${i}]:\n${text}\n[КОНЕЦ КОНТЕКСТА ${i}]\n\n`;
           })
-          .join("")}`,
+          .join("")}[/INST]`,
     };
-    const memory = [prompt, ...chatHistory, { role: "user", content: input + '\n Аргументируй ответ фактами из контекста. Отвечай на русскомх[/INST]</s>' }];
+    const memory = [prompt, ...chatHistory, { role: "user", content: input + '\n[INST] Аргументируй ответ фактами из контекста. Отвечай на русскомх[/INST]</s>' }];
     console.log('LanceDb:chat (from vectorized) memory:', memory);
     const responseText = await LLMConnector.getChatCompletion(memory, {
       temperature: workspace?.openAiTemp ?? 0.2,
