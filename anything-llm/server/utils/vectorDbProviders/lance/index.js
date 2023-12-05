@@ -304,15 +304,15 @@ const LanceDb = {
     const prompt = {
       role: "system",
       content: `${chatPrompt(workspace)}
-      [INST]КОНТЕКСТ: \n\n
+      КОНТЕКСТ: \n\n
     ${contextTexts
         .map((text, i) => {
           return `${i}\n${text}\n\n`;     
             // return `[КОНТЕКСТ ${i}]:\n${text}\n[КОНЕЦ КОНТЕКСТА ${i}]\n\n`;
           })
-          .join("")}[/INST]`,
+          .join("")}`,
     };
-    const memory = [prompt, ...chatHistory, { role: "user", content: input + '\n[INST] Аргументируй ответ фактами из контекста. Отвечай на русскомх[/INST]</s>' }];
+    const memory = [prompt, ...chatHistory, { role: "user", content: input + '\n Аргументируй ответ фактами из контекста. Отвечай на русскомх[/INST]</s>' }];
     console.log('LanceDb:chat (from vectorized) memory:', memory);
     const responseText = await LLMConnector.getChatCompletion(memory, {
       temperature: workspace?.openAiTemp ?? 0.2,
