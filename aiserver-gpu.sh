@@ -22,7 +22,7 @@ tar -czvf "$tarball_name.gz" \
 # ./start-em.sh \
 # ./start-mm.sh \
 # ./start-vllm.sh \
-./vllm/docker/docker-compose.yml\
+./vllm/docker/docker-compose.yml \
 ./db-reset.sh \
 ./client-files/ &&
 echo "Tarball compressed."
