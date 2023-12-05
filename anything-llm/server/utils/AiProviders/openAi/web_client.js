@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 
-async function v1_chat_completions(prompt, temperature) {
+async function v1_chat_completions(messages, temperature) {
  
   const base_url = process.env.COMPLETION_MODEL_ENDPOINT;
   console.log('v1_chat_completions: *** base_url:', base_url);
@@ -11,7 +11,7 @@ async function v1_chat_completions(prompt, temperature) {
   const url = base_url + '/v1/chat/completions';
   const payload = {
     "model": compl_model,
-    "messages": prompt,
+    "messages": messages,
     // "max_tokens": 512,
     "temperature": temperature,
     // "top_p": 0.95,
