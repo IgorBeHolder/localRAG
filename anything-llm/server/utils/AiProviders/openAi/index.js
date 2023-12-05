@@ -73,7 +73,7 @@ class OpenAi {
       );
 
     const IS_OFFLINE = true;
-    const PROMPT_TEMPLATE = [
+    const messages = [
       {
         role: "system",
         content: '<s>[INST]Вы полезный помощник. Ваши ответы должны быть точными и краткими. Отвечайте на русском языке.[/INST]'
@@ -83,7 +83,7 @@ class OpenAi {
 
       { role: "user",  content:  prompt + "</s>"}, // "[INST]Ответь на русском языке:[/INST]" + prompt
     ]; //  chat history with the user's   PROMPT at the END
-    console.log('memory:', PROMPT_TEMPLATE);
+    console.log('.anything-llm/server/utils/AiProviders/openAi/index.js messages:', messages);
     let textResponse;
     if (!IS_OFFLINE) {
       try {
@@ -92,7 +92,7 @@ class OpenAi {
             model,
             temperature: Number(workspace?.openAiTemp ?? 0.21),
             n: 1, // only one completion/response will be generated
-            messages: PROMPT_TEMPLATE,
+            messages: messages,
           });
 
         const res = json.data; // the response from online chat completion service (openai)
@@ -113,7 +113,7 @@ class OpenAi {
       }
     } else {
 
-      textResponse = await v1_chat_completions(PROMPT_TEMPLATE, Number(workspace?.openAiTemp ?? 0.22));
+      textResponse = await v1_chat_completions(messages, Number(workspace?.openAiTemp ?? 0.22));
     }
 
     return textResponse;
