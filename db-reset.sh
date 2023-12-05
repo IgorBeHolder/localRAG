@@ -32,6 +32,11 @@ chmod 777 ./anything-llm/server/storage/anythingllm.db
 
 (
   echo "Run main app container ..."
+  container_id=$(docker ps -a -q -f name=^/anyth$)
+if [ ! -z "$container_id" ]; then
+    echo "Removing existing container with name 'anyth'..."
+    docker rm -f $container_id
+fi
 # ./start.sh
 docker run -d --restart always \
   --name anyth \
