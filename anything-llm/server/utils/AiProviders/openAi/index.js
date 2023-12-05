@@ -81,7 +81,7 @@ class OpenAi {
 
       ...chatHistory,
 
-      { role: "user",  content:  prompt}, // "[INST]Ответь на русском языке:[/INST]" + prompt
+      { role: "user",  content:  prompt + "</s>"}, // "[INST]Ответь на русском языке:[/INST]" + prompt
     ]; //  chat history with the user's   PROMPT at the END
     console.log('memory:', PROMPT_TEMPLATE);
     let textResponse;
