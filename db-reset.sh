@@ -8,6 +8,7 @@ docker stop anyth && \
 remove_if_exists() {
   if [ -f "$1" ]; then
     rm "$1"
+    echo "Removed $1"
   fi
 }
 
@@ -15,6 +16,7 @@ remove_if_exists() {
 remove_dir_if_exists() {
   if [ -d "$1" ]; then
     rm -rf "$1"
+    echo "Removed $1"
   fi
 }
 
@@ -27,5 +29,5 @@ echo "Copying db file..."
 cp ./client-files/anythingllm.db ./anything-llm/server/storage/anythingllm.db
 chmod 777 ./anything-llm/server/storage/anythingllm.db
 
-echo "Run containers ..."
+echo "Run main app container ..."
 ./start.sh
