@@ -8,6 +8,7 @@ async function v1_chat_completions(messages, temperature) {
   const compl_model = process.env.COMPLETION_MODEL_NAME;
   console.log('v1_chat_completions: *** completion_model:', compl_model);
   console.log('v1_chat_completions: *** temperature:', temperature);
+  console.log('v1_chat_completions: *** messages:', messages);
   const url = base_url + '/v1/chat/completions';
   const payload = {
     "model": compl_model,

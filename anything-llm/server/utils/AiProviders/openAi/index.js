@@ -160,7 +160,7 @@ class OpenAi {
   async embedChunks(textChunks = []) {
     const IS_OFFLINE = true; 
 
-    if (IS_OFFLINE) {  // get embeddings from local LLM
+    if (IS_OFFLINE) {  // get  from local LLM
       if (typeof textChunks === 'string') {
         textChunks = [textChunks];
       }
