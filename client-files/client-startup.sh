@@ -16,7 +16,6 @@ docker network ls | grep -q "llm-net" || docker network create "llm-net"
 
 # echo "Loading sherpa-aiserver docker images..."
 if [ "$DEVICE" = "cpu" ]; then
-
   docker load -i  sherpa-aiserver-cpu_v0.1.tar
 else
   docker load -i  sherpa-aiserver-gpu_v0.1.tar
@@ -82,8 +81,9 @@ else
   container_id=$(docker ps -a -q -f name=^/vllm$)
   if [ ! -z "$container_id" ]; then
     docker stop "$container_id"
-    # docker rm "$container_id"
+    docker rm "$container_id"
   fi
+
   cd vllm/docker
   docker-compose -p localrag -f docker-compose.yml up -d
   echo -e "VLLM container started.\n-----------------------------"

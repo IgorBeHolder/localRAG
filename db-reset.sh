@@ -30,5 +30,18 @@ echo "Copying db file..."
 cp ./client-files/anythingllm.db ./anything-llm/server/storage/anythingllm.db
 chmod 777 ./anything-llm/server/storage/anythingllm.db
 
-echo "Run main app container ..."
-./start.sh
+(
+  echo "Run main app container ..."
+# ./start.sh
+docker run -d --restart always \
+  --name anyth \
+  --platform linux/amd64 \
+  --env-file ./client-files/.env \
+  --user "${ARG_UID}:${ARG_GID}" \
+  -v ./anything-llm/server/storage:/app/server/storage \
+  -v ./anything-llm/collector/hotdir/:/app/collector/hotdir \
+  -v ./anything-llm/collector/outputs/:/app/collector/outputs \
+  -p 3001:3001 \
+  --network llm-net \
+  anyth:v1
+)
