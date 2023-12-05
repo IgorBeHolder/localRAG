@@ -324,7 +324,14 @@ const LanceDb = {
           })
           .join("")}`,
     };
-    const memory = [sys_prompt, prompt, ...chatHistory, { role: "user", content: input + '\nАргументируй ответ фактами из контекста. Отвечай на русском языке.' }];
+    const memory = [
+      sys_prompt,
+      prompt,
+      ...chatHistory,
+      {
+        role: "user",
+        content: input + '\nАргументируй ответ фактами из контекста. Отвечай на русском языке.'
+      }];
     console.log('LanceDb:CHAT (from vectorized) memory:328', memory);
     const responseText = await LLMConnector.getChatCompletion(memory, {
       temperature: workspace?.openAiTemp ?? 0.2,

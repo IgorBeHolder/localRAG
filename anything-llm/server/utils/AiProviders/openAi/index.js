@@ -81,7 +81,7 @@ class OpenAi {
       },
 
       ...chatHistory,
-      { role: "user", content: prompt + "</s>" }, // "[INST]Ответь на русском языке:[/INST]" + prompt
+      { role: "user", content: prompt + '\nОтвечай на русском языке.' }, // "[INST]Ответь на русском языке:[/INST]" + prompt
     ]; //  chat history with the user's   PROMPT at the END
     console.log('.anything-llm/server/utils/AiProviders/openAi/index.js messages:', messages);
     let textResponse;
