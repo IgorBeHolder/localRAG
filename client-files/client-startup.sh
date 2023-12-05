@@ -14,11 +14,20 @@ docker network ls | grep -q "llm-net" || docker network create "llm-net"
 # echo "Untar sherpa-aiserver tar files..."
 # tar -xzvf models.tar.gz --overwrite
 
-# echo "Loading sherpa-aiserver docker images..."
-if [ "$DEVICE" = "cpu" ]; then
-  docker load -i  sherpa-aiserver-cpu_v0.1.tar
-else
-  docker load -i  sherpa-aiserver-gpu_v0.1.tar
+echo "Loading sherpa-aiserver docker images..."
+# Check if images have already been loaded
+images_loaded() {
+    [ -f db-reset.sh ]
+}
+if images_loaded; then
+  if [ "$DEVICE" = "cpu" ]; then
+    echo "Loading CPU docker images..."
+    docker load -i  sherpa-aiserver-cpu_v0.1.tar
+  else
+    echo "Loading GPU docker images..."
+    docker load -i  sherpa-aiserver-gpu_v0.1.tar
+  fi
+  echo "Docker images have been loaded previously."
 fi
 
 # create folders for document processor
