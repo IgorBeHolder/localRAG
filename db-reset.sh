@@ -31,7 +31,7 @@ cp ./client-files/anythingllm.db ./anything-llm/server/storage/anythingllm.db
 chmod 777 ./anything-llm/server/storage/anythingllm.db
 
 (
-  echo "Run main app container ..."
+  echo "Starting web server (main app container) ..."
   container_id=$(docker ps -a -q -f name=^/anyth$)
 if [ ! -z "$container_id" ]; then
     echo "Removing existing container with name 'anyth'..."
@@ -49,4 +49,5 @@ docker run -d --restart always \
   -p 3001:3001 \
   --network llm-net \
   anyth:v1
+echo -e "Web server started.\n-----------------------------"
 )
