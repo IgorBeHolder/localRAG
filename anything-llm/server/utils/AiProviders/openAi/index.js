@@ -76,12 +76,12 @@ class OpenAi {
     const messages = [
       {
         role: "system",
-        content: '<s>[INST]Вы полезный помощник. Ваши ответы должны быть точными и краткими. Отвечайте на русском языке.[/INST]'
+        content: `<s>[INST]Вы полезный помощник. Ваши ответы должны быть точными и краткими. 
+        Отвечайте на русском языке.[/INST]`
       },
 
       ...chatHistory,
-
-      { role: "user",  content:  prompt + "</s>"}, // "[INST]Ответь на русском языке:[/INST]" + prompt
+      { role: "user", content: prompt + "</s>" }, // "[INST]Ответь на русском языке:[/INST]" + prompt
     ]; //  chat history with the user's   PROMPT at the END
     console.log('.anything-llm/server/utils/AiProviders/openAi/index.js messages:', messages);
     let textResponse;
@@ -124,7 +124,7 @@ class OpenAi {
   // anything-llm/server/utils/vectorDbProviders/lance/index.js:254  in LanceDB.query()
   // anything-llm/server/utils/vectorDbProviders/lance/index.js:304  in LanceDB.chat()
   async getChatCompletion(messages = [], { temperature = 0.23 }) {
-    const IS_OFFLINE = true; 
+    const IS_OFFLINE = true;
     const model = process.env.OPEN_MODEL_PREF || "gpt-3.5-turbo";
 
     if (!IS_OFFLINE) {
@@ -142,7 +142,7 @@ class OpenAi {
         throw new Error("OpenAI chat: No results length!");
       }
 
-      return data.choices[0].message.content; 
+      return data.choices[0].message.content;
 
     } else {
       return await v1_chat_completions(messages, temperature);
@@ -158,7 +158,7 @@ class OpenAi {
   }
 
   async embedChunks(textChunks = []) {
-    const IS_OFFLINE = true; 
+    const IS_OFFLINE = true;
 
     if (IS_OFFLINE) {  // get  from local LLM
       if (typeof textChunks === 'string') {
