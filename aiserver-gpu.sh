@@ -7,9 +7,9 @@ tarball_name="sherpa-aiserver-gpu_v0.2.tar"
 # save docker images to a tarball
 echo "Saving docker images to a tarball..."
 docker save -o "$tarball_name" \
+nginx:latest \
 # anyth:v1 \
 # embed:v1 \
-nginx:latest 
 # pgembeding:latest \
 # ghcr.io/mistralai/mistral-src/vllm:latest &&
 echo "Docker images saved to a tarball."
