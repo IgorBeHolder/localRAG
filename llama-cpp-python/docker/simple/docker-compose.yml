@@ -22,7 +22,7 @@ services:
     volumes:
       - "../../../model-store:/app/model-store" 
     ports:
-      - 3003:3003
+      - ${MM_PORT}:${MM_PORT}
     ulimits:
       memlock:
         soft: 17179869184

@@ -18,11 +18,11 @@
 
 # python -m vllm.entrypoints.openai.api_server --model ../../model-store/mistralai/Mistral-7B-Instruct-v0.1-AWQ --quantization awq
 python -m vllm.entrypoints.openai.api_server \
-    --model ../../model-store/mistralai/Mistral-7B-Instruct-v0.1 \
-    --port 3003 --host 0.0.0.0 
-    # --quantization awq
-# wait -n
-# exit $?
+    --model "../../$COMPLETION_MODEL_NAME" \
+    --port $MM_PORT \
+    --host $HOST
+
+
 
 # run script:
 # ./start-vllm.sh mistralai/Mistral-7B-Instruct-v0.1 
