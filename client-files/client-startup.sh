@@ -1,5 +1,8 @@
 #!/bin/bash
 
+GPU_ARCHIVE="sherpa-aiserver-gpu_v0.2.tar.gz"
+CPU_ARCHIVE="sherpa-aiserver-cpu_v0.2.tar.gz"
+
 # Load environment variables from .env file
 set -a
 source ./client-files/.env
@@ -22,10 +25,10 @@ images_loaded() {
 if images_loaded; then
   if [ "$DEVICE" = "cpu" ]; then
     echo "Loading CPU docker images..."
-    docker load -i  sherpa-aiserver-cpu_v0.1.tar
+    docker load -i  $CPU_ARCHIVE
   else
     echo "Loading GPU docker images..."
-    docker load -i  sherpa-aiserver-gpu_v0.1.tar
+    docker load -i  $GPU_ARCHIVE
   fi
   echo "Docker images have been loaded previously."
 fi
