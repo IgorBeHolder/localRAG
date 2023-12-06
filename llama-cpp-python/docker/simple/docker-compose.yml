@@ -16,6 +16,7 @@ services:
       dockerfile: ./Dockerfile
       args:
         DOCKER_BUILDKIT: 1  
+        COMPLETION_MODEL_NAME: ${COMPLETION_MODEL_NAME}
     volumes:
       - "../../../model-store:/app/model-store" 
     ports:
