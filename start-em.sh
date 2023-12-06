@@ -2,6 +2,12 @@
 
 (
 echo "Starting the embedding model server..."
+set -a
+echo $PWD
+source ./client-files/.env
+set +a
+echo -e "Environment variables loaded.\nBuild for $DEVICE.\n$COMPLETION_MODEL_NAME\n-----------------------------"
+
 
 # Define a function to remove a container by name if it exists
 remove_container_if_exists() {

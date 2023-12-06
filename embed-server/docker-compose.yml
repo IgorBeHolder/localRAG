@@ -9,6 +9,12 @@ services:
     platform: linux/amd64
     env_file:
       - ../client-files/.env 
+    environment:
+      HOST: ${HOST}
+      EM_PORT: ${EM_PORT}
+      DEVICE: ${DEVICE}
+      N_CTX: ${N_CTX}
+      EMBEDDING_MODEL_NAME: ${EMBEDDING_MODEL_NAME}
     build:
       context: .
       dockerfile: Dockerfile
@@ -17,7 +23,7 @@ services:
     volumes:
       - "../model-store/:/app/model-store"
     ports:
-      - "3004:3004"
+      - ${EM_PORT}:${EM_PORT}
     networks:
       - llm-net
 
