@@ -7,11 +7,10 @@ services:
     restart: always
     command:
       - "--host"
-      - "${MM_HOST}"
+      - ${HOST}
       - "--port"
-      - "${MM_PORT}"
+      - ${MM_PORT}
       - "--model=/${COMPLETION_MODEL_NAME}"
-      # - "--model=/model-store/mistralai/Mistral-7B-Instruct-v0.1"
     volumes:
       - "../../model-store/:/model-store"
     ports:
