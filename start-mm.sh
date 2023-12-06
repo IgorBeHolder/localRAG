@@ -17,7 +17,7 @@ fi
 
 cd llama-cpp-python/docker/simple && 
 git checkout main &&
-# docker-compose -p localrag up -d --build
-docker-compose -p localrag build --no-cache
+docker-compose -p localrag up -d --build
+# docker-compose -p localrag build --no-cache
 
 )
