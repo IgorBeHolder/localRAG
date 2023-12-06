@@ -7,20 +7,20 @@ services:
     image: llm-server-cpu:v1
     platform: linux/amd64
     environment:
-      HOST: "0.0.0.0"
-      PORT: "3003"
+      HOST: 0.0.0.0
+      PORT: 3003
+      COMPLETION_MODEL_NAME: ${COMPLETION_MODEL_NAME}
       # CMAKE_ARGS: "-DLLAMA_BLAS=ON -DLLAMA_BLAS_VENDOR=OpenBLAS"
       # FORCE_CMAKE: 1
     build:
       context: .
       dockerfile: ./Dockerfile
       args:
-        DOCKER_BUILDKIT: 1  
-        COMPLETION_MODEL_NAME: ${COMPLETION_MODEL_NAME}
+        DOCKER_BUILDKIT: 1
     volumes:
       - "../../../model-store:/app/model-store" 
     ports:
-      - "3003:3003" 
+      - 3003:3003
     ulimits:
       memlock:
         soft: 17179869184
