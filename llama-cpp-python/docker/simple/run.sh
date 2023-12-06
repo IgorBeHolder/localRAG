@@ -1,10 +1,4 @@
 #!/bin/sh
-set -a
-echo $PWD
-source ../../../client-files/.env
-set +a
-echo -e "Environment variables loaded.\nBuild for $DEVICE.\n$COMPLETION_MODEL_NAME\n-----------------------------"
-
 
 python3 -m llama_cpp.server \
     --model "$COMPLETION_MODEL_NAME" \
