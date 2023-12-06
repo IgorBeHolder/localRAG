@@ -7,6 +7,6 @@ services:
       - ../../../model-store:/model-store    
     environment:
       - MODEL_NAME=openchat/openchat_3.5
-    mem_limit: 24G
+    mem_limit: 32G
 
 # docker-compose up --build
