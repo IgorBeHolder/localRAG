@@ -15,6 +15,6 @@ def download_model(model_name, save_directory):
     tokenizer.save_pretrained(save_directory)
 
 if __name__ == "__main__":
-    model_name = "openchat/openchat_3.5"
+    model_name = "IlyaGusev/saiga_mistral_7b"
     save_directory = "/model-store"
     download_model(model_name, save_directory)
