@@ -7,9 +7,9 @@ services:
     restart: always
     command:
       - "--host"
-      - "0.0.0.0"
+      - "${MM_HOST}"
       - "--port"
-      - "3003"
+      - "${MM_PORT}"
       - "--model=/${COMPLETION_MODEL_NAME}"
       # - "--model=/model-store/mistralai/Mistral-7B-Instruct-v0.1"
     volumes:
@@ -17,8 +17,8 @@ services:
     ports:
       - "3003:3003"
     environment:
-      HOST: 0.0.0.0
-      PORT: 3003
+      HOST: ${HOST}
+      PORT: ${PORT}
       DEVICE: ${DEVICE}
       COMPLETION_MODEL_NAME: ${COMPLETION_MODEL_NAME}
       CUDA_HOME: "/usr/local/cuda"

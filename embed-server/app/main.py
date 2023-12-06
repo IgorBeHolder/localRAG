@@ -16,7 +16,7 @@ from pydantic import BaseModel, Field
 # from services.x_auth_token import get_x_token_key
 
 
-PORT = int(os.getenv("PORT", 3004))
+PORT = int(os.getenv("EM_PORT", 3004))
 HOST = os.getenv("HOST", "0.0.0.0")
 EMBEDDING_MODEL_NAME = os.getenv("EMBEDDING_MODEL_NAME", "no_name_model")
 DATABASE_URL = os.getenv(
