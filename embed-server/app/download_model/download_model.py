@@ -15,6 +15,6 @@ def download_model(model_name, save_directory):
     tokenizer.save_pretrained(save_directory)
 
 if __name__ == "__main__":
-    model_name = "TheBloke/Llama-2-7B-Chat-GGUF"
+    model_name = "meta-llama/Llama-2-7b-chat-hf"
     save_directory = "/model-store"
     download_model(model_name, save_directory)
