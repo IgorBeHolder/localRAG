@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  model_downloader:
+    build: .
+    volumes:
+      - ./model-store:/model-store
+    environment:
+      - MODEL_NAME=openchat/openchat_3.5
