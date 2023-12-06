@@ -1,6 +1,6 @@
 #!/bin/sh
 set -a
-source ../../../client-files/.env
+source ./client-files/.env
 set +a
 echo -e "Environment variables loaded.\nBuild for $DEVICE.\n$COMPLETION_MODEL_NAME\n-----------------------------"
 
