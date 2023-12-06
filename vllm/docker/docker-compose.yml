@@ -14,10 +14,10 @@ services:
     volumes:
       - "../../model-store/:/model-store"
     ports:
-      - "3003:3003"
+      - ${MM_PORT}:${MM_PORT}
     environment:
       HOST: ${HOST}
-      PORT: ${PORT}
+      PORT: ${MM_PORT}
       DEVICE: ${DEVICE}
       COMPLETION_MODEL_NAME: ${COMPLETION_MODEL_NAME}
       CUDA_HOME: "/usr/local/cuda"
