@@ -1,0 +1,3 @@
+[submodule "llama-cpp-python/vendor/llama.cpp"]
+    path = llama-cpp-python/vendor/llama.cpp
+    url = https://github.com/ggerganov/llama.cpp.git
