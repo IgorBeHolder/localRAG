@@ -16,5 +16,5 @@ def download_model(model_name, save_directory):
 
 if __name__ == "__main__":
     model_name = "openchat/openchat_3.5"
-    save_directory = "/model-store/openchat_3.5"
+    save_directory = "/model-store"
     download_model(model_name, save_directory)
