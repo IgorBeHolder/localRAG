@@ -22,3 +22,6 @@ do
    sudo chmod 644 "$BASE_DIR/$file"
    echo "Downloaded and set permissions for $BASE_DIR/$file"
 done
+
+# do not forget to: 
+# chmod +x copy-openchat.sh
