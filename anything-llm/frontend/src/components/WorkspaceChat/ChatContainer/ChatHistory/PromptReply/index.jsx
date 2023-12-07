@@ -49,7 +49,7 @@ const PromptReply = forwardRef(
         <div
           className="ml-2 p-4 max-w-[75%] bg-gray-400 dark:bg-stone-700 rounded-sm xl:rounded-2xl border border-gray-700">
           <div
-            className="whitespace-pre-line break-all-in-children text-slate-800 dark:text-slate-200 flex flex-col gap-y-1 font-[500] md:font-semibold text-sm md:text-base"
+            className="break-all-in-children no-scroll whitespace-pre-line text-slate-800 dark:text-slate-200 flex flex-col gap-y-1 font-[500] md:font-semibold text-sm md:text-base"
             dangerouslySetInnerHTML={{__html: renderMarkdown(reply)}}
           />
           <Citations sources={sources}/>
