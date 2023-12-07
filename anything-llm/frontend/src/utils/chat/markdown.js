@@ -32,5 +32,5 @@ window.copySnippet = function () {
 };
 
 export default function renderMarkdown(text = "") {
-  return markdown.render(text);
+  return markdown.render(String(text));
 }
