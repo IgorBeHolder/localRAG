@@ -14,9 +14,6 @@ echo "Current directory: $(pwd)"
 # create docker network if it doesn't exist
 docker network ls | grep -q "llm-net" || docker network create "llm-net"
 
-# echo "Untar sherpa-aiserver tar files..."
-# tar -xzvf models.tar.gz --overwrite
-
 echo "Loading sherpa-aiserver docker images..."
 # Check if images have already been loaded
 images_loaded() {

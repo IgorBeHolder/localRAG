@@ -6,7 +6,6 @@ import NewWorkspaceModal, {
 import {isMobile} from "react-device-detect";
 import ChatBubble from "../ChatBubble";
 import System from "../../models/system";
-import {CHAT_MAX_LENGTH} from "../../utils/constants.js";
 
 export default function DefaultChatContainer() {
   const [mockMsgs, setMockMessages] = useState([]);
@@ -128,7 +127,7 @@ export default function DefaultChatContainer() {
             //onKeyDown={captureEnter}
             //onChange={onChange}
             required={true}
-            maxLength={CHAT_MAX_LENGTH}
+            maxLength={240}
             //disabled={inputDisabled}
             //onFocus={() => setFocused(true)}
             //onBlur={(e) => {
