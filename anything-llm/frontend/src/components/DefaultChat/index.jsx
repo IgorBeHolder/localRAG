@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from "react";
-import {GitHub, GitMerge, Loader, Mail, Menu, Plus} from "react-feather";
+import {Plus} from "react-feather";
 import NewWorkspaceModal, {
   useNewWorkspaceModal
 } from "../Modals/NewWorkspace";
-import paths from "../../utils/paths";
 import {isMobile} from "react-device-detect";
 import ChatBubble from "../ChatBubble";
 import System from "../../models/system";
+import {CHAT_MAX_LENGTH} from "../../utils/constants.js";
 
 export default function DefaultChatContainer() {
   const [mockMsgs, setMockMessages] = useState([]);
@@ -128,7 +128,7 @@ export default function DefaultChatContainer() {
             //onKeyDown={captureEnter}
             //onChange={onChange}
             required={true}
-            maxLength={240}
+            maxLength={CHAT_MAX_LENGTH}
             //disabled={inputDisabled}
             //onFocus={() => setFocused(true)}
             //onBlur={(e) => {
