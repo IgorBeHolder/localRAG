@@ -1,6 +1,7 @@
 import React, {useState, useRef, memo, useEffect} from "react";
 import {isMobile} from "react-device-detect";
 import {Loader, Menu, X} from "react-feather";
+import {CHAT_MAX_LENGTH} from "../../../../utils/constants.js";
 
 export default function PromptInput({
                                       workspace,
@@ -76,7 +77,7 @@ export default function PromptInput({
               onKeyDown={captureEnter}
               onChange={onChange}
               required={true}
-              maxLength={240}
+              maxLength={CHAT_MAX_LENGTH}
               disabled={inputDisabled}
               onFocus={() => setFocused(true)}
               onBlur={(e) => {
