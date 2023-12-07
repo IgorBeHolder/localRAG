@@ -183,7 +183,6 @@ function CommandMenu({workspace, show, handleClick, hide}) {
           <X className="h-4 w-4"/>
         </button>
       </div>
-
       <div className="flex flex-col">
         {COMMANDS.map((item, i) => {
           const {cmd, description} = item;

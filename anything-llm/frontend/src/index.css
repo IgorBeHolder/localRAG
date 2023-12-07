@@ -123,10 +123,6 @@ a {
   animation-delay: 50ms;
 }
 
-.break-all-in-children * {
-  word-break: break-all !important;
-}
-
 @keyframes message2 {
   0% {
     max-height: 100%;
@@ -311,4 +307,8 @@ dialog[open] {
 dialog::backdrop {
   background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(2px);
+}
+
+.break-all-in-children * {
+  word-break: break-all !important;
 }

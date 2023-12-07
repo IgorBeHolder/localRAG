@@ -1,9 +1,8 @@
 import React, {useEffect, useState} from "react";
-import {GitHub, GitMerge, Loader, Mail, Menu, Plus} from "react-feather";
+import {Plus} from "react-feather";
 import NewWorkspaceModal, {
   useNewWorkspaceModal
 } from "../Modals/NewWorkspace";
-import paths from "../../utils/paths";
 import {isMobile} from "react-device-detect";
 import ChatBubble from "../ChatBubble";
 import System from "../../models/system";
