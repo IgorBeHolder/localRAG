@@ -1,7 +1,7 @@
 import React, {useState, useRef, memo, useEffect} from "react";
 import {isMobile} from "react-device-detect";
 import {Loader, Menu, X} from "react-feather";
-import {CHAT_MAX_LENGTH} from "../../../../utils/constants.js";
+const CHAT_MAX_LENGTH = 16384;
 
 export default function PromptInput({
                                       workspace,
