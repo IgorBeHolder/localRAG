@@ -8,7 +8,7 @@ tarball_name="models_v0.2.tar.gz"
 echo "Compressing tarball..."
 tar -czvf "$tarball_name" \
   ./model-store/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 \
-  ./mistral-7b-instruct-v0.1.Q4_K_M.gguf
+  ./model-store/mistral-7b-instruct-v0.1.Q4_K_M.gguf
 
 echo "Tarball compressed."
 
