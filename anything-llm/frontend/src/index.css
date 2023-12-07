@@ -123,10 +123,6 @@ a {
   animation-delay: 50ms;
 }
 
-.break-all-in-children * {
-  word-break: break-all !important;
-}
-
 @keyframes message2 {
   0% {
     max-height: 100%;

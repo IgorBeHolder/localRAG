@@ -43,8 +43,8 @@ const HistoricalMessage = forwardRef(
         <Jazzicon size={30} user={{uid: workspace.slug}}/>
         <div
           className="ml-2 p-4 max-w-[75%] bg-gray-400 dark:bg-stone-700 rounded-sm xl:rounded-2xl border border-gray-700">
-          <div
-            className="no-scroll whitespace-pre-line break-all-in-children text-slate-800 dark:text-slate-200 font-[500] md:font-semibold text-sm md:text-base flex flex-col gap-y-1"
+          <span
+            className="no-scroll whitespace-pre-line text-slate-800 dark:text-slate-200 font-[500] md:font-semibold text-sm md:text-base flex flex-col gap-y-1"
             dangerouslySetInnerHTML={{__html: renderMarkdown(message)}}
           />
           <Citations sources={sources}/>
