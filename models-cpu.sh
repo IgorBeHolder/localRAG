@@ -2,7 +2,7 @@
 set -e
 
 # Set the file name as a variable
-tarball_name="models_v0.2.tar.gz"
+tarball_name="models_cpu_v0.2.tar.gz"
 
 # Create a compressed tarball
 echo "Compressing tarball..."
