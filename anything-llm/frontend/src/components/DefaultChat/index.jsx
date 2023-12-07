@@ -6,7 +6,7 @@ import NewWorkspaceModal, {
 import {isMobile} from "react-device-detect";
 import ChatBubble from "../ChatBubble";
 import System from "../../models/system";
-const CHAT_MAX_LENGTH = 16384;
+import {CHAT_MAX_LENGTH} from "../../utils/constants.js";
 
 export default function DefaultChatContainer() {
   const [mockMsgs, setMockMessages] = useState([]);
