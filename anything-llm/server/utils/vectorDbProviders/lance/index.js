@@ -4,7 +4,7 @@ const { OpenAIEmbeddings } = require("langchain/embeddings/openai");
 const { RecursiveCharacterTextSplitter } = require("langchain/text_splitter");
 const { storeVectorResult, cachedVectorInformation } = require("../../files");
 const { v4: uuidv4 } = require("uuid");
-const { chatPrompt } = require("../../chats");
+// const { chatPrompt } = require("../../chats");
 
 const LanceDb = {
   uri: `${!!process.env.STORAGE_DIR ? `${process.env.STORAGE_DIR}/` : "./storage/"
@@ -244,31 +244,32 @@ const LanceDb = {
       namespace,
       queryVector
     );
-    // forming the prompt for the chat 
+
+    // FORMING THE MEMORY LIST FOR THE QUERY
+    const { BOS, EOS, assistance_prefix, end_of_turn, user_prefix  } = prompt_templates();
+
     const context = {
       role: "assistant",
       content:
-        // `[INST]КОНТЕКСТ: \n\n
-        `[INST]КОНТЕКСТ: \n\n
+      assistance_prefix + `КОНТЕКСТ: \n\n
     ${contextTexts
           .map((text, i) => {
             return `${i}\n${text}\n\n`;
-            // return `[CONTEXT ${i}]:\n${text}\n[END CONTEXT ${i}]\n\n`;
           })
-          // .join("")}[/INST]`,
-          .join("")}[/INST]`,
+          .join("")}` + end_of_turn,
     };
+
     const memory_list = [
-      { role: "system", content: chatPrompt(workspace) },
+      { role: "system", content: BOS + workspace.openAiPrompt },
       context,
       {
         role: "user",
-        content: `[INST]В ответе используй информацию из предоставленного контекста.
+        content: user_prefix + `В ответе используй информацию из предоставленного контекста.
     Аргументируй ответ фактами только из контекста. Перед ответом внимательно изучи весь предоставленный контекст.
     Отвечай на русском языке.
-    ${input}/INST]`
+    ${input}` + end_of_turn
       }];
-    console.log('LanceDb:QUERY memory:270', memory_list);
+    // console.log('LanceDb:QUERY memory:272', memory_list);
     const responseText = await LLMConnector.getChatCompletion(memory_list, {
       temperature: workspace?.openAiTemp ?? 0.2,
     });
@@ -308,21 +309,22 @@ const LanceDb = {
       namespace,
       queryVector
     );
+    // FORMING THE MEMORY LIST FOR THE QUERY
+    const { BOS, EOS, assistance_prefix, end_of_turn, user_prefix  } = prompt_templates();
     const sys_prompt = {
       role: "system",
-      content: `${chatPrompt(workspace)}`
+      content: BOS + workspace.openAiPrompt
     };
 
     const prompt = {
       role: "assistant",
       content:
-        `КОНТЕКСТ: \n\n
+      assistance_prefix + `КОНТЕКСТ: \n\n
     ${contextTexts
           .map((text, i) => {
             return `${i}\n${text}\n\n`;
-            // return `[КОНТЕКСТ ${i}]:\n${text}\n[КОНЕЦ КОНТЕКСТА ${i}]\n\n`;
           })
-          .join("")}`,
+          .join("")}` + end_of_turn,
     };
     const memory = [
       sys_prompt,
@@ -330,9 +332,9 @@ const LanceDb = {
       ...chatHistory,
       {
         role: "user",
-        content: input + '\nАргументируй ответ фактами из контекста. Отвечай на русском языке.'
+        content: user_prefix + input + '\nАргументируй ответ фактами из контекста. Отвечай на русском языке.' + end_of_turn
       }];
-    console.log('LanceDb:CHAT (from vectorized) memory:328', memory);
+    console.log('LanceDb:CHAT (from vectorized) memory:337', memory);
     const responseText = await LLMConnector.getChatCompletion(memory, {
       temperature: workspace?.openAiTemp ?? 0.2,
     });
@@ -384,4 +386,36 @@ const LanceDb = {
   },
 };
 
+
+function prompt_templates() {
+  const model_name_is_openchat = process.env.COMPLETION_MODEL_NAME.includes('openchat');
+  const model_name_is_mistral = process.env.COMPLETION_MODEL_NAME.includes('mistral');
+
+  const user_prefix = model_name_is_openchat
+    ? 'GPT4 Correct User: '
+    : model_name_is_mistral
+      ? '[INST]'
+      : '';
+  const assistance_prefix = model_name_is_openchat
+      ? 'GPT4 Correct Assistant: '
+      : model_name_is_mistral
+        ? '[INST]'
+        : '';
+  const end_of_turn = model_name_is_openchat
+    ? '<|end_of_turn|>'
+    : model_name_is_mistral
+      ? '[/INST]'
+      : '';
+
+  const BOS = model_name_is_mistral
+    ? '' //'<s>'
+    : '';
+  const EOS = model_name_is_mistral
+    ? '</s>'
+    : '';
+
+  return { BOS, EOS, assistance_prefix, end_of_turn, user_prefix };
+}
+
 module.exports.LanceDb = LanceDb;
+module.exports.prompt_templates = prompt_templates;

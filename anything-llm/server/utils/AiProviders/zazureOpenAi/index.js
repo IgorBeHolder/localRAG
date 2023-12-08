@@ -37,7 +37,7 @@ class AzureOpenAi {
       .getChatCompletions(
         model,
         [
-          { role: "system", content: "" },
+          { role: "system", content: workspace?.openAiPrompt },
           ...chatHistory,
           { role: "user", content: prompt },
         ],

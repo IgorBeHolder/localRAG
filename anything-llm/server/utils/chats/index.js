@@ -4,7 +4,9 @@ const { WorkspaceChats } = require("../../models/workspaceChats");
 const { resetMemory } = require("./commands/reset");
 const moment = require("moment");
 const { getVectorDbClass, getLLMProvider } = require("../helpers");
-const { AzureOpenAi } = require("../AiProviders/azureOpenAi");
+const { AzureOpenAi } = require("../AiProviders/zazureOpenAi");
+const { prompt_templates } = require('../vectorDbProviders/lance/index');
+// const { BOS, EOS, assistance_prefix, end_of_turn, user_prefix } = prompt_templates();
 
 function convertToChatHistory(history = []) {
   const formattedHistory = [];
@@ -95,7 +97,11 @@ async function chatWithWorkspace(
 
   const hasVectorizedSpace = await VectorDb.hasNamespace(workspace.slug);
   const embeddingsCount = await VectorDb.namespaceCount(workspace.slug);
-   //  has NO vectorized space
+
+
+
+
+  //  has NO vectorized space
   if (!hasVectorizedSpace || embeddingsCount === 0) {
     const rawHistory = await WorkspaceChats.forWorkspace(workspace.id);
     const chatHistory = convertToPromptHistory(rawHistory);
@@ -122,7 +128,7 @@ async function chatWithWorkspace(
     };
 
 
-    
+
   } else {    //  HAS vectorized space
     var messageLimit = workspace?.openAiHistory;
 
@@ -135,7 +141,7 @@ async function chatWithWorkspace(
       response,
       sources,
       message: error,
-// 
+      // 
     } = await VectorDb[chatMode]({
       namespace: workspace.slug,
       input: message,
@@ -173,9 +179,7 @@ async function chatWithWorkspace(
 
 function chatPrompt(workspace) {
   return (
-    workspace?.openAiPrompt ??
-    "<s>[INST]Вы полезный помощник, который отвечает на вопросы пользователей, используя предоставленный КОНТЕКСТ. Если ответа на вопрос нет в предоставленном контексте, отвечай на русском языке: Я не знаю.[/INST]"
-    // "Вы полезный помощник, который отвечает на вопросы пользователей, используя предоставленный КОНТЕКСТ. Если ответа на вопрос нет в предоставленном контексте, отвечай на русском языке: Я не знаю."
+    workspace.openAiPrompt
   );
 }
 

@@ -29,6 +29,7 @@ services:
 
   nginx:
     container_name: nginx
+    restart: always    
     image: nginx:latest 
     build: 
         context: .

@@ -1,4 +1,6 @@
-const { v1_chat_completions, v1_embeddings_openllm } = require('./web_client'); // 
+const { v1_chat_completions, v1_embeddings_openllm } = require('./web_client');
+const { prompt_templates } = require('../../../utils/vectorDbProviders/lance/index');
+const { BOS, EOS, assistance_prefix, end_of_turn, user_prefix } = prompt_templates();
 
 
 class OpenAi {
@@ -62,10 +64,13 @@ class OpenAi {
 
 
   // used in 
-  // 1. anything-llm/server/utils/chats/index.js:100 (if there is no vectorized space (hasVectorizedSpace is false) 
+  // 1. anything-llm/server/utils/chats/index.js:100 (if there is NO vectorized space (hasVectorizedSpace is false) 
   // or if the number of embeddings is zero. )
-  // 2. anything-llm/frontend/src/models/workspace.js:60 (set as a property of Workspace)  
+  // 2. anything-llm/frontend/src/models/workspace.js:60 (set as a property of Workspace)  workspace.openAiPrompt
   async sendChat(chatHistory = [], prompt, workspace = {}) {
+    // format history with pre - and post- fixes
+    const formattedHistory = convertToPromptHistory(chatHistory);
+    // console.log('chatHistory:', formattedHistory);
     const model = process.env.OPEN_MODEL_PREF;
     if (!this.isValidChatModel(model))
       throw new Error(
@@ -76,21 +81,21 @@ class OpenAi {
     const messages = [
       {
         role: "system",
-        content: `<s>[INST]Вы полезный помощник. Ваши ответы должны быть точными и краткими. 
-        Отвечайте на русском языке.[/INST]`
+        content: BOS + workspace.openAiPrompt
       },
 
-      ...chatHistory,
-      { role: "user", content: prompt + '\nОтвечай на русском языке.' }, // "[INST]Ответь на русском языке:[/INST]" + prompt
+      ...formattedHistory,
+      { role: "user", content: user_prefix + prompt + end_of_turn },
     ]; //  chat history with the user's   PROMPT at the END
-    console.log('.anything-llm/server/utils/AiProviders/openAi/index.js messages:', messages);
+
+    // console.log('.anything-llm/server/utils/AiProviders/openAi/index.js messages:', messages);
     let textResponse;
     if (!IS_OFFLINE) {
       try {
         const json = await this.openai
           .createChatCompletion({
             model,
-            temperature: Number(workspace?.openAiTemp ?? 0.21),
+            temperature: Number(workspace.openAiTemp),
             n: 1, // only one completion/response will be generated
             messages: messages,
           });
@@ -113,7 +118,7 @@ class OpenAi {
       }
     } else {
 
-      textResponse = await v1_chat_completions(messages, Number(workspace?.openAiTemp ?? 0.22));
+      textResponse = await v1_chat_completions(messages, Number(workspace.openAiTemp));
     }
 
     return textResponse;
@@ -123,7 +128,7 @@ class OpenAi {
   // used in:
   // anything-llm/server/utils/vectorDbProviders/lance/index.js:254  in LanceDB.query()
   // anything-llm/server/utils/vectorDbProviders/lance/index.js:304  in LanceDB.chat()
-  async getChatCompletion(messages = [], { temperature = 0.23 }) {
+  async getChatCompletion(messages = [], { temperature = 0.23130 }) {
     const IS_OFFLINE = true;
     const model = process.env.OPEN_MODEL_PREF || "gpt-3.5-turbo";
 
@@ -183,6 +188,25 @@ class OpenAi {
     }
   }  // end of embedChunks()
 }  // end of class OpenAi
+
+function convertToPromptHistory(history = []) {
+  const formattedHistory = [];
+
+  history.forEach((historyItem) => {
+    const { role, content } = historyItem;
+
+    // Determine the prefix based on the role
+    const prefix = role === "user" ? user_prefix : assistance_prefix;
+
+    // Add the formatted item to the history array
+    formattedHistory.push({ role: role, content: prefix + content + end_of_turn });
+  });
+
+  return formattedHistory;
+}
+
+
+
 
 module.exports = {
   OpenAi,

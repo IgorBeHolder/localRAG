@@ -64,3 +64,54 @@ curl -X 'POST' 'http://46.254.21.170:3002/v1/embeddings' -H 'accept: application
 
 
 curl -X 'POST' 'http://0.0.0.0:3004/v1/search' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{ "n_top": 5,  "text_for_search": "What were relations between Pierre and Natasha?",   "search_in_embeddings_only": true}'
+
+
+openchat: ********************************************************************************************************************
+
+# removed special all special tokens
+curl -X 'POST' \
+  'http://46.254.21.170:3003/v1/chat/completions' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "model": "/model-store/TheBloke/openchat_3.5-GGUF/openchat_3.5.Q4_K_M.gguf",
+  "messages": [
+    {
+      "role": "system",
+      "content": "Вы полезный помощник. Ваши ответы должны быть точными и краткими. Отвечайте на русском языке."
+    },
+    {
+      "role": "user",
+      "content": "GPT4 Correct User: Ваша задача сгенерировать валидный JSON объект на основе этой информации. Например следующая информация:: name: John lastname: Smith address: #1 Samuel St. would be converted to:" 
+    }
+  ],
+  "max_tokens": 512,
+  "temperature": 0.33,
+  "frequency_penalty": 1.2
+}'
+
+
+curl -X 'POST' \
+  'http://46.254.21.170:3003/v1/chat/completions' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "model": "/model-store/TheBloke/openchat_3.5-GGUF/openchat_3.5.Q4_K_M.gguf",
+  "messages": [
+    {
+      "role": "system",
+      "content": "Вы полезный помощник. Ваши ответы должны быть точными и краткими. Отвечайте на русском языке."
+    },
+    {
+      "role": "user",
+      "content": "GPT4 Correct User: Ваша задача сгенерировать валидный JSON объект на основе этой информации: name: John lastname: Smith address: #1 Samuel St. Только сгенерируй валидный JSON объект без объяснений." 
+    },
+    {
+      "role": "assistant",
+      "content": "GPT4 Correct Assistant: Ваша задача сгенерировать валидный JSON объект на основе этой информации: name: John lastname: Smith address: #1 Samuel St. Только сгенерируй валидный JSON объект без объяснений." 
+    }
+  ],
+  "max_tokens": 512,
+  "temperature": 0.33,
+  "frequency_penalty": 1.2
+}'

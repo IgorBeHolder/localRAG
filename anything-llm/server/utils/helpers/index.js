@@ -28,7 +28,7 @@ function getLLMProvider() {
       const { OpenAi } = require("../AiProviders/openAi");
       return new OpenAi();
     case "azure":
-      const { AzureOpenAi } = require("../AiProviders/azureOpenAi");
+      const { AzureOpenAi } = require("../AiProviders/zazureOpenAi");
       return new AzureOpenAi();
     default:
       throw new Error("ENV: No LLM_PROVIDER value found in environment!");
