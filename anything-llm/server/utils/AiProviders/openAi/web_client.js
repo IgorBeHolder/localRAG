@@ -1,18 +1,45 @@
 const axios = require('axios');
+const { prompt_templates } = require('../../vectorDbProviders/lance/index');
+const { BOS, EOS, assistance_prefix, end_of_turn, user_prefix } = prompt_templates();
+
+
+function format_messages(messages = []) {
+  const formattedHistory = [];
+
+  messages.forEach((messagesItem) => {
+    const { role, content } = messagesItem;
+
+    // Determine the prefix based on the role
+    const prefix = role === "user" ? user_prefix : (role === "system" ? BOS : assistance_prefix);
+    EOT = role === "system" ? EOS : end_of_turn;
+
+    // Add the formatted item to the history array
+    formattedHistory.push({ role: role, content: prefix + content + EOT });
+  });
+
+  // Extract the content from each item and join them into a string
+  // const flattenedContent = formattedHistory.map(item => item.content).join("");
+  // return flattenedContent;
+  return formattedHistory;
+}
+
 
 
 async function v1_chat_completions(messages, temperature) {
  
+  // const messages2string = format_messages(messages);
+  const messages2string = messages;
+
   const base_url = process.env.COMPLETION_MODEL_ENDPOINT;
   console.log('v1_chat_completions: *** base_url:', base_url);
   const compl_model = process.env.COMPLETION_MODEL_NAME;
   console.log('v1_chat_completions: *** completion_model:', compl_model);
   console.log('v1_chat_completions: *** temperature:', temperature);
-  console.log('v1_chat_completions: *** messages:', messages);
+  console.log('v1_chat_completions: *** messages:', messages2string);
   const url = base_url + '/v1/chat/completions';
   const payload = {
     "model": compl_model,
-    "messages": messages,
+    "messages": messages2string,
     // "max_tokens": 512,
     "temperature": temperature,
     // "top_p": 0.95,
@@ -78,6 +105,8 @@ async function v1_embeddings_openllm(textInput) {
     return null;
   }
 }
+
+
 
 
 module.exports = {

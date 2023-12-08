@@ -246,28 +246,28 @@ const LanceDb = {
     );
 
     // FORMING THE MEMORY LIST FOR THE QUERY
-    const { BOS, EOS, assistance_prefix, end_of_turn, user_prefix  } = prompt_templates();
+    // const { BOS, EOS, assistance_prefix, end_of_turn, user_prefix  } = prompt_templates();
 
     const context = {
       role: "assistant",
       content:
-      assistance_prefix + `КОНТЕКСТ: \n\n
+        `КОНТЕКСТ: \n\n
     ${contextTexts
           .map((text, i) => {
             return `${i}\n${text}\n\n`;
           })
-          .join("")}` + end_of_turn,
+          .join("")}`,
     };
 
     const memory_list = [
-      { role: "system", content: BOS + workspace.openAiPrompt },
+      { role: "system", content: workspace.openAiPrompt },
       context,
       {
         role: "user",
-        content: user_prefix + `В ответе используй информацию из предоставленного контекста.
+        content: `В ответе используй информацию из предоставленного контекста.
     Аргументируй ответ фактами только из контекста. Перед ответом внимательно изучи весь предоставленный контекст.
     Отвечай на русском языке.
-    ${input}` + end_of_turn
+    ${input}`
       }];
     // console.log('LanceDb:QUERY memory:272', memory_list);
     const responseText = await LLMConnector.getChatCompletion(memory_list, {
@@ -310,7 +310,7 @@ const LanceDb = {
       queryVector
     );
     // FORMING THE MEMORY LIST FOR THE QUERY
-    const { BOS, EOS, assistance_prefix, end_of_turn, user_prefix  } = prompt_templates();
+    const { BOS, EOS, assistance_prefix, end_of_turn, user_prefix } = prompt_templates();
     const sys_prompt = {
       role: "system",
       content: BOS + workspace.openAiPrompt
@@ -319,7 +319,7 @@ const LanceDb = {
     const prompt = {
       role: "assistant",
       content:
-      assistance_prefix + `КОНТЕКСТ: \n\n
+        assistance_prefix + `КОНТЕКСТ: \n\n
     ${contextTexts
           .map((text, i) => {
             return `${i}\n${text}\n\n`;
@@ -397,10 +397,10 @@ function prompt_templates() {
       ? '[INST]'
       : '';
   const assistance_prefix = model_name_is_openchat
-      ? 'GPT4 Correct Assistant: '
-      : model_name_is_mistral
-        ? '[INST]'
-        : '';
+    ? 'GPT4 Correct Assistant: '
+    : model_name_is_mistral
+      ? '[INST]'
+      : '';
   const end_of_turn = model_name_is_openchat
     ? '<|end_of_turn|>'
     : model_name_is_mistral
@@ -408,7 +408,7 @@ function prompt_templates() {
       : '';
 
   const BOS = model_name_is_mistral
-    ? '' //'<s>'
+    ? '<s>'
     : '';
   const EOS = model_name_is_mistral
     ? '</s>'

@@ -1,7 +1,4 @@
 const { v1_chat_completions, v1_embeddings_openllm } = require('./web_client');
-const { prompt_templates } = require('../../../utils/vectorDbProviders/lance/index');
-const { BOS, EOS, assistance_prefix, end_of_turn, user_prefix } = prompt_templates();
-
 
 class OpenAi {
   constructor() {
@@ -68,9 +65,7 @@ class OpenAi {
   // or if the number of embeddings is zero. )
   // 2. anything-llm/frontend/src/models/workspace.js:60 (set as a property of Workspace)  workspace.openAiPrompt
   async sendChat(chatHistory = [], prompt, workspace = {}) {
-    // format history with pre - and post- fixes
-    const formattedHistory = convertToPromptHistory(chatHistory);
-    // console.log('chatHistory:', formattedHistory);
+
     const model = process.env.OPEN_MODEL_PREF;
     if (!this.isValidChatModel(model))
       throw new Error(
@@ -81,11 +76,11 @@ class OpenAi {
     const messages = [
       {
         role: "system",
-        content: BOS + workspace.openAiPrompt
+        content: workspace.openAiPrompt
       },
 
-      ...formattedHistory,
-      { role: "user", content: user_prefix + prompt + end_of_turn },
+      ...chatHistory,
+      { role: "user", content: prompt },
     ]; //  chat history with the user's   PROMPT at the END
 
     // console.log('.anything-llm/server/utils/AiProviders/openAi/index.js messages:', messages);
@@ -128,7 +123,7 @@ class OpenAi {
   // used in:
   // anything-llm/server/utils/vectorDbProviders/lance/index.js:254  in LanceDB.query()
   // anything-llm/server/utils/vectorDbProviders/lance/index.js:304  in LanceDB.chat()
-  async getChatCompletion(messages = [], { temperature = 0.23130 }) {
+  async getChatCompletion(messages = [], { temperature  }) {
     const IS_OFFLINE = true;
     const model = process.env.OPEN_MODEL_PREF || "gpt-3.5-turbo";
 
@@ -188,24 +183,6 @@ class OpenAi {
     }
   }  // end of embedChunks()
 }  // end of class OpenAi
-
-function convertToPromptHistory(history = []) {
-  const formattedHistory = [];
-
-  history.forEach((historyItem) => {
-    const { role, content } = historyItem;
-
-    // Determine the prefix based on the role
-    const prefix = role === "user" ? user_prefix : assistance_prefix;
-
-    // Add the formatted item to the history array
-    formattedHistory.push({ role: role, content: prefix + content + end_of_turn });
-  });
-
-  return formattedHistory;
-}
-
-
 
 
 module.exports = {

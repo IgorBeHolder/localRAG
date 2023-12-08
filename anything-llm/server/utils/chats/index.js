@@ -65,7 +65,6 @@ function grepCommand(message) {
 async function chatWithWorkspace(
   workspace,
   message,
-  // chatMode = "chat",
   chatMode = "query",
   user = null
 ) {

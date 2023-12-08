@@ -178,3 +178,16 @@ curl -X 'POST' \
     "temperature":0.4, 
     "frequency_penalty":1.2
   }'
+
+
+curl -X 'POST' \
+  'http://46.254.21.170:3003/v1/chat/completions' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "model": "/model-store/mistralai/Mistral-7B-Instruct-v0.1",
+    "messages": [{"role": "user", "content": "Write an aesthetic TODO app using HTML5 and JS, in a single file. You should use round corners and gradients to make it more aesthetic."}
+    ],
+    "temperature":0.4, 
+    "frequency_penalty":1.2
+  }'
