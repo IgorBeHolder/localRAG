@@ -39,7 +39,7 @@ export default function ChatHistory({ history = [], workspace }) {
         if (props.role === "assistant" && props.animate) {
           return (
             <PromptReply
-              key={props.uuid}
+              key={index}
               ref={isLastMessage ? replyRef : null}
               uuid={props.uuid}
               reply={props.content}
