@@ -1,4 +1,6 @@
 // For handling of synchronous chats that are not utilizing streaming or chat requests.
+import {DEFAULT_CHAT_OPTIONS} from "../constants.js";
+
 export default function handleChat(
   chatResult,
   setLoadingResponse,
@@ -6,7 +8,7 @@ export default function handleChat(
   remHistory,
   _chatHistory
 ) {
-  const { uuid, textResponse, type, sources = [], error, close } = chatResult;
+  const {uuid, textResponse, type, sources = [], error, close} = chatResult;
 
   if (type === "abort") {
     setLoadingResponse(false);
@@ -55,11 +57,4 @@ export default function handleChat(
       animate: true,
     });
   }
-}
-
-export function chatPrompt(workspace) {
-  return (
-    workspace?.openAiPrompt ??
-    "Вы полезный ассистент. Ваши ответы должны быть точными и краткими. Отвечайте на русском языке. Аргументируйте ваши ответы фактами."
-  );
 }
