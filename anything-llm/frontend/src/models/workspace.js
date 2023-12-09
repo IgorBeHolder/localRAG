@@ -1,22 +1,22 @@
-import { API_BASE } from "../utils/constants";
-import { baseHeaders } from "../utils/request";
+import {API_BASE} from "../utils/constants";
+import {baseHeaders} from "../utils/request";
 
 const Workspace = {
   new: async function (data = {}) {
-    const { workspace, message } = await fetch(`${API_BASE}/workspace/new`, {
+    const {workspace, message} = await fetch(`${API_BASE}/workspace/new`, {
       method: "POST",
       body: JSON.stringify(data),
       headers: baseHeaders(),
     })
       .then((res) => res.json())
       .catch((e) => {
-        return { workspace: null, message: e.message };
+        return {workspace: null, message: e.message};
       });
 
-    return { workspace, message };
+    return {workspace, message};
   },
   update: async function (slug, data = {}) {
-    const { workspace, message } = await fetch(
+    const {workspace, message} = await fetch(
       `${API_BASE}/workspace/${slug}/update`,
       {
         method: "POST",
@@ -26,13 +26,13 @@ const Workspace = {
     )
       .then((res) => res.json())
       .catch((e) => {
-        return { workspace: null, message: e.message };
+        return {workspace: null, message: e.message};
       });
 
-    return { workspace, message };
+    return {workspace, message};
   },
   modifyEmbeddings: async function (slug, changes = {}) {
-    const { workspace, message } = await fetch(
+    const {workspace, message} = await fetch(
       `${API_BASE}/workspace/${slug}/update-embeddings`,
       {
         method: "POST",
@@ -42,10 +42,10 @@ const Workspace = {
     )
       .then((res) => res.json())
       .catch((e) => {
-        return { workspace: null, message: e.message };
+        return {workspace: null, message: e.message};
       });
 
-    return { workspace, message };
+    return {workspace, message};
   },
   chatHistory: async function (slug) {
     const history = await fetch(`${API_BASE}/workspace/${slug}/chats`, {
@@ -57,10 +57,10 @@ const Workspace = {
       .catch(() => []);
     return history;
   },
-  sendChat: async function ({ slug }, message, mode = "query") {
+  sendChat: async function ({slug}, message, mode = "query") {
     const chatResult = await fetch(`${API_BASE}/workspace/${slug}/chat`, {
       method: "POST",
-      body: JSON.stringify({ message, mode }),
+      body: JSON.stringify({message, mode}),
       headers: baseHeaders(),
     })
       .then((res) => res.json())
@@ -109,7 +109,7 @@ const Workspace = {
     });
 
     const data = await response.json();
-    return { response, data };
+    return {response, data};
   },
 };
 
