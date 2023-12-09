@@ -1,4 +1,4 @@
-const Formatter = Intl.NumberFormat("en", { notation: "compact" });
+const Formatter = Intl.NumberFormat("en", {notation: "compact"});
 
 export function numberWithCommas(input) {
   return input.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -34,19 +34,19 @@ export function humanFileSize(bytes, si = false, dp = 1) {
   } while (
     Math.round(Math.abs(bytes) * r) / r >= thresh &&
     u < units.length - 1
-  );
+    );
 
   return bytes.toFixed(dp) + " " + units[u];
 }
 
 export function milliToHms(milli = 0) {
   const d = parseFloat(milli) / 1_000.0;
-  var h = Math.floor(d / 3600);
-  var m = Math.floor((d % 3600) / 60);
-  var s = parseFloat((d % 3600.0) % 60);
+  let h = Math.floor(d / 3600);
+  let m = Math.floor((d % 3600) / 60);
+  let s = parseFloat((d % 3600.0) % 60);
 
-  var hDisplay = h >= 1 ? h + "h " : "";
-  var mDisplay = m >= 1 ? m + "m " : "";
-  var sDisplay = s >= 0.01 ? s.toFixed(2) + "s" : "";
+  let hDisplay = h >= 1 ? h + "h " : "";
+  let mDisplay = m >= 1 ? m + "m " : "";
+  let sDisplay = s >= 0.01 ? s.toFixed(2) + "s" : "";
   return hDisplay + mDisplay + sDisplay;
 }

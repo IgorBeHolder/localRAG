@@ -13,7 +13,7 @@ export default function EditUserModal({ user }) {
     e.preventDefault();
     const data = {};
     const form = new FormData(e.target);
-    for (var [key, value] of form.entries()) {
+    for (let [key, value] of form.entries()) {
       if (!value || value === null) continue;
       data[key] = value;
     }

@@ -16,7 +16,7 @@ export default function NewUserModal() {
     e.preventDefault();
     const data = {};
     const form = new FormData(e.target);
-    for (var [key, value] of form.entries()) data[key] = value;
+    for (let [key, value] of form.entries()) data[key] = value;
     const {user, error} = await Admin.newUser(data);
     if (!!user) window.location.reload();
     setError(error);

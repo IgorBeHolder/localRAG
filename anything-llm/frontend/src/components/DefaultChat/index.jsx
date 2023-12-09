@@ -86,8 +86,8 @@ export default function DefaultChatContainer() {
         setMockMessages([MESSAGES[0]]);
       }
 
-      var timer = 500;
-      var messages = [];
+      let timer = 500;
+      let messages = [];
 
       MESSAGES.map((child) => {
         setTimeout(() => {
