@@ -42,7 +42,7 @@ async function v1_chat_completions(messages, temperature) {
     "messages": messages2string,
     // "max_tokens": 512,
     "temperature": temperature,
-    // "top_p": 0.95,
+    "top_p": 0.95,
     // "presence_penalty": 0,
     "frequency_penalty": 1.3
   };
