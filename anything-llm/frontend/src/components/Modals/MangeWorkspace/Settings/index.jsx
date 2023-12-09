@@ -1,7 +1,7 @@
 import React, {useState, useRef, useEffect} from "react";
 import Workspace from "../../../../models/workspace";
 import paths from "../../../../utils/paths";
-import {chatPrompt} from "../../../../utils/chat";
+import {DEFAULT_CHAT_OPTIONS} from "../../../../utils/constants.js";
 
 // Ensure that a type is correct before sending the body
 // to the backend.
@@ -143,10 +143,10 @@ export default function WorkspaceSettings({workspace}) {
                 name="openAiTemp"
                 type="number"
                 min={0.0}
-                max={2.0}
-                step={0.1}
+                max={1.0}
+                step={0.01}
                 onWheel={(e) => e.target.blur()}
-                defaultValue={workspace?.openAiTemp ?? 0.2}
+                defaultValue={workspace?.openAiTemp ?? DEFAULT_CHAT_OPTIONS.openAiTemp}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-stone-600 dark:border-stone-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="0.5"
                 required={true}
@@ -174,7 +174,7 @@ export default function WorkspaceSettings({workspace}) {
                 name="openAiPrompt"
                 maxLength={500}
                 rows={5}
-                defaultValue={chatPrompt(workspace)}
+                defaultValue={workspace?.openAiPrompt ?? DEFAULT_CHAT_OPTIONS.openAiPrompt}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-stone-600 dark:border-stone-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Учитывая следующий разговор, соответствующий контекст и дополнительный вопрос, ответьте на текущий вопрос, который задает пользователь. Отправьте только свой ответ на вопрос с учетом приведенной выше информации, следуя инструкциям пользователя по мере необходимости."
                 required={true}
@@ -195,7 +195,8 @@ export default function WorkspaceSettings({workspace}) {
                 <p className="text-xs text-gray-600 dark:text-stone-400">
                   Количество предыдущих вопрос-ответов, которые будут включены в кратковременную память текущего ответа.
                   <br/>
-                  При больших значениях увеличивается время на ответ. Если значение больше 20, это может привести к сбоям в чате в зависимости
+                  При больших значениях увеличивается время на ответ. Если значение больше 20, это может привести к
+                  сбоям в чате в зависимости
                   от размера сообщения.
                 </p>
               </div>
@@ -206,7 +207,7 @@ export default function WorkspaceSettings({workspace}) {
                 max={20}
                 step={1}
                 onWheel={(e) => e.target.blur()}
-                defaultValue={workspace?.openAiHistory ?? 7}
+                defaultValue={workspace?.openAiHistory ?? DEFAULT_CHAT_OPTIONS.openAiHistory}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-stone-600 dark:border-stone-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="7"
                 required={true}
