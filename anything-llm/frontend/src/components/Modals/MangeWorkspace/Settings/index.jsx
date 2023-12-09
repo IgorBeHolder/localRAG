@@ -51,7 +51,7 @@ export default function WorkspaceSettings({workspace}) {
     e.preventDefault();
     const data = {};
     const form = new FormData(formEl.current);
-    for (var [key, value] of form.entries()) data[key] = castToType(key, value);
+    for (let [key, value] of form.entries()) data[key] = castToType(key, value);
     const {workspace: updatedWorkspace, message} = await Workspace.update(
       workspace.slug,
       data

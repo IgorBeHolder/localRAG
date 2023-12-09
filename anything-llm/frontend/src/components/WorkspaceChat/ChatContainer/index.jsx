@@ -39,7 +39,7 @@ export default function ChatContainer({workspace, knownHistory = []}) {
       const promptMessage =
         chatHistory.length > 0 ? chatHistory[chatHistory.length - 1] : null;
       const remHistory = chatHistory.length > 0 ? chatHistory.slice(0, -1) : [];
-      var _chatHistory = [...remHistory];
+      let _chatHistory = [...remHistory];
 
       if (!promptMessage || !promptMessage?.userMessage) {
         setLoadingResponse(false);

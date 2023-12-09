@@ -11,7 +11,7 @@ export default function NewUserModal() {
     e.preventDefault();
     const data = {};
     const form = new FormData(e.target);
-    for (var [key, value] of form.entries()) data[key] = value;
+    for (let [key, value] of form.entries()) data[key] = value;
     const {success, error} = await Invite.acceptInvite(code, data);
     if (!!success) window.location.replace(paths.home());
     setError(error);

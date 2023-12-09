@@ -18,8 +18,8 @@ export default function Jazzicon({ size = 10, user }) {
 }
 
 function toPseudoRandomInteger(uidString = "") {
-  var numberArray = [uidString.length];
-  for (var i = 0; i < uidString.length; i++) {
+  let numberArray = [uidString.length];
+  for (let i = 0; i < uidString.length; i++) {
     numberArray[i] = uidString.charCodeAt(i);
   }
 

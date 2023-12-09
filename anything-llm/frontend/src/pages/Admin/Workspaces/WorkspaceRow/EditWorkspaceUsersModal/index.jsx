@@ -17,7 +17,7 @@ export default function EditWorkspaceUsersModal({workspace, users}) {
       userIds: []
     };
     const form = new FormData(e.target);
-    for (var [key, value] of form.entries()) {
+    for (let [key, value] of form.entries()) {
       if (key.includes("user-") && value === "yes") {
         const [_, id] = key.split(`-`);
         data.userIds.push(+id);
