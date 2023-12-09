@@ -11,7 +11,8 @@ nginx:latest \
 anyth:v1 \
 embed:v1 \
 pgembeding:latest \
-ghcr.io/mistralai/mistral-src/vllm:latest
+vllm/vllm-openai
+# ghcr.io/mistralai/mistral-src/vllm:latest
 echo "Docker images saved to a tarball."
 
 # Create a compressed tarball
