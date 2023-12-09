@@ -4,7 +4,8 @@ services:
   vllm:
     container_name: vllm
     # image: ghcr.io/mistralai/mistral-src/vllm:latest
-    image: docker.io/vllm/vllm-openai:latest
+    # image: docker.io/vllm/vllm-openai:latest
+    image: vllm/vllm-openai:latest
     restart: always
     command:
       - "--host"
