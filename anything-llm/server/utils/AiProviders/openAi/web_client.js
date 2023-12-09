@@ -38,7 +38,7 @@ async function v1_chat_completions(messages, temperature) {
   console.log('v1_chat_completions: *** messages:', messages2string);
   const url = base_url + '/v1/chat/completions';
   const payload = {
-    "model": compl_model,
+    "model":   "/" + compl_model,
     "messages": messages2string,
     // "max_tokens": 512,
     "temperature": temperature,
