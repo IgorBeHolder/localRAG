@@ -2,7 +2,7 @@
 set -e
 
 # Set the file name as a variable
-tarball_name="sherpa-aiserver-gpu_v0.2.tar"
+tarball_name="sherpa-aiserver-gpu_v0.3.tar"
 
 # save docker images to a tarball
 echo "Saving docker images to a tarball..."

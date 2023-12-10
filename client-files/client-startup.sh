@@ -15,7 +15,7 @@ echo "Current directory: $(pwd)"
 docker network ls | grep -q "llm-net" || docker network create "llm-net"
 
 echo "Loading sherpa-aiserver docker images..."
-# Check if images have already been loaded
+# Check if images have already been loaded (not direct checking)
 images_loaded() {
     [ -f db-reset.sh ]
 }

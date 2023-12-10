@@ -16,7 +16,6 @@
     # --tokenizer=hf-internal-testing/llama-tokenizer
     # --download-dir ./model-store &&
 
-# python -m vllm.entrypoints.openai.api_server --model ../../model-store/mistralai/Mistral-7B-Instruct-v0.1-AWQ --quantization awq
 python -m vllm.entrypoints.openai.api_server \
     --model "../../$COMPLETION_MODEL_NAME" \
     --port $MM_PORT \
