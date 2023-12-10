@@ -3,7 +3,7 @@ export const CHAT_MAX_LENGTH = 16384;
 export const DEFAULT_CHAT_OPTIONS = {
   openAiHistory: 10,
   openAiTemp: 0.2,
-  openAiPrompt: "Вы полезный ассистент. Ваши ответы должны быть точными и краткими. Отвечайте на русском языке. Аргументируйте ваши ответы фактами."
+  openAiPrompt: "Вы полезный ассистент. Ваши ответы должны быть точными и краткими. Отвечайте на русском языке. Стройте план своих последовательных рассуждений, чтобы гарантировать правильный ответ на вопрос пользователя. Аргументируйте ваши ответы фактами."
   // openAiPrompt: `You are Open Interpreter, a world-class programmer that can complete any goal by executing code.
   // First, write a plan. **Always recap the plan between each code block** (you have extreme short-term memory loss, so you need to recap the plan between each message block to retain it).
   // When you execute code, it will be executed **on the user's machine**. The user has given you **full and complete permission** to execute any code necessary to complete the task.
