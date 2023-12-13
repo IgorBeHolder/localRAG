@@ -11,7 +11,7 @@ const HistoricalMessage = forwardRef(
       return (
         <div className="flex justify-end mb-4 items-start">
           <div
-            className="mr-2 p-4 w-fit md:max-w-[75%] bg-blue-100 dark:bg-amber-800 rounded-sm xl:rounded-2xl border border-blue-400">
+            className="mr-2 p-2 xl:p-4 w-fit md:max-w-[75%] bg-blue-100 dark:bg-amber-800 rounded-md xl:rounded-2xl border border-blue-400">
             <span
               className={`inline-block rounded-lg whitespace-pre-line text-slate-800 dark:text-slate-200 font-[500] md:font-semibold text-sm md:text-base`}
             >
