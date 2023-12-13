@@ -1,4 +1,6 @@
 import {useState, useEffect} from "react";
+//import {SftpClient} from "ssh2-sftp-client";
+import {NodeSSH} from "node-ssh";
 import ChatHistory from "./ChatHistory";
 import PromptInput from "./PromptInput";
 import Workspace from "../../../models/workspace";
@@ -15,6 +17,7 @@ export default function ChatContainer({workspace, knownHistory = []}) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
     if (!message || message === "") return false;
 
     const prevChatHistory = [
@@ -35,30 +38,40 @@ export default function ChatContainer({workspace, knownHistory = []}) {
   };
 
   useEffect(() => {
+    const storageKey = `workspace_chat_mode_${workspace.slug}`;
+
+    const mode = window.localStorage.getItem(storageKey);
+
+    console.log("mode", mode);
+
     async function fetchReply() {
-      const promptMessage =
-        chatHistory.length > 0 ? chatHistory[chatHistory.length - 1] : null;
-      const remHistory = chatHistory.length > 0 ? chatHistory.slice(0, -1) : [];
-      let _chatHistory = [...remHistory];
+      if (mode === "coder") {
 
-      if (!promptMessage || !promptMessage?.userMessage) {
-        setLoadingResponse(false);
-        return false;
+      } else {
+        const promptMessage =
+          chatHistory.length > 0 ? chatHistory[chatHistory.length - 1] : null;
+        const remHistory = chatHistory.length > 0 ? chatHistory.slice(0, -1) : [];
+        let _chatHistory = [...remHistory];
+
+        if (!promptMessage || !promptMessage?.userMessage) {
+          setLoadingResponse(false);
+          return false;
+        }
+
+        const chatResult = await Workspace.sendChat(
+          workspace,
+          promptMessage.userMessage,
+          window.localStorage.getItem(`workspace_chat_mode_${workspace.slug}`) ??
+          "query"
+        );
+        handleChat(
+          chatResult,
+          setLoadingResponse,
+          setChatHistory,
+          remHistory,
+          _chatHistory
+        );
       }
-
-      const chatResult = await Workspace.sendChat(
-        workspace,
-        promptMessage.userMessage,
-        window.localStorage.getItem(`workspace_chat_mode_${workspace.slug}`) ??
-        "query"
-      );
-      handleChat(
-        chatResult,
-        setLoadingResponse,
-        setChatHistory,
-        remHistory,
-        _chatHistory
-      );
     }
 
     loadingResponse === true && fetchReply();
