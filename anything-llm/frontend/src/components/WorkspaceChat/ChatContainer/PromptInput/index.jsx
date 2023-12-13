@@ -45,6 +45,10 @@ export default function PromptInput({
       window.localStorage.setItem(storageKey, "chat");
       window.dispatchEvent(new Event("workspace_chat_mode_update"));
       return;
+    } else if (command === "/coder") {
+      window.localStorage.setItem(storageKey, "coder");
+      window.dispatchEvent(new Event("workspace_chat_mode_update"));
+      return;
     }
 
     onChange({target: {value: `${command} ${message}`}});
@@ -160,14 +164,21 @@ function CommandMenu({workspace, show, handleClick, hide}) {
   if (!show) return null;
   const COMMANDS = [
     {
+      cmd: "/coder",
+      description: "- перейти в режим кодинга."
+    },
+    {
       cmd: "/conversation",
-      description: "- переключиться в режим чата (запоминает недавнюю историю чата)."
+      description: "- перейти в режим чата (запоминает недавнюю историю чата)."
     },
     {
       cmd: "/query",
       description: "- перейти в режим запроса (не запоминает предыдущие чаты)."
     },
-    {cmd: "/reset", description: "- очистить текущую историю чата."}
+    {
+      cmd: "/reset",
+      description: "- очистить текущую историю чата."
+    }
   ];
 
   return (
