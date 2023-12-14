@@ -14,7 +14,7 @@ export default function MultiUserAuth() {
     const data = {};
 
     const form = new FormData(e.target);
-    for (var [key, value] of form.entries()) data[key] = value;
+    for (let [key, value] of form.entries()) data[key] = value;
     const {valid, user, token, message} = await System.requestToken(data);
     if (valid && !!token && !!user) {
       window.localStorage.setItem(AUTH_USER, JSON.stringify(user));

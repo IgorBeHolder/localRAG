@@ -1,6 +1,7 @@
 import React, {useRef, useState} from "react";
 import {X} from "react-feather";
 import Workspace from "../../models/workspace";
+import {DEFAULT_CHAT_OPTIONS} from "../../utils/constants.js";
 
 const noop = () => false;
 export default function NewWorkspaceModal({hideModal = noop}) {
@@ -9,10 +10,16 @@ export default function NewWorkspaceModal({hideModal = noop}) {
   const handleCreate = async (e) => {
     setError(null);
     e.preventDefault();
-    const data = {};
+    let data = {...DEFAULT_CHAT_OPTIONS};
     const form = new FormData(formEl.current);
-    for (var [key, value] of form.entries()) data[key] = value;
+    for (let [key, value] of form.entries()) data[key] = value;
     const {workspace, message} = await Workspace.new(data);
+
+    const {workspace: updatedWorkspace, message: updateMessage} = await Workspace.update(
+      workspace.slug,
+      DEFAULT_CHAT_OPTIONS
+    );
+
     if (!!workspace) window.location.reload();
     setError(message);
   };

@@ -2,7 +2,7 @@
 set -e
 
 # Set the file name as a variable
-tarball_name="sherpa-aiserver-gpu_v0.2.tar"
+tarball_name="sherpa-aiserver-gpu_v0.3.tar"
 
 # save docker images to a tarball
 echo "Saving docker images to a tarball..."
@@ -11,7 +11,8 @@ nginx:latest \
 anyth:v1 \
 embed:v1 \
 pgembeding:latest \
-ghcr.io/mistralai/mistral-src/vllm:latest
+vllm/vllm-openai
+# ghcr.io/mistralai/mistral-src/vllm:latest
 echo "Docker images saved to a tarball."
 
 # Create a compressed tarball

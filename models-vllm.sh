@@ -2,13 +2,14 @@
 set -e
 
 # Set the file name as a variable
-tarball_name="models_vllm_v0.2.tar.gz"
+tarball_name="models_vllm_v0.3.tar.gz"
 
 # Create a compressed tarball
 echo "Compressing tarball..."
 tar -czvf "$tarball_name" \
   ./model-store/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 \
-  ./model-store/mistralai/Mistral-7B-Instruct-v0.1
+  ./model-store/model-store/openchat/openchat_3.5 \
+  # ./model-store/mistralai/Mistral-7B-Instruct-v0.1
 
 echo "Tarball compressed."
 

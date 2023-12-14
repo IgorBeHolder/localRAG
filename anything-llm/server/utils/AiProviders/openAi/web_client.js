@@ -23,10 +23,10 @@ function format_messages(messages = []) {
   return formattedHistory;
 }
 
-
+const model_prefix = process.env.DEVICE == ('cpu') ? '/app' : '';
 
 async function v1_chat_completions(messages, temperature) {
- 
+
   // const messages2string = format_messages(messages);
   const messages2string = messages;
 
@@ -38,13 +38,14 @@ async function v1_chat_completions(messages, temperature) {
   console.log('v1_chat_completions: *** messages:', messages2string);
   const url = base_url + '/v1/chat/completions';
   const payload = {
-    "model": compl_model,
+    // add the prefix to the model name like '/app'
+    "model": model_prefix + "/model-store/" + compl_model,
     "messages": messages2string,
     // "max_tokens": 512,
     "temperature": temperature,
-    // "top_p": 0.95,
+    "top_p": 0.95,
     // "presence_penalty": 0,
-    "frequency_penalty": 1.2
+    "frequency_penalty": 1.3
   };
   // The presence penalty is a one - off additive contribution that applies to all tokens that
   // have been sampled at least once and the frequency penalty is a contribution that is proportional 

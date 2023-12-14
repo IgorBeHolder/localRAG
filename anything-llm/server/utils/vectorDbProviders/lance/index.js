@@ -264,10 +264,11 @@ const LanceDb = {
       context,
       {
         role: "user",
-        content: `В ответе используй информацию из предоставленного контекста.
-    Аргументируй ответ фактами только из контекста. Перед ответом внимательно изучи весь предоставленный контекст.
-    Отвечай на русском языке.
-    ${input}`
+        content: `Вопрос: ${input}"
+        В ответе используй информацию из предоставленного выше контекста.
+        Аргументируй ответ фактами только из контекста. Перед ответом внимательно изучи весь предоставленный контекст.
+        Отвечай кратко на русском языке только на последний вопрос.
+    `
       }];
     // console.log('LanceDb:QUERY memory:272', memory_list);
     const responseText = await LLMConnector.getChatCompletion(memory_list, {
@@ -319,12 +320,12 @@ const LanceDb = {
     const prompt = {
       role: "assistant",
       content:
-        assistance_prefix + `КОНТЕКСТ: \n\n
+        `КОНТЕКСТ: \n\n
     ${contextTexts
           .map((text, i) => {
             return `${i}\n${text}\n\n`;
           })
-          .join("")}` + end_of_turn,
+          .join("")}`,
     };
     const memory = [
       sys_prompt,
@@ -332,7 +333,7 @@ const LanceDb = {
       ...chatHistory,
       {
         role: "user",
-        content: user_prefix + input + '\nАргументируй ответ фактами из контекста. Отвечай на русском языке.' + end_of_turn
+        content: input + '\nАргументируй ответ фактами из контекста. Отвечай кратко на русском языке только на последний вопрос.'
       }];
     console.log('LanceDb:CHAT (from vectorized) memory:337', memory);
     const responseText = await LLMConnector.getChatCompletion(memory, {

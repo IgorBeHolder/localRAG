@@ -12,6 +12,7 @@ logs/server.log
 *.db
 storage/lancedb
 public/
+storage/
 
 # !storage/anythingllm.db
 
