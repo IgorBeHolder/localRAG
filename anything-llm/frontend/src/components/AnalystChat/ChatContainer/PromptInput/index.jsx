@@ -52,9 +52,6 @@ export default function PromptInput({
 
       window.localStorage.setItem(storageKey, "analyst");
       window.dispatchEvent(new Event("workspace_chat_mode_update"));
-
-      window.location = "/analyst/" + workspace.name;
-
       return;
     }
 
