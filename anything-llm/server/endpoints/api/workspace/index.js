@@ -479,18 +479,18 @@ function apiWorkspaceEndpoints(app) {
 
       const uuid = uuidv4();
 
-      const result = {
-        id: uuid,
-        type: "textResponse",
-        textResponse: "textResponse",
-        sources: [],
-        close: true,
-        error: null
-      }
-
-      response.status(200).json({...result});
-
-      return;
+      //const result = {
+      //  id: uuid,
+      //  type: "textResponse",
+      //  textResponse: "textResponse",
+      //  sources: [],
+      //  close: true,
+      //  error: null
+      //}
+      //
+      //response.status(200).json({...result});
+      //
+      //return;
 
       try {
         const {slug} = request.params;
@@ -504,25 +504,25 @@ function apiWorkspaceEndpoints(app) {
           return;
         }
 
-        if (mode === "analyst") {
-          const result = {
-            id: uuid,
-            type: "textResponse",
-            textResponse: "textResponse",
-            sources: [],
-            close: true,
-            error: null
-          } // await chatWithWorkspace(workspace, message, mode);
-
-          response.status(200).json({...result});
-        } else {
+        //if (mode === "analyst") {
+        //  const result = {
+        //    id: uuid,
+        //    type: "textResponse",
+        //    textResponse: "textResponse",
+        //    sources: [],
+        //    close: true,
+        //    error: null
+        //  } // await chatWithWorkspace(workspace, message, mode);
+        //
+        //  response.status(200).json({...result});
+        //} else {
           const result = await chatWithWorkspace(workspace, message, mode);
           await Telemetry.sendTelemetry("sent_chat", {
             LLMSelection: process.env.LLM_PROVIDER || "openai",
             VectorDbSelection: process.env.VECTOR_DB || "pinecone"
           });
           response.status(200).json({...result});
-        }
+        //}
       } catch (e) {
         response.status(500).json({
           id: uuidv4(),
