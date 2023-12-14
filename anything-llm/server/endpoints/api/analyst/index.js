@@ -10,6 +10,7 @@ const {
 const {getVectorDbClass} = require("../../../utils/helpers");
 const {multiUserMode, reqBody} = require("../../../utils/http");
 const {validApiKey} = require("../../../utils/middleware/validApiKey");
+const {v4: uuidv4} = require("uuid");
 
 function apiAnalystEndpoints(app) {
   if (!app) return;
@@ -432,7 +433,7 @@ function apiAnalystEndpoints(app) {
   );
 
   app.post(
-    "/v1/analyst/:slug/coder",
+    "/v1/analyst/:slug/analyst",
     [validApiKey],
     async (request, response) => {
       /*
@@ -484,14 +485,16 @@ function apiAnalystEndpoints(app) {
           return;
         }
 
-        console.log('### request ###', message, mode);
+        console.log("### request ###", message, mode);
 
-        //const result = await chatWithAnalyst(analyst, message, mode);
-        //await Telemetry.sendTelemetry("sent_chat", {
-        //  LLMSelection: process.env.LLM_PROVIDER || "openai",
-        //  VectorDbSelection: process.env.VECTOR_DB || "pinecone"
-        //});
-
+        const result = {
+          id: uuidv4(),
+          type: "textResponse",
+          textResponse: "sshResponse",
+          sources: [],
+          close: true,
+          error: null
+        }
 
         response.status(200).json({...result});
       } catch (e) {

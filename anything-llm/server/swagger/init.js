@@ -31,6 +31,7 @@ const endpointsFiles = [
   '../endpoints/api/admin/index.js',
   '../endpoints/api/document/index.js',
   '../endpoints/api/workspace/index.js',
+  '../endpoints/api/analyst/index.js',
   '../endpoints/api/system/index.js',
 ];
 
