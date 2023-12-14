@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useCallback, useState} from "react";
 import {ReactTerminal} from "react-terminal";
 import {getTimeAgo} from "../../../../../utils/functions.js";
 
-const TerminalComponent = () => {
+const TerminalComponent = ({handleSubmit}) => {
   const [message, setMessage] = useState(null);
   const [from, setFrom] = useState(null);
   const [email, setEmail] = useState(null);
@@ -352,6 +352,13 @@ const TerminalComponent = () => {
       }
 
       return validateMessage(input);
+    },
+    ssh: (input) => {
+      console.log("SSH", input);
+
+      handleSubmit(input);
+
+      return "test";
     },
     from: (input) => {
       if (!input && !from) {

@@ -6,7 +6,7 @@ const Workspace = {
     const {workspace, message} = await fetch(`${API_BASE}/workspace/new`, {
       method: "POST",
       body: JSON.stringify(data),
-      headers: baseHeaders(),
+      headers: baseHeaders()
     })
       .then((res) => res.json())
       .catch((e) => {
@@ -21,7 +21,7 @@ const Workspace = {
       {
         method: "POST",
         body: JSON.stringify(data),
-        headers: baseHeaders(),
+        headers: baseHeaders()
       }
     )
       .then((res) => res.json())
@@ -37,7 +37,7 @@ const Workspace = {
       {
         method: "POST",
         body: JSON.stringify(changes), // contains 'adds' and 'removes' keys that are arrays of filepaths
-        headers: baseHeaders(),
+        headers: baseHeaders()
       }
     )
       .then((res) => res.json())
@@ -48,69 +48,73 @@ const Workspace = {
     return {workspace, message};
   },
   chatHistory: async function (slug) {
-    const history = await fetch(`${API_BASE}/workspace/${slug}/chats`, {
+    return await fetch(`${API_BASE}/workspace/${slug}/chats`, {
       method: "GET",
-      headers: baseHeaders(),
+      headers: baseHeaders()
     })
       .then((res) => res.json())
       .then((res) => res.history || [])
       .catch(() => []);
-    return history;
   },
   sendChat: async function ({slug}, message, mode = "query") {
-    const chatResult = await fetch(`${API_BASE}/workspace/${slug}/chat`, {
+    return await fetch(`${API_BASE}/workspace/${slug}/chat`, {
       method: "POST",
       body: JSON.stringify({message, mode}),
-      headers: baseHeaders(),
+      headers: baseHeaders()
     })
       .then((res) => res.json())
       .catch((e) => {
         console.error(e);
         return null;
       });
-
-    return chatResult;
+  },
+  sendCoder: async function ({slug}, message, mode = "coder") {
+    return await fetch(`${API_BASE}/workspace/${slug}/coder`, {
+      method: "POST",
+      body: JSON.stringify({message, mode}),
+      headers: baseHeaders()
+    })
+      .then((res) => res.json())
+      .catch((e) => {
+        console.error(e);
+        return null;
+      });
   },
   all: async function () {
-    const workspaces = await fetch(`${API_BASE}/workspaces`, {
+    return await fetch(`${API_BASE}/workspaces`, {
       method: "GET",
-      headers: baseHeaders(),
+      headers: baseHeaders()
     })
       .then((res) => res.json())
       .then((res) => res.workspaces || [])
       .catch(() => []);
-
-    return workspaces;
   },
   bySlug: async function (slug = "") {
-    const workspace = await fetch(`${API_BASE}/workspace/${slug}`, {
-      headers: baseHeaders(),
+    return await fetch(`${API_BASE}/workspace/${slug}`, {
+      headers: baseHeaders()
     })
       .then((res) => res.json())
       .then((res) => res.workspace)
       .catch(() => null);
-    return workspace;
   },
   delete: async function (slug) {
-    const result = await fetch(`${API_BASE}/workspace/${slug}`, {
+    return await fetch(`${API_BASE}/workspace/${slug}`, {
       method: "DELETE",
-      headers: baseHeaders(),
+      headers: baseHeaders()
     })
       .then((res) => res.ok)
       .catch(() => false);
-
-    return result;
   },
   uploadFile: async function (slug, formData) {
     const response = await fetch(`${API_BASE}/workspace/${slug}/upload`, {
       method: "POST",
       body: formData,
-      headers: baseHeaders(),
+      headers: baseHeaders()
     });
 
     const data = await response.json();
     return {response, data};
-  },
+  }
 };
 
 export default Workspace;

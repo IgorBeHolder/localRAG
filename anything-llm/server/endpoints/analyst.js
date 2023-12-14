@@ -226,18 +226,18 @@ function analystEndpoints(app) {
 
     conn.connect(sshConfig);
 
-    try {
-      const {slug} = request.params;
-      const user = await userFromSession(request, response);
-      const analyst = multiUserMode(response)
-        ? await Analyst.getWithUser(user, {slug})
-        : await Analyst.get({slug});
-
-      response.status(200).json({analyst});
-    } catch (e) {
-      console.log(e.message, e);
-      response.sendStatus(500).end();
-    }
+    //try {
+    //  const {slug} = request.params;
+    //  const user = await userFromSession(request, response);
+    //  const analyst = multiUserMode(response)
+    //    ? await Analyst.getWithUser(user, {slug})
+    //    : await Analyst.get({slug});
+    //
+    //  response.status(200).json({analyst});
+    //} catch (e) {
+    //  console.log(e.message, e);
+    //  response.sendStatus(500).end();
+    //}
   });
 
   app.get(

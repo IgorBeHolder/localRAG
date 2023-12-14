@@ -13,19 +13,18 @@ export default function ChatContainer({workspace, knownHistory = []}) {
     setMessage(event.target.value);
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    if (!message || message === "") return false;
+  const handleSubmit = async (msg) => {
+    console.log("handleSubmit", msg);
+    if (!msg || msg === "") return false;
 
     const prevChatHistory = [
       ...chatHistory,
-      {content: message, role: "user"},
+      {content: msg, role: "user"},
       {
         content: "",
         role: "assistant",
         pending: true,
-        userMessage: message,
+        userMessage: msg,
         animate: true
       }
     ];
@@ -40,36 +39,35 @@ export default function ChatContainer({workspace, knownHistory = []}) {
 
     const mode = window.localStorage.getItem(storageKey);
 
-    console.log("mode", mode);
+    console.log("mode fetchReply", mode);
 
     async function fetchReply() {
-      if (mode === "coder") {
+      //if (mode === "coder") {
+      const promptMessage = chatHistory.length > 0 ? chatHistory[chatHistory.length - 1] : null;
+      const remHistory = chatHistory.length > 0 ? chatHistory.slice(0, -1) : [];
+      let _chatHistory = [...remHistory];
 
-      } else {
-        const promptMessage =
-          chatHistory.length > 0 ? chatHistory[chatHistory.length - 1] : null;
-        const remHistory = chatHistory.length > 0 ? chatHistory.slice(0, -1) : [];
-        let _chatHistory = [...remHistory];
-
-        if (!promptMessage || !promptMessage?.userMessage) {
-          setLoadingResponse(false);
-          return false;
-        }
-
-        const chatResult = await Workspace.sendChat(
-          workspace,
-          promptMessage.userMessage,
-          window.localStorage.getItem(`workspace_chat_mode_${workspace.slug}`) ??
-          "query"
-        );
-        handleChat(
-          chatResult,
-          setLoadingResponse,
-          setChatHistory,
-          remHistory,
-          _chatHistory
-        );
+      if (!promptMessage || !promptMessage?.userMessage) {
+        setLoadingResponse(false);
+        return false;
       }
+
+      const chatResult = await Workspace.sendChat(
+        workspace,
+        promptMessage.userMessage,
+        "analyst"
+      );
+
+      console.log("chatResult", chatResult);
+
+      handleChat(
+        chatResult,
+        setLoadingResponse,
+        setChatHistory,
+        remHistory,
+        _chatHistory
+      );
+      //}
     }
 
     loadingResponse === true && fetchReply();
