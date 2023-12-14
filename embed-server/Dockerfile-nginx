@@ -6,5 +6,5 @@ COPY nginx/nginx.conf /etc/nginx
 COPY nginx/.htpasswd /etc/nginx/.htpasswd
 
 # Copy proxy config SCHEMA
-# COPY ../client-files/nginx/local-rag-docs.conf /etc/nginx/sites-enabled/local-rag-docs.conf 
-COPY nginx/local-rag-docs.conf /etc/nginx/sites-enabled/local-rag-docs.conf 
+COPY config/local-rag-docs.conf /etc/nginx/sites-enabled/local-rag-docs.conf 
+# COPY nginx/local-rag-docs.conf /etc/nginx/sites-enabled/local-rag-docs.conf 
