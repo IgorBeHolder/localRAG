@@ -17,7 +17,7 @@ services:
         DOCKER_BUILDKIT: 1  
     volumes:
     # ensure all host dirs have the same permissions as the container user
-      - "../server/storage:/app/server/storage"
+      - "../server/storage/:/app/server/storage"
       - "../collector/hotdir/:/app/collector/hotdir"
       - "../collector/outputs/:/app/collector/outputs"
     user: "${ARG_UID}:${ARG_GID}"
