@@ -22,6 +22,7 @@ const { utilEndpoints } = require("./endpoints/utils");
 const { Telemetry } = require("./models/telemetry");
 const { developerEndpoints } = require("./endpoints/api");
 const setupTelemetry = require("./utils/telemetry");
+const {analystEndpoints} = require("./endpoints/analyst");
 const app = express();
 const apiRouter = express.Router();
 const FILE_LIMIT = "3GB";
@@ -39,6 +40,7 @@ app.use(
 app.use("/api", apiRouter);
 systemEndpoints(apiRouter);
 workspaceEndpoints(apiRouter);
+analystEndpoints(apiRouter);
 chatEndpoints(apiRouter);
 adminEndpoints(apiRouter);
 inviteEndpoints(apiRouter);
@@ -66,7 +68,6 @@ apiRouter.post("/v/:command", async (request, response) => {
       console.error(JSON.stringify(e));
       response.status(500).json({ error: e.message });
     }
-    return;
   } catch (e) {
     console.log(e.message, e);
     response.sendStatus(500).end();
