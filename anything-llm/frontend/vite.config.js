@@ -1,19 +1,19 @@
-import {defineConfig} from 'vite';
-import postcss from './postcss.config.js';
-import react from '@vitejs/plugin-react';
-import dns from 'dns';
+import {defineConfig} from "vite";
+import postcss from "./postcss.config.js";
+import react from "@vitejs/plugin-react";
+import dns from "dns";
 import {visualizer} from "rollup-plugin-visualizer";
 
-dns.setDefaultResultOrder('verbatim')
+dns.setDefaultResultOrder("verbatim")
 
 // https://vitejs.dev/config/
 export default defineConfig({
   server: {
     port: 3000,
-    host: 'localhost'
+    host: "localhost"
   },
   define: {
-    'process.env': process.env
+    "process.env": process.env
   },
   css: {
     postcss
@@ -48,10 +48,10 @@ export default defineConfig({
     }
   },
   optimizeDeps: {
-    exclude: ['fsevents'],
+    exclude: ["fsevents"],
     esbuildOptions: {
       define: {
-        global: 'globalThis'
+        global: "globalThis"
       },
       plugins: []
     }
