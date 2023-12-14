@@ -488,7 +488,9 @@ function apiWorkspaceEndpoints(app) {
         error: null
       }
 
-      return response.status(200).json({...result});
+      response.status(200).json({...result});
+
+      return;
 
       try {
         const {slug} = request.params;
