@@ -497,32 +497,17 @@ function apiWorkspaceEndpoints(app) {
         const {message, mode = "query"} = reqBody(request);
         const workspace = await Workspace.get({slug});
 
-        console.log("### request ###", message, mode);
-
         if (!workspace) {
           response.sendStatus(400).end();
           return;
         }
 
-        //if (mode === "analyst") {
-        //  const result = {
-        //    id: uuid,
-        //    type: "textResponse",
-        //    textResponse: "textResponse",
-        //    sources: [],
-        //    close: true,
-        //    error: null
-        //  } // await chatWithWorkspace(workspace, message, mode);
-        //
-        //  response.status(200).json({...result});
-        //} else {
-          const result = await chatWithWorkspace(workspace, message, mode);
-          await Telemetry.sendTelemetry("sent_chat", {
-            LLMSelection: process.env.LLM_PROVIDER || "openai",
-            VectorDbSelection: process.env.VECTOR_DB || "pinecone"
-          });
-          response.status(200).json({...result});
-        //}
+        const result = await chatWithWorkspace(workspace, message, mode);
+        await Telemetry.sendTelemetry("sent_chat", {
+          LLMSelection: process.env.LLM_PROVIDER || "openai",
+          VectorDbSelection: process.env.VECTOR_DB || "pinecone"
+        });
+        response.status(200).json({...result});
       } catch (e) {
         response.status(500).json({
           id: uuidv4(),
@@ -588,8 +573,6 @@ function apiWorkspaceEndpoints(app) {
           response.sendStatus(400).end();
           return;
         }
-
-        console.log("### request ###", message, mode);
 
         const uuid = uuidv4();
 

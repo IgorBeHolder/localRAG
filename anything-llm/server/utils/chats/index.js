@@ -77,113 +77,115 @@ async function chatWithWorkspace(
 
   console.log("chatWithWorkspace", chatMode);
 
-  return {
-    id: uuid,
-    type: "textResponse",
-    textResponse: "textResponse",
-    sources: [],
-    close: true,
-    error: null
-  }
-
   if (!!command && Object.keys(VALID_COMMANDS).includes(command)) {
     return await VALID_COMMANDS[command](workspace, message, uuid, user);
   }
 
-  const {safe, reasons = []} = await LLMConnector.isSafe(message);
-  if (!safe) {
-    return {
-      id: uuid,
-      type: "abort",
-      textResponse: null,
-      sources: [],
-      close: true,
-      // error: `This message was moderated and will not be allowed. Violations for ${reasons.join(
-      //   ", "
-      // )} found.`,
-      error: `Это сообщение не прошло модерацию по причине ${reasons.join(
-        ", "
-      )}.`
-    };
-  }
-
-  const hasVectorizedSpace = await VectorDb.hasNamespace(workspace.slug);
-  const embeddingsCount = await VectorDb.namespaceCount(workspace.slug);
-
-
-  //  has NO vectorized space
-  if (!hasVectorizedSpace || embeddingsCount === 0) {
-    const rawHistory = await WorkspaceChats.forWorkspace(workspace.id);
-    const chatHistory = convertToPromptHistory(rawHistory);
-    const response = await LLMConnector.sendChat(
-      chatHistory,
-      message,
-      workspace
-    );
-    const data = {text: response, sources: [], type: "query"};
-
-    await WorkspaceChats.new({
-      workspaceId: workspace.id,
-      prompt: message,
-      response: data,
-      user
-    });
+  if (chatMode === "analyst") {
     return {
       id: uuid,
       type: "textResponse",
-      textResponse: response,
+      textResponse: "ssh me",
       sources: [],
       close: true,
       error: null
-    };
-
-
-  } else {    //  HAS vectorized space
-    var messageLimit = workspace?.openAiHistory;
-
-    const rawHistory = await WorkspaceChats.forWorkspace(
-      workspace.id,
-      messageLimit
-    );
-    const chatHistory = convertToPromptHistory(rawHistory);
-    const {
-      response,
-      sources,
-      message: error
-      //
-    } = await VectorDb[chatMode]({
-      namespace: workspace.slug,
-      input: message,
-      workspace,
-      chatHistory
-    });
-    if (!response) {
+    }
+  } else {
+    const {safe, reasons = []} = await LLMConnector.isSafe(message);
+    if (!safe) {
       return {
         id: uuid,
         type: "abort",
         textResponse: null,
         sources: [],
         close: true,
-        error
+        // error: `This message was moderated and will not be allowed. Violations for ${reasons.join(
+        //   ", "
+        // )} found.`,
+        error: `Это сообщение не прошло модерацию по причине ${reasons.join(
+          ", "
+        )}.`
       };
     }
 
-    const data = {text: response, sources, type: chatMode};
-    await WorkspaceChats.new({
-      workspaceId: workspace.id,
-      prompt: message,
-      response: data,
-      user
-    });
-    return {
-      id: uuid,
-      type: "textResponse",
-      textResponse: response,
-      sources,
-      close: true,
-      error
-    };
-  } // end has vectorized space
+    const hasVectorizedSpace = await VectorDb.hasNamespace(workspace.slug);
+    const embeddingsCount = await VectorDb.namespaceCount(workspace.slug);
+
+
+    //  has NO vectorized space
+    if (!hasVectorizedSpace || embeddingsCount === 0) {
+      const rawHistory = await WorkspaceChats.forWorkspace(workspace.id);
+      const chatHistory = convertToPromptHistory(rawHistory);
+      const response = await LLMConnector.sendChat(
+        chatHistory,
+        message,
+        workspace
+      );
+      const data = {text: response, sources: [], type: "query"};
+
+      await WorkspaceChats.new({
+        workspaceId: workspace.id,
+        prompt: message,
+        response: data,
+        user
+      });
+      return {
+        id: uuid,
+        type: "textResponse",
+        textResponse: response,
+        sources: [],
+        close: true,
+        error: null
+      };
+
+
+    } else {    //  HAS vectorized space
+      var messageLimit = workspace?.openAiHistory;
+
+      const rawHistory = await WorkspaceChats.forWorkspace(
+        workspace.id,
+        messageLimit
+      );
+      const chatHistory = convertToPromptHistory(rawHistory);
+      const {
+        response,
+        sources,
+        message: error
+        //
+      } = await VectorDb[chatMode]({
+        namespace: workspace.slug,
+        input: message,
+        workspace,
+        chatHistory
+      });
+      if (!response) {
+        return {
+          id: uuid,
+          type: "abort",
+          textResponse: null,
+          sources: [],
+          close: true,
+          error
+        };
+      }
+
+      const data = {text: response, sources, type: chatMode};
+      await WorkspaceChats.new({
+        workspaceId: workspace.id,
+        prompt: message,
+        response: data,
+        user
+      });
+      return {
+        id: uuid,
+        type: "textResponse",
+        textResponse: response,
+        sources,
+        close: true,
+        error
+      };
+    } // end has vectorized space
+  }
 }
 
 function chatPrompt(workspace) {

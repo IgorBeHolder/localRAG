@@ -68,8 +68,8 @@ const Workspace = {
         return null;
       });
   },
-  sendCoder: async function ({slug}, message, mode = "coder") {
-    return await fetch(`${API_BASE}/workspace/${slug}/coder`, {
+  sendCoder: async function ({slug}, message, mode = "analyst") {
+    return await fetch(`${API_BASE}/analyst/${slug}/analyst`, {
       method: "POST",
       body: JSON.stringify({message, mode}),
       headers: baseHeaders()

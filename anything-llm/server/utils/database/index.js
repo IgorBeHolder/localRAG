@@ -37,7 +37,6 @@ async function checkForMigrations(model, db) {
 
   console.log(`Running ${toMigrate.length} migrations`, toMigrate);
   await db.exec(toMigrate.join(";\n"));
-  return;
 }
 
 // Note(tcarambat): When building in production via Docker the SQLite file will not exist
