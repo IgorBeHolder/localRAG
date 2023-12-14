@@ -32,9 +32,9 @@ services:
     restart: always    
     image: nginx:latest 
     # environment variables are not used currently
-    environment:
-      - HOST_SERVER_URI=${HOST_SERVER_URI} 
-      - MAIN_MODEL_SERVER_URI=${MAIN_MODEL_SERVER_URI}
+    # environment:
+    #   - HOST_SERVER_URI=${HOST_SERVER_URI} 
+    #   - MAIN_MODEL_SERVER_URI=${MAIN_MODEL_SERVER_URI}
     build: 
         context: .
         dockerfile: Dockerfile-nginx      
@@ -45,7 +45,7 @@ services:
     networks:
       - llm-net
     volumes:
-      - ./config:/etc/nginx/sites-enabled/
+      - ./config/:/etc/nginx/sites-enabled/
 
   postgres:
     container_name: postgres
