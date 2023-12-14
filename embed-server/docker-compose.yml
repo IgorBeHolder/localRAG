@@ -45,7 +45,7 @@ services:
     networks:
       - llm-net
     volumes:
-      - ../client-files/nginx:/etc/nginx/sites-enabled/
+      - ./config:/etc/nginx/sites-enabled/
 
   postgres:
     container_name: postgres
