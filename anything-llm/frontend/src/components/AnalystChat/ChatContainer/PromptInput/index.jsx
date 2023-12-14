@@ -2,6 +2,7 @@ import React, {useState, useRef, memo, useEffect} from "react";
 import {isMobile} from "react-device-detect";
 import {Loader, Menu, X} from "react-feather";
 import {CHAT_MAX_LENGTH} from "../../../../utils/constants.js";
+import TerminalComponent from "../ChatHistory/Terminal/index.jsx";
 
 export default function PromptInput({
                                       workspace,
@@ -37,31 +38,32 @@ export default function PromptInput({
 
   const setTextCommand = (command = "") => {
     const storageKey = `workspace_chat_mode_${workspace.slug}`;
-    if (command === "/query") {
-      window.localStorage.setItem(storageKey, "query");
-      window.dispatchEvent(new Event("workspace_chat_mode_update"));
-      return;
-    } else if (command === "/conversation") {
-      window.localStorage.setItem(storageKey, "chat");
-      window.dispatchEvent(new Event("workspace_chat_mode_update"));
-      return;
-    } else if (command === "/analyst") {
-      if (!window.confirm(`Вы переходите в сеанс анализа данных.\nРабочее пространство "${workspace.name}" будет закрыто.`)) {
+    if (command !== "/analyst") {
+      if (!window.confirm(`Вы покидаете в сеанс анализа данных.\nРабочее пространство "${workspace.name}" будет закрыто.`)) {
         return false;
       }
 
-      window.localStorage.setItem(storageKey, "analyst");
-      window.dispatchEvent(new Event("workspace_chat_mode_update"));
-      return;
+      if (command === "/conversation") {
+        window.localStorage.setItem(storageKey, "chat");
+        window.dispatchEvent(new Event("workspace_chat_mode_update"));
+        window.location = "/workspace/" + workspace.name;
+        return;
+      } else if (command === "/query") {
+        window.localStorage.setItem(storageKey, "query");
+        window.dispatchEvent(new Event("workspace_chat_mode_update"));
+        window.location = "/workspace/" + workspace.name;
+        return;
+      }
     }
 
     onChange({target: {value: `${command} ${message}`}});
   };
 
+  console.log("workspace", workspace);
+
   return (
     <div className="main-form absolute p-1 md:p-8 lg:p-[50px] position-absolute bottom-0 left-0 right-0 !pb-0">
       <div className="bg-white pt-2 pb-8">
-
         <form
           onSubmit={handleSubmit}
           className="flex flex-col gap-y-1 bg-white dark:bg-black-900 lg:w-3/4 w-full mx-auto"
@@ -80,26 +82,31 @@ export default function PromptInput({
             >
               <Menu className="w-4 h-4 md:h-6 md:w-6"/>
             </button>
-            <textarea
-              onKeyUp={adjustTextArea}
-              onKeyDown={captureEnter}
-              onChange={onChange}
-              required={true}
-              maxLength={CHAT_MAX_LENGTH}
-              disabled={inputDisabled}
-              onFocus={() => setFocused(true)}
-              onBlur={(e) => {
-                setFocused(false);
-                adjustTextArea(e);
-              }}
-              value={message}
-              className="cursor-text max-h-[100px] md:min-h-[40px] block mx-2 md:mx-4 p-2.5 w-full text-[16px] md:text-sm rounded-lg border bg-gray-50 border-gray-300 placeholder-gray-200 text-gray-900 dark:text-white dark:bg-stone-600 dark:border-stone-700 dark:placeholder-stone-400"
-              placeholder={
-                isMobile
-                  ? "Введите ваше сообщение здесь."
-                  : "Shift + Enter для новой строки. Enter, чтобы отправить."
-              }
-            />
+
+            <TerminalComponent>
+
+            </TerminalComponent>
+
+            {/*<textarea*/}
+            {/*  onKeyUp={adjustTextArea}*/}
+            {/*  onKeyDown={captureEnter}*/}
+            {/*  onChange={onChange}*/}
+            {/*  required={true}*/}
+            {/*  maxLength={CHAT_MAX_LENGTH}*/}
+            {/*  disabled={inputDisabled}*/}
+            {/*  onFocus={() => setFocused(true)}*/}
+            {/*  onBlur={(e) => {*/}
+            {/*    setFocused(false);*/}
+            {/*    adjustTextArea(e);*/}
+            {/*  }}*/}
+            {/*  value={message}*/}
+            {/*  className="cursor-text max-h-[100px] md:min-h-[40px] block mx-2 md:mx-4 p-2.5 w-full text-[16px] md:text-sm rounded-lg border bg-gray-50 border-gray-300 placeholder-gray-200 text-gray-900 dark:text-white dark:bg-stone-600 dark:border-stone-700 dark:placeholder-stone-400"*/}
+            {/*  placeholder={*/}
+            {/*    isMobile*/}
+            {/*      ? "Введите ваше сообщение здесь."*/}
+            {/*      : "Shift + Enter для новой строки. Enter, чтобы отправить."*/}
+            {/*  }*/}
+            {/*/>*/}
             <button
               ref={formRef}
               type="submit"
