@@ -2,7 +2,7 @@
 set -e
 
 # Set the file name as a variable
-tarball_name="models-cpu-RTC.tar.gz"
+tarball_name="models-cpu-RTC-mistr.tar.gz"
 
 # Create a compressed tarball
 echo "Compressing tarball..."
