@@ -476,22 +476,6 @@ function apiWorkspaceEndpoints(app) {
      }
    }
    */
-
-      const uuid = uuidv4();
-
-      //const result = {
-      //  id: uuid,
-      //  type: "textResponse",
-      //  textResponse: "textResponse",
-      //  sources: [],
-      //  close: true,
-      //  error: null
-      //}
-      //
-      //response.status(200).json({...result});
-      //
-      //return;
-
       try {
         const {slug} = request.params;
         const {message, mode = "query"} = reqBody(request);
@@ -502,7 +486,9 @@ function apiWorkspaceEndpoints(app) {
           return;
         }
 
-        const result = await chatWithWorkspace(workspace, message, mode);
+        console.log("chatWithWorkspace ######################################################################", mode);
+
+        const result = await chatWithWorkspace(workspace, message, mode, null, request);
         await Telemetry.sendTelemetry("sent_chat", {
           LLMSelection: process.env.LLM_PROVIDER || "openai",
           VectorDbSelection: process.env.VECTOR_DB || "pinecone"

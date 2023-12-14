@@ -24,6 +24,8 @@ export default function WorkspaceChat({loading, workspace}) {
     getHistory();
   }, [workspace, loading]);
 
+  console.log("workspace", workspace);
+
   if (loadingHistory) return <LoadingChat/>;
   if (!loading && !loadingHistory && !workspace) {
     return (

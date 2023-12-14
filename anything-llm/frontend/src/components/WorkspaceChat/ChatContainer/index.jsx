@@ -9,8 +9,35 @@ export default function ChatContainer({workspace, knownHistory = []}) {
   const [loadingResponse, setLoadingResponse] = useState(false);
   const [chatHistory, setChatHistory] = useState(knownHistory);
 
+  const storageKey = `workspace_chat_mode_${workspace.slug}`;
+
+  const mode = window.localStorage.getItem(storageKey);
+
+  console.log("mode", mode);
+
   const handleMessageChange = (event) => {
     setMessage(event.target.value);
+  };
+
+  const handleSSH = async (msg) => {
+    console.log("handleSubmit", msg);
+    if (!msg || msg === "") return false;
+
+    const prevChatHistory = [
+      ...chatHistory,
+      {content: msg, role: "user"},
+      {
+        content: "",
+        role: "assistant",
+        pending: true,
+        userMessage: msg,
+        animate: true
+      }
+    ];
+
+    setChatHistory(prevChatHistory);
+    setMessage("");
+    setLoadingResponse(true);
   };
 
   const handleSubmit = async (event) => {
@@ -36,12 +63,6 @@ export default function ChatContainer({workspace, knownHistory = []}) {
   };
 
   useEffect(() => {
-    const storageKey = `workspace_chat_mode_${workspace.slug}`;
-
-    const mode = window.localStorage.getItem(storageKey);
-
-    console.log("mode", mode);
-
     async function fetchReply() {
       if (mode === "coder") {
 
@@ -73,7 +94,7 @@ export default function ChatContainer({workspace, knownHistory = []}) {
     }
 
     loadingResponse === true && fetchReply();
-  }, [loadingResponse, chatHistory, workspace]);
+  }, [loadingResponse, chatHistory, workspace, mode]);
 
   return (
     <div
@@ -82,13 +103,14 @@ export default function ChatContainer({workspace, knownHistory = []}) {
 
       <div className="main-box relative flex flex-col w-full h-full overflow-y-auto p-[16px] lg:p-[32px] !pb-0">
         <div className="flex flex-col flex-1 w-full bg-white shadow-md relative">
-          <ChatHistory history={chatHistory} workspace={workspace}/>
+          <ChatHistory mode={mode} history={chatHistory} workspace={workspace}/>
         </div>
       </div>
       <PromptInput
+        mode={mode}
         workspace={workspace}
         message={message}
-        submit={handleSubmit}
+        submit={mode === "analyst" ? handleSSH : handleSubmit}
         onChange={handleMessageChange}
         inputDisabled={loadingResponse}
         buttonDisabled={loadingResponse}

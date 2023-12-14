@@ -1,15 +1,16 @@
-import { Frown } from "react-feather";
+import {Frown} from "react-feather";
 import HistoricalMessage from "./HistoricalMessage";
 import PromptReply from "./PromptReply";
-import { useEffect, useRef } from "react";
+import {useEffect, useRef} from "react";
 
-export default function ChatHistory({ history = [], workspace }) {
+export default function ChatHistory({mode, history = [], workspace}) {
   const replyRef = useRef(null);
+
 
   useEffect(() => {
     if (replyRef.current) {
       setTimeout(() => {
-        replyRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
+        replyRef.current.scrollIntoView({behavior: "smooth", block: "end"});
       }, 700);
     }
   }, [history]);
@@ -18,7 +19,7 @@ export default function ChatHistory({ history = [], workspace }) {
     return (
       <div className="flex flex-col h-[89%] md:mt-0 pb-5 w-full justify-center items-center">
         <div className="w-fit flex items-center gap-x-2">
-          <Frown className="h-4 w-4 text-slate-400" />
+          <Frown className="h-4 w-4 text-slate-400"/>
           <p className="text-slate-400">История чата не найдена.</p>
         </div>
         <p className="text-slate-400 text-xs">
@@ -30,7 +31,7 @@ export default function ChatHistory({ history = [], workspace }) {
 
   return (
     <div
-      className="flex flex-col w-full flex-grow-1 p-1 md:p-8 lg:p-[50px] relative !pb-[150px]"
+      className={`flex flex-col w-full flex-grow-1 p-1 md:p-8 lg:p-[50px] relative !pb-[${mode === "analyst" ? 350 : 150}px]`}
       id="chat-history"
     >
       {history.map((props, index) => {
