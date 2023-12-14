@@ -1,8 +1,8 @@
-import React, { lazy, Suspense } from "react";
-import { Routes, Route } from "react-router-dom";
-import { ContextWrapper } from "./AuthContext";
-import PrivateRoute, { AdminRoute } from "./components/PrivateRoute";
-import { ToastContainer } from "react-toastify";
+import React, {lazy, Suspense} from "react";
+import {Routes, Route} from "react-router-dom";
+import {ContextWrapper} from "./AuthContext";
+import PrivateRoute, {AdminRoute} from "./components/PrivateRoute";
+import {ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Main = lazy(() => import("./pages/Main"));
@@ -18,47 +18,47 @@ const AdminApiKeys = lazy(() => import("./pages/Admin/ApiKeys"));
 
 export default function App() {
   return (
-    <Suspense fallback={<div />}>
+    <Suspense fallback={<div/>}>
       <ContextWrapper>
         <Routes>
-          <Route path="/" element={<Main />} />
+          <Route path="/" element={<Main/>}/>
           <Route
             path="/workspace/:slug"
-            element={<PrivateRoute Component={WorkspaceChat} />}
+            element={<PrivateRoute Component={WorkspaceChat}/>}
           />
-          <Route path="/accept-invite/:code" element={<InvitePage />} />
+          <Route path="/accept-invite/:code" element={<InvitePage/>}/>
 
           {/* Admin Routes */}
           <Route
             path="/admin/system-preferences"
-            element={<AdminRoute Component={AdminSystem} />}
+            element={<AdminRoute Component={AdminSystem}/>}
           />
           <Route
             path="/admin/invites"
-            element={<AdminRoute Component={AdminInvites} />}
+            element={<AdminRoute Component={AdminInvites}/>}
           />
           <Route
             path="/admin/users"
-            element={<AdminRoute Component={AdminUsers} />}
+            element={<AdminRoute Component={AdminUsers}/>}
           />
           <Route
             path="/admin/workspaces"
-            element={<AdminRoute Component={AdminWorkspaces} />}
+            element={<AdminRoute Component={AdminWorkspaces}/>}
           />
           <Route
             path="/admin/workspace-chats"
-            element={<AdminRoute Component={AdminChats} />}
+            element={<AdminRoute Component={AdminChats}/>}
           />
           <Route
             path="/admin/appearance"
-            element={<AdminRoute Component={AdminAppearance} />}
+            element={<AdminRoute Component={AdminAppearance}/>}
           />
           <Route
             path="/admin/api-keys"
-            element={<AdminRoute Component={AdminApiKeys} />}
+            element={<AdminRoute Component={AdminApiKeys}/>}
           />
         </Routes>
-        <ToastContainer />
+        <ToastContainer/>
       </ContextWrapper>
     </Suspense>
   );

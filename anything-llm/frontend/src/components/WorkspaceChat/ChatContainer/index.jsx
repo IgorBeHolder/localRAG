@@ -1,6 +1,4 @@
 import {useState, useEffect} from "react";
-//import {SftpClient} from "ssh2-sftp-client";
-import {NodeSSH} from "node-ssh";
 import ChatHistory from "./ChatHistory";
 import PromptInput from "./PromptInput";
 import Workspace from "../../../models/workspace";
