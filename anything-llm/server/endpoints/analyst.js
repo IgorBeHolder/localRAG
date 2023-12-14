@@ -3,6 +3,7 @@ const {Analyst} = require("../models/analyst");
 const {Document} = require("../models/documents");
 const {DocumentVectors} = require("../models/vectors");
 const {AnalystChats} = require("../models/analystChats");
+const Client = require("ssh2").Client;
 const {convertToChatHistory} = require("../utils/chats");
 const {getVectorDbClass} = require("../utils/helpers");
 const {setupMulter} = require("../utils/files/multer");
@@ -14,6 +15,43 @@ const {validatedRequest} = require("../utils/middleware/validatedRequest");
 const {SystemSettings} = require("../models/systemSettings");
 const {Telemetry} = require("../models/telemetry");
 const {handleUploads} = setupMulter();
+
+const conn = new Client();
+
+const sshConfig = {
+  host: "localhost",
+  port: 2222,
+  username: "coder",
+  password: "coder"
+};
+
+conn.on("ready", () => {
+  console.log("SSH connection established.");
+
+  // Далее вы можете выполнять команды, например:
+  conn.exec("ls", (err, stream) => {
+    if (err) throw err;
+    stream
+      .on("close", (code, signal) => {
+        console.log("Stream closed with code " + code + " and signal " + signal);
+        conn.end();
+      })
+      .on("data", (data) => {
+        console.log("STDOUT: " + data);
+      })
+      .stderr.on("data", (data) => {
+      console.log("STDERR: " + data);
+    });
+  });
+});
+
+conn.on("error", (err) => {
+  console.error("Error connecting to the server:", err);
+});
+
+conn.on("end", () => {
+  console.log("SSH connection closed.");
+});
 
 function analystndpoints(app) {
   if (!app) return;
@@ -184,6 +222,10 @@ function analystndpoints(app) {
   });
 
   app.get("/analyst/:slug", [validatedRequest], async (request, response) => {
+    debugger;
+
+    conn.connect(sshConfig);
+
     try {
       const {slug} = request.params;
       const user = await userFromSession(request, response);

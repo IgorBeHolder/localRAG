@@ -5,7 +5,7 @@ const { AnalystUser } = require("./workspaceUsers");
 
 const Analyst = {
   writable: [
-    // Used for generic updates so we can validate keys in request body
+    // Used for generic updates, so we can validate keys in request body
     "name",
     "slug",
     "vectorTag",

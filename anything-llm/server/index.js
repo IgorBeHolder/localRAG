@@ -1,5 +1,5 @@
 process.env.NODE_ENV === "development"
-  ? require("dotenv").config({ path: `.env.${process.env.NODE_ENV}` })
+  ? require("dotenv").config({path: `.env.${process.env.NODE_ENV}`})
   : require("dotenv").config();
 console.log("*** COMPLETION_MODEL_ENDPOINT", process.env.COMPLETION_MODEL_ENDPOINT);
 console.log("*** COMPLETION_MODEL_NAME", process.env.COMPLETION_MODEL_NAME);
@@ -11,29 +11,29 @@ const bodyParser = require("body-parser");
 const serveIndex = require("serve-index");
 const cors = require("cors");
 const path = require("path");
-const { reqBody } = require("./utils/http");
-const { systemEndpoints } = require("./endpoints/system");
-const { workspaceEndpoints } = require("./endpoints/workspaces");
-const { chatEndpoints } = require("./endpoints/chat");
-const { getVectorDbClass } = require("./utils/helpers");
-const { adminEndpoints } = require("./endpoints/admin");
-const { inviteEndpoints } = require("./endpoints/invite");
-const { utilEndpoints } = require("./endpoints/utils");
-const { Telemetry } = require("./models/telemetry");
-const { developerEndpoints } = require("./endpoints/api");
-const setupTelemetry = require("./utils/telemetry");
+const {reqBody} = require("./utils/http");
+const {systemEndpoints} = require("./endpoints/system");
+const {workspaceEndpoints} = require("./endpoints/workspaces");
 const {analystEndpoints} = require("./endpoints/analyst");
+const {chatEndpoints} = require("./endpoints/chat");
+const {getVectorDbClass} = require("./utils/helpers");
+const {adminEndpoints} = require("./endpoints/admin");
+const {inviteEndpoints} = require("./endpoints/invite");
+const {utilEndpoints} = require("./endpoints/utils");
+const {Telemetry} = require("./models/telemetry");
+const {developerEndpoints} = require("./endpoints/api");
+const setupTelemetry = require("./utils/telemetry");
 const app = express();
 const apiRouter = express.Router();
 const FILE_LIMIT = "3GB";
 
-app.use(cors({ origin: true }));
-app.use(bodyParser.text({ limit: FILE_LIMIT }));
-app.use(bodyParser.json({ limit: FILE_LIMIT }));
+app.use(cors({origin: true}));
+app.use(bodyParser.text({limit: FILE_LIMIT}));
+app.use(bodyParser.json({limit: FILE_LIMIT}));
 app.use(
   bodyParser.urlencoded({
     limit: FILE_LIMIT,
-    extended: true,
+    extended: true
   })
 );
 
@@ -50,11 +50,11 @@ developerEndpoints(app, apiRouter);
 apiRouter.post("/v/:command", async (request, response) => {
   try {
     const VectorDb = getVectorDbClass();
-    const { command } = request.params;
+    const {command} = request.params;
     if (!Object.getOwnPropertyNames(VectorDb).includes(command)) {
       response.status(500).json({
         message: "invalid interface command",
-        commands: Object.getOwnPropertyNames(VectorDb),
+        commands: Object.getOwnPropertyNames(VectorDb)
       });
       return;
     }
@@ -62,11 +62,11 @@ apiRouter.post("/v/:command", async (request, response) => {
     try {
       const body = reqBody(request);
       const resBody = await VectorDb[command](body);
-      response.status(200).json({ ...resBody });
+      response.status(200).json({...resBody});
     } catch (e) {
       // console.error(e)
       console.error(JSON.stringify(e));
-      response.status(500).json({ error: e.message });
+      response.status(500).json({error: e.message});
     }
   } catch (e) {
     console.log(e.message, e);
@@ -76,7 +76,7 @@ apiRouter.post("/v/:command", async (request, response) => {
 
 if (process.env.NODE_ENV !== "development") {
   app.use(
-    express.static(path.resolve(__dirname, "public"), { extensions: ["js"] })
+    express.static(path.resolve(__dirname, "public"), {extensions: ["js"]})
   );
 
   app.use("/", function (_, response) {
@@ -86,7 +86,7 @@ if (process.env.NODE_ENV !== "development") {
 
 app.use(
   "/system/data-exports",
-  serveIndex(__dirname + "/storage/exports", { icons: true })
+  serveIndex(__dirname + "/storage/exports", {icons: true})
 );
 
 app.all("*", function (_, response) {
