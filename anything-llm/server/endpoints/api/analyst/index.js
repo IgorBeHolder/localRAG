@@ -432,7 +432,7 @@ function apiAnalystEndpoints(app) {
   );
 
   app.post(
-    "/v1/analyst/:slug/chat",
+    "/v1/analyst/:slug/coder",
     [validApiKey],
     async (request, response) => {
       /*
@@ -484,11 +484,15 @@ function apiAnalystEndpoints(app) {
           return;
         }
 
-        const result = await chatWithAnalyst(analyst, message, mode);
-        await Telemetry.sendTelemetry("sent_chat", {
-          LLMSelection: process.env.LLM_PROVIDER || "openai",
-          VectorDbSelection: process.env.VECTOR_DB || "pinecone"
-        });
+        console.log('### request ###', message, mode);
+
+        //const result = await chatWithAnalyst(analyst, message, mode);
+        //await Telemetry.sendTelemetry("sent_chat", {
+        //  LLMSelection: process.env.LLM_PROVIDER || "openai",
+        //  VectorDbSelection: process.env.VECTOR_DB || "pinecone"
+        //});
+
+
         response.status(200).json({...result});
       } catch (e) {
         response.status(500).json({

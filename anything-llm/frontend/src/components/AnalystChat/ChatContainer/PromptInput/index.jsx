@@ -32,7 +32,7 @@ export default function PromptInput({
     element.style.height = "1px";
     element.style.height =
       event.target.value.length !== 0
-        ? 25 + element.scrollHeight + "px"
+        ? (25 + element.scrollHeight) + "px"
         : "1px";
   };
 
@@ -83,9 +83,7 @@ export default function PromptInput({
               <Menu className="w-4 h-4 md:h-6 md:w-6"/>
             </button>
 
-            <TerminalComponent>
-
-            </TerminalComponent>
+            <TerminalComponent handleSubmit={handleSubmit}/>
 
             {/*<textarea*/}
             {/*  onKeyUp={adjustTextArea}*/}
