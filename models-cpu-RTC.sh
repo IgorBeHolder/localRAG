@@ -8,7 +8,7 @@ tarball_name="models-cpu-RTC.tar.gz"
 echo "Compressing tarball..."
 tar -czvf "$tarball_name" \
   ./model-store/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 \
-  ./model-store/TheBloke/openchat_3.5-GGUF/openchat_3.5.Q4_K_M.gguf
+  ./model-store/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/mistral-7b-instruct-v0.2.Q4_K_M.gguf
 
 echo "Tarball compressed."
 
