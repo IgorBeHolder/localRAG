@@ -54,7 +54,8 @@
     "uuid": "^9.0.0",
     "uuid-apikey": "^1.5.3",
     "vectordb": "0.1.12",
-    "weaviate-ts-client": "^1.4.0"
+    "weaviate-ts-client": "^1.4.0",
+    "ws": "^8.15.1"
   },
   "devDependencies": {
     "cross-env": "^7.0.3",

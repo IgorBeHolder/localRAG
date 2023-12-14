@@ -11,6 +11,10 @@ const bodyParser = require("body-parser");
 const serveIndex = require("serve-index");
 const cors = require("cors");
 const path = require("path");
+
+const http = require("http");
+const WebSocket = require("ws");
+const sshMiddleware = require("./endpoints/sshMiddleware");
 const {reqBody} = require("./utils/http");
 const {systemEndpoints} = require("./endpoints/system");
 const {workspaceEndpoints} = require("./endpoints/workspaces");
@@ -38,6 +42,51 @@ app.use(
 );
 
 app.use("/api", apiRouter);
+
+function executeSSHCommand(command, sshConnection, ws) {
+  sshConnection.exec(command, (err, stream) => {
+    if (err) {
+      console.error("Error executing command:", err);
+      ws.send("Error executing command");
+      return;
+    }
+
+    let result = "";
+    stream
+      .on("data", (data) => {
+        result += data;
+      })
+      .on("close", (code, signal) => {
+        console.log("Stream closed with code " + code + " and signal " + signal);
+        ws.send(result);
+      });
+  });
+}
+
+const server = http.createServer((req, res) => {
+  // Ваш обработчик HTTP-запросов (если необходимо)
+});
+
+const wss = new WebSocket.Server({noServer: true});
+
+// Используем middleware для управления соединением SSH
+server.on("upgrade", (request, socket, head) => {
+  console.log("upgrade ############################################");
+  sshMiddleware(request, {}, () => {
+    wss.handleUpgrade(request, socket, head, (ws) => {
+      wss.emit("connection", ws, request, request.sshConnection);
+    });
+  });
+});
+
+wss.on("connection", (ws, request, sshConnection) => {
+  console.log("connection ############################################");
+  ws.on("message", (message) => {
+    // Получаем команду от клиента и выполняем ее на сервере SSH
+    executeSSHCommand(message, sshConnection, ws);
+  });
+});
+
 systemEndpoints(apiRouter);
 workspaceEndpoints(apiRouter);
 analystEndpoints(apiRouter);

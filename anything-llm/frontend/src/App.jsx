@@ -31,7 +31,7 @@ export default function App() {
             />
             <Route
               path="/analyst/:slug"
-              element={<PrivateRoute Component={AnalystChat}/>}
+              element={<PrivateRoute Component={WorkspaceChat}/>}
             />
             <Route path="/accept-invite/:code" element={<InvitePage/>}/>
 

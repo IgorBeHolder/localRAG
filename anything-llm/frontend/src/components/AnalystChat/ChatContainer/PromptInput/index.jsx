@@ -64,10 +64,7 @@ export default function PromptInput({
   return (
     <div className="main-form absolute p-1 md:p-8 lg:p-[50px] position-absolute bottom-0 left-0 right-0 !pb-0">
       <div className="bg-white pt-2 pb-8">
-        <form
-          onSubmit={handleSubmit}
-          className="flex flex-col gap-y-1 bg-white dark:bg-black-900 lg:w-3/4 w-full mx-auto"
-        >
+        <div className="flex flex-col gap-y-1 bg-white dark:bg-black-900 lg:w-3/4 w-full mx-auto">
           <div className="flex items-center py-2 px-4 rounded-lg">
             <CommandMenu
               workspace={workspace}
@@ -85,26 +82,6 @@ export default function PromptInput({
 
             <TerminalComponent handleSubmit={handleSubmit}/>
 
-            {/*<textarea*/}
-            {/*  onKeyUp={adjustTextArea}*/}
-            {/*  onKeyDown={captureEnter}*/}
-            {/*  onChange={onChange}*/}
-            {/*  required={true}*/}
-            {/*  maxLength={CHAT_MAX_LENGTH}*/}
-            {/*  disabled={inputDisabled}*/}
-            {/*  onFocus={() => setFocused(true)}*/}
-            {/*  onBlur={(e) => {*/}
-            {/*    setFocused(false);*/}
-            {/*    adjustTextArea(e);*/}
-            {/*  }}*/}
-            {/*  value={message}*/}
-            {/*  className="cursor-text max-h-[100px] md:min-h-[40px] block mx-2 md:mx-4 p-2.5 w-full text-[16px] md:text-sm rounded-lg border bg-gray-50 border-gray-300 placeholder-gray-200 text-gray-900 dark:text-white dark:bg-stone-600 dark:border-stone-700 dark:placeholder-stone-400"*/}
-            {/*  placeholder={*/}
-            {/*    isMobile*/}
-            {/*      ? "Введите ваше сообщение здесь."*/}
-            {/*      : "Shift + Enter для новой строки. Enter, чтобы отправить."*/}
-            {/*  }*/}
-            {/*/>*/}
             <button
               ref={formRef}
               type="submit"
@@ -129,7 +106,7 @@ export default function PromptInput({
             </button>
           </div>
           <Tracking workspaceSlug={workspace.slug}/>
-        </form>
+        </div>
       </div>
     </div>
   );

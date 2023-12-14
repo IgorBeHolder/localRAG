@@ -68,14 +68,15 @@ async function chatWithWorkspace(
   workspace,
   message,
   chatMode = "query",
-  user = null
+  user = null,
+  request = null
 ) {
   const uuid = uuidv4();
   const LLMConnector = getLLMProvider();
   const VectorDb = getVectorDbClass();
   const command = grepCommand(message);
 
-  console.log("chatWithWorkspace", chatMode);
+  console.log("chatWithWorkspace $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$", chatMode, request?.sshConnection ?? "no sshConnection");
 
   if (!!command && Object.keys(VALID_COMMANDS).includes(command)) {
     return await VALID_COMMANDS[command](workspace, message, uuid, user);
