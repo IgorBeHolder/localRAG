@@ -67,9 +67,16 @@ export default function PromptInput({
       window.location = "/analyst/" + workspace.name;
 
       return;
-    } else if (command === "/coder") {
-      window.localStorage.setItem(storageKey, "coder");
+    } else if (command === "/analyst") {
+      if (!window.confirm(`Вы переходите в сеанс анализа данных.\nРабочее пространство "${workspace.name}" будет закрыто.`)) {
+        return false;
+      }
+
+      window.localStorage.setItem(storageKey, "analyst");
       window.dispatchEvent(new Event("workspace_chat_mode_update"));
+
+      window.location = "/analyst/" + workspace.name;
+
       return;
     }
 
