@@ -132,7 +132,7 @@ export default function PromptInput({
                 <Menu className="w-4 h-4 md:h-6 md:w-6"/>
               </button>
 
-              <TerminalComponent handleSubmit={handleSubmit}/>
+              <TerminalComponent onChange={onChange} handleSubmit={handleSubmit}/>
             </div>
 
             <Tracking workspaceSlug={workspace.slug}/>
