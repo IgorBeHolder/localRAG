@@ -11,7 +11,7 @@ anyth:v1 \
 embed:v1 \
 nginx:latest \
 pgembeding:latest \
-llm-server-cpu:v2 &&
+llm-server:v2 &&
 echo "Docker images saved to a tarball."
 
 # Create a compressed tarball
