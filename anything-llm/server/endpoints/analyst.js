@@ -53,7 +53,7 @@ conn.on("end", () => {
   console.log("SSH connection closed.");
 });
 
-function analystndpoints(app) {
+function analystEndpoints(app) {
   if (!app) return;
 
   app.post("/analyst/new", [validatedRequest], async (request, response) => {
@@ -269,4 +269,4 @@ function analystndpoints(app) {
   );
 }
 
-module.exports = {analystndpoints};
+module.exports = {analystEndpoints};
