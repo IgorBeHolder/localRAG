@@ -1,51 +1,53 @@
-const { v4: uuidv4 } = require("uuid");
-const { OpenAi } = require("../AiProviders/openAi");
-const { WorkspaceChats } = require("../../models/workspaceChats");
-const { resetMemory } = require("./commands/reset");
+const {v4: uuidv4} = require("uuid");
+const {OpenAi} = require("../AiProviders/openAi");
+const {WorkspaceChats} = require("../../models/workspaceChats");
+const {resetMemory} = require("./commands/reset");
 const moment = require("moment");
-const { getVectorDbClass, getLLMProvider } = require("../helpers");
-const { AzureOpenAi } = require("../AiProviders/zazureOpenAi");
-const { prompt_templates } = require('../vectorDbProviders/lance/index');
+const {getVectorDbClass, getLLMProvider} = require("../helpers");
+const {AzureOpenAi} = require("../AiProviders/zazureOpenAi");
+const {prompt_templates} = require("../vectorDbProviders/lance/index");
+
 // const { BOS, EOS, assistance_prefix, end_of_turn, user_prefix } = prompt_templates();
 
 function convertToChatHistory(history = []) {
   const formattedHistory = [];
   history.forEach((history) => {
-    const { prompt, response, createdAt } = history;
+    const {prompt, response, createdAt} = history;
     const data = JSON.parse(response);
     formattedHistory.push([
       {
         role: "user",
         content: prompt,
-        sentAt: moment(createdAt).unix(),
+        sentAt: moment(createdAt).unix()
       },
       {
         role: "assistant",
         content: data.text,
         sources: data.sources || [],
-        sentAt: moment(createdAt).unix(),
-      },
+        sentAt: moment(createdAt).unix()
+      }
     ]);
   });
 
   return formattedHistory.flat();
 }
+
 //
 function convertToPromptHistory(history = []) {
   const formattedHistory = [];
   history.forEach((history) => {
-    const { prompt, response } = history;
+    const {prompt, response} = history;
     const data = JSON.parse(response);
     formattedHistory.push([
-      { role: "user", content: prompt },
-      { role: "assistant", content: data.text },
+      {role: "user", content: prompt},
+      {role: "assistant", content: data.text}
     ]);
   });
   return formattedHistory.flat();
 }
 
 const VALID_COMMANDS = {
-  "/reset": resetMemory,
+  "/reset": resetMemory
 };
 
 function grepCommand(message) {
@@ -73,11 +75,22 @@ async function chatWithWorkspace(
   const VectorDb = getVectorDbClass();
   const command = grepCommand(message);
 
+  console.log("chatWithWorkspace", chatMode);
+
+  return {
+    id: uuid,
+    type: "textResponse",
+    textResponse: "textResponse",
+    sources: [],
+    close: true,
+    error: null
+  }
+
   if (!!command && Object.keys(VALID_COMMANDS).includes(command)) {
     return await VALID_COMMANDS[command](workspace, message, uuid, user);
   }
 
-  const { safe, reasons = [] } = await LLMConnector.isSafe(message);
+  const {safe, reasons = []} = await LLMConnector.isSafe(message);
   if (!safe) {
     return {
       id: uuid,
@@ -90,14 +103,12 @@ async function chatWithWorkspace(
       // )} found.`,
       error: `Это сообщение не прошло модерацию по причине ${reasons.join(
         ", "
-      )}.`,
+      )}.`
     };
   }
 
   const hasVectorizedSpace = await VectorDb.hasNamespace(workspace.slug);
   const embeddingsCount = await VectorDb.namespaceCount(workspace.slug);
-
-
 
 
   //  has NO vectorized space
@@ -109,13 +120,13 @@ async function chatWithWorkspace(
       message,
       workspace
     );
-    const data = { text: response, sources: [], type: "query" };
+    const data = {text: response, sources: [], type: "query"};
 
     await WorkspaceChats.new({
       workspaceId: workspace.id,
       prompt: message,
       response: data,
-      user,
+      user
     });
     return {
       id: uuid,
@@ -123,9 +134,8 @@ async function chatWithWorkspace(
       textResponse: response,
       sources: [],
       close: true,
-      error: null,
+      error: null
     };
-
 
 
   } else {    //  HAS vectorized space
@@ -139,13 +149,13 @@ async function chatWithWorkspace(
     const {
       response,
       sources,
-      message: error,
-      // 
+      message: error
+      //
     } = await VectorDb[chatMode]({
       namespace: workspace.slug,
       input: message,
       workspace,
-      chatHistory,
+      chatHistory
     });
     if (!response) {
       return {
@@ -154,16 +164,16 @@ async function chatWithWorkspace(
         textResponse: null,
         sources: [],
         close: true,
-        error,
+        error
       };
     }
 
-    const data = { text: response, sources, type: chatMode };
+    const data = {text: response, sources, type: chatMode};
     await WorkspaceChats.new({
       workspaceId: workspace.id,
       prompt: message,
       response: data,
-      user,
+      user
     });
     return {
       id: uuid,
@@ -171,7 +181,7 @@ async function chatWithWorkspace(
       textResponse: response,
       sources,
       close: true,
-      error,
+      error
     };
   } // end has vectorized space
 }
@@ -185,5 +195,5 @@ function chatPrompt(workspace) {
 module.exports = {
   convertToChatHistory,
   chatWithWorkspace,
-  chatPrompt,
+  chatPrompt
 };
