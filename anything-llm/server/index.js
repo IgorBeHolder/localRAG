@@ -18,7 +18,7 @@ const sshMiddleware = require("./endpoints/sshMiddleware");
 const {reqBody} = require("./utils/http");
 const {systemEndpoints} = require("./endpoints/system");
 const {workspaceEndpoints} = require("./endpoints/workspaces");
-const {analystEndpoints} = require("./endpoints/analyst");
+//const {analystEndpoints} = require("./endpoints/analyst");
 const {chatEndpoints} = require("./endpoints/chat");
 const {getVectorDbClass} = require("./utils/helpers");
 const {adminEndpoints} = require("./endpoints/admin");
@@ -44,30 +44,39 @@ app.use(
 app.use("/api", apiRouter);
 
 function executeSSHCommand(command, sshConnection, ws) {
-  sshConnection.exec(command, (err, stream) => {
-    if (err) {
-      console.error("Error executing command:", err);
-      ws.send("Error executing command");
-      return;
-    }
+  console.log("@@@@@@@ executeSSHCommand", command, sshConnection.config);
+  try {
+    sshConnection.exec(command, (err, stream) => {
+      if (err) {
+        console.error("Error executing command:", err);
+        ws.send("Error executing command");
+        return;
+      }
 
-    let result = "";
-    stream
-      .on("data", (data) => {
-        result += data;
-      })
-      .on("close", (code, signal) => {
-        console.log("Stream closed with code " + code + " and signal " + signal);
-        ws.send(result);
-      });
-  });
+      let result = "";
+      stream
+        .on("data", (data) => {
+          result += data;
+        })
+        .on("close", (code, signal) => {
+          console.log("Stream closed with code " + code + " and signal " + signal);
+          ws.send(result);
+        });
+    });
+  } catch (e) {
+    console.log("@@@@@@@ executeSSHCommand", e);
+  }
 }
 
 const server = http.createServer((req, res) => {
   // Ваш обработчик HTTP-запросов (если необходимо)
 });
 
+const APP_PORT = process.env.SERVER_PORT || 3001;
+
 const wss = new WebSocket.Server({noServer: true});
+
+console.log("wss @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@", wss);
 
 // Используем middleware для управления соединением SSH
 server.on("upgrade", (request, socket, head) => {
@@ -82,14 +91,22 @@ server.on("upgrade", (request, socket, head) => {
 wss.on("connection", (ws, request, sshConnection) => {
   console.log("connection ############################################");
   ws.on("message", (message) => {
+    const command = message.toString();
+
+    console.log("message ############################################", command);
+
     // Получаем команду от клиента и выполняем ее на сервере SSH
-    executeSSHCommand(message, sshConnection, ws);
+    executeSSHCommand(command, sshConnection, ws);
   });
+});
+
+server.listen(3030, () => {
+  console.log(`@@@@@@@@@@@@@@@@ WS Server is running on port ${3030}`);
 });
 
 systemEndpoints(apiRouter);
 workspaceEndpoints(apiRouter);
-analystEndpoints(apiRouter);
+//analystEndpoints(apiRouter);
 chatEndpoints(apiRouter);
 adminEndpoints(apiRouter);
 inviteEndpoints(apiRouter);
@@ -143,10 +160,10 @@ app.all("*", function (_, response) {
 });
 
 app
-  .listen(process.env.SERVER_PORT || 3001, async () => {
+  .listen(APP_PORT, async () => {
     await setupTelemetry();
     console.log(
-      `Example app listening on port ${process.env.SERVER_PORT || 3001}`
+      `Example app listening on port ${APP_PORT}`
     );
   })
   .on("error", function (err) {

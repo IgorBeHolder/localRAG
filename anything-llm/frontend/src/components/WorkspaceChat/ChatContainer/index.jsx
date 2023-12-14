@@ -1,4 +1,4 @@
-import {useState, useEffect} from "react";
+import {useState, useEffect, useCallback} from "react";
 import ChatHistory from "./ChatHistory";
 import PromptInput from "./PromptInput";
 import Workspace from "../../../models/workspace";
@@ -8,6 +8,9 @@ export default function ChatContainer({workspace, knownHistory = []}) {
   const [message, setMessage] = useState("");
   const [loadingResponse, setLoadingResponse] = useState(false);
   const [chatHistory, setChatHistory] = useState(knownHistory);
+  const [command, setCommand] = useState("");
+  const [output, setOutput] = useState("");
+  const [ws, setWs] = useState(null);
 
   const storageKey = `workspace_chat_mode_${workspace.slug}`;
 
@@ -18,6 +21,14 @@ export default function ChatContainer({workspace, knownHistory = []}) {
   const handleMessageChange = (event) => {
     setMessage(event.target.value);
   };
+
+  const sendCommand = useCallback(() => {
+    console.log("sendCommand", ws, command);
+    // Отправляем команду на сервер через WebSocket
+    if (ws && ws.readyState === WebSocket.OPEN) {
+      ws.send(command);
+    }
+  }, [command]);
 
   const handleSSH = async (msg) => {
     console.log("handleSubmit", msg);
@@ -35,6 +46,7 @@ export default function ChatContainer({workspace, knownHistory = []}) {
       }
     ];
 
+    setCommand(msg);
     setChatHistory(prevChatHistory);
     setMessage("");
     setLoadingResponse(true);
@@ -63,12 +75,35 @@ export default function ChatContainer({workspace, knownHistory = []}) {
   };
 
   useEffect(() => {
-    async function fetchReply() {
-      if (mode === "coder") {
+    // Устанавливаем WebSocket-соединение
+    const newWs = new WebSocket("ws://localhost:3030");
+    setWs(newWs);
 
+    newWs.onopen = () => {
+      console.log("WebSocket connection opened.");
+    };
+
+    newWs.onmessage = (event) => {
+      setOutput(event.data);
+    };
+
+    newWs.onclose = () => {
+      console.log("WebSocket connection closed.");
+    };
+
+    // Очищаем ресурсы при размонтировании компонента
+    return () => {
+      newWs.close();
+    };
+  }, []);
+
+  useEffect(() => {
+    async function fetchReply() {
+      console.log("fetchReply", mode);
+      if (mode === "analyst") {
+        sendCommand();
       } else {
-        const promptMessage =
-          chatHistory.length > 0 ? chatHistory[chatHistory.length - 1] : null;
+        const promptMessage = chatHistory.length > 0 ? chatHistory[chatHistory.length - 1] : null;
         const remHistory = chatHistory.length > 0 ? chatHistory.slice(0, -1) : [];
         let _chatHistory = [...remHistory];
 
@@ -80,8 +115,7 @@ export default function ChatContainer({workspace, knownHistory = []}) {
         const chatResult = await Workspace.sendChat(
           workspace,
           promptMessage.userMessage,
-          window.localStorage.getItem(`workspace_chat_mode_${workspace.slug}`) ??
-          "query"
+          mode ?? "query"
         );
         handleChat(
           chatResult,
