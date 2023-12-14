@@ -9,7 +9,7 @@ import {TerminalContextProvider} from "react-terminal";
 const Main = lazy(() => import("./pages/Main"));
 const InvitePage = lazy(() => import("./pages/Invite"));
 const WorkspaceChat = lazy(() => import("./pages/WorkspaceChat"));
-const AnalystChat = lazy(() => import("./pages/AnalystChat"));
+//const AnalystChat = lazy(() => import("./pages/AnalystChat"));
 const AdminUsers = lazy(() => import("./pages/Admin/Users"));
 const AdminInvites = lazy(() => import("./pages/Admin/Invitations"));
 const AdminWorkspaces = lazy(() => import("./pages/Admin/Workspaces"));
