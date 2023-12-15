@@ -2,7 +2,7 @@
 set -e
 
 # Set the file name as a variable
-tarball_name="sherpa-aiserver-gpu_v0.3.tar"
+tarball_name="sherpa-aiserver-openchat_v0.1.tar"
 
 # save docker images to a tarball
 echo "Saving docker images to a tarball..."
@@ -20,12 +20,10 @@ echo "Compressing tarball..."
 tar -czvf "$tarball_name.gz" \
 "$tarball_name"  \
 ./vllm/docker/docker-compose.yml \
+./embed-server/config/ \
 ./db-reset.sh \
 ./client-files/ 
-# ./start.sh \
-# ./start-em.sh \
-# ./start-mm.sh \
-# ./start-vllm.sh \
+
 echo "Tarball compressed."
 
 rm "$tarball_name"

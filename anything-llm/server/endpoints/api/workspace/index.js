@@ -1,15 +1,17 @@
-const { Document } = require("../../../models/documents");
-const { Telemetry } = require("../../../models/telemetry");
-const { DocumentVectors } = require("../../../models/vectors");
-const { Workspace } = require("../../../models/workspace");
-const { WorkspaceChats } = require("../../../models/workspaceChats");
+const {Document} = require("../../../models/documents");
+const {Telemetry} = require("../../../models/telemetry");
+const {DocumentVectors} = require("../../../models/vectors");
+const {Workspace} = require("../../../models/workspace");
+const {WorkspaceChats} = require("../../../models/workspaceChats");
 const {
   convertToChatHistory,
-  chatWithWorkspace,
+  chatWithWorkspace
 } = require("../../../utils/chats");
-const { getVectorDbClass } = require("../../../utils/helpers");
-const { multiUserMode, reqBody } = require("../../../utils/http");
-const { validApiKey } = require("../../../utils/middleware/validApiKey");
+const {getVectorDbClass} = require("../../../utils/helpers");
+const {multiUserMode, reqBody} = require("../../../utils/http");
+const {validApiKey} = require("../../../utils/middleware/validApiKey");
+const {Analyst} = require("../../../models/analyst");
+const {v4: uuidv4} = require("uuid");
 
 function apiWorkspaceEndpoints(app) {
   if (!app) return;
@@ -59,14 +61,14 @@ function apiWorkspaceEndpoints(app) {
     }
     */
     try {
-      const { name = null } = reqBody(request);
-      const { workspace, message } = await Workspace.new(name);
+      const {name = null} = reqBody(request);
+      const {workspace, message} = await Workspace.new(name);
       await Telemetry.sendTelemetry("workspace_created", {
         multiUserMode: multiUserMode(response),
         LLMSelection: process.env.LLM_PROVIDER || "openai",
-        VectorDbSelection: process.env.VECTOR_DB || "pinecone",
+        VectorDbSelection: process.env.VECTOR_DB || "pinecone"
       });
-      response.status(200).json({ workspace, message });
+      response.status(200).json({workspace, message});
     } catch (e) {
       console.log(e.message, e);
       response.sendStatus(500).end();
@@ -108,7 +110,7 @@ function apiWorkspaceEndpoints(app) {
     */
     try {
       const workspaces = await Workspace.where();
-      response.status(200).json({ workspaces });
+      response.status(200).json({workspaces});
     } catch (e) {
       console.log(e.message, e);
       response.sendStatus(500).end();
@@ -155,9 +157,9 @@ function apiWorkspaceEndpoints(app) {
     }
     */
     try {
-      const { slug } = request.params;
-      const workspace = await Workspace.get({ slug });
-      response.status(200).json({ workspace });
+      const {slug} = request.params;
+      const workspace = await Workspace.get({slug});
+      response.status(200).json({workspace});
     } catch (e) {
       console.log(e.message, e);
       response.sendStatus(500).end();
@@ -185,21 +187,21 @@ function apiWorkspaceEndpoints(app) {
     }
     */
       try {
-        const { slug = "" } = request.params;
+        const {slug = ""} = request.params;
         const VectorDb = getVectorDbClass();
-        const workspace = await Workspace.get({ slug });
+        const workspace = await Workspace.get({slug});
 
         if (!workspace) {
           response.sendStatus(400).end();
           return;
         }
 
-        await WorkspaceChats.delete({ workspaceId: Number(workspace.id) });
+        await WorkspaceChats.delete({workspaceId: Number(workspace.id)});
         await DocumentVectors.deleteForWorkspace(Number(workspace.id));
-        await Document.delete({ workspaceId: Number(workspace.id) });
-        await Workspace.delete({ id: Number(workspace.id) });
+        await Document.delete({workspaceId: Number(workspace.id)});
+        await Workspace.delete({id: Number(workspace.id)});
         try {
-          await VectorDb["delete-namespace"]({ namespace: slug });
+          await VectorDb["delete-namespace"]({namespace: slug});
         } catch (e) {
           console.error(e.message);
         }
@@ -270,20 +272,20 @@ function apiWorkspaceEndpoints(app) {
     }
     */
       try {
-        const { slug = null } = request.params;
+        const {slug = null} = request.params;
         const data = reqBody(request);
-        const currWorkspace = await Workspace.get({ slug });
+        const currWorkspace = await Workspace.get({slug});
 
         if (!currWorkspace) {
           response.sendStatus(400).end();
           return;
         }
 
-        const { workspace, message } = await Workspace.update(
+        const {workspace, message} = await Workspace.update(
           currWorkspace.id,
           data
         );
-        response.status(200).json({ workspace, message });
+        response.status(200).json({workspace, message});
       } catch (e) {
         console.log(e.message, e);
         response.sendStatus(500).end();
@@ -335,8 +337,8 @@ function apiWorkspaceEndpoints(app) {
     }
     */
       try {
-        const { slug } = request.params;
-        const workspace = await Workspace.get({ slug });
+        const {slug} = request.params;
+        const workspace = await Workspace.get({slug});
 
         if (!workspace) {
           response.sendStatus(400).end();
@@ -344,7 +346,7 @@ function apiWorkspaceEndpoints(app) {
         }
 
         const history = await WorkspaceChats.forWorkspace(workspace.id);
-        response.status(200).json({ history: convertToChatHistory(history) });
+        response.status(200).json({history: convertToChatHistory(history)});
       } catch (e) {
         console.log(e.message, e);
         response.sendStatus(500).end();
@@ -409,9 +411,9 @@ function apiWorkspaceEndpoints(app) {
     }
     */
       try {
-        const { slug = null } = request.params;
-        const { adds = [], deletes = [] } = reqBody(request);
-        const currWorkspace = await Workspace.get({ slug });
+        const {slug = null} = request.params;
+        const {adds = [], deletes = []} = reqBody(request);
+        const currWorkspace = await Workspace.get({slug});
 
         if (!currWorkspace) {
           response.sendStatus(400).end();
@@ -423,7 +425,7 @@ function apiWorkspaceEndpoints(app) {
         const updatedWorkspace = await Workspace.get(
           `id = ${Number(currWorkspace.id)}`
         );
-        response.status(200).json({ workspace: updatedWorkspace });
+        response.status(200).json({workspace: updatedWorkspace});
       } catch (e) {
         console.log(e.message, e);
         response.sendStatus(500).end();
@@ -475,21 +477,23 @@ function apiWorkspaceEndpoints(app) {
    }
    */
       try {
-        const { slug } = request.params;
-        const { message, mode = "query" } = reqBody(request);
-        const workspace = await Workspace.get({ slug });
+        const {slug} = request.params;
+        const {message, mode = "query"} = reqBody(request);
+        const workspace = await Workspace.get({slug});
 
         if (!workspace) {
           response.sendStatus(400).end();
           return;
         }
 
-        const result = await chatWithWorkspace(workspace, message, mode);
+        console.log("chatWithWorkspace ######################################################################", mode);
+
+        const result = await chatWithWorkspace(workspace, message, mode, null, request);
         await Telemetry.sendTelemetry("sent_chat", {
           LLMSelection: process.env.LLM_PROVIDER || "openai",
-          VectorDbSelection: process.env.VECTOR_DB || "pinecone",
+          VectorDbSelection: process.env.VECTOR_DB || "pinecone"
         });
-        response.status(200).json({ ...result });
+        response.status(200).json({...result});
       } catch (e) {
         response.status(500).json({
           id: uuidv4(),
@@ -497,11 +501,91 @@ function apiWorkspaceEndpoints(app) {
           textResponse: null,
           sources: [],
           close: true,
-          error: e.message,
+          error: e.message
+        });
+      }
+    }
+  );
+
+  app.post(
+    "/v1/workspace/:slug/coder",
+    [validApiKey],
+    async (request, response) => {
+      /*
+   #swagger.tags = ['Analysts']
+   #swagger.description = 'Execute a chat with a analyst'
+   #swagger.requestBody = {
+       description: 'prompt to send to the analyst and the type of conversation (query or chat).',
+       required: true,
+       type: 'object',
+       content: {
+         "application/json": {
+           example: {
+             message: "What is AnythingLLM?",
+             mode: "query | chat"
+           }
+         }
+       }
+     }
+   #swagger.responses[200] = {
+     content: {
+       "application/json": {
+         schema: {
+           type: 'object',
+           example: {
+              id: 'chat-uuid',
+              type: "abort | textResponse",
+              textResponse: "Response to your query",
+              sources: [{title: "anythingllm.txt", chunk: "This is a context chunk used in the answer of the prompt by the LLM,"}],
+              close: true,
+              error: "null | text string of the failure mode."
+           }
+         }
+       }
+     }
+   }
+   #swagger.responses[403] = {
+     schema: {
+       "$ref": "#/definitions/InvalidAPIKey"
+     }
+   }
+   */
+      try {
+        const {slug} = request.params;
+        const {message, mode = "query"} = reqBody(request);
+        const analyst = await Analyst.get({slug});
+
+        if (!analyst) {
+          response.sendStatus(400).end();
+          return;
+        }
+
+        const uuid = uuidv4();
+
+        const result = {
+          id: uuid,
+          type: "textResponse",
+          textResponse: "textResponse",
+          sources: [],
+          close: true,
+          error: null
+        }
+
+        console.log("### request ###", message, mode);
+
+        response.status(200).json({...result});
+      } catch (e) {
+        response.status(500).json({
+          id: uuidv4(),
+          type: "abort",
+          textResponse: null,
+          sources: [],
+          close: true,
+          error: e.message
         });
       }
     }
   );
 }
 
-module.exports = { apiWorkspaceEndpoints };
+module.exports = {apiWorkspaceEndpoints};

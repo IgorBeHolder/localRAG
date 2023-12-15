@@ -1,7 +1,7 @@
 #!/bin/bash
 
-GPU_ARCHIVE="sherpa-aiserver-gpu_v0.2.tar.gz"
-CPU_ARCHIVE="sherpa-aiserver-cpu_v0.2.tar.gz"
+GPU_ARCHIVE="sherpa-aiserver-openchat_v0.1.tar.gz"
+CPU_ARCHIVE="sherpa-aiserver-RTC-v2.tar.gz"
 
 # Load environment variables from .env file
 set -a
@@ -80,7 +80,7 @@ if [ "$DEVICE" = "cpu" ]; then
     -p 3003:3003 \
     --ulimit memlock=17179869184:17179869184 \
     --network llm-net \
-    llm-server-cpu:v1
+    llm-server:v2
   echo -e "Main model server started.\n-----------------------------"
   )
 else

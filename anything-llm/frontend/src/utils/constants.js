@@ -1,5 +1,7 @@
 export const API_BASE = import.meta.env.VITE_API_BASE || "/api";
 export const CHAT_MAX_LENGTH = 16384;
+export const WS_URL = "ws://localhost:3030";
+
 export const DEFAULT_CHAT_OPTIONS = {
   openAiHistory: 10,
   openAiTemp: 0.2,
