@@ -44,6 +44,8 @@ app.use(
 
 app.use("/api", apiRouter);
 
+let activeStream = null;
+
 function executeSSHCommand(command, sshConnection, ws) {
   console.log("@@@@@@@ executeSSHCommand", command);
   try {
@@ -62,36 +64,67 @@ function executeSSHCommand(command, sshConnection, ws) {
     //  });
     //});
 
-    sshConnection.exec(command, (err, stream) => {
-      if (err) {
-        console.error("Error executing command:", err);
-        ws.send("Error executing command");
-        return;
-      }
 
-      let result = "";
-      stream
-        .on("data", (data) => {
-          console.log("Command Output:", data);
-          result += data.toString();
-        })
-        .on("close", (code, signal) => {
-          let chatResult = {
-            id: uuidv4(),
-            textResponse: result,
-            sources: [],
-            error: null,
-            close: true
-          };
+    if (activeStream) {
+      console.log("@@@@@@@@@@ activeStream", command);
+      activeStream.write(command + "\n");
+    } else {
+      sshConnection.exec(command, (err, stream) => {
+        if (err) {
+          console.error("Error executing command:", err);
+          ws.send("Error executing command");
+          return;
+        }
 
-          if (code) {
-            chatResult.error = {code};
-          }
+        let result = "";
+        stream
+          .on("data", (data, ...rest) => {
+            console.log("@@@@@@@@@@ CommandOutput:", data, `'${data.toString()}'`, rest);
+            result = data.toString();
 
-          ws.send(JSON.stringify(chatResult));
-          console.log("Stream closed with code " + code + " and signal " + signal + " result was sent");
-        });
-    });
+            if (result === "> ") {
+              activeStream = stream;
+            }
+
+            let chatResult = {
+              id: uuidv4(),
+              textResponse: data.toString(),
+              sources: [],
+              error: null,
+              close: true
+            };
+
+            ws.send(JSON.stringify(chatResult));
+            console.log("Stream is open, result was sent");
+          })
+          .on("close", (code, signal) => {
+            activeStream = null;
+
+            if (code) {
+              let chatResult = {
+                id: uuidv4(),
+                textResponse: "Connection closed",
+                sources: [],
+                error: null,
+                close: true
+              };
+
+              chatResult.error = {code, text: (code === 127 ? "-bash: no such command" : "-bash: unknown error")};
+
+              console.warn("@@@@@@@ SSH Result", code, signal);
+
+              ws.send(JSON.stringify(chatResult));
+              console.log("Stream closed with code " + code + " and signal " + signal + " result was sent");
+            }
+          })
+          .on("exit", (code) => {
+            //activeStream = null;
+            //
+            //console.log("@@@@@@@ SSH stream :: exit\n", {code});
+            //sshConnection.end();
+          });
+      });
+    }
   } catch (e) {
     console.log("@@@@@@@ executeSSHCommand", e);
   }
@@ -120,7 +153,10 @@ server.on("upgrade", (request, socket, head) => {
 });
 
 wss.on("connection", (ws, request, sshConnection) => {
-  console.log("##################### WS connection");
+  console.log("##################### WS connection", activeStream);
+
+  activeStream = null;
+
   ws.on("message", (message) => {
     const command = message.toString();
 

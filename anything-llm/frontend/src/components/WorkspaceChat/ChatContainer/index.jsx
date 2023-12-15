@@ -166,11 +166,13 @@ export default function ChatContainer({workspace, knownHistory = []}) {
       className="main-content flex-1 lg:max-w-[var(--max-content)] relative bg-white dark:bg-black-900 lg:h-full"
     >
 
-      <div className="main-box relative flex flex-col w-full h-full overflow-y-auto p-[16px] lg:p-[32px] !pb-0">
-        <div className="flex flex-col flex-1 w-full bg-white shadow-md relative">
-          <ChatHistory mode={mode} history={chatHistory} workspace={workspace}/>
+      {mode === "analyst" ? null :
+        <div className="main-box relative flex flex-col w-full h-full overflow-y-auto p-[16px] lg:p-[32px] !pb-0">
+          <div className="flex flex-col flex-1 w-full bg-white shadow-md relative">
+            <ChatHistory mode={mode} history={chatHistory} workspace={workspace}/>
+          </div>
         </div>
-      </div>
+      }
       <PromptInput
         mode={mode}
         workspace={workspace}

@@ -12,7 +12,7 @@ const TerminalComponent = ({handleSubmit}) => {
   const [from, setFrom] = useState(null);
   const [email, setEmail] = useState(null);
   const [sent, setSent] = useState(false);
-  const [theme, setTheme] = useState("portfolio");
+  const [promptSymbol, setPromptSymbol] = useState("$");
   const [command, setCommand] = useState("");
   const [output, setOutput] = useState("");
   const [ws, setWs] = useState(null);
@@ -28,6 +28,11 @@ const TerminalComponent = ({handleSubmit}) => {
     };
 
     newWs.onmessage = (event) => {
+      console.warn("onmessage", event.data);
+      if (event.data.trim() === ">") {
+        setPromptSymbol(">");
+      }
+
       setOutput(event.data);
     };
 
@@ -93,11 +98,17 @@ const TerminalComponent = ({handleSubmit}) => {
       //console.log("response", response);
 
       if (response.error) {
-        console.log("response ERROR", response);
+        if (response.error.code === 127) {
+          console.log(response.error.text);
+        } else {
+          console.log("SSH SENT NON ZERO RESPONSE", response);
+        }
       } else {
-        const lines = response.textResponse.split("\n");
+        const lines = response.textResponse.split("\n").filter((l, li) => {
+          return !(li && l.trim() === ">");
+        });
 
-        console.log(response.textResponse);
+        console.log(lines.join("\n"));
 
         //lines.forEach(l => {
         //  printText(l);
@@ -116,13 +127,14 @@ const TerminalComponent = ({handleSubmit}) => {
     style={{
       display: "flex",
       alignItems: "center",
+      height: "calc(100vh - 200px)",
       width: "100%"
     }}
   >
     <Terminal
       ref={terminalRef}
       watchConsoleLogging={true}
-      promptSymbol="$"
+      promptSymbol={promptSymbol}
       color="green"
       backgroundColor="black"
       barColor="black"
