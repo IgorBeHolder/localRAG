@@ -1,11 +1,7 @@
 import React, {useEffect, useRef, useCallback, useState} from "react";
-import {ReactTerminal} from "react-terminal";
-import {getTimeAgo} from "../../../../../utils/functions.js";
 import useWebSocket, {ReadyState} from "react-use-websocket";
 import {WS_URL} from "../../../../../utils/constants.js";
 import Terminal from "terminal-in-react/lib/bundle/terminal-react";
-//import {Terminal} from "xterm";
-//import "xterm/css/xterm.css";
 
 const TerminalComponent = ({handleSubmit}) => {
   const [command, setCommand] = useState("");
@@ -51,6 +47,8 @@ const TerminalComponent = ({handleSubmit}) => {
   useEffect(() => {
     if (output) {
       const response = JSON.parse(output);
+
+      //console.log("terminalRef", terminalRef, output);
 
       if (response.error) {
         if (response.error.code === 127) {
