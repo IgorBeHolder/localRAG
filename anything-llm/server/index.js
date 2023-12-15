@@ -157,13 +157,26 @@ wss.on("connection", (ws, request, sshConnection) => {
 
   activeStream = null;
 
+  executeSSHCommand("interpreter\n", sshConnection, ws);
+
   ws.on("message", (message) => {
     const command = message.toString();
 
     console.log("##################### WS message", command);
 
-    // Получаем команду от клиента и выполняем ее на сервере SSH
-    executeSSHCommand(command, sshConnection, ws);
+    if (activeStream) {
+      // Получаем команду от клиента и выполняем ее на сервере SSH
+      executeSSHCommand(command, sshConnection, ws);
+    }
+  });
+
+  ws.on("close", (message) => {
+    const command = message.toString();
+
+    if (activeStream) {
+      // Получаем команду от клиента и выполняем ее на сервере SSH
+      executeSSHCommand("exit\n", sshConnection, ws);
+    }
   });
 });
 

@@ -8,7 +8,6 @@ import Terminal from "terminal-in-react/lib/bundle/terminal-react";
 //import "xterm/css/xterm.css";
 
 const TerminalComponent = ({handleSubmit}) => {
-  const [promptSymbol, setPromptSymbol] = useState("$");
   const [command, setCommand] = useState("");
   const [output, setOutput] = useState("");
   const terminalRef = useRef();
@@ -64,10 +63,6 @@ const TerminalComponent = ({handleSubmit}) => {
           return l.length && !(li && l.trim() === ">");
         });
 
-        if (lines[lines.length - 1].trim() === ">") {
-          setPromptSymbol(">");
-        }
-
         console.log(lines.join("\n"));
 
         //lines.forEach(l => {
@@ -75,7 +70,7 @@ const TerminalComponent = ({handleSubmit}) => {
         //});
       }
     }
-  }, [output, setPromptSymbol]);
+  }, [output]);
 
   useEffect(() => {
     sendCommand();
@@ -94,7 +89,7 @@ const TerminalComponent = ({handleSubmit}) => {
     <Terminal
       ref={terminalRef}
       watchConsoleLogging={true}
-      promptSymbol={promptSymbol}
+      promptSymbol=">"
       color="green"
       backgroundColor="black"
       barColor="black"
