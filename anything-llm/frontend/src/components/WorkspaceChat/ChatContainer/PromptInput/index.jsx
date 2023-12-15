@@ -67,6 +67,10 @@ export default function PromptInput({
       window.location = "/analyst/" + workspace.name;
 
       return;
+    } else if (command === "/coder") {
+      window.localStorage.setItem(storageKey, "coder");
+      window.dispatchEvent(new Event("workspace_chat_mode_update"));
+      return;
     }
 
     onChange({target: {value: `${command} ${message}`}});
