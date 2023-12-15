@@ -8,7 +8,8 @@ if [ ! -z "$container_id" ]; then
 fi
 
 cd anything-llm
-git checkout main
+# todo revert
+#git checkout main
 cd docker
 docker-compose --env-file ../../client-files/.env -p localrag up -d --build
 # docker-compose --env-file ../../client-files/.env -p localrag up -d

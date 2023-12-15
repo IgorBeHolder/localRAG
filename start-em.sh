@@ -25,7 +25,8 @@ remove_container_if_exists "nginx"
 remove_container_if_exists "postgres"
 
 cd embed-server &&
-git checkout main &&
+# todo revert
+#git checkout main &&
 docker-compose -p localrag up -d --build
 
 )

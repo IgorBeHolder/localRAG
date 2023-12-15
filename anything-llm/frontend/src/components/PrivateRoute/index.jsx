@@ -14,7 +14,7 @@ function useIsAuthenticated() {
 
   useEffect(() => {
     const validateSession = async () => {
-      const multiUserMode = (await System.keys()).MultiUserMode;
+      const multiUserMode = (await System.keys())?.MultiUserMode;
       if (!multiUserMode) {
         setIsAuthed(true);
         return;

@@ -1615,6 +1615,679 @@
         }
       }
     },
+    "/v1/workspace/{slug}/coder": {
+      "post": {
+        "tags": [
+          "Analysts"
+        ],
+        "description": "Execute a chat with a analyst",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "id": "chat-uuid",
+                    "type": "abort | textResponse",
+                    "textResponse": "Response to your query",
+                    "sources": [
+                      {
+                        "title": "anythingllm.txt",
+                        "chunk": "This is a context chunk used in the answer of the prompt by the LLM,"
+                      }
+                    ],
+                    "close": true,
+                    "error": "null | text string of the failure mode."
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidAPIKey"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidAPIKey"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "description": "prompt to send to the analyst and the type of conversation (query or chat).",
+          "required": true,
+          "type": "object",
+          "content": {
+            "application/json": {
+              "example": {
+                "message": "What is AnythingLLM?",
+                "mode": "query | chat"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/analyst/new": {
+      "post": {
+        "tags": [
+          "Analysts"
+        ],
+        "description": "Create a new analyst",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "analyst": {
+                      "id": 79,
+                      "name": "Sample analyst",
+                      "slug": "sample-analyst",
+                      "createdAt": "2023-08-17 00:45:03",
+                      "openAiTemp": null,
+                      "lastUpdatedAt": "2023-08-17 00:45:03",
+                      "openAiHistory": 20,
+                      "openAiPrompt": null
+                    },
+                    "message": "Analyst created"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidAPIKey"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidAPIKey"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "description": "JSON object containing new display name of analyst.",
+          "required": true,
+          "type": "object",
+          "content": {
+            "application/json": {
+              "example": {
+                "name": "My New Analyst"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/analysts": {
+      "get": {
+        "tags": [
+          "Analysts"
+        ],
+        "description": "List all current analysts",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "analysts": [
+                      {
+                        "id": 79,
+                        "name": "Sample analyst",
+                        "slug": "sample-analyst",
+                        "createdAt": "2023-08-17 00:45:03",
+                        "openAiTemp": null,
+                        "lastUpdatedAt": "2023-08-17 00:45:03",
+                        "openAiHistory": 20,
+                        "openAiPrompt": null
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidAPIKey"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidAPIKey"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/v1/analyst/{slug}": {
+      "get": {
+        "tags": [
+          "Analysts"
+        ],
+        "description": "Get a analyst by its unique slug.",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Unique slug of analyst to find"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "analyst": {
+                      "id": 79,
+                      "name": "My analyst",
+                      "slug": "my-analyst-123",
+                      "createdAt": "2023-08-17 00:45:03",
+                      "openAiTemp": null,
+                      "lastUpdatedAt": "2023-08-17 00:45:03",
+                      "openAiHistory": 20,
+                      "openAiPrompt": null,
+                      "documents": []
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidAPIKey"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidAPIKey"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Analysts"
+        ],
+        "description": "Deletes a analyst by its slug.",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Unique slug of analyst to delete"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidAPIKey"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidAPIKey"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/v1/analyst/{slug}/update": {
+      "post": {
+        "tags": [
+          "Analysts"
+        ],
+        "description": "Update analyst settings by its unique slug.",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Unique slug of analyst to find"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "analyst": {
+                      "id": 79,
+                      "name": "My analyst",
+                      "slug": "my-analyst-123",
+                      "createdAt": "2023-08-17 00:45:03",
+                      "openAiTemp": null,
+                      "lastUpdatedAt": "2023-08-17 00:45:03",
+                      "openAiHistory": 20,
+                      "openAiPrompt": null,
+                      "documents": []
+                    },
+                    "message": null
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidAPIKey"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidAPIKey"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "description": "JSON object containing new settings to update a analyst. All keys are optional and will not update unless provided",
+          "required": true,
+          "type": "object",
+          "content": {
+            "application/json": {
+              "example": {
+                "name": "Updated Analyst Name",
+                "openAiTemp": 0.2,
+                "openAiHistory": 20,
+                "openAiPrompt": "Respond to all inquires and questions in binary - do not respond in any other format."
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/analyst/{slug}/chats": {
+      "get": {
+        "tags": [
+          "Analysts"
+        ],
+        "description": "Get a analysts chats regardless of user by its unique slug.",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Unique slug of analyst to find"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "history": [
+                      {
+                        "role": "user",
+                        "content": "What is AnythingLLM?",
+                        "sentAt": 1692851630
+                      },
+                      {
+                        "role": "assistant",
+                        "content": "AnythingLLM is a platform that allows you to convert notes, PDFs, and other source materials into a chatbot. It ensures privacy, cites its answers, and allows multiple people to interact with the same documents simultaneously. It is particularly useful for businesses to enhance the visibility and readability of various written communications such as SOPs, contracts, and sales calls. You can try it out with a free trial to see if it meets your business needs.",
+                        "sources": [
+                          {
+                            "source": "object about source document and snippets used"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidAPIKey"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidAPIKey"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/v1/analyst/{slug}/update-embeddings": {
+      "post": {
+        "tags": [
+          "Analysts"
+        ],
+        "description": "Add or remove documents from a analyst by its unique slug.",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Unique slug of analyst to find"
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "analyst": {
+                      "id": 79,
+                      "name": "My analyst",
+                      "slug": "my-analyst-123",
+                      "createdAt": "2023-08-17 00:45:03",
+                      "openAiTemp": null,
+                      "lastUpdatedAt": "2023-08-17 00:45:03",
+                      "openAiHistory": 20,
+                      "openAiPrompt": null,
+                      "documents": []
+                    },
+                    "message": null
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidAPIKey"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidAPIKey"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "description": "JSON object of additions and removals of documents to add to update a analyst. The value should be the folder + filename with the exclusions of the top-level documents path.",
+          "required": true,
+          "type": "object",
+          "content": {
+            "application/json": {
+              "example": {
+                "adds": [],
+                "deletes": [
+                  "custom-documents/anythingllm-hash.json"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/analyst/{slug}/analyst": {
+      "post": {
+        "tags": [
+          "Analysts"
+        ],
+        "description": "Execute a chat with a analyst",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "id": "chat-uuid",
+                    "type": "abort | textResponse",
+                    "textResponse": "Response to your query",
+                    "sources": [
+                      {
+                        "title": "anythingllm.txt",
+                        "chunk": "This is a context chunk used in the answer of the prompt by the LLM,"
+                      }
+                    ],
+                    "close": true,
+                    "error": "null | text string of the failure mode."
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidAPIKey"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidAPIKey"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "description": "prompt to send to the analyst and the type of conversation (query or chat).",
+          "required": true,
+          "type": "object",
+          "content": {
+            "application/json": {
+              "example": {
+                "message": "What is AnythingLLM?",
+                "mode": "query | chat"
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/system/env-dump": {
       "get": {
         "tags": [

@@ -1,33 +1,32 @@
 const {Document} = require("../../../models/documents");
 const {Telemetry} = require("../../../models/telemetry");
 const {DocumentVectors} = require("../../../models/vectors");
-const {Workspace} = require("../../../models/workspace");
-const {WorkspaceChats} = require("../../../models/workspaceChats");
+const {Analyst} = require("../../../models/analyst");
+const {AnalystChats} = require("../../../models/analystChats");
 const {
   convertToChatHistory,
-  chatWithWorkspace
+  chatWithAnalyst
 } = require("../../../utils/chats");
 const {getVectorDbClass} = require("../../../utils/helpers");
 const {multiUserMode, reqBody} = require("../../../utils/http");
 const {validApiKey} = require("../../../utils/middleware/validApiKey");
-const {Analyst} = require("../../../models/analyst");
 const {v4: uuidv4} = require("uuid");
 
-function apiWorkspaceEndpoints(app) {
+function apiAnalystEndpoints(app) {
   if (!app) return;
 
-  app.post("/v1/workspace/new", [validApiKey], async (request, response) => {
+  app.post("/v1/analyst/new", [validApiKey], async (request, response) => {
     /*
-    #swagger.tags = ['Workspaces']
-    #swagger.description = 'Create a new workspace'
+    #swagger.tags = ['Analysts']
+    #swagger.description = 'Create a new analyst'
     #swagger.requestBody = {
-        description: 'JSON object containing new display name of workspace.',
+        description: 'JSON object containing new display name of analyst.',
         required: true,
         type: 'object',
         content: {
           "application/json": {
             example: {
-              name: "My New Workspace",
+              name: "My New Analyst",
             }
           }
         }
@@ -38,17 +37,17 @@ function apiWorkspaceEndpoints(app) {
           schema: {
             type: 'object',
             example: {
-              workspace: {
+              analyst: {
                 "id": 79,
-                "name": "Sample workspace",
-                "slug": "sample-workspace",
+                "name": "Sample analyst",
+                "slug": "sample-analyst",
                 "createdAt": "2023-08-17 00:45:03",
                 "openAiTemp": null,
                 "lastUpdatedAt": "2023-08-17 00:45:03",
                 "openAiHistory": 20,
                 "openAiPrompt": null
               },
-              message: 'Workspace created'
+              message: 'Analyst created'
             }
           }
         }
@@ -62,34 +61,34 @@ function apiWorkspaceEndpoints(app) {
     */
     try {
       const {name = null} = reqBody(request);
-      const {workspace, message} = await Workspace.new(name);
-      await Telemetry.sendTelemetry("workspace_created", {
+      const {analyst, message} = await Analyst.new(name);
+      await Telemetry.sendTelemetry("analyst_created", {
         multiUserMode: multiUserMode(response),
         LLMSelection: process.env.LLM_PROVIDER || "openai",
         VectorDbSelection: process.env.VECTOR_DB || "pinecone"
       });
-      response.status(200).json({workspace, message});
+      response.status(200).json({analyst, message});
     } catch (e) {
       console.log(e.message, e);
       response.sendStatus(500).end();
     }
   });
 
-  app.get("/v1/workspaces", [validApiKey], async (request, response) => {
+  app.get("/v1/analysts", [validApiKey], async (request, response) => {
     /*
-    #swagger.tags = ['Workspaces']
-    #swagger.description = 'List all current workspaces'
+    #swagger.tags = ['Analysts']
+    #swagger.description = 'List all current analysts'
     #swagger.responses[200] = {
       content: {
         "application/json": {
           schema: {
             type: 'object',
             example: {
-              workspaces: [
+              analysts: [
                 {
                   "id": 79,
-                  "name": "Sample workspace",
-                  "slug": "sample-workspace",
+                  "name": "Sample analyst",
+                  "slug": "sample-analyst",
                   "createdAt": "2023-08-17 00:45:03",
                   "openAiTemp": null,
                   "lastUpdatedAt": "2023-08-17 00:45:03",
@@ -109,22 +108,22 @@ function apiWorkspaceEndpoints(app) {
     }
     */
     try {
-      const workspaces = await Workspace.where();
-      response.status(200).json({workspaces});
+      const analysts = await Analyst.where();
+      response.status(200).json({analysts});
     } catch (e) {
       console.log(e.message, e);
       response.sendStatus(500).end();
     }
   });
 
-  app.get("/v1/workspace/:slug", [validApiKey], async (request, response) => {
+  app.get("/v1/analyst/:slug", [validApiKey], async (request, response) => {
     /*
-    #swagger.tags = ['Workspaces']
-    #swagger.description = 'Get a workspace by its unique slug.'
-    #swagger.path = '/v1/workspace/{slug}'
+    #swagger.tags = ['Analysts']
+    #swagger.description = 'Get a analyst by its unique slug.'
+    #swagger.path = '/v1/analyst/{slug}'
     #swagger.parameters['slug'] = {
         in: 'path',
-        description: 'Unique slug of workspace to find',
+        description: 'Unique slug of analyst to find',
         required: true,
         type: 'string'
     }
@@ -134,10 +133,10 @@ function apiWorkspaceEndpoints(app) {
           schema: {
             type: 'object',
             example: {
-              workspace: {
+              analyst: {
                 "id": 79,
-                "name": "My workspace",
-                "slug": "my-workspace-123",
+                "name": "My analyst",
+                "slug": "my-analyst-123",
                 "createdAt": "2023-08-17 00:45:03",
                 "openAiTemp": null,
                 "lastUpdatedAt": "2023-08-17 00:45:03",
@@ -158,8 +157,8 @@ function apiWorkspaceEndpoints(app) {
     */
     try {
       const {slug} = request.params;
-      const workspace = await Workspace.get({slug});
-      response.status(200).json({workspace});
+      const analyst = await Analyst.get({slug});
+      response.status(200).json({analyst});
     } catch (e) {
       console.log(e.message, e);
       response.sendStatus(500).end();
@@ -167,16 +166,16 @@ function apiWorkspaceEndpoints(app) {
   });
 
   app.delete(
-    "/v1/workspace/:slug",
+    "/v1/analyst/:slug",
     [validApiKey],
     async (request, response) => {
       /*
-    #swagger.tags = ['Workspaces']
-    #swagger.description = 'Deletes a workspace by its slug.'
-    #swagger.path = '/v1/workspace/{slug}'
+    #swagger.tags = ['Analysts']
+    #swagger.description = 'Deletes a analyst by its slug.'
+    #swagger.path = '/v1/analyst/{slug}'
     #swagger.parameters['slug'] = {
         in: 'path',
-        description: 'Unique slug of workspace to delete',
+        description: 'Unique slug of analyst to delete',
         required: true,
         type: 'string'
     }
@@ -189,17 +188,17 @@ function apiWorkspaceEndpoints(app) {
       try {
         const {slug = ""} = request.params;
         const VectorDb = getVectorDbClass();
-        const workspace = await Workspace.get({slug});
+        const analyst = await Analyst.get({slug});
 
-        if (!workspace) {
+        if (!analyst) {
           response.sendStatus(400).end();
           return;
         }
 
-        await WorkspaceChats.delete({workspaceId: Number(workspace.id)});
-        await DocumentVectors.deleteForWorkspace(Number(workspace.id));
-        await Document.delete({workspaceId: Number(workspace.id)});
-        await Workspace.delete({id: Number(workspace.id)});
+        await AnalystChats.delete({analystId: Number(analyst.id)});
+        await DocumentVectors.deleteForAnalyst(Number(analyst.id));
+        await Document.delete({analystId: Number(analyst.id)});
+        await Analyst.delete({id: Number(analyst.id)});
         try {
           await VectorDb["delete-namespace"]({namespace: slug});
         } catch (e) {
@@ -214,27 +213,27 @@ function apiWorkspaceEndpoints(app) {
   );
 
   app.post(
-    "/v1/workspace/:slug/update",
+    "/v1/analyst/:slug/update",
     [validApiKey],
     async (request, response) => {
       /*
-    #swagger.tags = ['Workspaces']
-    #swagger.description = 'Update workspace settings by its unique slug.'
-    #swagger.path = '/v1/workspace/{slug}/update'
+    #swagger.tags = ['Analysts']
+    #swagger.description = 'Update analyst settings by its unique slug.'
+    #swagger.path = '/v1/analyst/{slug}/update'
     #swagger.parameters['slug'] = {
         in: 'path',
-        description: 'Unique slug of workspace to find',
+        description: 'Unique slug of analyst to find',
         required: true,
         type: 'string'
     }
     #swagger.requestBody = {
-      description: 'JSON object containing new settings to update a workspace. All keys are optional and will not update unless provided',
+      description: 'JSON object containing new settings to update a analyst. All keys are optional and will not update unless provided',
       required: true,
       type: 'object',
       content: {
         "application/json": {
           example: {
-            "name": 'Updated Workspace Name',
+            "name": 'Updated Analyst Name',
             "openAiTemp": 0.2,
             "openAiHistory": 20,
             "openAiPrompt": "Respond to all inquires and questions in binary - do not respond in any other format."
@@ -248,10 +247,10 @@ function apiWorkspaceEndpoints(app) {
           schema: {
             type: 'object',
             example: {
-              workspace: {
+              analyst: {
                 "id": 79,
-                "name": "My workspace",
-                "slug": "my-workspace-123",
+                "name": "My analyst",
+                "slug": "my-analyst-123",
                 "createdAt": "2023-08-17 00:45:03",
                 "openAiTemp": null,
                 "lastUpdatedAt": "2023-08-17 00:45:03",
@@ -274,18 +273,18 @@ function apiWorkspaceEndpoints(app) {
       try {
         const {slug = null} = request.params;
         const data = reqBody(request);
-        const currWorkspace = await Workspace.get({slug});
+        const currAnalyst = await Analyst.get({slug});
 
-        if (!currWorkspace) {
+        if (!currAnalyst) {
           response.sendStatus(400).end();
           return;
         }
 
-        const {workspace, message} = await Workspace.update(
-          currWorkspace.id,
+        const {analyst, message} = await Analyst.update(
+          currAnalyst.id,
           data
         );
-        response.status(200).json({workspace, message});
+        response.status(200).json({analyst, message});
       } catch (e) {
         console.log(e.message, e);
         response.sendStatus(500).end();
@@ -294,16 +293,16 @@ function apiWorkspaceEndpoints(app) {
   );
 
   app.get(
-    "/v1/workspace/:slug/chats",
+    "/v1/analyst/:slug/chats",
     [validApiKey],
     async (request, response) => {
       /*
-    #swagger.tags = ['Workspaces']
-    #swagger.description = 'Get a workspaces chats regardless of user by its unique slug.'
-    #swagger.path = '/v1/workspace/{slug}/chats'
+    #swagger.tags = ['Analysts']
+    #swagger.description = 'Get a analysts chats regardless of user by its unique slug.'
+    #swagger.path = '/v1/analyst/{slug}/chats'
     #swagger.parameters['slug'] = {
         in: 'path',
-        description: 'Unique slug of workspace to find',
+        description: 'Unique slug of analyst to find',
         required: true,
         type: 'string'
     }
@@ -338,14 +337,14 @@ function apiWorkspaceEndpoints(app) {
     */
       try {
         const {slug} = request.params;
-        const workspace = await Workspace.get({slug});
+        const analyst = await Analyst.get({slug});
 
-        if (!workspace) {
+        if (!analyst) {
           response.sendStatus(400).end();
           return;
         }
 
-        const history = await WorkspaceChats.forWorkspace(workspace.id);
+        const history = await AnalystChats.forAnalyst(analyst.id);
         response.status(200).json({history: convertToChatHistory(history)});
       } catch (e) {
         console.log(e.message, e);
@@ -355,21 +354,21 @@ function apiWorkspaceEndpoints(app) {
   );
 
   app.post(
-    "/v1/workspace/:slug/update-embeddings",
+    "/v1/analyst/:slug/update-embeddings",
     [validApiKey],
     async (request, response) => {
       /*
-    #swagger.tags = ['Workspaces']
-    #swagger.description = 'Add or remove documents from a workspace by its unique slug.'
-    #swagger.path = '/v1/workspace/{slug}/update-embeddings'
+    #swagger.tags = ['Analysts']
+    #swagger.description = 'Add or remove documents from a analyst by its unique slug.'
+    #swagger.path = '/v1/analyst/{slug}/update-embeddings'
     #swagger.parameters['slug'] = {
         in: 'path',
-        description: 'Unique slug of workspace to find',
+        description: 'Unique slug of analyst to find',
         required: true,
         type: 'string'
     }
     #swagger.requestBody = {
-      description: 'JSON object of additions and removals of documents to add to update a workspace. The value should be the folder + filename with the exclusions of the top-level documents path.',
+      description: 'JSON object of additions and removals of documents to add to update a analyst. The value should be the folder + filename with the exclusions of the top-level documents path.',
       required: true,
       type: 'object',
       content: {
@@ -387,10 +386,10 @@ function apiWorkspaceEndpoints(app) {
           schema: {
             type: 'object',
             example: {
-              workspace: {
+              analyst: {
                 "id": 79,
-                "name": "My workspace",
-                "slug": "my-workspace-123",
+                "name": "My analyst",
+                "slug": "my-analyst-123",
                 "createdAt": "2023-08-17 00:45:03",
                 "openAiTemp": null,
                 "lastUpdatedAt": "2023-08-17 00:45:03",
@@ -413,19 +412,19 @@ function apiWorkspaceEndpoints(app) {
       try {
         const {slug = null} = request.params;
         const {adds = [], deletes = []} = reqBody(request);
-        const currWorkspace = await Workspace.get({slug});
+        const currAnalyst = await Analyst.get({slug});
 
-        if (!currWorkspace) {
+        if (!currAnalyst) {
           response.sendStatus(400).end();
           return;
         }
 
-        await Document.removeDocuments(currWorkspace, deletes);
-        await Document.addDocuments(currWorkspace, adds);
-        const updatedWorkspace = await Workspace.get(
-          `id = ${Number(currWorkspace.id)}`
+        await Document.removeDocuments(currAnalyst, deletes);
+        await Document.addDocuments(currAnalyst, adds);
+        const updatedAnalyst = await Analyst.get(
+          `id = ${Number(currAnalyst.id)}`
         );
-        response.status(200).json({workspace: updatedWorkspace});
+        response.status(200).json({analyst: updatedAnalyst});
       } catch (e) {
         console.log(e.message, e);
         response.sendStatus(500).end();
@@ -434,81 +433,7 @@ function apiWorkspaceEndpoints(app) {
   );
 
   app.post(
-    "/v1/workspace/:slug/chat",
-    [validApiKey],
-    async (request, response) => {
-      /*
-   #swagger.tags = ['Workspaces']
-   #swagger.description = 'Execute a chat with a workspace'
-   #swagger.requestBody = {
-       description: 'prompt to send to the workspace and the type of conversation (query or chat).',
-       required: true,
-       type: 'object',
-       content: {
-         "application/json": {
-           example: {
-             message: "What is AnythingLLM?",
-             mode: "query | chat"
-           }
-         }
-       }
-     }
-   #swagger.responses[200] = {
-     content: {
-       "application/json": {
-         schema: {
-           type: 'object',
-           example: {
-              id: 'chat-uuid',
-              type: "abort | textResponse",
-              textResponse: "Response to your query",
-              sources: [{title: "anythingllm.txt", chunk: "This is a context chunk used in the answer of the prompt by the LLM,"}],
-              close: true,
-              error: "null | text string of the failure mode."
-           }
-         }
-       }
-     }
-   }
-   #swagger.responses[403] = {
-     schema: {
-       "$ref": "#/definitions/InvalidAPIKey"
-     }
-   }
-   */
-      try {
-        const {slug} = request.params;
-        const {message, mode = "query"} = reqBody(request);
-        const workspace = await Workspace.get({slug});
-
-        if (!workspace) {
-          response.sendStatus(400).end();
-          return;
-        }
-
-        console.log("chatWithWorkspace ######################################################################", mode);
-
-        const result = await chatWithWorkspace(workspace, message, mode, null, request);
-        await Telemetry.sendTelemetry("sent_chat", {
-          LLMSelection: process.env.LLM_PROVIDER || "openai",
-          VectorDbSelection: process.env.VECTOR_DB || "pinecone"
-        });
-        response.status(200).json({...result});
-      } catch (e) {
-        response.status(500).json({
-          id: uuidv4(),
-          type: "abort",
-          textResponse: null,
-          sources: [],
-          close: true,
-          error: e.message
-        });
-      }
-    }
-  );
-
-  app.post(
-    "/v1/workspace/:slug/coder",
+    "/v1/analyst/:slug/analyst",
     [validApiKey],
     async (request, response) => {
       /*
@@ -560,18 +485,16 @@ function apiWorkspaceEndpoints(app) {
           return;
         }
 
-        const uuid = uuidv4();
+        console.log("### request ###", message, mode);
 
         const result = {
-          id: uuid,
+          id: uuidv4(),
           type: "textResponse",
-          textResponse: "textResponse",
+          textResponse: "sshResponse",
           sources: [],
           close: true,
           error: null
         }
-
-        console.log("### request ###", message, mode);
 
         response.status(200).json({...result});
       } catch (e) {
@@ -588,4 +511,4 @@ function apiWorkspaceEndpoints(app) {
   );
 }
 
-module.exports = {apiWorkspaceEndpoints};
+module.exports = {apiAnalystEndpoints};

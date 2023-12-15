@@ -312,3 +312,23 @@ dialog::backdrop {
 .break-all-in-children * {
   word-break: break-all !important;
 }
+
+div.terminal-base {
+  height: 100%;
+  min-height: 100%;
+  max-width: 100%;
+}
+
+div.terminal-base > div {
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+}
+
+div.terminal-base > div > div {
+  width: 100%;
+  max-width: 100%;
+}
+
+div.terminal-base > div > div:last-child {
+  max-height: none;
+}
