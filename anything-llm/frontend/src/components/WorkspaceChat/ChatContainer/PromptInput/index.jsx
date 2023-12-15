@@ -39,14 +39,23 @@ export default function PromptInput({
 
   const setTextCommand = (command = "") => {
     const storageKey = `workspace_chat_mode_${workspace.slug}`;
-    if (command === "/query") {
-      window.localStorage.setItem(storageKey, "query");
-      window.dispatchEvent(new Event("workspace_chat_mode_update"));
-      return;
-    } else if (command === "/conversation") {
-      window.localStorage.setItem(storageKey, "chat");
-      window.dispatchEvent(new Event("workspace_chat_mode_update"));
-      return;
+
+    if (mode === "analyst") {
+      if (!window.confirm(`Вы покидаете сеанс анализа данных.\nРабочее пространство "${workspace.name}" будет закрыто.`)) {
+        return false;
+      }
+
+      if (command === "/conversation") {
+        window.localStorage.setItem(storageKey, "chat");
+        window.dispatchEvent(new Event("workspace_chat_mode_update"));
+        window.location = "/workspace/" + workspace.name;
+        return;
+      } else if (command === "/query") {
+        window.localStorage.setItem(storageKey, "query");
+        window.dispatchEvent(new Event("workspace_chat_mode_update"));
+        window.location = "/workspace/" + workspace.name;
+        return;
+      }
     } else if (command === "/analyst") {
       if (!window.confirm(`Вы переходите в сеанс анализа данных.\nРабочее пространство "${workspace.name}" будет закрыто.`)) {
         return false;
@@ -64,9 +73,9 @@ export default function PromptInput({
   };
 
   return (
-    <div className="main-form absolute p-1 md:p-8 lg:p-[50px] position-absolute bottom-0 left-0 right-0 !pb-0">
+    <div
+      className={(mode === "analyst" ? "relative h-full" : "absolute") + " main-form p-1 md:p-8 lg:p-[50px] position-absolute bottom-0 left-0 right-0 !pb-0"}>
       <div className="bg-white pt-2 pb-8">
-
         {mode === "analyst" ?
           <div
             onSubmit={handleSubmit}
@@ -78,6 +87,7 @@ export default function PromptInput({
                 show={showMenu}
                 handleClick={setTextCommand}
                 hide={() => setShowMenu(false)}
+                mode={mode}
               />
               <button
                 onClick={() => setShowMenu(!showMenu)}
@@ -93,7 +103,7 @@ export default function PromptInput({
           </div>
           : <form
             onSubmit={handleSubmit}
-            className="flex flex-col gap-y-1 bg-white dark:bg-black-900 lg:w-3/4 w-full mx-auto"
+            className="relative flex flex-col gap-y-1 bg-white dark:bg-black-900 lg:w-3/4 w-full mx-auto"
           >
             <div className="flex items-center py-2 px-4 rounded-lg">
               <CommandMenu
@@ -101,6 +111,7 @@ export default function PromptInput({
                 show={showMenu}
                 handleClick={setTextCommand}
                 hide={() => setShowMenu(false)}
+                mode={mode}
               />
               <button
                 onClick={() => setShowMenu(!showMenu)}
@@ -195,7 +206,7 @@ const Tracking = memo(({workspaceSlug}) => {
   );
 });
 
-function CommandMenu({workspace, show, handleClick, hide}) {
+function CommandMenu({workspace, show, handleClick, hide, mode}) {
   if (!show) return null;
   const COMMANDS = [
     {
@@ -218,8 +229,8 @@ function CommandMenu({workspace, show, handleClick, hide}) {
 
   return (
     <div
-      className="absolute bottom-[100%] min-h-[200px] flex flex-col rounded-lg border border-slate-400 p-2 pt-4 bg-gray-50 dark:bg-stone-600">
-      <div className="flex justify-between items-center border-b border-slate-400 px-2 py-1 ">
+      className={(mode === "analyst" ? "top-[100px]" : "bottom-[100%]") + " absolute z-10 min-h-[200px] flex flex-col rounded-lg border border-slate-400 p-2 pt-4 bg-gray-50 dark:bg-stone-600"}>
+      <div className="flex justify-between items-center border-b border-slate-400 px-2 py-1">
         <p className="text-gray-800 dark:text-slate-200">Доступные команды</p>
         <button
           type="button"

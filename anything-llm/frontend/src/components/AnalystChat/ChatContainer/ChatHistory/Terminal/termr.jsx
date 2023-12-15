@@ -85,8 +85,6 @@ const TerminalComponent = ({handleSubmit}) => {
     if (output) {
       const response = JSON.parse(output);
 
-      console.log("response", response);
-
       if (response.error) {
         console.log("response ERROR", response);
       } else {
