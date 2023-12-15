@@ -19,6 +19,10 @@
   "prisma": {
     "seed": "node prisma/seed.js"
   },
+  "os": [
+    "darwin",
+    "win32"
+  ],
   "dependencies": {
     "@azure/openai": "^1.0.0-beta.3",
     "@googleapis/youtube": "^9.0.0",
@@ -53,7 +57,7 @@
     "swagger-ui-express": "^5.0.0",
     "uuid": "^9.0.0",
     "uuid-apikey": "^1.5.3",
-    "vectordb": "0.1.12",
+    "vectordb": "0.3.11",
     "weaviate-ts-client": "^1.4.0",
     "ws": "^8.15.1"
   },
