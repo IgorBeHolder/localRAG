@@ -122,6 +122,7 @@ const TerminalComponent = ({handleSubmit}) => {
     <Terminal
       ref={terminalRef}
       watchConsoleLogging={true}
+      promptSymbol="$"
       color="green"
       backgroundColor="black"
       barColor="black"
