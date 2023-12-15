@@ -11,41 +11,12 @@ import "xterm/css/xterm.css";
 
 const TerminalComponent = ({handleSubmit}) => {
   const serializeAddon = new SerializeAddon();
-  const [command, setCommand] = useState("");
-  const [output, setOutput] = useState("");
-  const [ws, setWs] = useState(null);
 
-  useEffect(() => {
-    // Устанавливаем WebSocket-соединение
-    const newWs = new WebSocket(WS_URL);
-    setWs(newWs);
-
-    newWs.onopen = () => {
-      console.log("WebSocket connection opened.");
-    };
-
-    newWs.onmessage = (event) => {
-      setOutput(event.data);
-    };
-
-    newWs.onclose = () => {
-      console.log("WebSocket connection closed.");
-    };
-
-    // Очищаем ресурсы при размонтировании компонента
-    return () => {
-      newWs.close();
-    };
-  }, []);
-
-  const sendCommand = useCallback(() => {
-    console.log("sendCommand", command);
-    // Отправляем команду на сервер через WebSocket
-    if (ws && ws.readyState === WebSocket.OPEN && command) {
-      console.log(ws);
-      ws.send(command);
-    }
-  }, [command]);
+  const [message, setMessage] = useState(null);
+  const [from, setFrom] = useState(null);
+  const [email, setEmail] = useState(null);
+  const [sent, setSent] = useState(false);
+  const [theme, setTheme] = useState("portfolio");
 
   //Public API that will echo messages sent to it back to the client
   //const [socketUrl, setSocketUrl] = useState(WS_URL);
@@ -75,8 +46,11 @@ const TerminalComponent = ({handleSubmit}) => {
 
   const defaultCommandHandler = useCallback((cmd) => {
     console.log("defaultCommandHandler", cmd);
-    setCommand(cmd);
-  }, []);
+
+    if (typeof handleSubmit === "function") {
+      handleSubmit(cmd);
+    }
+  }, [handleSubmit]);
 
   const terminalRef = useRef(null);
   const terminal = useRef(null);
@@ -111,29 +85,7 @@ const TerminalComponent = ({handleSubmit}) => {
   //}
 
   useEffect(() => {
-    if (terminal.current && output) {
-      const response = JSON.parse(output);
-
-      console.log('response', response);
-
-      if (response.error) {
-        console.log("response ERROR", response);
-      } else {
-        const lines = response.textResponse.split("\n");
-
-        lines.forEach(l => {
-          terminal.current.writeln(l);
-        });
-      }
-    }
-  }, [output, terminal]);
-
-  useEffect(() => {
-    sendCommand();
-  }, [command]);
-
-  useEffect(() => {
-    terminal.current = new Terminal({rows: 10, cols: 100});
+    terminal.current = new Terminal({rows: 10});
     terminal.current.loadAddon(serializeAddon);
 
     // Устанавливаем размеры терминала

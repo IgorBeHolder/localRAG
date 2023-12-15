@@ -27,6 +27,7 @@ const {utilEndpoints} = require("./endpoints/utils");
 const {Telemetry} = require("./models/telemetry");
 const {developerEndpoints} = require("./endpoints/api");
 const setupTelemetry = require("./utils/telemetry");
+const {v4: uuidv4} = require("uuid");
 const app = express();
 const apiRouter = express.Router();
 const FILE_LIMIT = "3GB";
@@ -44,8 +45,23 @@ app.use(
 app.use("/api", apiRouter);
 
 function executeSSHCommand(command, sshConnection, ws) {
-  console.log("@@@@@@@ executeSSHCommand", command, sshConnection.config);
+  console.log("@@@@@@@ executeSSHCommand", command);
   try {
+    //sshConnection.exec(command, (err, stream) => {
+    //  if (err) throw err;
+    //
+    //  // Обработка вывода команды
+    //  stream.on("data", (data) => {
+    //    console.log("Command Output:", data.toString());
+    //  });
+    //
+    //  // Завершение соединения после выполнения команды
+    //  stream.on("close", (code, signal) => {
+    //    console.log(`Stream closed with code ${code} and signal ${signal}`);
+    //    //sshConnection.end();
+    //  });
+    //});
+
     sshConnection.exec(command, (err, stream) => {
       if (err) {
         console.error("Error executing command:", err);
@@ -56,11 +72,24 @@ function executeSSHCommand(command, sshConnection, ws) {
       let result = "";
       stream
         .on("data", (data) => {
-          result += data;
+          console.log("Command Output:", data);
+          result += data.toString();
         })
         .on("close", (code, signal) => {
-          console.log("Stream closed with code " + code + " and signal " + signal);
-          ws.send(result);
+          let chatResult = {
+            id: uuidv4(),
+            textResponse: result,
+            sources: [],
+            error: null,
+            close: true
+          };
+
+          if (code) {
+            chatResult.error = {code};
+          }
+
+          ws.send(JSON.stringify(chatResult));
+          console.log("Stream closed with code " + code + " and signal " + signal + " result was sent");
         });
     });
   } catch (e) {
@@ -76,24 +105,26 @@ const APP_PORT = process.env.SERVER_PORT || 3001;
 
 const wss = new WebSocket.Server({noServer: true});
 
-console.log("wss @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@", wss);
-
 // Используем middleware для управления соединением SSH
 server.on("upgrade", (request, socket, head) => {
-  console.log("upgrade ############################################");
+  console.log("##################### WS upgrade");
   sshMiddleware(request, {}, () => {
     wss.handleUpgrade(request, socket, head, (ws) => {
-      wss.emit("connection", ws, request, request.sshConnection);
+      if (request?.sshConnection) {
+        wss.emit("connection", ws, request, request?.sshConnection);
+      } else {
+        console.log("##################### WS NO connection");
+      }
     });
   });
 });
 
 wss.on("connection", (ws, request, sshConnection) => {
-  console.log("connection ############################################");
+  console.log("##################### WS connection");
   ws.on("message", (message) => {
     const command = message.toString();
 
-    console.log("message ############################################", command);
+    console.log("##################### WS message", command);
 
     // Получаем команду от клиента и выполняем ее на сервере SSH
     executeSSHCommand(command, sshConnection, ws);
@@ -101,7 +132,7 @@ wss.on("connection", (ws, request, sshConnection) => {
 });
 
 server.listen(3030, () => {
-  console.log(`@@@@@@@@@@@@@@@@ WS Server is running on port ${3030}`);
+  console.log(`##################### WS Server is running on port ${3030}`);
 });
 
 systemEndpoints(apiRouter);
