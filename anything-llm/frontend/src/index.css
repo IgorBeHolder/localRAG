@@ -312,3 +312,17 @@ dialog::backdrop {
 .break-all-in-children * {
   word-break: break-all !important;
 }
+
+div.terminal-base {
+  height: 350px;
+  min-height: 350px;
+}
+
+div.terminal-base > div {
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+}
+
+div.terminal-base > div > div {
+  width: 100%;
+}

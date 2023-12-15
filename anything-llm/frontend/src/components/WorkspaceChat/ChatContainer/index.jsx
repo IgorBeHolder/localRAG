@@ -100,8 +100,6 @@ export default function ChatContainer({workspace, knownHistory = []}) {
   //}, []);
 
   useEffect(() => {
-    console.log("process WS output", output);
-
     if (output) {
       const promptMessage = chatHistory.length > 0 ? chatHistory[chatHistory.length - 1] : null;
       const remHistory = chatHistory.length > 0 ? chatHistory.slice(0, -1) : [];
