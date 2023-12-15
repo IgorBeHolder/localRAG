@@ -1,6 +1,6 @@
 #!/bin/bash
 
-GPU_ARCHIVE="sherpa-aiserver-gpu_v0.2.tar.gz"
+GPU_ARCHIVE="sherpa-aiserver-openchat_v0.1.tar.gz"
 CPU_ARCHIVE="sherpa-aiserver-RTC-v2.tar.gz"
 
 # Load environment variables from .env file

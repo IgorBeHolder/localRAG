@@ -11,3 +11,6 @@
     - tarball_name
     - docker images
     - files and folders
+ 4. ### client-files/client-startup.sh
+    - GPU_ARCHIVE
+    - files and folders
