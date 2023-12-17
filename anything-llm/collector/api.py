@@ -1,5 +1,5 @@
 import os
-from flask import Flask, json, request
+from flask import Flask, json, request, jsonify
 from scripts.watch.process_single import process_single
 from scripts.watch.filetypes import ACCEPTED_MIMES
 
@@ -34,7 +34,6 @@ def root():
 # Destination directory for the CSV file
 DEST_DIRECTORY = "../../coder/content"
 
-
 @app.route("/save_csv", methods=["POST"])
 def save_csv_file():
     # Check if the post request has the file part
@@ -46,7 +45,7 @@ def save_csv_file():
     # If the user does not select a file, the browser submits an
     # empty file without a filename.
     if file.filename == "":
-        return jsonify({"message": "No selected file"}), 400
+        return jsonify({"message": "Файл не выбран"}), 400
 
     if file and file.filename.endswith(".csv"):
         # Ensure destination directory exists
@@ -58,6 +57,6 @@ def save_csv_file():
 
         # Save the file
         file.save(file_path)
-        return jsonify({"message": f"File {file.filename} uploaded successfully"}), 200
+        return jsonify({"message": f"Файл {file.filename} успешно загружен"}), 200
 
-    return jsonify({"message": "Invalid file type"}), 400
+    return jsonify({"message": "Тип файла не поддерживается"}), 400
