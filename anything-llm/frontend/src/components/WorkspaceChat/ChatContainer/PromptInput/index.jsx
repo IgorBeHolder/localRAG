@@ -97,15 +97,15 @@ export default function PromptInput({
             className={"flex flex-col gap-y-1 bg-white dark:bg-black-900 w-full mx-auto min-h-[300px]" + (mode === "analyst" ? "" : " lg:w-3/4")}
           >
             <div className="flex items-center py-2 px-4 rounded-lg">
-              <CommandMenu
-                workspace={workspace}
-                show={showMenu}
-                handleClick={setTextCommand}
-                hide={() => setShowMenu(false)}
-                mode={mode}
-              />
-
-              <TerminalComponent toggleMenu={toggleMenu} handleSubmit={handleSubmit}/>
+              <TerminalComponent toggleMenu={toggleMenu} handleSubmit={handleSubmit}>
+                <CommandMenu
+                  workspace={workspace}
+                  show={showMenu}
+                  handleClick={setTextCommand}
+                  hide={() => setShowMenu(false)}
+                  mode={mode}
+                />
+              </TerminalComponent>
             </div>
 
             <Tracking workspaceSlug={workspace.slug}/>
@@ -238,7 +238,8 @@ function CommandMenu({workspace, show, handleClick, hide, mode}) {
 
   return (
     <div
-      className={(mode === "analyst" ? "top-[100px]" : "bottom-[100%]") + " absolute z-10 min-h-[200px] flex flex-col rounded-lg border border-slate-400 p-2 pt-4 bg-gray-50 dark:bg-stone-600"}>
+      className={"bottom-[100%] absolute z-10 min-h-[200px] flex flex-col rounded-lg border border-slate-400 p-2 pt-4 bg-gray-50 dark:bg-stone-600"}
+    >
       <div className="flex justify-between items-center border-b border-slate-400 px-2 py-1">
         <p className="text-gray-800 dark:text-slate-200">Доступные команды</p>
         <button

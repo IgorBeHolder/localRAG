@@ -49,22 +49,30 @@ WORKDIR /app
 FROM base as frontend-deps
 
 COPY --chown=anythingllm:anythingllm ./frontend/package.json ./frontend/yarn.lock ./frontend/
+
+# RUN  cd ./frontend/ && \
 RUN  --mount=type=cache,target=/tmp/yarn-cache cd ./frontend/ && \
     yarn install && yarn cache clean
 
 # Install server dependencies
 FROM base as server-deps
-COPY ./server/package.json ./server/yarn.lock ./server/
+# COPY ./server/package.json ./server/yarn.lock ./server/
+COPY --chown=anythingllm:anythingllm ./server/package.json ./server/yarn.lock ./server/
+
+# RUN  cd ./server/ && \
 RUN  --mount=type=cache,target=/tmp/yarn-cache cd ./server/ && \
-    yarn install --production && yarn cache clean && \
-    rm /app/server/node_modules/vectordb/x86_64-apple-darwin.node && \
-    rm /app/server/node_modules/vectordb/aarch64-apple-darwin.node
+    yarn install --production && yarn cache clean
+
+RUN if [ -f "/app/server/node_modules/vectordb/x86_64-apple-darwin.node" ]; then rm "/app/server/node_modules/vectordb/x86_64-apple-darwin.node"; fi
+RUN if [ -f "/app/server/node_modules/vectordb/aarch64-apple-darwin.node" ]; then rm "/app/server/node_modules/vectordb/aarch64-apple-darwin.node"; fi
 
 # Build the frontend
 FROM frontend-deps as build-stage
-# to avoid permission errors with bundleinspector.html 
-COPY --chown=anythingllm:anythingllm ./frontend/ ./frontend/ 
+# to avoid permission errors with bundleinspector.html
+COPY --chown=anythingllm:anythingllm ./frontend/ ./frontend/
 
+
+# RUN cd ./frontend/ && \
 RUN --mount=type=cache,target=/tmp/yarn-cache cd ./frontend/ && \
     yarn build && yarn cache clean && \
     rm -rf /tmp/yarn-cache/*
@@ -87,7 +95,7 @@ RUN --mount=type=cache,target=/tmp/pip_cache cd /app/collector && \
     pip install -r requirements.txt && \
     # pip install --no-cache-dir -r requirements.txt
     rm -rf /tmp/pip_cache/*
-USER anythingllm
+# USER anythingllm
 
 # Migrate and Run Prisma against known schema
 # RUN cd ./server && npx prisma generate && npx prisma migrate && npx prisma seed
