@@ -55,8 +55,6 @@ export function SidebarMobileHeader() {
   const {showing, showModal, hideModal} = useManageWorkspaceModal();
   const showModalCoderWorkspace = useSelector((state) => state.popup.modalCoderWorkspace);
 
-  console.log("showingCoder", showModalCoderWorkspace);
-
   // Settings
   const [tab, setTab] = useState(null);
   const [settings, setSettings] = useState(null);
