@@ -70,30 +70,9 @@ async function processCsvDocument(filename = "") {
     });
 }
 
-async function processCsvDocument(filename = "") {
-  if (!filename) return false;
-  // send filename to python app:
-  return await fetch(`${PYTHON_API}/save_csv`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/csv",
-    },
-    body: JSON.stringify({ filename }),
-  })
-    .then((res) => {
-      if (!res.ok) throw new Error("Запрос не удался");
-      return res.json();
-    })
-    .then((res) => res)
-    .catch((e) => {
-      console.log(e.message);
-      return { success: false, reason: e.message };
-    });
-}
-
 module.exports = {
   checkPythonAppAlive,
   processDocument,
   processCsvDocument,
-  acceptedFileTypes,
+  acceptedFileTypes
 };
