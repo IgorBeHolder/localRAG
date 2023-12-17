@@ -8,3 +8,5 @@ client-files/.env
 test/
 *.gz
 *.tar
+embed-server/nginx/local-rag-docs.conf
+anything-llm/server/yarn.lock
