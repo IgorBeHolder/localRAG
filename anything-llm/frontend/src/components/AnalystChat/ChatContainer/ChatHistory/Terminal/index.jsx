@@ -6,7 +6,7 @@ import {showModal} from "../../../../../store/popupSlice.js";
 import {useDispatch, useSelector} from "react-redux";
 import {Menu} from "react-feather";
 
-const TerminalComponent = ({handleSubmit, toggleMenu, children}) => {
+const TerminalComponent = ({handleSubmit, toggleMenu, setTextCommand, children}) => {
   const dispatch = useDispatch();
   const [terminalKey, setTerminalKey] = useState(0);
   const [command, setCommand] = useState("");
@@ -88,10 +88,7 @@ const TerminalComponent = ({handleSubmit, toggleMenu, children}) => {
     console.log("openFile");
   };
   const closeChat = () => {
-    if (!window.confirm(`Вы собираетесь закрыть терминал Анализ данных.`)) {
-      return false;
-    }
-    console.log("closeChat");
+    setTextCommand("/query");
   };
 
   useEffect(() => {

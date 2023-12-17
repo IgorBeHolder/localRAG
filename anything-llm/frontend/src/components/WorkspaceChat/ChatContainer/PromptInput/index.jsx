@@ -45,7 +45,7 @@ export default function PromptInput({
     const storageKey = `workspace_chat_mode_${workspace.slug}`;
 
     if (mode === "analyst") {
-      if (!window.confirm(`Вы покидаете сеанс анализа данных.\nРабочее пространство "${workspace.name}" будет закрыто.`)) {
+      if (!window.confirm(`Вы собираетесь закрыть терминал Анализ данных.`)) {
         return false;
       }
 
@@ -97,7 +97,7 @@ export default function PromptInput({
             className={"flex flex-col gap-y-1 bg-white dark:bg-black-900 w-full mx-auto min-h-[300px]" + (mode === "analyst" ? "" : " lg:w-3/4")}
           >
             <div className="flex items-center py-2 px-4 rounded-lg">
-              <TerminalComponent toggleMenu={toggleMenu} handleSubmit={handleSubmit}>
+              <TerminalComponent toggleMenu={toggleMenu} handleSubmit={handleSubmit} setTextCommand={setTextCommand}>
                 <CommandMenu
                   workspace={workspace}
                   show={showMenu}
