@@ -75,17 +75,16 @@ const TerminalComponent = ({handleSubmit, toggleMenu}) => {
     }
   }, [output]);
 
-  const uploadFile = (event) => {
+  const uploadFile = () => {
     dispatch(showModal("modalCoderWorkspace"));
   };
-  const resetChat = (event) => {
-    console.log("resetChat");
-
+  const resetChat = () => {
+    setCommand("%reset");
   };
-  const openFile = (event) => {
+  const openFile = () => {
     console.log("openFile");
   };
-  const closeChat = (event) => {
+  const closeChat = () => {
     console.log("closeChat");
   };
 
