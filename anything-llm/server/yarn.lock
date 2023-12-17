@@ -524,11 +524,7 @@ axios@^0.26.0:
   dependencies:
     follow-redirects "^1.14.8"
 
-<<<<<<< HEAD
-axios@^1.6.2:
-=======
 axios@^1.4.0, axios@^1.6.2:
->>>>>>> 694fc7c89a0f5a58ac72f4e7c5c858f66013edd9
   version "1.6.2"
   resolved "https://registry.yarnpkg.com/axios/-/axios-1.6.2.tgz#de67d42c755b571d3e698df1b6504cde9b0ee9f2"
   integrity sha512-7i24Ri4pmDRfJTR7LDBhsOTtcm+9kjX5WiY1X3wIisx6G9So3pfMkEiU7emUBe46oceVImccTEM3k6C5dbVW8A==
