@@ -41,6 +41,20 @@ export default function PromptInput({
     setShowMenu(!showMenu);
   };
 
+  const simpleMode = (command, storageKey) => {
+    if (command === "/conversation") {
+      window.localStorage.setItem(storageKey, "chat");
+      window.dispatchEvent(new Event("workspace_chat_mode_update"));
+      window.location = "/workspace/" + workspace.name;
+      return false;
+    } else if (command === "/query") {
+      window.localStorage.setItem(storageKey, "query");
+      window.dispatchEvent(new Event("workspace_chat_mode_update"));
+      window.location = "/workspace/" + workspace.name;
+      return false;
+    }
+  }
+
   const setTextCommand = (command = "") => {
     const storageKey = `workspace_chat_mode_${workspace.slug}`;
 
@@ -49,17 +63,7 @@ export default function PromptInput({
         return false;
       }
 
-      if (command === "/conversation") {
-        window.localStorage.setItem(storageKey, "chat");
-        window.dispatchEvent(new Event("workspace_chat_mode_update"));
-        window.location = "/workspace/" + workspace.name;
-        return;
-      } else if (command === "/query") {
-        window.localStorage.setItem(storageKey, "query");
-        window.dispatchEvent(new Event("workspace_chat_mode_update"));
-        window.location = "/workspace/" + workspace.name;
-        return;
-      }
+      return simpleMode(command, storageKey);
     } else if (command === "/analyst") {
       if (!window.confirm(`Вы переходите в сеанс анализа данных.\nРабочее пространство "${workspace.name}" будет закрыто.`)) {
         return false;
@@ -71,17 +75,8 @@ export default function PromptInput({
       window.location = "/analyst/" + workspace.name;
 
       return;
-    } else if (command === "/analyst") {
-      if (!window.confirm(`Вы переходите в сеанс анализа данных.\nРабочее пространство "${workspace.name}" будет закрыто.`)) {
-        return false;
-      }
-
-      window.localStorage.setItem(storageKey, "analyst");
-      window.dispatchEvent(new Event("workspace_chat_mode_update"));
-
-      window.location = "/analyst/" + workspace.name;
-
-      return;
+    } else if (command !== "/analyst") {
+      return simpleMode(command, storageKey);
     }
 
     onChange({target: {value: `${command} ${message}`}});
