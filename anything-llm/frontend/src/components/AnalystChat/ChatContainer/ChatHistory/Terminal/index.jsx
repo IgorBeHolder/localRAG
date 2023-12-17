@@ -81,6 +81,7 @@ const TerminalComponent = ({handleSubmit}) => {
       display: "flex",
       alignItems: "center",
       height: "calc(100vh - 200px)",
+      minHeight: "260px",
       width: "100%"
     }}
   >

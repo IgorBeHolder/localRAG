@@ -27,6 +27,18 @@ export default function PromptInput({
       }
     }
   };
+  const uploadFile = (event) => {
+    console.log("uploadDialog");
+  };
+  const resetChat = (event) => {
+    console.log("resetChat");
+  };
+  const openFile = (event) => {
+    console.log("openFile");
+  };
+  const closeChat = (event) => {
+    console.log("closeChat");
+  };
   const adjustTextArea = (event) => {
     if (isMobile) return false;
     const element = event.target;
@@ -85,12 +97,12 @@ export default function PromptInput({
 
   return (
     <div
-      className={(mode === "analyst" ? "relative h-full" : "absolute") + " main-form p-1 md:p-8 lg:p-[50px] position-absolute bottom-0 left-0 right-0 !pb-0"}>
+      className={(mode === "analyst" ? "relative h-full overflow-y-auto" : "absolute") + " main-form p-1 md:p-8 lg:p-[50px] position-absolute bottom-0 left-0 right-0 !pb-0"}>
       <div className="bg-white pt-2 pb-8">
         {mode === "analyst" ?
           <div
             onSubmit={handleSubmit}
-            className="flex flex-col gap-y-1 bg-white dark:bg-black-900 lg:w-3/4 w-full mx-auto"
+            className="flex flex-col gap-y-1 bg-white dark:bg-black-900 lg:w-3/4 w-full mx-auto min-h-[300px]"
           >
             <div className="flex items-center py-2 px-4 rounded-lg">
               <CommandMenu
@@ -111,6 +123,46 @@ export default function PromptInput({
               <TerminalComponent handleSubmit={handleSubmit}/>
             </div>
             <Tracking workspaceSlug={workspace.slug}/>
+
+
+            <div className="ssh-controls flex p-2 gap-2 justify-center">
+              <label
+                onClick={() => {
+                  uploadFile();
+                }}
+                className="p-2 text-slate-500 bg-transparent rounded-md hover:bg-gray-200 dark:hover:bg-stone-500 dark:hover:text-slate-200"
+              >
+                <input className={"hidden"} type="file"/>
+                <span>Загрузить файл</span>
+              </label>
+              <button
+                onClick={() => {
+                  resetChat();
+                }}
+                type="button"
+                className="p-2 text-slate-500 bg-transparent rounded-md hover:bg-gray-200 dark:hover:bg-stone-500 dark:hover:text-slate-200"
+              >
+                <span>Сброс чата</span>
+              </button>
+              <button
+                onClick={() => {
+                  openFile();
+                }}
+                type="button"
+                className="p-2 text-slate-500 bg-transparent rounded-md hover:bg-gray-200 dark:hover:bg-stone-500 dark:hover:text-slate-200"
+              >
+                <span>Открыть файл</span>
+              </button>
+              <button
+                onClick={() => {
+                  closeChat();
+                }}
+                type="button"
+                className="p-2 text-slate-500 bg-transparent rounded-md hover:bg-gray-200 dark:hover:bg-stone-500 dark:hover:text-slate-200"
+              >
+                <span>Закрыть</span>
+              </button>
+            </div>
           </div>
           : <form
             onSubmit={handleSubmit}
