@@ -54,10 +54,10 @@ async function processDocument(filename = "") {
 async function processCsvDocument(filename = "") {
   if (!filename) return false;
   // send filename to python app:
-  return await fetch(`${PYTHON_API}/process`, {
+  return await fetch(`${PYTHON_API}/save_csv`, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
+      "Content-Type": "application/csv",
     },
     body: JSON.stringify({ filename }),
   })
@@ -75,5 +75,6 @@ async function processCsvDocument(filename = "") {
 module.exports = {
   checkPythonAppAlive,
   processDocument,
+  processCsvDocument,
   acceptedFileTypes,
 };
