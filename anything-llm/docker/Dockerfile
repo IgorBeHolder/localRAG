@@ -50,16 +50,18 @@ FROM base as frontend-deps
 
 COPY --chown=anythingllm:anythingllm ./frontend/package.json ./frontend/yarn.lock ./frontend/
 
-# RUN  cd ./frontend/ && \
+
 RUN  --mount=type=cache,target=/tmp/yarn-cache cd ./frontend/ && \
     yarn install && yarn cache clean
 
 # Install server dependencies
 FROM base as server-deps
-# COPY ./server/package.json ./server/yarn.lock ./server/
+
 COPY --chown=anythingllm:anythingllm ./server/package.json ./server/yarn.lock ./server/
 
-# RUN  cd ./server/ && \
+COPY --chown=anythingllm:anythingllm ./server/package.json ./server/yarn.lock ./server/
+
+
 RUN  --mount=type=cache,target=/tmp/yarn-cache cd ./server/ && \
     yarn install --production && yarn cache clean
 
@@ -72,7 +74,6 @@ FROM frontend-deps as build-stage
 COPY --chown=anythingllm:anythingllm ./frontend/ ./frontend/
 
 
-# RUN cd ./frontend/ && \
 RUN --mount=type=cache,target=/tmp/yarn-cache cd ./frontend/ && \
     yarn build && yarn cache clean && \
     rm -rf /tmp/yarn-cache/*
@@ -88,14 +89,12 @@ COPY --from=build-stage /app/frontend/dist ./server/public
 COPY --chown=anythingllm:anythingllm ./collector/ ./collector/
 
 # Install collector dependencies
-
 RUN --mount=type=cache,target=/tmp/pip_cache cd /app/collector && \
     python3 -m virtualenv v-env && \
     . v-env/bin/activate && \
     pip install -r requirements.txt && \
-    # pip install --no-cache-dir -r requirements.txt
     rm -rf /tmp/pip_cache/*
-# USER anythingllm
+
 
 # Migrate and Run Prisma against known schema
 # RUN cd ./server && npx prisma generate && npx prisma migrate && npx prisma seed

@@ -28,7 +28,7 @@ const model_prefix = process.env.DEVICE == ('cpu') ? '/app' : '';
 async function v1_chat_completions(messages, temperature) {
 
   // const messages2string = format_messages(messages);
-  const messages2string = messages;
+  const messages2string = messages;  // skip the formatting 
 
   const base_url = process.env.COMPLETION_MODEL_ENDPOINT;
   console.log('v1_chat_completions: *** base_url:', base_url);
