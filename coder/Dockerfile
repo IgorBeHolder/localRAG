@@ -38,10 +38,11 @@ RUN poetry install --no-dev
 RUN pip3 install --upgrade pip
 
 RUN --mount=type=cache,target=/tmp/pip_cache pip3 install \
-    numpy scipy pandas matplotlib  \
-    fastapi uvicorn scikit-learn
-    
-RUN pip3 install open-interpreter
+    matplotlib seaborn \
+    sweetviz open-interpreter
+    # pydantic==2.4.0 pandas-profiling 
+    # dataprep scikit-learn
+# RUN --mount=type=cache,target=/tmp/pip_cache pip3 install 
 
 
 # Create SSH directory
@@ -57,10 +58,16 @@ RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/
 
 EXPOSE 22
 
-# RUN mkdir /home/coder/content
-COPY interpreter/terminal_interface/config.yaml /usr/local/lib/python3.11/site-packages/interpreter/terminal_interface/config.yaml
-
-# RUN echo "interpreter && %reset" >> /home/coder/.bashrc
+RUN mkdir /home/coder/content
+COPY interpreter/terminal_interface/config.yaml \
+    /usr/local/lib/python3.11/site-packages/interpreter/terminal_interface/config.yaml
+COPY oi-venv/lib/python3.11/site-packages/interpreter/terminal_interface/terminal_interface.py \
+    /usr/local/lib/python3.11/site-packages/interpreter/terminal_interface/terminal_interface.py
+COPY oi-venv/lib/python3.11/site-packages/interpreter/core/llm/setup_text_llm.py \
+    /usr/local/lib/python3.11/site-packages/interpreter/core/llm/setup_text_llm.py
+COPY oi-venv/lib/python3.11/site-packages/interpreter/core/llm/setup_openai_coding_llm.py \
+    /usr/local/lib/python3.11/site-packages/interpreter/core/llm/setup_openai_coding_llm.py
+    # RUN echo "interpreter && %reset" >> /home/coder/.bashrc
 
 # Start the SSH service
 CMD ["/usr/sbin/sshd", "-D"]
