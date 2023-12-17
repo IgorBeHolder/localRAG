@@ -59,9 +59,6 @@ FROM base as server-deps
 
 COPY --chown=anythingllm:anythingllm ./server/package.json ./server/yarn.lock ./server/
 
-COPY --chown=anythingllm:anythingllm ./server/package.json ./server/yarn.lock ./server/
-
-
 RUN  --mount=type=cache,target=/tmp/yarn-cache cd ./server/ && \
     yarn install --production && yarn cache clean
 

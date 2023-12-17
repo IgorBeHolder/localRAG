@@ -34,7 +34,6 @@ def root():
 # Destination directory for the CSV file
 DEST_DIRECTORY = "../../coder/content"
 
-
 @api.route("/save_csv", methods=["POST"])
 def save_csv_file():
     # Check if the post request has the file part

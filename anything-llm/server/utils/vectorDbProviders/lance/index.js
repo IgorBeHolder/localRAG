@@ -389,8 +389,8 @@ const LanceDb = {
 
 
 function prompt_templates() {
-  const model_name_is_openchat = process.env.COMPLETION_MODEL_NAME.includes('openchat');
-  const model_name_is_mistral = process.env.COMPLETION_MODEL_NAME.includes('mistral');
+  const model_name_is_openchat = process.env.COMPLETION_MODEL_NAME ? process.env.COMPLETION_MODEL_NAME.includes('openchat') : false;
+  const model_name_is_mistral = process.env.COMPLETION_MODEL_NAME ? process.env.COMPLETION_MODEL_NAME.includes('mistral') : false;
 
   const user_prefix = model_name_is_openchat
     ? 'GPT4 Correct User: '
