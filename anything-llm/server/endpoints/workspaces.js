@@ -8,6 +8,7 @@ const {getVectorDbClass} = require("../utils/helpers");
 const {setupMulter} = require("../utils/files/multer");
 const {
   checkPythonAppAlive,
+  processCsvDocument,
   processDocument
 } = require("../utils/files/documentProcessor");
 const {validatedRequest} = require("../utils/middleware/validatedRequest");
@@ -83,6 +84,72 @@ function workspaceEndpoints(app) {
       }
 
       const {success, reason} = await processDocument(originalname);
+      if (!success) {
+        response.status(500).json({success: false, error: reason}).end();
+        return;
+      }
+
+      console.log(
+        `Document ${originalname} uploaded and processed successfully. It is now available in documents.`
+      );
+      await Telemetry.sendTelemetry("document_uploaded");
+      response.status(200).json({success: true, error: null});
+    }
+  );
+
+  app.post(
+    "/save_csv",
+    handleUploads.single("file"),
+    async function (request, response) {
+      const {originalname} = request.file;
+      const processingOnline = await checkPythonAppAlive();
+
+      console.log("originalname", processingOnline, originalname);
+
+      if (!processingOnline) {
+        response
+          .status(500)
+          .json({
+            success: false,
+            error: `CSV processing API is not online. Document ${originalname} will not be processed automatically.`
+          })
+          .end();
+        return;
+      }
+
+      const {success, reason} = await processCsvDocument(originalname);
+      if (!success) {
+        response.status(500).json({success: false, error: reason}).end();
+        return;
+      }
+
+      console.log(
+        `Document ${originalname} uploaded and processed successfully. It is now available in documents.`
+      );
+      await Telemetry.sendTelemetry("document_uploaded");
+      response.status(200).json({success: true, error: null});
+    }
+  );
+
+  app.post(
+    "/workspace/:slug/upload_csv",
+    handleUploads.single("file"),
+    async function (request, response) {
+      const {originalname} = request.file;
+      const processingOnline = await checkPythonAppAlive();
+
+      if (!processingOnline) {
+        response
+          .status(500)
+          .json({
+            success: false,
+            error: `Python processing API is not online. Document ${originalname} will not be processed automatically.`
+          })
+          .end();
+        return;
+      }
+
+      const {success, reason} = await processCsvDocument(originalname);
       if (!success) {
         response.status(500).json({success: false, error: reason}).end();
         return;
