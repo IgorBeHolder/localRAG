@@ -233,7 +233,7 @@ function CommandMenu({workspace, show, handleClick, hide, mode}) {
 
   return (
     <div
-      className={"bottom-[100%] absolute z-10 min-h-[200px] flex flex-col rounded-lg border border-slate-400 p-2 pt-4 bg-gray-50 dark:bg-stone-600"}
+      className={"bottom-[100%] absolute z-10 min-h-[200px] max-w-[96vw] flex flex-col rounded-lg border border-slate-400 p-2 pt-4 bg-gray-50 dark:bg-stone-600"}
     >
       <div className="flex justify-between items-center border-b border-slate-400 px-2 py-1">
         <p className="text-gray-800 dark:text-slate-200">Доступные команды</p>
@@ -257,12 +257,12 @@ function CommandMenu({workspace, show, handleClick, hide, mode}) {
                   handleClick(cmd);
                   hide();
                 }}
-                className="w-full px-4 py-2 flex items-baseline rounded-lg hover:bg-gray-300 hover:dark:bg-slate-500 gap-x-2 disabled:cursor-not-allowed"
+                className="w-full p-2 lg:px-4 flex items-baseline rounded-lg hover:bg-gray-300 hover:dark:bg-slate-500 gap-x-2 disabled:cursor-not-allowed"
               >
                 <p className="text-gray-800 dark:text-slate-200 font-semibold">
                   {cmd}
                 </p>
-                <p className="text-gray-800 dark:text-slate-300 text-sm text-left">
+                <p className="text-gray-800 dark:text-slate-300 text-sm text-left truncate">
                   {description}
                 </p>
               </button>
