@@ -74,8 +74,6 @@ const TerminalComponent = ({handleSubmit}) => {
     sendCommand();
   }, [command]);
 
-  const showMsg = () => "Hello World"
-
   return <div
     style={{
       display: "flex",

@@ -8,9 +8,7 @@ import {
   Tool,
   X
 } from "react-feather";
-import NewWorkspaceModal, {
-  useNewWorkspaceModal
-} from "../Modals/NewWorkspace";
+import NewWorkspaceModal, {useNewWorkspaceModal} from "../Modals/NewWorkspace";
 import ActiveWorkspaces from "./ActiveWorkspaces";
 import paths from "../../utils/paths";
 import useUser from "../../hooks/useUser";
@@ -20,6 +18,7 @@ import useLogo from "../../hooks/useLogo";
 import SettingsOverlay, {useSystemSettingsOverlay} from "./SettingsOverlay";
 import ManageWorkspace, {useManageWorkspaceModal} from "../Modals/MangeWorkspace/index.jsx";
 import SystemSettingsModal, {useSystemSettingsModal} from "../Modals/Settings/index.jsx";
+import CoderWorkspaceModal, {useCoderWorkspaceModal} from "../Modals/MangeCoder/index.jsx";
 
 export default function Sidebar() {
   const {
@@ -52,6 +51,9 @@ export function SidebarMobileHeader() {
   const [workspaces, setWorkspaces] = useState([]);
   const [selectedWs, setSelectedWs] = useState(null);
   const {showing, showModal, hideModal} = useManageWorkspaceModal();
+  const {showing: showingCoder, showModal: showModalCoder, hideModal: hideModalCoder} = useCoderWorkspaceModal();
+
+  console.log("showingCoder", showingCoder);
 
   // Settings
   const [tab, setTab] = useState(null);
