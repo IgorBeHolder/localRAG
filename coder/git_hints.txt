@@ -1,0 +1,13 @@
+# downloads all the changes from the source repository w/o merging them into local files
+git fetch upstream
+
+# make sure you're on the branch where you want to merge the changes
+git checkout main
+
+# merge changes from the upstream repository into your local main branch
+git merge upstream/main
+
+# push the changes to my remote GitHub repository
+git push origin main
+
+
