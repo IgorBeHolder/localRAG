@@ -132,6 +132,38 @@ function workspaceEndpoints(app) {
   );
 
   app.post(
+    "/workspace/:slug/upload_csv",
+    handleUploads.single("file"),
+    async function (request, response) {
+      const {originalname} = request.file;
+      const processingOnline = await checkPythonAppAlive();
+
+      if (!processingOnline) {
+        response
+          .status(500)
+          .json({
+            success: false,
+            error: `Python processing API is not online. Document ${originalname} will not be processed automatically.`
+          })
+          .end();
+        return;
+      }
+
+      const {success, reason} = await processCsvDocument(originalname);
+      if (!success) {
+        response.status(500).json({success: false, error: reason}).end();
+        return;
+      }
+
+      console.log(
+        `Document ${originalname} uploaded processed and successfully. It is now available in documents.`
+      );
+      await Telemetry.sendTelemetry("document_uploaded");
+      response.status(200).json({success: true, error: null});
+    }
+  );
+
+  app.post(
     "/workspace/:slug/update-embeddings",
     [validatedRequest],
     async (request, response) => {
