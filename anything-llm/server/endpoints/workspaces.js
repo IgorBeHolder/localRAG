@@ -98,7 +98,7 @@ function workspaceEndpoints(app) {
   );
 
   app.post(
-    "/workspace/:slug/save_csv",
+    "/save_csv",
     handleUploads.single("file"),
     async function (request, response) {
       const {originalname} = request.file;
