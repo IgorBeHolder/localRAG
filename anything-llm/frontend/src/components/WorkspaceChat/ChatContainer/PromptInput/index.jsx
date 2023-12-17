@@ -41,25 +41,29 @@ export default function PromptInput({
     setShowMenu(!showMenu);
   };
 
+  const simpleMode = (command, storageKey) => {
+    if (command === "/conversation") {
+      window.localStorage.setItem(storageKey, "chat");
+      window.dispatchEvent(new Event("workspace_chat_mode_update"));
+      window.location = "/workspace/" + workspace.name;
+      return false;
+    } else if (command === "/query") {
+      window.localStorage.setItem(storageKey, "query");
+      window.dispatchEvent(new Event("workspace_chat_mode_update"));
+      window.location = "/workspace/" + workspace.name;
+      return false;
+    }
+  }
+
   const setTextCommand = (command = "") => {
     const storageKey = `workspace_chat_mode_${workspace.slug}`;
 
     if (mode === "analyst") {
-      if (!window.confirm(`Вы покидаете сеанс анализа данных.\nРабочее пространство "${workspace.name}" будет закрыто.`)) {
+      if (!window.confirm(`Вы собираетесь закрыть терминал Анализ данных.`)) {
         return false;
       }
 
-      if (command === "/conversation") {
-        window.localStorage.setItem(storageKey, "chat");
-        window.dispatchEvent(new Event("workspace_chat_mode_update"));
-        window.location = "/workspace/" + workspace.name;
-        return;
-      } else if (command === "/query") {
-        window.localStorage.setItem(storageKey, "query");
-        window.dispatchEvent(new Event("workspace_chat_mode_update"));
-        window.location = "/workspace/" + workspace.name;
-        return;
-      }
+      return simpleMode(command, storageKey);
     } else if (command === "/analyst") {
       if (!window.confirm(`Вы переходите в сеанс анализа данных.\nРабочее пространство "${workspace.name}" будет закрыто.`)) {
         return false;
@@ -71,17 +75,8 @@ export default function PromptInput({
       window.location = "/analyst/" + workspace.name;
 
       return;
-    } else if (command === "/analyst") {
-      if (!window.confirm(`Вы переходите в сеанс анализа данных.\nРабочее пространство "${workspace.name}" будет закрыто.`)) {
-        return false;
-      }
-
-      window.localStorage.setItem(storageKey, "analyst");
-      window.dispatchEvent(new Event("workspace_chat_mode_update"));
-
-      window.location = "/analyst/" + workspace.name;
-
-      return;
+    } else if (command !== "/analyst") {
+      return simpleMode(command, storageKey);
     }
 
     onChange({target: {value: `${command} ${message}`}});
@@ -97,15 +92,15 @@ export default function PromptInput({
             className={"flex flex-col gap-y-1 bg-white dark:bg-black-900 w-full mx-auto min-h-[300px]" + (mode === "analyst" ? "" : " lg:w-3/4")}
           >
             <div className="flex items-center py-2 px-4 rounded-lg">
-              <CommandMenu
-                workspace={workspace}
-                show={showMenu}
-                handleClick={setTextCommand}
-                hide={() => setShowMenu(false)}
-                mode={mode}
-              />
-
-              <TerminalComponent toggleMenu={toggleMenu} handleSubmit={handleSubmit}/>
+              <TerminalComponent toggleMenu={toggleMenu} handleSubmit={handleSubmit} setTextCommand={setTextCommand}>
+                <CommandMenu
+                  workspace={workspace}
+                  show={showMenu}
+                  handleClick={setTextCommand}
+                  hide={() => setShowMenu(false)}
+                  mode={mode}
+                />
+              </TerminalComponent>
             </div>
 
             <Tracking workspaceSlug={workspace.slug}/>
@@ -238,7 +233,8 @@ function CommandMenu({workspace, show, handleClick, hide, mode}) {
 
   return (
     <div
-      className={(mode === "analyst" ? "top-[100px]" : "bottom-[100%]") + " absolute z-10 min-h-[200px] flex flex-col rounded-lg border border-slate-400 p-2 pt-4 bg-gray-50 dark:bg-stone-600"}>
+      className={"bottom-[100%] absolute z-10 min-h-[200px] max-w-[96vw] flex flex-col rounded-lg border border-slate-400 p-2 pt-4 bg-gray-50 dark:bg-stone-600"}
+    >
       <div className="flex justify-between items-center border-b border-slate-400 px-2 py-1">
         <p className="text-gray-800 dark:text-slate-200">Доступные команды</p>
         <button
@@ -261,12 +257,12 @@ function CommandMenu({workspace, show, handleClick, hide, mode}) {
                   handleClick(cmd);
                   hide();
                 }}
-                className="w-full px-4 py-2 flex items-baseline rounded-lg hover:bg-gray-300 hover:dark:bg-slate-500 gap-x-2 disabled:cursor-not-allowed"
+                className="w-full p-2 lg:px-4 flex items-baseline rounded-lg hover:bg-gray-300 hover:dark:bg-slate-500 gap-x-2 disabled:cursor-not-allowed"
               >
                 <p className="text-gray-800 dark:text-slate-200 font-semibold">
                   {cmd}
                 </p>
-                <p className="text-gray-800 dark:text-slate-300 text-sm text-left">
+                <p className="text-gray-800 dark:text-slate-300 text-sm text-left truncate">
                   {description}
                 </p>
               </button>

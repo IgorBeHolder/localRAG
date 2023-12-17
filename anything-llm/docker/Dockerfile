@@ -50,6 +50,7 @@ FROM base as frontend-deps
 
 COPY --chown=anythingllm:anythingllm ./frontend/package.json ./frontend/yarn.lock ./frontend/
 
+
 RUN  --mount=type=cache,target=/tmp/yarn-cache cd ./frontend/ && \
     yarn install && yarn cache clean
 
@@ -57,6 +58,9 @@ RUN  --mount=type=cache,target=/tmp/yarn-cache cd ./frontend/ && \
 FROM base as server-deps
 
 COPY --chown=anythingllm:anythingllm ./server/package.json ./server/yarn.lock ./server/
+
+COPY --chown=anythingllm:anythingllm ./server/package.json ./server/yarn.lock ./server/
+
 
 RUN  --mount=type=cache,target=/tmp/yarn-cache cd ./server/ && \
     yarn install --production && yarn cache clean
@@ -66,8 +70,8 @@ RUN if [ -f "/app/server/node_modules/vectordb/aarch64-apple-darwin.node" ]; the
 
 # Build the frontend
 FROM frontend-deps as build-stage
-# to avoid permission errors with bundleinspector.html 
-COPY --chown=anythingllm:anythingllm ./frontend/ ./frontend/ 
+# to avoid permission errors with bundleinspector.html
+COPY --chown=anythingllm:anythingllm ./frontend/ ./frontend/
 
 
 RUN --mount=type=cache,target=/tmp/yarn-cache cd ./frontend/ && \
@@ -90,6 +94,7 @@ RUN --mount=type=cache,target=/tmp/pip_cache cd /app/collector && \
     . v-env/bin/activate && \
     pip install -r requirements.txt && \
     rm -rf /tmp/pip_cache/*
+
 
 # Migrate and Run Prisma against known schema
 # RUN cd ./server && npx prisma generate && npx prisma migrate && npx prisma seed

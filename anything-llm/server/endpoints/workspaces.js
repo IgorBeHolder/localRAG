@@ -98,7 +98,7 @@ function workspaceEndpoints(app) {
   );
 
   app.post(
-    "/save_csv",
+    "/workspace/:slug/save_csv",
     handleUploads.single("file"),
     async function (request, response) {
       const {originalname} = request.file;
@@ -132,7 +132,7 @@ function workspaceEndpoints(app) {
   );
 
   app.post(
-    "/workspace/:slug/upload_csv",
+    "/save_csv",
     handleUploads.single("file"),
     async function (request, response) {
       const {originalname} = request.file;
@@ -156,7 +156,7 @@ function workspaceEndpoints(app) {
       }
 
       console.log(
-        `Document ${originalname} uploaded processed and successfully. It is now available in documents.`
+        `Document ${originalname} uploaded and processed successfully. It is now available in documents.`
       );
       await Telemetry.sendTelemetry("document_uploaded");
       response.status(200).json({success: true, error: null});

@@ -6,9 +6,9 @@ import {showModal} from "../../../../../store/popupSlice.js";
 import {useDispatch, useSelector} from "react-redux";
 import {Menu} from "react-feather";
 
-const TerminalComponent = ({handleSubmit, toggleMenu}) => {
-  const showModalCoderWorkspace = useSelector((state) => state.popup.modalCoderWorkspace);
+const TerminalComponent = ({handleSubmit, toggleMenu, setTextCommand, children}) => {
   const dispatch = useDispatch();
+  const [terminalKey, setTerminalKey] = useState(0);
   const [command, setCommand] = useState("");
   const [output, setOutput] = useState("");
   const terminalRef = useRef();
@@ -79,23 +79,33 @@ const TerminalComponent = ({handleSubmit, toggleMenu}) => {
     dispatch(showModal("modalCoderWorkspace"));
   };
   const resetChat = () => {
-    setCommand("%reset");
+    if (!window.confirm(`Сбросить историю диалога?`)) {
+      return false;
+    }
+    setTerminalKey(terminalKey + 1);
   };
   const openFile = () => {
     console.log("openFile");
   };
   const closeChat = () => {
-    console.log("closeChat");
+    setTextCommand("/query");
   };
 
   useEffect(() => {
     sendCommand();
   }, [command]);
 
+  useEffect(() => {
+    if (terminalKey) {
+      setCommand("%reset");
+    }
+  }, [terminalKey]);
+
   return <div className={"flex flex-col align-center w-full lg:mt-8 min-h-[300px]"}
               style={{height: "calc(100vh - 170px)"}}>
     <div className={"grow overflow-y-auto"}>
       <Terminal
+        key={"terminal_" + terminalKey}
         ref={terminalRef}
         watchConsoleLogging={true}
         promptSymbol=">"
@@ -114,7 +124,8 @@ const TerminalComponent = ({handleSubmit, toggleMenu}) => {
       />
     </div>
 
-    <div className="ssh-controls flex flex-wrap justify-center p-2 lg:py-4 gap-2 lg:gap-4 whitespace-nowrap">
+    <div className="ssh-controls relative flex flex-wrap justify-center p-2 lg:py-4 gap-2 lg:gap-4 whitespace-nowrap">
+      {children}
       <button
         onClick={() => {
           toggleMenu();
