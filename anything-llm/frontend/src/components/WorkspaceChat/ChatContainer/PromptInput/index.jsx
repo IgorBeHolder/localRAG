@@ -14,6 +14,7 @@ export default function PromptInput({
                                       buttonDisabled
                                     }) {
   const [showMenu, setShowMenu] = useState(false);
+
   const formRef = useRef(null);
   const [_, setFocused] = useState(false);
   const handleSubmit = (e) => {
@@ -35,6 +36,9 @@ export default function PromptInput({
       event.target.value.length !== 0
         ? 25 + element.scrollHeight + "px"
         : "1px";
+  };
+  const toggleMenu = () => {
+    setShowMenu(!showMenu);
   };
 
   const setTextCommand = (command = "") => {
@@ -67,9 +71,16 @@ export default function PromptInput({
       window.location = "/analyst/" + workspace.name;
 
       return;
-    } else if (command === "/coder") {
-      window.localStorage.setItem(storageKey, "coder");
+    } else if (command === "/analyst") {
+      if (!window.confirm(`Вы переходите в сеанс анализа данных.\nРабочее пространство "${workspace.name}" будет закрыто.`)) {
+        return false;
+      }
+
+      window.localStorage.setItem(storageKey, "analyst");
       window.dispatchEvent(new Event("workspace_chat_mode_update"));
+
+      window.location = "/analyst/" + workspace.name;
+
       return;
     }
 
@@ -78,12 +89,12 @@ export default function PromptInput({
 
   return (
     <div
-      className={(mode === "analyst" ? "relative h-full" : "absolute") + " main-form p-1 md:p-8 lg:p-[50px] position-absolute bottom-0 left-0 right-0 !pb-0"}>
-      <div className="bg-white pt-2 pb-8">
+      className={(mode === "analyst" ? "relative h-full overflow-y-auto" : "absolute") + " main-form p-1 md:p-8 lg:p-[50px] position-absolute bottom-0 left-0 right-0 !pb-0"}>
+      <div className={"bg-white pt-2" + (mode === "analyst" ? "" : " pb-8")}>
         {mode === "analyst" ?
           <div
             onSubmit={handleSubmit}
-            className="flex flex-col gap-y-1 bg-white dark:bg-black-900 lg:w-3/4 w-full mx-auto"
+            className={"flex flex-col gap-y-1 bg-white dark:bg-black-900 w-full mx-auto min-h-[300px]" + (mode === "analyst" ? "" : " lg:w-3/4")}
           >
             <div className="flex items-center py-2 px-4 rounded-lg">
               <CommandMenu
@@ -93,16 +104,10 @@ export default function PromptInput({
                 hide={() => setShowMenu(false)}
                 mode={mode}
               />
-              <button
-                onClick={() => setShowMenu(!showMenu)}
-                type="button"
-                className="p-2 text-slate-500 bg-transparent rounded-md hover:bg-gray-200 dark:hover:bg-stone-500 dark:hover:text-slate-200"
-              >
-                <Menu className="w-4 h-4 md:h-6 md:w-6"/>
-              </button>
 
-              <TerminalComponent handleSubmit={handleSubmit}/>
+              <TerminalComponent toggleMenu={toggleMenu} handleSubmit={handleSubmit}/>
             </div>
+
             <Tracking workspaceSlug={workspace.slug}/>
           </div>
           : <form

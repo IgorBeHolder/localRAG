@@ -8,9 +8,9 @@ import {
   Tool,
   X
 } from "react-feather";
-import NewWorkspaceModal, {
-  useNewWorkspaceModal
-} from "../Modals/NewWorkspace";
+import {useSelector, useDispatch} from "react-redux";
+
+import NewWorkspaceModal, {useNewWorkspaceModal} from "../Modals/NewWorkspace";
 import ActiveWorkspaces from "./ActiveWorkspaces";
 import paths from "../../utils/paths";
 import useUser from "../../hooks/useUser";
@@ -20,6 +20,7 @@ import useLogo from "../../hooks/useLogo";
 import SettingsOverlay, {useSystemSettingsOverlay} from "./SettingsOverlay";
 import ManageWorkspace, {useManageWorkspaceModal} from "../Modals/MangeWorkspace/index.jsx";
 import SystemSettingsModal, {useSystemSettingsModal} from "../Modals/Settings/index.jsx";
+import CoderWorkspaceModal, {useCoderWorkspaceModal} from "../Modals/MangeCoder/index.jsx";
 
 export default function Sidebar() {
   const {
@@ -52,6 +53,7 @@ export function SidebarMobileHeader() {
   const [workspaces, setWorkspaces] = useState([]);
   const [selectedWs, setSelectedWs] = useState(null);
   const {showing, showModal, hideModal} = useManageWorkspaceModal();
+  const showModalCoderWorkspace = useSelector((state) => state.popup.modalCoderWorkspace);
 
   // Settings
   const [tab, setTab] = useState(null);
@@ -121,6 +123,7 @@ export function SidebarMobileHeader() {
                          hideModal={hideModalSettings}
                          setLoading={setLoading}
                          loading={loading}/>
+
         <div className="w-full h-full flex flex-col overflow-x-hidden items-between relative">
           {/* Header Information */}
           <div className="flex w-full items-center justify-between px-2">
@@ -169,6 +172,8 @@ export function SidebarMobileHeader() {
       )}
 
       {showingNewWsModal && <NewWorkspaceModal hideModal={hideNewWsModal}/>}
+
+      {showModalCoderWorkspace && <CoderWorkspaceModal/>}
 
       {showingSettings && !!tab && (
         <SystemSettingsModal tab={tab} hideModal={handleModalClose}/>

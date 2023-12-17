@@ -114,6 +114,16 @@ const Workspace = {
 
     const data = await response.json();
     return {response, data};
+  },
+  uploadCsvFile: async function (slug, formData) {
+    const response = await fetch(`${API_BASE}/save_csv`, {
+      method: "POST",
+      body: formData,
+      headers: baseHeaders()
+    });
+
+    const data = await response.json();
+    return {response, data};
   }
 };
 

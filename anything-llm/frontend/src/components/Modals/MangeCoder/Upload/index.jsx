@@ -165,42 +165,15 @@ export default function UploadToWorkspace({workspace, fileTypes}) {
 
 function ModalWrapper({deleteWorkspace, children}) {
   return (
-    <>
-      <div className="p-6 flex h-full w-full max-h-[80vh] overflow-y-scroll">
-        <div className="flex flex-col gap-y-1 w-full">
-          <div className="flex flex-col mb-2">
-            <p className="text-gray-800 dark:text-stone-200 text-base ">
-              Добавьте файл с данными в рабочее пространство для анализа данных.
-            </p>
-            <p className="text-gray-600 dark:text-stone-400 text-xs ">
-              Эти файлы будут загружены в процессор документов, работающий на этом экземпляре Sherpa AI Server. Эти
-              файлы и не передаются третьим лицам.
-            </p>
-            {process.env.NODE_ENV !== "production" && (
-              <div className="mt-2 text-gray-600 dark:text-stone-400 text-xs">
-                <div className="w-[1px] bg-stone-400 w-full"/>
-                Информация о локальном рабочем пространстве: для обработки этих документов у вас должно быть
-                запущено{" "}
-                <code
-                  className="text-xs bg-gray-200 text-gray-800 dark:bg-stone-800 dark:text-slate-400 font-mono rounded-sm px-1">
-                  приложение для обработки документов Python
-                </code>
-              </div>
-            )}
-          </div>
-          {children}
+    <div className="p-6 flex h-full w-full max-h-[80vh] overflow-y-scroll">
+      <div className="flex flex-col gap-y-1 w-full">
+        <div className="flex flex-col mb-2">
+          <p className="text-gray-800 dark:text-stone-200 text-base ">
+            Добавьте файл с данными в рабочее пространство для анализа данных.
+          </p>
         </div>
+        {children}
       </div>
-      <div
-        className="flex items-center justify-between p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
-        <button
-          onClick={deleteWorkspace}
-          type="button"
-          className="border border-transparent text-gray-500 bg-white hover:bg-red-100 rounded-lg text-sm font-medium px-5 py-2.5 hover:text-red-900 focus:z-10 dark:bg-transparent dark:text-gray-300 dark:hover:text-white dark:hover:bg-red-600"
-        >
-          Удалить рабочее пространство
-        </button>
-      </div>
-    </>
+    </div>
   );
 }
