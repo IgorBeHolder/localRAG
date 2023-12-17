@@ -3,6 +3,7 @@ import {isMobile} from "react-device-detect";
 import {Loader, Menu, X} from "react-feather";
 import {CHAT_MAX_LENGTH} from "../../../../utils/constants.js";
 import TerminalComponent from "../../../AnalystChat/ChatContainer/ChatHistory/Terminal/index.jsx";
+import {useCoderWorkspaceModal} from "../../../Modals/MangeCoder/index.jsx";
 
 export default function PromptInput({
                                       mode,
@@ -13,6 +14,7 @@ export default function PromptInput({
                                       inputDisabled,
                                       buttonDisabled
                                     }) {
+  const {showing: showingCoder, showModal: showModalCoder, hideModal: hideModalCoder} = useCoderWorkspaceModal();
   const [showMenu, setShowMenu] = useState(false);
   const formRef = useRef(null);
   const [_, setFocused] = useState(false);
@@ -28,7 +30,13 @@ export default function PromptInput({
     }
   };
   const uploadFile = (event) => {
-    console.log("uploadDialog");
+    console.log("uploadDialog", showingCoder);
+
+    if (showingCoder) {
+      hideModalCoder();
+    } else {
+      showModalCoder();
+    }
   };
   const resetChat = (event) => {
     console.log("resetChat");
@@ -122,19 +130,19 @@ export default function PromptInput({
 
               <TerminalComponent handleSubmit={handleSubmit}/>
             </div>
+
             <Tracking workspaceSlug={workspace.slug}/>
 
-
-            <div className="ssh-controls flex p-2 gap-2 justify-center">
-              <label
+            <div className="ssh-controls flex flex-wrap justify-center p-2 gap-2 whitespace-nowrap">
+              <button
                 onClick={() => {
                   uploadFile();
                 }}
+                type="button"
                 className="p-2 text-slate-500 bg-transparent rounded-md hover:bg-gray-200 dark:hover:bg-stone-500 dark:hover:text-slate-200"
               >
-                <input className={"hidden"} type="file"/>
                 <span>Загрузить файл</span>
-              </label>
+              </button>
               <button
                 onClick={() => {
                   resetChat();
