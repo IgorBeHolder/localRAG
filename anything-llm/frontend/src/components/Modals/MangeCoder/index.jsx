@@ -3,20 +3,20 @@ import {UploadCloud, X} from "react-feather";
 import {useParams} from "react-router-dom";
 import Workspace from "../../../models/workspace";
 import UploadToWorkspace from "./Upload";
+import {hideModal} from "../../../store/popupSlice.js";
+import {useDispatch} from "react-redux";
 
 const TABS = {
   upload: UploadToWorkspace
 };
 
 const noop = () => false;
-export default function CoderWorkspaceModal({
-                                              hideModal = noop,
-                                              providedSlug = null
-                                            }) {
+export default function CoderWorkspaceModal({providedSlug = null}) {
   const {slug} = useParams();
   const [selectedTab, setSelectedTab] = useState("upload");
   const [workspace, setWorkspace] = useState(null);
   const [fileTypes, setFileTypes] = useState([".csv"]);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     async function fetchWorkspace() {
@@ -27,6 +27,10 @@ export default function CoderWorkspaceModal({
     fetchWorkspace();
   }, [selectedTab, slug]);
 
+  const closeModal = () => {
+    dispatch(hideModal("modalCoderWorkspace"));
+  };
+
   if (!workspace) return null;
 
   const Component = TABS[selectedTab || "Документы"];
@@ -35,7 +39,7 @@ export default function CoderWorkspaceModal({
       className="fixed top-0 left-0 right-0 z-100 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] h-full bg-black bg-opacity-50 flex items-center justify-center">
       <div
         className="flex fixed top-0 left-0 right-0 w-full h-full"
-        onClick={hideModal}
+        onClick={closeModal}
       />
       <div className="relative w-full max-w-2xl max-h-full">
         <div className="relative bg-white rounded-lg shadow dark:bg-stone-700">
@@ -45,7 +49,7 @@ export default function CoderWorkspaceModal({
                 Обновление "{workspace.name}"
               </h3>
               <button
-                onClick={hideModal}
+                onClick={closeModal}
                 type="button"
                 className="transition-all duration-300 text-gray-400 bg-transparent hover:bg-blue-100 hover:text-blue-600 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
                 data-modal-hide="staticModal"

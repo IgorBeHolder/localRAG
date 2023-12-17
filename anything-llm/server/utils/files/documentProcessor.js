@@ -6,13 +6,13 @@
 const mode = process.env.MODE;
 
 let PYTHON_API;
-if (mode == 'production') {
+if (mode == "production") {
   PYTHON_API = "http://localhost:3005";  // doc server running in docker container
 } else {
   PYTHON_API = "http://0.0.0.0:3005";  //  doc server running on host machine
 }
 
-console.log('PYTHON_API:*********************', PYTHON_API);
+console.log("PYTHON_API:*********************", PYTHON_API);
 
 async function checkPythonAppAlive() {
   return await fetch(`${PYTHON_API}`)
@@ -36,9 +36,9 @@ async function processDocument(filename = "") {
   return await fetch(`${PYTHON_API}/process`, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
+      "Content-Type": "application/json"
     },
-    body: JSON.stringify({ filename }),
+    body: JSON.stringify({filename})
   })
     .then((res) => {
       if (!res.ok) throw new Error("Запрос не удался");
@@ -47,19 +47,17 @@ async function processDocument(filename = "") {
     .then((res) => res)
     .catch((e) => {
       console.log(e.message);
-      return { success: false, reason: e.message };
+      return {success: false, reason: e.message};
     });
 }
 
 async function processCsvDocument(filename = "") {
+  console.log("processCsvDocument", filename);
   if (!filename) return false;
   // send filename to python app:
   return await fetch(`${PYTHON_API}/save_csv`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/csv",
-    },
-    body: JSON.stringify({ filename }),
+    body: JSON.stringify({filename})
   })
     .then((res) => {
       if (!res.ok) throw new Error("Запрос не удался");
@@ -68,7 +66,7 @@ async function processCsvDocument(filename = "") {
     .then((res) => res)
     .catch((e) => {
       console.log(e.message);
-      return { success: false, reason: e.message };
+      return {success: false, reason: e.message};
     });
 }
 
@@ -76,5 +74,5 @@ module.exports = {
   checkPythonAppAlive,
   processDocument,
   processCsvDocument,
-  acceptedFileTypes,
+  acceptedFileTypes
 };

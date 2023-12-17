@@ -90,7 +90,7 @@ function workspaceEndpoints(app) {
       }
 
       console.log(
-        `Document ${originalname} uploaded processed and successfully. It is now available in documents.`
+        `Document ${originalname} uploaded and processed successfully. It is now available in documents.`
       );
       await Telemetry.sendTelemetry("document_uploaded");
       response.status(200).json({success: true, error: null});
@@ -98,18 +98,20 @@ function workspaceEndpoints(app) {
   );
 
   app.post(
-    "/workspace/:slug/upload_csv",
+    "/workspace/:slug/save_csv",
     handleUploads.single("file"),
     async function (request, response) {
       const {originalname} = request.file;
       const processingOnline = await checkPythonAppAlive();
+
+      console.log("originalname", processingOnline, originalname);
 
       if (!processingOnline) {
         response
           .status(500)
           .json({
             success: false,
-            error: `Python processing API is not online. Document ${originalname} will not be processed automatically.`
+            error: `CSV processing API is not online. Document ${originalname} will not be processed automatically.`
           })
           .end();
         return;
@@ -122,7 +124,7 @@ function workspaceEndpoints(app) {
       }
 
       console.log(
-        `Document ${originalname} uploaded processed and successfully. It is now available in documents.`
+        `Document ${originalname} uploaded and processed successfully. It is now available in documents.`
       );
       await Telemetry.sendTelemetry("document_uploaded");
       response.status(200).json({success: true, error: null});

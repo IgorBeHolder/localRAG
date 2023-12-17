@@ -4,6 +4,8 @@ import {Loader, Menu, X} from "react-feather";
 import {CHAT_MAX_LENGTH} from "../../../../utils/constants.js";
 import TerminalComponent from "../../../AnalystChat/ChatContainer/ChatHistory/Terminal/index.jsx";
 import {useCoderWorkspaceModal} from "../../../Modals/MangeCoder/index.jsx";
+import {hideModal, showModal} from "../../../../store/popupSlice.js";
+import {useDispatch, useSelector} from "react-redux";
 
 export default function PromptInput({
                                       mode,
@@ -14,8 +16,10 @@ export default function PromptInput({
                                       inputDisabled,
                                       buttonDisabled
                                     }) {
-  const {showing: showingCoder, showModal: showModalCoder, hideModal: hideModalCoder} = useCoderWorkspaceModal();
+  const showModalCoderWorkspace = useSelector((state) => state.popup.modalCoderWorkspace);
+  const dispatch = useDispatch();
   const [showMenu, setShowMenu] = useState(false);
+
   const formRef = useRef(null);
   const [_, setFocused] = useState(false);
   const handleSubmit = (e) => {
@@ -30,12 +34,12 @@ export default function PromptInput({
     }
   };
   const uploadFile = (event) => {
-    console.log("uploadDialog", showingCoder);
+    console.log("showModalCoderWorkspace uploadDialog", showModalCoderWorkspace);
 
-    if (showingCoder) {
-      hideModalCoder();
+    if (showModalCoderWorkspace) {
+      dispatch(hideModal("modalCoderWorkspace"));
     } else {
-      showModalCoder();
+      dispatch(showModal("modalCoderWorkspace"));
     }
   };
   const resetChat = (event) => {
