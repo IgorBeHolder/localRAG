@@ -27,6 +27,7 @@ if ! images_loaded; then
     echo "Loading GPU docker images..."
     docker load -i  $GPU_ARCHIVE
   fi
+else
   echo "Docker images have been loaded previously."
 fi
 
