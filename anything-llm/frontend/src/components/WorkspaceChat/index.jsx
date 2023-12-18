@@ -17,7 +17,6 @@ export default function WorkspaceChat({loading, workspace}) {
     }
   }, [IS_CODER, storageKey]);
 
-
   useEffect(() => {
     async function getHistory() {
       if (loading) return;
@@ -34,7 +33,10 @@ export default function WorkspaceChat({loading, workspace}) {
     getHistory();
   }, [workspace, loading]);
 
-  if (loadingHistory) return <LoadingChat/>;
+  if (loadingHistory) {
+    return <LoadingChat/>;
+  }
+
   if (!loading && !loadingHistory && !workspace) {
     return (
       <>

@@ -109,7 +109,7 @@ const TerminalComponent = ({handleSubmit, toggleMenu, setTextCommand, children})
     }
   }, [terminalKey]);
 
-  return <div className={"flex flex-col align-center w-full lg:mt-8 min-h-[300px]"}
+  return <div className={"flex flex-col align-center w-full min-h-[300px]"}
               style={{height: "calc(100vh - 170px)"}}>
     <div className={"grow overflow-y-auto"}>
       <Terminal

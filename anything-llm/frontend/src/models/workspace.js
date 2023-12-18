@@ -119,10 +119,15 @@ const Workspace = {
     const response = await fetch(`http://0.0.0.0:3005/save_csv`, {
       method: "POST",
       body: formData,
+      //mode: "no-cors",
       headers: baseHeaders()
     });
 
-    const data = await response.json();
+
+    const data = await response;
+
+    console.log("response", response, data);
+
     return {response, data};
   }
 };
