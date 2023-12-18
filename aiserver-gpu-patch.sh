@@ -30,10 +30,11 @@ echo "Docker images saved to a tarball."
 echo "Compressing tarball..."
 tar -czvf "$tarball_name.gz" \
 "$tarball_name"  \
-# ./vllm/docker/docker-compose.yml \
-# ./embed-server/config/ \
-# ./db-reset.sh \
-# ./client-files/ 
+./vllm/docker/docker-compose.yml \
+./embed-server/config/ \
+./db-reset.sh \   
+./client-files/ 
+
 
 echo "Tarball compressed."
 
