@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-tarball_name="sais-openchat_pat"
+tarball_name="sais-mistral_pat"
 container_names=("anyth" "nginx")
 images_to_save=()
 
@@ -19,7 +19,7 @@ for container_name in "${container_names[@]}"; do
     images_to_save+=("${container_name}:last_com")
 done
 
-images_to_save+=("vllm/vllm-openai:latest" "pgembeding" "embed:v1" )
+# images_to_save+=("nginx:v1")
 
 echo "Saving docker images to a tarball..."
 docker save -o "$tarball_name.tar" "${images_to_save[@]}"
