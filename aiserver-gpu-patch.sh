@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-tarball_name="ais-openchat_pat.tar"
+tarball_name="ais-openchat_pat"
 container_names=("anyth" "nginx")
 images_to_save=()
 
@@ -28,7 +28,7 @@ echo "Docker images saved to a tarball."
 
 
 echo "Compressing tarball..."
-tar -czvf "$tarball_name.gz" \
+tar -czvf "$tarball_name.tar.gz" \
 "$tarball_name" \
 ./vllm/docker/docker-compose.yml \
 ./embed-server/config/ \
@@ -41,8 +41,8 @@ echo "Tarball compressed."
 rm "$tarball_name"
 
 # Generate MD5 checksum and save to a file
-md5sum "$tarball_name.gz" > "md5sum_$tarball_name.gz.txt"
-touch "md5sum_$tarball_name.gz.txt"
-echo "md5sum saved to md5sum_$tarball_name.gz.txt"
+md5sum "$tarball_name.tar.gz" > "md5sum_$tarball_name.txt"
+touch "md5sum_$tarball_name.txt"
+echo "md5sum saved to md5sum_$tarball_name.txt"
 
 echo "Script completed successfully."
