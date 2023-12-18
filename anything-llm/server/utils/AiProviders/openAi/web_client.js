@@ -24,7 +24,7 @@ function format_messages(messages = []) {
 }
 
 const model_prefix = 
-  process.env.DEVICE == ('cpu') ? '/app' : '';
+  process.env.DEVICE == ('cpu') ? '/app/model-store/' : '/model-store/';
 
 async function v1_chat_completions(messages, temperature) {
 
@@ -40,7 +40,7 @@ async function v1_chat_completions(messages, temperature) {
   const url = base_url + '/v1/chat/completions';
   const payload = {
     // add the prefix to the model name like '/app'
-    "model": model_prefix + "/model-store/" + compl_model,
+    "model": model_prefix + compl_model,
     "messages": messages2string,
     // "max_tokens": 512,
     "temperature": temperature,
