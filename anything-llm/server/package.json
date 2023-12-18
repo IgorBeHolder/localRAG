@@ -19,10 +19,6 @@
   "prisma": {
     "seed": "node prisma/seed.js"
   },
-  "os": [
-    "darwin",
-    "win32"
-  ],
   "dependencies": {
     "@azure/openai": "^1.0.0-beta.3",
     "@googleapis/youtube": "^9.0.0",
