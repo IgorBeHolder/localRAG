@@ -112,7 +112,7 @@ else
     --name nginx \
     -p 3002:3002 \
     --network llm-net \
-    nginx:latest
+    nginx:last_com
 fi
 echo -e "Nginx server started.\n-----------------------------"
 ) &&
@@ -133,7 +133,7 @@ else
     -v ./anything-llm/collector/outputs/:/app/collector/outputs \
     -p 3001:3001 \
     --network llm-net \
-    anyth:v1
+    anyth:last_com
 fi
 echo -e "Web server started.\n-----------------------------"
 ) &&
