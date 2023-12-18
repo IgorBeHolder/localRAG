@@ -1,21 +1,32 @@
 #!/bin/bash
 set -e
 
-# Set the file name as a variable
-tarball_name="sherpa-aiserver-openchat_v0.1.tar"
+tarball_name="ais-openchat_pat.tar"
+container_names=("anyth" "nginx")
+images_to_save=()
 
-# save docker images to a tarball
+for container_name in "${container_names[@]}"; do
+    container_id=$(docker ps -qf "name=$container_name")
+    # Check if the container ID was found
+    if [ -z "$container_id" ]; then
+        echo "Error: No container found with name $container_name"
+        continue 
+    fi
+
+    echo "Committing the container ($container_name) to a new image..."
+    docker commit "$container_id" "${container_name}:last_com"
+
+    images_to_save+=("${container_name}:last_com")
+done
+
+# images_to_save+=("nginx:v1")
+
 echo "Saving docker images to a tarball..."
-docker save -o "$tarball_name" \
-nginx:latest \
-anyth:v1 
-# embed:v1 \
-# pgembeding:latest \
-# vllm/vllm-openai
-# ghcr.io/mistralai/mistral-src/vllm:latest
+docker save -o "$tarball_name.tar" "${images_to_save[@]}"
 echo "Docker images saved to a tarball."
 
-# Create a compressed tarball
+
+
 echo "Compressing tarball..."
 tar -czvf "$tarball_name.gz" \
 "$tarball_name"  \
@@ -30,7 +41,7 @@ rm "$tarball_name"
 
 # Generate MD5 checksum and save to a file
 md5sum "$tarball_name.gz" > "md5sum_$tarball_name.gz.txt"
-
+touch "md5sum_$tarball_name.gz.txt"
 echo "md5sum saved to md5sum_$tarball_name.gz.txt"
 
 echo "Script completed successfully."
