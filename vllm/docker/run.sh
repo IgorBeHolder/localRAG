@@ -21,7 +21,3 @@ python -m vllm.entrypoints.openai.api_server \
     --port $MM_PORT \
     --host $HOST
 
-
-
-# run script:
-# ./start-vllm.sh mistralai/Mistral-7B-Instruct-v0.1 
