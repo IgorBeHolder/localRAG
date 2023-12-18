@@ -23,7 +23,8 @@ function format_messages(messages = []) {
   return formattedHistory;
 }
 
-const model_prefix = process.env.DEVICE == ('cpu') ? '/app' : '/model-store/';
+const model_prefix = 
+  process.env.DEVICE == ('cpu') ? '/app' : '';
 
 async function v1_chat_completions(messages, temperature) {
 
