@@ -47,6 +47,6 @@ docker run -d --restart always \
   -v ./anything-llm/collector/outputs/:/app/collector/outputs \
   -p 3001:3001 \
   --network llm-net \
-  anyth:last-com || echo "Error starting web server"
+  anyth:last_com || echo "Error starting web server"
 
 echo -e "Web server script completed.\n-----------------------------"
