@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-tarball_name="ais-openchat_pat"
+tarball_name="sais-openchat_pat"
 container_names=("anyth" "nginx")
 images_to_save=()
 
