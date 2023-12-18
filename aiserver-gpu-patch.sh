@@ -6,7 +6,7 @@ container_names=("anyth" "nginx")
 images_to_save=()
 
 for container_name in "${container_names[@]}"; do
-    container_id=$(docker ps -qf "name=$container_name")
+    container_id=$(docker ps -qaf "name=$container_name")
     # Check if the container ID was found
     if [ -z "$container_id" ]; then
         echo "Error: No container found with name $container_name"
@@ -41,8 +41,10 @@ echo "Tarball compressed."
 rm "$tarball_name.tar"
 
 # Generate MD5 checksum and save to a file
-md5sum "$tarball_name.tar.gz" > "md5sum_$tarball_name.txt"
-touch "md5sum_$tarball_name.txt"
-echo "md5sum saved to md5sum_$tarball_name.txt"
+md5sum "$tarball_name.tar.gz" > "md5sum_$tarball_name.tar.gz.txt"
+
+# Display the contents of the MD5 checksum file
+echo "Displaying the MD5 checksum:"
+cat "md5sum_$tarball_name.tar.gz.txt"
 
 echo "Script completed successfully."
