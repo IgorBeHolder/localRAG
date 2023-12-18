@@ -32,7 +32,12 @@ const app = express();
 const apiRouter = express.Router();
 const FILE_LIMIT = "3GB";
 
-app.use(cors({origin: true}));
+app.use(cors({
+  //origin: 'http://localhost:3000',
+  //methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  //allowedHeaders: 'Content-Type,Authorization',
+  origin: true
+}));
 app.use(bodyParser.text({limit: FILE_LIMIT}));
 app.use(bodyParser.json({limit: FILE_LIMIT}));
 app.use(

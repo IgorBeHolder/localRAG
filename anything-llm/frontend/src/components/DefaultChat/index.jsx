@@ -103,7 +103,7 @@ export default function DefaultChatContainer() {
   }, []);
 
   const chatForm = <div
-    className="main-form absolute p-1 md:p-8 lg:p-[50px] position-absolute bottom-0 left-0 right-0 !pb-0">
+    className="main-form absolute p-1 md:p-8 lg:p-[50px] bottom-0 left-0 right-0 !pb-0">
     <div className="bg-white pt-2 pb-8">
       <form
         //onSubmit={handleSubmit}
