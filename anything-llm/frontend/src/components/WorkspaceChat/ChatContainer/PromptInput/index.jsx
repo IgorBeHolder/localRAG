@@ -1,7 +1,7 @@
 import React, {useState, useRef, memo, useEffect} from "react";
 import {isMobile} from "react-device-detect";
 import {Loader, Menu, X} from "react-feather";
-import {CHAT_MAX_LENGTH} from "../../../../utils/constants.js";
+import {CHAT_MAX_LENGTH, IS_CODER} from "../../../../utils/constants.js";
 import TerminalComponent from "../../../AnalystChat/ChatContainer/ChatHistory/Terminal/index.jsx";
 
 export default function PromptInput({
@@ -178,6 +178,7 @@ export default function PromptInput({
 
 const Tracking = memo(({workspaceSlug}) => {
   const storageKey = `workspace_chat_mode_${workspaceSlug}`;
+
   const [chatMode, setChatMode] = useState(
     window.localStorage.getItem(storageKey) ?? "query"
   );
@@ -197,6 +198,10 @@ const Tracking = memo(({workspaceSlug}) => {
     watchForChatModeChange();
   }, [workspaceSlug]);
 
+  useEffect(() => {
+
+  }, [IS_CODER, chatMode, workspaceSlug]);
+
   return (
     <div className="flex flex-col md:flex-row w-full justify-center items-center gap-2 mb-2 px-4 mx:px-0">
       <p
@@ -214,10 +219,6 @@ function CommandMenu({workspace, show, handleClick, hide, mode}) {
   if (!show) return null;
   const COMMANDS = [
     {
-      cmd: "/analyst",
-      description: "- перейти в режим кодинга."
-    },
-    {
       cmd: "/conversation",
       description: "- перейти в режим чата (запоминает недавнюю историю чата)."
     },
@@ -230,6 +231,13 @@ function CommandMenu({workspace, show, handleClick, hide, mode}) {
       description: "- очистить текущую историю чата."
     }
   ];
+
+  if (IS_CODER) {
+    COMMANDS.unshift({
+      cmd: "/analyst",
+      description: "- перейти в режим кодинга."
+    });
+  }
 
   return (
     <div

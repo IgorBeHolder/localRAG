@@ -1,4 +1,5 @@
 export const API_BASE = import.meta.env.VITE_API_BASE || "/api";
+export const IS_CODER = import.meta.env.VITE_IS_CODER === "TRUE" || false;
 export const CHAT_MAX_LENGTH = 16384;
 export const WS_URL = "ws://localhost:3030";
 

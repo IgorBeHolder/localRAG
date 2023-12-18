@@ -3,10 +3,20 @@ import Workspace from "../../models/workspace";
 import LoadingChat from "./LoadingChat";
 import ChatContainer from "./ChatContainer";
 import paths from "../../utils/paths";
+import {IS_CODER} from "../../utils/constants.js";
 
 export default function WorkspaceChat({loading, workspace}) {
   const [history, setHistory] = useState([]);
   const [loadingHistory, setLoadingHistory] = useState(true);
+  const storageKey = workspace ? `workspace_chat_mode_${workspace.slug}` : "";
+
+  useEffect(() => {
+    if (!IS_CODER && storageKey && window.location.pathname.startsWith("/analyst/")) {
+      window.localStorage.setItem(storageKey, "query");
+      window.location = "/workspace/" + workspace.name;
+    }
+  }, [IS_CODER, storageKey]);
+
 
   useEffect(() => {
     async function getHistory() {
@@ -23,8 +33,6 @@ export default function WorkspaceChat({loading, workspace}) {
 
     getHistory();
   }, [workspace, loading]);
-
-  console.log("workspace", workspace);
 
   if (loadingHistory) return <LoadingChat/>;
   if (!loading && !loadingHistory && !workspace) {
