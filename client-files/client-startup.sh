@@ -19,7 +19,7 @@ echo "Loading sherpa-aiserver docker images..."
 images_loaded() {
     [ -f db-reset.sh ]
 }
-if images_loaded; then
+if ! images_loaded; then
   if [ "$DEVICE" = "cpu" ]; then
     echo "Loading CPU docker images..."
     docker load -i  $CPU_ARCHIVE
