@@ -38,7 +38,7 @@ tar -czvf "$tarball_name.tar.gz" \
 
 echo "Tarball compressed."
 
-rm "$tarball_name"
+rm "$tarball_name.tar"
 
 # Generate MD5 checksum and save to a file
 md5sum "$tarball_name.tar.gz" > "md5sum_$tarball_name.txt"
