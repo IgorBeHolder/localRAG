@@ -36,17 +36,23 @@ echo "Copying db file..."
 cp ./client-files/anythingllm.db ./anything-llm/server/storage/anythingllm.db
 chmod 777 ./anything-llm/server/storage/anythingllm.db
 
-echo "Starting web server (main app container) ..."
-docker run -d --restart always \
-  --name anyth \
-  --platform linux/amd64 \
-  --env-file ./client-files/.env \
-  --user "${ARG_UID}:${ARG_GID}" \
-  -v ./anything-llm/server/storage:/app/server/storage \
-  -v ./anything-llm/collector/hotdir/:/app/collector/hotdir \
-  -v ./anything-llm/collector/outputs/:/app/collector/outputs \
-  -p 3001:3001 \
-  --network llm-net \
-  anyth:last_com || echo "Error starting web server"
+  echo "Starting the WEB server..."
+container_id=$(docker ps -a -q -f name=^/anyth$)
+if [ ! -z "$container_id" ]; then
+  docker start "$container_id"
+else
+  docker run -d --restart always \
+    --name anyth \
+    --platform linux/amd64 \
+    --env-file ./client-files/.env \
+    --user "${ARG_UID}:${ARG_GID}" \
+    -v ./anything-llm/server/storage:/app/server/storage \
+    -v ./anything-llm/collector/hotdir/:/app/collector/hotdir \
+    -v ./anything-llm/collector/outputs/:/app/collector/outputs \
+    -p 3001:3001 \
+    --network llm-net \
+    anyth:last_com
+fi
+echo -e "Web server started.\n-----------------------------"
 
-echo -e "Web server script completed.\n-----------------------------"
+
