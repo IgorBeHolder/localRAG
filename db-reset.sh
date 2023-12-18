@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Stop the container
+container_id=$(docker ps -a -q -f name=^/anyth$)
 echo "Stopping ANYTH container..."
-docker stop anyth && \
+docker stop $container_id && \
 
 # Function to remove a file if it exists
 remove_if_exists() {
@@ -34,12 +34,11 @@ chmod 777 ./anything-llm/server/storage/anythingllm.db
 
 (
   echo "Starting web server (main app container) ..."
-  container_id=$(docker ps -a -q -f name=^/anyth$)
-if [ ! -z "$container_id" ]; then
-    echo "Removing existing container with name 'anyth'..."
-    docker rm -f $container_id
-fi
-# ./start.sh
+  
+# if [ ! -z "$container_id" ]; then
+#     echo "Stopping existing container with name 'anyth'..."
+#     docker st -f $container_id
+
 docker run -d --restart always \
   --name anyth \
   --platform linux/amd64 \
@@ -50,6 +49,6 @@ docker run -d --restart always \
   -v ./anything-llm/collector/outputs/:/app/collector/outputs \
   -p 3001:3001 \
   --network llm-net \
-  anyth:v1
+  anyth:last-com
 echo -e "Web server started.\n-----------------------------"
 )
