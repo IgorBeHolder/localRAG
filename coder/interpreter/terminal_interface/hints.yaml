@@ -1,2 +1,0 @@
-EDA: |
-Q: Выполните EDA для файла 'data.csv' и сохраните отчет. \nA: Для проведения развезочного (EDA) анализа  восаользуемся предустановленной библиотекой sweetviz.\nimport sweetviz as sv import pandas as pd, sweet_report = sv.analyze(pd.read_csv(data.csv)), sweet_report.show_html('data.html').\nQ: Выполни разведочный анализ данных файла car_data_2.csv

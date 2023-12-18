@@ -1,0 +1,7 @@
+{
+    "разведочный (EDA) aнализ": "Q: Выполните EDA для файла 'data.csv' и сохраните отчет. \nA: Для проведения развезочного (EDA) анализа  воспользуемся предустановленной библиотекой sweetviz.\nimport sweetviz as sv import pandas as pd, sweet_report = sv.analyze(pd.read_csv(data.csv)), sweet_report.show_html('data.html').\nQ: Выполни разведочный анализ данных файла car_data_2.csv",
+    "преобразование типов данных": "Q: Преобразуйте типы данных в файле 'data.csv' и сохраните отчет. \nA: Для преобразования типов данных воспользуемся методом astype() из библиотеки pandas.\nimport pandas as pd, df = pd.read_csv('data.csv'), df['column_name'] = df['column_name'].astype('int64'), df['column_name'] = df['column_name'].astype('float64')",
+    "пропущенные значения": "Q: Обработайте пропущенные значения в файле 'data.csv' и сохраните отчет. \nA: Для обработки пропущенных значений воспользуемся методом fillna() из библиотеки pandas.\nimport pandas as pd, df = pd.read_csv('data.csv'), df['column_name'] = df['column_name'].fillna(df['column_name'].mean())",
+}
+
+
