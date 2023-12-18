@@ -12,7 +12,7 @@ services:
       - ${HOST}
       - "--port"
       - ${MM_PORT}
-      - "--model=/model-store/${COMPLETION_MODEL_NAME}"
+      - "--model=/${COMPLETION_MODEL_NAME}"
     volumes:
       - "../../model-store/:/model-store"
     ports:
