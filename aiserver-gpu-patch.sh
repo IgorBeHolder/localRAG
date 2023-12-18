@@ -32,8 +32,8 @@ tar -czvf "$tarball_name.gz" \
 "$tarball_name"  \
 ./vllm/docker/docker-compose.yml \
 ./embed-server/config/ \
-./db-reset.sh \   
-./client-files/ 
+./db-reset.sh \
+./client-files/
 
 
 echo "Tarball compressed."
