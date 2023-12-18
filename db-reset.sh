@@ -15,6 +15,8 @@ remove_if_exists() {
 # Function to remove a directory if it exists
 remove_dir_if_exists() {
   if [ -d "$1" ]; then
+    # set permissions for document processor folders
+    sudo chmod -R 777  "$1"
     rm -rf "$1"
     echo "Removed $1"
   fi
