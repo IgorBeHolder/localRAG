@@ -112,7 +112,8 @@ const TerminalComponent = ({handleSubmit, toggleMenu, setTextCommand, children})
   return <div className={"flex flex-col align-center w-full min-h-[300px]"}
               style={{height: "calc(100vh - 170px)"}}>
     <div className={"grow overflow-y-auto"}>
-      <Terminal
+
+      {connectionStatus === 'Open' ? <Terminal
         key={"terminal_" + terminalKey}
         ref={terminalRef}
         watchConsoleLogging={true}
@@ -129,7 +130,7 @@ const TerminalComponent = ({handleSubmit, toggleMenu, setTextCommand, children})
           popup: "alert"
         }}
         msg="You can write anything here. Example - Hello! My name is Foo and I like Bar."
-      />
+      /> : <span>WS Status: {connectionStatus}</span>}
     </div>
 
     <div className="ssh-controls relative flex flex-wrap justify-center p-2 lg:py-4 gap-2 lg:gap-4 whitespace-nowrap">
