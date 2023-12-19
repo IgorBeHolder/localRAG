@@ -1,6 +1,6 @@
 #!/bin/bash
 
-GPU_ARCHIVE="sherpa-aiserver-openchat_v0.1.tar.gz"
+GPU_ARCHIVE="sherpa-aiserver-openchat_v0.2.tar.gz"
 CPU_ARCHIVE="sherpa-aiserver-RTC-v2.tar.gz"
 
 # Load environment variables from .env file
@@ -74,10 +74,13 @@ if [ "$DEVICE" = "cpu" ]; then
   docker run -d \
     --name llm-server \
     --platform linux/amd64 \
-    -e HOST=0.0.0.0 \
-    -e PORT=3003 \
+    -e HOST=$HOST \
+    -e MM_PORT=$MM_PORT \
+    -e DEVICE=$DEVICE \
+    -e N_CTX=$N_CTX \
+    -e COMPLETION_MODEL_NAME=$COMPLETION_MODEL_NAME \
     -v ./model-store:/app/model-store \
-    -p 3003:3003 \
+    -p $MM_PORT:$MM_PORT \
     --ulimit memlock=17179869184:17179869184 \
     --network llm-net \
     llm-server:v2

@@ -19,6 +19,7 @@ echo "Compressing tarball..."
 tar -czvf "$tarball_name.gz" \
 "$tarball_name"  \
 ./db-reset.sh \
+./embed-server/config/ \
 ./client-files/ 
 
 ./client-files &&
