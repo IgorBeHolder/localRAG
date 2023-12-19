@@ -10,19 +10,19 @@ echo -e "Environment variables loaded.\nBuild for $DEVICE.\n$EMBEDDING_MODEL_NAM
 
 
 # Define a function to remove a container by name if it exists
-remove_container_if_exists() {
+stop_container_if_exists() {
   local container_name=$1
   local container_id=$(docker ps -a -q -f name=^/${container_name}$)
   if [ ! -z "$container_id" ]; then
-    echo "Removing existing container with name '${container_name}'..."
-    docker rm -f $container_id
+    echo "Stopping existing container with name '${container_name}'..."
+    docker stop $container_id
   fi
 }
 
 # Remove containers if they exist
-remove_container_if_exists "embed"
-remove_container_if_exists "nginx"
-remove_container_if_exists "postgres"
+stop_container_if_exists "embed"
+stop_container_if_exists "nginx"
+stop_container_if_exists "postgres"
 
 cd embed-server &&
 # todo revert

@@ -64,13 +64,14 @@ echo -e "Embedding model server started.\n-----------------------------"
 
 if [ "$DEVICE" = "cpu" ]; then
   (
-  echo "Starting the MAIN model server CPU ..."
+  echo "Starting the LLM-server CPU ..."
 
   container_id=$(docker ps -a -q -f name=^/llm-server$)
   if [ ! -z "$container_id" ]; then
     docker start "$container_id"
   else
-
+    docker rm  "$container_id" &&
+    echo "Start LLM-server for $COMPLETION_MODEL_NAME"
     docker run -d \
       --name llm-server \
       --platform linux/amd64 \
@@ -106,13 +107,17 @@ fi
 echo "Starting the NGINX server..."
 container_id=$(docker ps -a -q -f name=^/nginx$)
 if [ ! -z "$container_id" ]; then
+  docker stop "$container_id" &&
   docker start "$container_id"
 else
   docker run -d \
     --name nginx \
+    --restart always \
     -p 3002:3002 \
+    -v ./config:/etc/nginx/sites-enabled \
     --network llm-net \
     nginx:last_com
+
 fi
 echo -e "Nginx server started.\n-----------------------------"
 ) &&
