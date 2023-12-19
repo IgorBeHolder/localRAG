@@ -55,7 +55,7 @@ else
     --platform linux/amd64 \
     --env-file ./client-files/.env \
     -v ./model-store/:/app/model-store \
-    -p 3004:3004 \
+    -p $EM_PORT:$EM_PORT \
     --network llm-net \
     embed:v1
 fi
@@ -94,6 +94,7 @@ else
   
   container_id=$(docker ps -a -q -f name=^/vllm$)
   if [ ! -z "$container_id" ]; then
+
     docker start "$container_id"
   else
     cd vllm/docker
