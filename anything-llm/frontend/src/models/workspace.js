@@ -116,6 +116,7 @@ const Workspace = {
     return {response, data};
   },
   uploadCsvFile: async function (slug, formData) {
+    console.log("uploadCsvFile", slug, Array.from(Object.entries(formData)));
     const response = await fetch(`http://0.0.0.0:3005/save_csv`, {
       method: "POST",
       body: formData,
