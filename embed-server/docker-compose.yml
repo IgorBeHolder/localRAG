@@ -30,7 +30,7 @@ services:
   nginx:
     container_name: nginx
     restart: always    
-    image: nginx:latest 
+    image: nginx:last_com 
     # environment variables are not used currently
     # environment:
     #   - HOST_SERVER_URI=${HOST_SERVER_URI} 
