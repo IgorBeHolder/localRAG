@@ -84,14 +84,14 @@ export default function PromptInput({
 
   return (
     <div
-      className={(mode === "analyst" ? "relative h-full overflow-y-auto" : "absolute") + " main-form p-1 md:p-8 lg:p-[50px] position-absolute bottom-0 left-0 right-0 !pb-0"}>
+      className={(mode === "analyst" ? "relative h-full overflow-y-auto" : "absolute") + " main-form p-1 md:p-8 bottom-0 left-0 right-0 !pb-0"}>
       <div className={"bg-white pt-2" + (mode === "analyst" ? "" : " pb-8")}>
         {mode === "analyst" ?
           <div
             onSubmit={handleSubmit}
             className={"flex flex-col gap-y-1 bg-white dark:bg-black-900 w-full mx-auto min-h-[300px]" + (mode === "analyst" ? "" : " lg:w-3/4")}
           >
-            <div className="flex items-center py-2 px-4 rounded-lg">
+            <div className="flex items-center py-2 px-4 rounded-lg lg:p-[50px] lg:pb-4">
               <TerminalComponent toggleMenu={toggleMenu} handleSubmit={handleSubmit} setTextCommand={setTextCommand}>
                 <CommandMenu
                   workspace={workspace}
