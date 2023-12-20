@@ -84,7 +84,10 @@ function executeSSHCommand(command, sshConnection, ws) {
         let result = "";
         stream
           .on("data", (data, ...rest) => {
-            console.log("@@@@@@@@@@ CommandOutput:", data, `'${data.toString()}'`, rest);
+            if (process.env.NODE_ENV === "development") {
+              console.log("@@@@@@@@@@ CommandOutput:", data, `'${data.toString()}'`, rest);
+            }
+
             result = data.toString();
 
             if (result === "> ") {
@@ -100,7 +103,10 @@ function executeSSHCommand(command, sshConnection, ws) {
             };
 
             ws.send(JSON.stringify(chatResult));
-            console.log("Stream is open, result was sent");
+
+            if (process.env.NODE_ENV === "development") {
+              console.log("Stream is open, result was sent");
+            }
           })
           .on("close", (code, signal) => {
             activeStream = null;
@@ -116,10 +122,15 @@ function executeSSHCommand(command, sshConnection, ws) {
 
               chatResult.error = {code, text: (code === 127 ? "-bash: no such command" : "-bash: unknown error")};
 
-              console.warn("@@@@@@@ SSH Result", code, signal);
+              if (process.env.NODE_ENV === "development") {
+                console.warn("@@@@@@@ SSH Result", code, signal);
+              }
 
               ws.send(JSON.stringify(chatResult));
-              console.log("Stream closed with code " + code + " and signal " + signal + " result was sent");
+
+              if (process.env.NODE_ENV === "development") {
+                console.log("Stream closed with code " + code + " and signal " + signal + " result was sent");
+              }
             }
           })
           .on("exit", (code) => {
@@ -131,7 +142,9 @@ function executeSSHCommand(command, sshConnection, ws) {
       });
     }
   } catch (e) {
-    console.log("@@@@@@@ executeSSHCommand", e);
+    if (process.env.NODE_ENV === "development") {
+      console.log("@@@@@@@ executeSSHCommand", e);
+    }
   }
 }
 
@@ -145,20 +158,26 @@ const wss = new WebSocket.Server({noServer: true});
 
 // Используем middleware для управления соединением SSH
 server.on("upgrade", (request, socket, head) => {
-  console.log("##################### WS upgrade");
+  if (process.env.NODE_ENV === "development") {
+    console.log("##################### WS upgrade");
+  }
   sshMiddleware(request, {}, () => {
     wss.handleUpgrade(request, socket, head, (ws) => {
       if (request?.sshConnection) {
         wss.emit("connection", ws, request, request?.sshConnection);
       } else {
-        console.log("##################### WS NO connection");
+        if (process.env.NODE_ENV === "development") {
+          console.log("##################### WS NO connection");
+        }
       }
     });
   });
 });
 
 wss.on("connection", (ws, request, sshConnection) => {
-  console.log("##################### WS connection", activeStream);
+  if (process.env.NODE_ENV === "development") {
+    console.log("##################### WS connection", activeStream);
+  }
 
   activeStream = null;
 
@@ -167,7 +186,9 @@ wss.on("connection", (ws, request, sshConnection) => {
   ws.on("message", (message) => {
     const command = message.toString();
 
-    console.log("##################### WS message", command);
+    if (process.env.NODE_ENV === "development") {
+      console.log("##################### WS message", command);
+    }
 
     if (activeStream) {
       // Получаем команду от клиента и выполняем ее на сервере SSH
@@ -186,7 +207,9 @@ wss.on("connection", (ws, request, sshConnection) => {
 });
 
 server.listen(3030, () => {
-  console.log(`##################### WS Server is running on port ${3030}`);
+  if (process.env.NODE_ENV === "development") {
+    console.log(`##################### WS Server is running on port ${3030}`);
+  }
 });
 
 systemEndpoints(apiRouter);
@@ -247,9 +270,9 @@ app.all("*", function (_, response) {
 app
   .listen(APP_PORT, async () => {
     await setupTelemetry();
-    console.log(
-      `Example app listening on port ${APP_PORT}`
-    );
+    if (process.env.NODE_ENV === "development") {
+      console.log(`Example app listening on port ${APP_PORT}`);
+    }
   })
   .on("error", function (err) {
     process.once("SIGUSR2", function () {

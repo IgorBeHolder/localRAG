@@ -10,3 +10,5 @@ test/
 *.tar
 embed-server/nginx/local-rag-docs.conf
 anything-llm/server/yarn.lock
+
+start-dp.sh

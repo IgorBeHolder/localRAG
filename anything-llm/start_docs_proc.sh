@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # script to run document processor in development mode
-coder/oi-venv/Scripts/activate
+collector/venv/scripts/activate
 # cd ..
 # node ./server/index.js &
-{ FLASK_ENV=production FLASK_APP=wsgi.py cd ./collector && gunicorn --timeout 300 --workers 4 --bind 0.0.0.0:3005 wsgi:api; } 
+{ set FLASK_ENV = "production" && set FLASK_APP="wsgi.py" && cd ./collector && flask run --host=0.0.0.0 --port=3005; }
 # wait -n
 # exit $?
