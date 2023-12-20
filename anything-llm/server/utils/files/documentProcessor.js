@@ -39,7 +39,7 @@ async function processDocument(filename = "") {
       "Content-Type": "application/json"
     },
     // limit filename to 30 characters
-    body: JSON.stringify({ filename: filename.substring(0, 30) })
+    body: JSON.stringify({ filename })
   })
     .then((res) => {
       if (!res.ok) throw new Error("Запрос не удался");
