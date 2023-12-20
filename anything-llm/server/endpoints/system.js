@@ -147,7 +147,7 @@ function systemEndpoints(app) {
           response.status(401).json({
             valid: false,
             token: null,
-            message: "[003] Не правльный пароль",
+            message: "[003] Не правильный пароль",
           });
           return;
         }

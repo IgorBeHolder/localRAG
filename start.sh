@@ -3,9 +3,9 @@
 echo "Starting the main app..."
 container_id=$(docker ps -a -q -f name=^/anyth$)
 if [ ! -z "$container_id" ]; then
-    echo "Removing existing container with name 'anyth'..."
+    echo "Stopping existing container with name 'anyth'..."
     # docker rm -f $container_id
-    stop $container_id
+    docker stop $container_id
 fi
 
 cd anything-llm

@@ -220,7 +220,7 @@ apiRouter.post("/v/:command", async (request, response) => {
       response.status(500).json({error: e.message});
     }
   } catch (e) {
-    console.log(e.message, e);
+    // console.log(e.message, e);
     response.sendStatus(500).end();
   }
 });
