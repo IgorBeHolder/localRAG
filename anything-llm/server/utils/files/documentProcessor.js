@@ -38,7 +38,8 @@ async function processDocument(filename = "") {
     headers: {
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({filename})
+    // limit filename to 30 characters
+    body: JSON.stringify({ filename: filename.substring(0, 30) })
   })
     .then((res) => {
       if (!res.ok) throw new Error("Запрос не удался");
@@ -47,17 +48,17 @@ async function processDocument(filename = "") {
     .then((res) => res)
     .catch((e) => {
       console.log(e.message);
-      return {success: false, reason: e.message};
+      return { success: false, reason: e.message };
     });
 }
 
 async function processCsvDocument(filename = "") {
-  console.log("processCsvDocument", filename);
+  console.log("processCsvDocument", filename.substring(0, 30));
   if (!filename) return false;
   // send filename to python app:
   return await fetch(`${PYTHON_API}/save_csv`, {
     method: "POST",
-    body: JSON.stringify({filename})
+    body: JSON.stringify({ filename })
   })
     .then((res) => {
       if (!res.ok) throw new Error("Запрос не удался");
@@ -66,7 +67,7 @@ async function processCsvDocument(filename = "") {
     .then((res) => res)
     .catch((e) => {
       console.log(e.message);
-      return {success: false, reason: e.message};
+      return { success: false, reason: e.message };
     });
 }
 
