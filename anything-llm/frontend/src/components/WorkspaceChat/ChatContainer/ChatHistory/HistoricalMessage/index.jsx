@@ -27,7 +27,7 @@ const HistoricalMessage = forwardRef(
       return (
         <div className="flex justify-start mb-4 items-end">
           <Jazzicon size={30} user={{uid: workspace.slug}}/>
-          <div className="ml-2 max-w-[75%] bg-gray-400 dark:bg-stone-700 rounded-t-2xl rounded-br-2xl rounded-bl-sm">
+          <div className="ml-2 xl:p-4 w-fit max-w-[75%] bg-gray-400 dark:bg-stone-700 rounded-t-2xl rounded-br-2xl rounded-bl-sm">
             <span
               className={`inline-block p-4 rounded-lg bg-red-50 text-red-500`}
             >
@@ -42,7 +42,7 @@ const HistoricalMessage = forwardRef(
       <div ref={ref} className="flex justify-start items-end mb-4">
         <Jazzicon size={30} user={{uid: workspace.slug}}/>
         <div
-          className="ml-2 p-4 max-w-[75%] bg-gray-400 dark:bg-stone-700 rounded-sm xl:rounded-2xl border border-gray-700">
+          className="ml-2 xl:p-4 w-fit max-w-[75%] bg-gray-400 dark:bg-stone-700 rounded-sm xl:rounded-2xl border border-gray-700">
           <div
             className="break-all-in-children overflow-auto whitespace-pre-line text-slate-800 dark:text-slate-200 font-[500] md:font-semibold text-sm md:text-base flex flex-col gap-y-1"
             dangerouslySetInnerHTML={{__html: renderMarkdown(message)}}

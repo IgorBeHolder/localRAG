@@ -61,15 +61,17 @@ const TerminalComponent = ({handleSubmit, toggleMenu, setTextCommand, children})
     if (output) {
       const response = JSON.parse(output);
 
-      //console.log("terminalRef", terminalRef, output);
+      // console.log("terminalRef", terminalRef, output);
 
       if (response.error) {
         if (response.error.code === 127) {
           console.log(response.error.text);
         } else {
-          console.log("SSH SENT NON ZERO RESPONSE", response);
+          console.warn("SSH SENT NON ZERO RESPONSE", response);
         }
       } else {
+        debugger;
+
         const lines = response.textResponse.split("\n").filter((l, li) => {
           return l.length && !(li && l.trim() === ">");
         });
@@ -116,7 +118,7 @@ const TerminalComponent = ({handleSubmit, toggleMenu, setTextCommand, children})
       {connectionStatus === 'Open' ? <Terminal
         key={"terminal_" + terminalKey}
         ref={terminalRef}
-        watchConsoleLogging={true}
+        watchConsoleLogging={true} // todo need a normal function to set text in terminal
         promptSymbol=">"
         color="green"
         backgroundColor="black"

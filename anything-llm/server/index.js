@@ -96,7 +96,8 @@ function executeSSHCommand(command, sshConnection, ws) {
 
             let chatResult = {
               id: uuidv4(),
-              textResponse: data.toString(),
+              type: "textResponse",
+              textResponse: result,
               sources: [],
               error: null,
               close: true
@@ -114,6 +115,7 @@ function executeSSHCommand(command, sshConnection, ws) {
             if (code) {
               let chatResult = {
                 id: uuidv4(),
+                type: "textResponse",
                 textResponse: "Connection closed",
                 sources: [],
                 error: null,
@@ -201,7 +203,7 @@ wss.on("connection", (ws, request, sshConnection) => {
 
     if (activeStream) {
       // Получаем команду от клиента и выполняем ее на сервере SSH
-      executeSSHCommand("exit\n", sshConnection, ws);
+      // executeSSHCommand("exit\n", sshConnection, ws);
     }
   });
 });
