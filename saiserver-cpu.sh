@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-tarball_name="sais-openchat-gpu"
+tarball_name="sais-mistral-cpu"
 container_names=("anyth" "nginx")
 images_to_save=()
 
