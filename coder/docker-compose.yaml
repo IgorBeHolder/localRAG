@@ -21,3 +21,4 @@ networks:
     external: true
 
 # docker-compose -p localrag up -d --build
+# ssh coder@localhost -p 2222
