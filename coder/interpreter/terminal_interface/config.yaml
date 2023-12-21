@@ -17,12 +17,15 @@ system_message: |
   
 local: true
 
-model: "openai//model-store/openchat/openchat_3.5"
+# model: "openai//model-store/openchat/openchat_3.5"
+model: "openai//app/model-store/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/mistral-7b-instruct-v0.2.Q4_K_M.gguf
 api_key: "fake_key"
-api_base: "http://194.135.112.219:3003/v1"
-model_name: "/model-store/openchat/openchat_3.5"
+# api_base: "http://194.135.112.219:3003/v1"
+api_base: "http://46.254.21.170:3003/v1"
+# model_name: "/model-store/openchat/openchat_3.5"
+model_name: "/model-store/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/mistral-7b-instruct-v0.2.Q4_K_M.gguf"
 
-context_window: 8192
+context_window: 4096
 max_output: 2000
 max_tokens: 1024
 conversation_history: True
