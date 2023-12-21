@@ -61,11 +61,11 @@ EXPOSE 22
 RUN mkdir /home/coder/content
 COPY interpreter/terminal_interface/config.yaml \
     /usr/local/lib/python3.11/site-packages/interpreter/terminal_interface/config.yaml
-COPY oi-venv/Lib/site-packages/interpreter/terminal_interface/terminal_interface.py \
+COPY oi-venv/lib/python3.11/site-packages/interpreter/terminal_interface/terminal_interface.py \
     /usr/local/lib/python3.11/site-packages/interpreter/terminal_interface/terminal_interface.py
-COPY oi-venv/Lib/site-packages/interpreter/core/llm/setup_text_llm.py \
+COPY oi-venv/lib/python3.11/site-packages/interpreter/core/llm/setup_text_llm.py \
     /usr/local/lib/python3.11/site-packages/interpreter/core/llm/setup_text_llm.py
-COPY oi-venv/Lib/site-packages/interpreter/core/llm/setup_openai_coding_llm.py \
+COPY oi-venv/lib/python3.11/site-packages/interpreter/core/llm/setup_openai_coding_llm.py \
     /usr/local/lib/python3.11/site-packages/interpreter/core/llm/setup_openai_coding_llm.py
     # RUN echo "interpreter && %reset" >> /home/coder/.bashrc
 

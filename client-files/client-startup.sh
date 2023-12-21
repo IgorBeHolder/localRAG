@@ -1,7 +1,7 @@
 #!/bin/bash
 
-GPU_ARCHIVE="sherpa-aiserver-openchat_v0.2.tar.gz"
-CPU_ARCHIVE="sherpa-aiserver-RTC-v2.tar.gz"
+GPU_ARCHIVE="aiserver-openchat_v0.2.tar.gz"
+CPU_ARCHIVE="sais-mistral-cpu.tar.gz"
 
 # Load environment variables from .env file
 set -a
@@ -22,10 +22,10 @@ images_loaded() {
 if ! images_loaded; then
   if [ "$DEVICE" = "cpu" ]; then
     echo "Loading CPU docker images..."
-    docker load -i  $CPU_ARCHIVE
+    sudo docker load -i  $CPU_ARCHIVE
   else
     echo "Loading GPU docker images..."
-    docker load -i  $GPU_ARCHIVE
+    sudo docker load -i  $GPU_ARCHIVE
   fi
 else
   echo "Docker images have been loaded previously."
@@ -74,6 +74,7 @@ if [ "$DEVICE" = "cpu" ]; then
     echo "Start LLM-server for $COMPLETION_MODEL_NAME"
     docker run -d \
       --name llm-server \
+      --restart always \
       --platform linux/amd64 \
       -e HOST=$HOST \
       -e MM_PORT=$MM_PORT \
@@ -108,18 +109,18 @@ fi
 echo "Starting the NGINX server..."
 container_id=$(docker ps -a -q -f name=^/nginx$)
 if [ ! -z "$container_id" ]; then
-  docker stop "$container_id" &&
-  docker start "$container_id"
-else
+  docker rm -f "$container_id"
+fi
+ # docker start "$container_id"
+#else
   docker run -d \
     --name nginx \
     --restart always \
     -p 3002:3002 \
-    -v ./config:/etc/nginx/sites-enabled \
+    -v ./embed-server/config/:/etc/nginx/sites-enabled \
     --network llm-net \
     nginx:last_com
 
-fi
 echo -e "Nginx server started.\n-----------------------------"
 ) &&
 

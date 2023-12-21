@@ -15,7 +15,7 @@ def convert_to_coding_llm(text_llm, debug_mode=False, vision=False):
         assert messages[0]["role"] == "system"
         messages[0][
             "content"
-        ] += "\nTo execute code on the user's machine, write a markdown code block. Specify the language after the ```. You will receive the output. Use any programming language."
+        ] += "\nTo execute code on the user's machine, write a markdown code block. Specify the language after the ```. You will receive the output. Use python."
 
         # Gaslight method (DISABLED):
         '''
