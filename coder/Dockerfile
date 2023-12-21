@@ -18,7 +18,7 @@ RUN apt-get update && apt-get install -y \
     libncurses5-dev \
     libncursesw5-dev \
     xz-utils \
-    tk-dev 
+    tk-dev
 
 # Install Poetry
 RUN curl -sSL https://install.python-poetry.org | python3 -
@@ -40,9 +40,9 @@ RUN pip3 install --upgrade pip
 RUN --mount=type=cache,target=/tmp/pip_cache pip3 install \
     matplotlib seaborn openpyxl \
     sweetviz open-interpreter
-    # pydantic==2.4.0 pandas-profiling 
+    # pydantic==2.4.0 pandas-profiling
     # dataprep scikit-learn
-# RUN --mount=type=cache,target=/tmp/pip_cache pip3 install 
+# RUN --mount=type=cache,target=/tmp/pip_cache pip3 install
 
 
 # Create SSH directory
@@ -61,11 +61,11 @@ EXPOSE 22
 RUN mkdir /home/coder/content
 COPY interpreter/terminal_interface/config.yaml \
     /usr/local/lib/python3.11/site-packages/interpreter/terminal_interface/config.yaml
-COPY oi-venv/lib/python3.11/site-packages/interpreter/terminal_interface/terminal_interface.py \
+COPY oi-venv/Lib/site-packages/interpreter/terminal_interface/terminal_interface.py \
     /usr/local/lib/python3.11/site-packages/interpreter/terminal_interface/terminal_interface.py
-COPY oi-venv/lib/python3.11/site-packages/interpreter/core/llm/setup_text_llm.py \
+COPY oi-venv/Lib/site-packages/interpreter/core/llm/setup_text_llm.py \
     /usr/local/lib/python3.11/site-packages/interpreter/core/llm/setup_text_llm.py
-COPY oi-venv/lib/python3.11/site-packages/interpreter/core/llm/setup_openai_coding_llm.py \
+COPY oi-venv/Lib/site-packages/interpreter/core/llm/setup_openai_coding_llm.py \
     /usr/local/lib/python3.11/site-packages/interpreter/core/llm/setup_openai_coding_llm.py
     # RUN echo "interpreter && %reset" >> /home/coder/.bashrc
 

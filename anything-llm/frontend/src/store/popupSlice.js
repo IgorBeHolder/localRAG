@@ -8,11 +8,9 @@ export const counterSlice = createSlice({
   },
   reducers: {
     showModal: (state, data) => {
-      console.log("modal", data.payload);
       state[data.payload] = true;
     },
     hideModal: (state, data) => {
-      console.log("modal", data.payload);
       state[data.payload] = false;
     }
   }
