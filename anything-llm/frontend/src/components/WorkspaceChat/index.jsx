@@ -5,17 +5,17 @@ import ChatContainer from "./ChatContainer";
 import paths from "../../utils/paths";
 import {IS_CODER} from "../../utils/constants.js";
 
-export default function WorkspaceChat({loading, workspace}) {
+export default function WorkspaceChat({loading, workspace, analystRoute}) {
   const [history, setHistory] = useState([]);
   const [loadingHistory, setLoadingHistory] = useState(true);
   const storageKey = workspace ? `workspace_chat_mode_${workspace.slug}` : "";
 
   useEffect(() => {
-    if (!IS_CODER && storageKey && window.location.pathname.startsWith("/analyst/")) {
+    if (analystRoute && !IS_CODER && storageKey) {
       window.localStorage.setItem(storageKey, "query");
       window.location = "/workspace/" + workspace.name;
     }
-  }, [IS_CODER, storageKey]);
+  }, [IS_CODER, storageKey, analystRoute]);
 
   useEffect(() => {
     async function getHistory() {
