@@ -62,7 +62,6 @@ export default function PromptInput({
     if (!window.confirm(`Сбросить историю диалога?`)) {
       return false;
     }
-    setTerminalKey(terminalKey + 1);
   };
   const openFile = () => {
     console.log("openFile");
