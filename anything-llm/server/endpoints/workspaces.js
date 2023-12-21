@@ -4,7 +4,7 @@ const {Document} = require("../models/documents");
 const {DocumentVectors} = require("../models/vectors");
 const {WorkspaceChats} = require("../models/workspaceChats");
 const {convertToChatHistory} = require("../utils/chats");
-const {getVectorDbClass} = require("../utils/helpers");
+const {getVectorDbClass, fixEncoding} = require("../utils/helpers");
 const {setupMulter} = require("../utils/files/multer");
 const {
   checkPythonAppAlive,
@@ -69,7 +69,7 @@ function workspaceEndpoints(app) {
     "/workspace/:slug/upload",
     handleUploads.single("file"),
     async function (request, response) {
-      const {originalname} = request.file;
+      const originalname = fixEncoding(request.file.originalname);
       const processingOnline = await checkPythonAppAlive();
 
       if (!processingOnline) {
