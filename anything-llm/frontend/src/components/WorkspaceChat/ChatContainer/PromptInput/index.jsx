@@ -7,6 +7,7 @@ import {useDispatch} from "react-redux";
 
 export default function PromptInput({
                                       analyst = false,
+                                      resetChatSSH,
                                       mode,
                                       workspace,
                                       message,
@@ -62,6 +63,7 @@ export default function PromptInput({
     if (!window.confirm(`Сбросить историю диалога?`)) {
       return false;
     }
+    resetChatSSH();
   };
   const openFile = () => {
     console.log("openFile");

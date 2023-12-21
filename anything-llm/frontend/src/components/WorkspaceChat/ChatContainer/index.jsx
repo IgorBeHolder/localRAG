@@ -124,6 +124,12 @@ export default function ChatContainer({workspace, knownHistory = []}) {
     }, [loadingResponse, chatHistory, workspace, mode]);
   }
 
+  const resetChatSSH = () => {
+    if (mode === "analyst") {
+      setCommand("%reset\n");
+    }
+  };
+
   const handleMessageChange = (event) => {
     setMessage(event.target.value);
   };
@@ -168,6 +174,7 @@ export default function ChatContainer({workspace, knownHistory = []}) {
       </div>
       <PromptInput
         analyst={mode === "analyst"}
+        resetChatSSH={resetChatSSH}
         mode={mode}
         workspace={workspace}
         message={message}
