@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
-import { FullScreenLoader } from "../Preloader";
+import {useEffect, useState} from "react";
+import {Navigate} from "react-router-dom";
+import {FullScreenLoader} from "../Preloader";
 import validateSessionTokenForUser from "../../utils/session";
 import paths from "../../utils/paths";
-import { AUTH_TIMESTAMP, AUTH_TOKEN, AUTH_USER } from "../../utils/constants";
-import { userFromStorage } from "../../utils/request";
+import {AUTH_TIMESTAMP, AUTH_TOKEN, AUTH_USER} from "../../utils/constants";
+import {userFromStorage} from "../../utils/request";
 import System from "../../models/system";
 
 // Used only for Multi-user mode only as we permission specific pages based on auth role.
@@ -44,21 +44,22 @@ function useIsAuthenticated() {
   return isAuthd;
 }
 
-export function AdminRoute({ Component }) {
+export function AdminRoute({Component}) {
   const authed = useIsAuthenticated();
-  if (authed === null) return <FullScreenLoader />;
+  if (authed === null) return <FullScreenLoader/>;
 
   const user = userFromStorage();
   return authed && user?.role === "admin" ? (
-    <Component />
+    <Component/>
   ) : (
-    <Navigate to={paths.home()} />
+    <Navigate to={paths.home()}/>
   );
 }
 
-export default function PrivateRoute({ Component }) {
+export default function PrivateRoute(props) {
+  const {Component} = props;
   const authed = useIsAuthenticated();
-  if (authed === null) return <FullScreenLoader />;
+  if (authed === null) return <FullScreenLoader/>;
 
-  return authed ? <Component /> : <Navigate to={paths.home()} />;
+  return authed ? <Component analystRoute={props.analystRoute}/> : <Navigate to={paths.home()}/>;
 }
