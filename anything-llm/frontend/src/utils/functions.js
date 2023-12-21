@@ -61,5 +61,5 @@ export function replaceTag(tag) {
 }
 
 export function safeTagsReplace(str) {
-  return str.replace(/[&<>]/g, replaceTag);
+  return String(str).replace(/[&<>]/g, replaceTag);
 }
