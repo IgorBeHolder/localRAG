@@ -8,7 +8,7 @@ export default function ChatHistory({mode, history = [], workspace}) {
 
 
   useEffect(() => {
-    if (replyRef.current) {
+    if (replyRef.current && replyRef.current.hasOwnProperty('scrollIntoView')) {
       setTimeout(() => {
         replyRef.current.scrollIntoView({behavior: "smooth", block: "end"});
       }, 700);

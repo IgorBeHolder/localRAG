@@ -3,7 +3,7 @@ import useWebSocket, {ReadyState} from "react-use-websocket";
 import {WS_URL} from "../../../../../utils/constants.js";
 import Terminal from "terminal-in-react/lib/bundle/terminal-react";
 import {showModal} from "../../../../../store/popupSlice.js";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {Menu} from "react-feather";
 
 const TerminalComponent = ({handleSubmit, toggleMenu, setTextCommand, children}) => {
@@ -61,15 +61,17 @@ const TerminalComponent = ({handleSubmit, toggleMenu, setTextCommand, children})
     if (output) {
       const response = JSON.parse(output);
 
-      //console.log("terminalRef", terminalRef, output);
+      // console.log("terminalRef", terminalRef, output);
 
       if (response.error) {
         if (response.error.code === 127) {
           console.log(response.error.text);
         } else {
-          console.log("SSH SENT NON ZERO RESPONSE", response);
+          console.warn("SSH SENT NON ZERO RESPONSE", response);
         }
       } else {
+        debugger;
+
         const lines = response.textResponse.split("\n").filter((l, li) => {
           return l.length && !(li && l.trim() === ">");
         });
@@ -112,10 +114,11 @@ const TerminalComponent = ({handleSubmit, toggleMenu, setTextCommand, children})
   return <div className={"flex flex-col align-center w-full min-h-[300px]"}
               style={{height: "calc(100vh - 170px)"}}>
     <div className={"grow overflow-y-auto"}>
-      <Terminal
+
+      {connectionStatus === 'Open' ? <Terminal
         key={"terminal_" + terminalKey}
         ref={terminalRef}
-        watchConsoleLogging={true}
+        watchConsoleLogging={true} // todo need a normal function to set text in terminal
         promptSymbol=">"
         color="green"
         backgroundColor="black"
@@ -129,7 +132,7 @@ const TerminalComponent = ({handleSubmit, toggleMenu, setTextCommand, children})
           popup: "alert"
         }}
         msg="You can write anything here. Example - Hello! My name is Foo and I like Bar."
-      />
+      /> : <span>WS Status: {connectionStatus}</span>}
     </div>
 
     <div className="ssh-controls relative flex flex-wrap justify-center p-2 lg:py-4 gap-2 lg:gap-4 whitespace-nowrap">

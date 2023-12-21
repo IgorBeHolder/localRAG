@@ -246,3 +246,5 @@ content/
 !oi-venv/lib/python3.11/site-packages/interpreter/terminal_interface/terminal_interface.py
 !oi-venv/lib/python3.11/site-packages/interpreter/core/llm/setup_text_llm.py
 !oi-venv/lib/python3.11/site-packages/interpreter/core/llm/setup_openai_coding_llm.py
+
+Dockerfile

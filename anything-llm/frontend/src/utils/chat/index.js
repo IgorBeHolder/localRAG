@@ -1,5 +1,6 @@
 // For handling of synchronous chats that are not utilizing streaming or chat requests.
 import {DEFAULT_CHAT_OPTIONS} from "../constants.js";
+import {safeTagsReplace} from "../functions.js";
 
 export default function handleChat(
   chatResult,
@@ -8,10 +9,10 @@ export default function handleChat(
   remHistory,
   _chatHistory
 ) {
-  const {uuid, textResponse, type, sources = [], error, close} = chatResult;
+  const {uuid, textResponse: text, type, sources = [], error, close} = chatResult;
+  const textResponse = safeTagsReplace(text);
 
   if (type === "abort") {
-    setLoadingResponse(false);
     setChatHistory([
       ...remHistory,
       {
@@ -34,7 +35,6 @@ export default function handleChat(
       animate: true,
     });
   } else if (type === "textResponse") {
-    setLoadingResponse(false);
     setChatHistory([
       ...remHistory,
       {
@@ -57,4 +57,6 @@ export default function handleChat(
       animate: true,
     });
   }
+
+  setLoadingResponse(false);
 }
