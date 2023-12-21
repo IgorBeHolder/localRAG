@@ -128,7 +128,7 @@ export default function Directory({
         )}
 
         <div
-          className={`flex items-center gap-x-2 text-gray-800 dark:text-stone-200 hover:bg-gray-100 dark:hover:bg-stone-800 px-2 rounded-lg`}
+          className={`flex items-start gap-x-2 text-gray-800 dark:text-stone-200 hover:bg-gray-100 dark:hover:bg-stone-800 px-2 rounded-lg`}
         >
           <button onClick={() => toggleSelection(`${parent}/${name}`)}>
             {isSelected(`${parent}/${name}`) ? (
@@ -141,7 +141,7 @@ export default function Directory({
             className="w-full items-center flex cursor-pointer"
             onClick={() => toggleDetails(!showDetails)}
           >
-            <h3 className="text-sm">{fixEncoding(String(meta.title))}</h3>
+            <h3 className="text-sm break-all">{fixEncoding(String(meta.title))}</h3>
             <br/>
           </div>
         </div>
