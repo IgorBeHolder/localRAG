@@ -18,7 +18,7 @@ system_message: |
 local: true
 
 # model: "openai//model-store/openchat/openchat_3.5"
-model: "openai//app/model-store/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/mistral-7b-instruct-v0.2.Q4_K_M.gguf
+model: "openai//app/model-store/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/mistral-7b-instruct-v0.2.Q4_K_M.gguf"
 api_key: "fake_key"
 # api_base: "http://194.135.112.219:3003/v1"
 api_base: "http://46.254.21.170:3003/v1"
