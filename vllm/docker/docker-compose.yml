@@ -18,13 +18,15 @@ services:
       - "../../model-store/:/model-store"
     ports:
       - ${MM_PORT}:${MM_PORT}
+    ipc: host
     environment:
       HOST: ${HOST}
       PORT: ${MM_PORT}
       DEVICE: ${DEVICE}
       COMPLETION_MODEL_NAME: ${COMPLETION_MODEL_NAME}
       CUDA_HOME: "/usr/local/cuda"
-      NVIDIA_VISIBLE_DEVICES: all      
+      NVIDIA_VISIBLE_DEVICES: all
+      TP_SIZE: ${TP_SIZE}
     deploy:
       resources:
         reservations:
