@@ -35,7 +35,10 @@ def as_docx(**kwargs):
     'token_count_estimate': len(tokenize(content))
   }
 
-  write_to_server_documents(data, f"{slugify(filename)}-{data.get('id')}")
+  # print(f"{slugify(filename)}-{data.get('id')}")
+
+  # write_to_server_documents(data, f"{slugify(filename)}-{data.get('id')}")
+  write_to_server_documents(data, f"{filename}-{data.get('id')}")
   move_source(parent_dir, f"{filename}{ext}", remove=remove)
 
   print(f"[SUCCESS]: {filename}{ext} converted & ready for embedding.\n")
