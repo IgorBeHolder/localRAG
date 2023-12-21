@@ -13,17 +13,21 @@ system_message: |
  Отвечайте на русском языке.
  При анализе данных с помощью python используйте итеративный подход, не загружайте снова и снова анализируемый файл, а загрузите его один раз и сохраните в переменную.
  Пользователь может не точно указывать название файла или столбца в данных, поэтому вам указывать наиболее близкие по смыслу сущности.
+ Вы должны создавать код, готовый к исполнению, без шаблонов и предложений что-то дописать.
  
   
 local: true
-
-# model: "openai//model-store/openchat/openchat_3.5"
-model: "openai//app/model-store/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/mistral-7b-instruct-v0.2.Q4_K_M.gguf"
 api_key: "fake_key"
-# api_base: "http://194.135.112.219:3003/v1"
-api_base: "http://46.254.21.170:3003/v1"
-# model_name: "/model-store/openchat/openchat_3.5"
-model_name: "/model-store/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/mistral-7b-instruct-v0.2.Q4_K_M.gguf"
+
+# GPU
+model: "openai//model-store/openchat/openchat_3.5"
+api_base: "http://194.135.112.219:3003/v1"
+model_name: "/model-store/openchat/openchat_3.5"
+
+# CPU
+# model: "openai//app/model-store/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/mistral-7b-instruct-v0.2.Q4_K_M.gguf"
+# api_base: "http://46.254.21.170:3003/v1"
+# model_name: "/model-store/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/mistral-7b-instruct-v0.2.Q4_K_M.gguf"
 
 context_window: 4096
 max_output: 2000
