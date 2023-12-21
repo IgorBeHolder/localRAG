@@ -116,11 +116,9 @@ const Workspace = {
     return {response, data};
   },
   uploadCsvFile: async function (slug, formData) {
-    console.log('PYTHON_API', PYTHON_API);
     const response = await fetch(`${PYTHON_API}/save_csv`, {
       method: "POST",
       body: formData,
-      // mode: "no-cors",
       headers: baseHeaders()
     });
 

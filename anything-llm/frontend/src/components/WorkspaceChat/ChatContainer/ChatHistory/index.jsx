@@ -6,7 +6,6 @@ import {useEffect, useRef} from "react";
 export default function ChatHistory({mode, history = [], workspace}) {
   const replyRef = useRef(null);
 
-
   useEffect(() => {
     if (replyRef.current && replyRef.current.hasOwnProperty('scrollIntoView')) {
       setTimeout(() => {
@@ -37,12 +36,13 @@ export default function ChatHistory({mode, history = [], workspace}) {
       {history.map((props, index) => {
         const isLastMessage = index === history.length - 1;
 
-        if (props.role === "assistant" && props.animate) {
+        if (props.role === "assistant" && (props.animate || props.typeWriter)) {
           return (
             <PromptReply
               key={index}
               ref={isLastMessage ? replyRef : null}
               uuid={props.uuid}
+              typeWriter={isLastMessage && props.typeWriter}
               reply={props.content}
               pending={props.pending}
               sources={props.sources}
