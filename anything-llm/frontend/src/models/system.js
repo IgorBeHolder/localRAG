@@ -1,5 +1,5 @@
-import { API_BASE, AUTH_TIMESTAMP } from "../utils/constants";
-import { baseHeaders } from "../utils/request";
+import {API_BASE, AUTH_TIMESTAMP, PYTHON_API} from "../utils/constants";
+import {baseHeaders} from "../utils/request";
 
 const System = {
   ping: async function () {
@@ -59,7 +59,7 @@ const System = {
   requestToken: async function (body) {
     return await fetch(`${API_BASE}/request-token`, {
       method: "POST",
-      body: JSON.stringify({ ...body }),
+      body: JSON.stringify({...body}),
     })
       .then((res) => {
         if (!res.ok) throw new Error("Could not validate login.");
@@ -67,11 +67,18 @@ const System = {
       })
       .then((res) => res)
       .catch((e) => {
-        return { valid: false, message: e.message };
+        return {valid: false, message: e.message};
       });
   },
   checkDocumentProcessorOnline: async () => {
     return await fetch(`${API_BASE}/system/document-processing-status`, {
+      headers: baseHeaders(),
+    })
+      .then((res) => res.ok)
+      .catch(() => false);
+  },
+  checkCsvUploadProcessorOnline: async () => {
+    return await fetch(PYTHON_API, {
       headers: baseHeaders(),
     })
       .then((res) => res.ok)
@@ -94,7 +101,7 @@ const System = {
       .then((res) => res.json())
       .catch((e) => {
         console.error(e);
-        return { newValues: null, error: e.message };
+        return {newValues: null, error: e.message};
       });
   },
   updateSystemPassword: async (data) => {
@@ -106,7 +113,7 @@ const System = {
       .then((res) => res.json())
       .catch((e) => {
         console.error(e);
-        return { success: false, error: e.message };
+        return {success: false, error: e.message};
       });
   },
   setupMultiUser: async (data) => {
@@ -118,14 +125,14 @@ const System = {
       .then((res) => res.json())
       .catch((e) => {
         console.error(e);
-        return { success: false, error: e.message };
+        return {success: false, error: e.message};
       });
   },
   deleteDocument: async (name, meta) => {
     return await fetch(`${API_BASE}/system/remove-document`, {
       method: "DELETE",
       headers: baseHeaders(),
-      body: JSON.stringify({ name, meta }),
+      body: JSON.stringify({name, meta}),
     })
       .then((res) => res.ok)
       .catch((e) => {
@@ -142,7 +149,7 @@ const System = {
       .then((res) => res)
       .catch((e) => {
         console.error(e);
-        return { filename: null, error: e.message };
+        return {filename: null, error: e.message};
       });
   },
   importData: async (formData) => {
@@ -155,7 +162,7 @@ const System = {
       .then((res) => res)
       .catch((e) => {
         console.error(e);
-        return { success: false, error: e.message };
+        return {success: false, error: e.message};
       });
   },
   uploadLogo: async function (formData) {
@@ -165,11 +172,11 @@ const System = {
     })
       .then((res) => {
         if (!res.ok) throw new Error("Error uploading logo.");
-        return { success: true, error: null };
+        return {success: true, error: null};
       })
       .catch((e) => {
         console.log(e);
-        return { success: false, error: e.message };
+        return {success: false, error: e.message};
       });
   },
   fetchLogo: async function (light = false) {
@@ -190,12 +197,12 @@ const System = {
   removeCustomLogo: async function () {
     return await fetch(`${API_BASE}/system/remove-logo`)
       .then((res) => {
-        if (res.ok) return { success: true, error: null };
+        if (res.ok) return {success: true, error: null};
         throw new Error("Error removing logo!");
       })
       .catch((e) => {
         console.log(e);
-        return { success: false, error: e.message };
+        return {success: false, error: e.message};
       });
   },
   getCanDeleteWorkspaces: async function () {
@@ -233,17 +240,17 @@ const System = {
     return fetch(`${API_BASE}/system/set-welcome-messages`, {
       method: "POST",
       headers: baseHeaders(),
-      body: JSON.stringify({ messages }),
+      body: JSON.stringify({messages}),
     })
       .then((res) => {
         if (!res.ok) {
           throw new Error(res.statusText || "Error setting welcome messages.");
         }
-        return { success: true, ...res.json() };
+        return {success: true, ...res.json()};
       })
       .catch((e) => {
         console.error(e);
-        return { success: false, error: e.message };
+        return {success: false, error: e.message};
       });
   },
   getApiKey: async function () {
@@ -259,7 +266,7 @@ const System = {
       })
       .catch((e) => {
         console.error(e);
-        return { apiKey: null, error: e.message };
+        return {apiKey: null, error: e.message};
       });
   },
   generateApiKey: async function () {
@@ -275,7 +282,7 @@ const System = {
       })
       .catch((e) => {
         console.error(e);
-        return { apiKey: null, error: e.message };
+        return {apiKey: null, error: e.message};
       });
   },
   deleteApiKey: async function () {

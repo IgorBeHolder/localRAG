@@ -19,7 +19,7 @@ const PromptReply = forwardRef(
         >
           <Jazzicon size={30} user={{uid: workspace.slug}}/>
           <div
-            className={MSG_STYLE(true) + " bg-gray-400 dark:bg-stone-700"}>
+            className={MSG_STYLE() + " bg-gray-400 dark:bg-stone-700"}>
             <span className={`inline-block p-2`}>
               <div className="dot-falling"></div>
             </span>

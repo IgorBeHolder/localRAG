@@ -17,13 +17,15 @@ export default function ChatContainer({workspace, knownHistory = []}) {
   const mode = window.localStorage.getItem(storageKey);
 
   const [loadingResponse, setLoadingResponse] = useState(mode === "analyst");
+  const [newWsMessage, setNewWsMessage] = useState(true);
+
   if (mode === "analyst") {
     //Public API that will echo messages sent to it back to the client
     const [socketUrl, setSocketUrl] = useState(WS_URL);
     const [messageHistory, setMessageHistory] = useState([]);
 
     const onWsMessage = useCallback(() => {
-      setLoadingResponse(true);
+      setNewWsMessage(true);
     }, [setLoadingResponse]);
 
     const {sendMessage, lastMessage, readyState} = useWebSocket(socketUrl, {
@@ -51,7 +53,7 @@ export default function ChatContainer({workspace, knownHistory = []}) {
     useEffect(() => {
       console.log('lastMessage', lastMessage);
 
-      if (lastMessage !== null && loadingResponse && (messageHistory.length ? messageHistory[messageHistory.length - 1] !== lastMessage.data : true)) {
+      if (lastMessage !== null && newWsMessage && (messageHistory.length ? messageHistory[messageHistory.length - 1] !== lastMessage.data : true)) {
         setMessageHistory((prev) => prev.concat(lastMessage.data));
 
         const remHistory = chatHistory.length > 0 ? chatHistory.slice(0, -1) : [];
@@ -68,6 +70,8 @@ export default function ChatContainer({workspace, knownHistory = []}) {
           remHistory,
           _chatHistory
         );
+
+        setNewWsMessage(false);
       }
     }, [lastMessage, chatHistory, setMessageHistory, setChatHistory]);
 
