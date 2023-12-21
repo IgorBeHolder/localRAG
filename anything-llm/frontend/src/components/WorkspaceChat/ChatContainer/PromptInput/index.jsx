@@ -2,8 +2,11 @@ import React, {useState, useRef, memo, useEffect} from "react";
 import {isMobile} from "react-device-detect";
 import {Loader, Menu, X} from "react-feather";
 import {CHAT_MAX_LENGTH, IS_CODER} from "../../../../utils/constants.js";
+import {showModal} from "../../../../store/popupSlice.js";
+import {useDispatch} from "react-redux";
 
 export default function PromptInput({
+                                      analyst = false,
                                       mode,
                                       workspace,
                                       message,
@@ -12,6 +15,7 @@ export default function PromptInput({
                                       inputDisabled,
                                       buttonDisabled
                                     }) {
+  const dispatch = useDispatch();
   const [showMenu, setShowMenu] = useState(false);
 
   const formRef = useRef(null);
@@ -51,6 +55,22 @@ export default function PromptInput({
     }
   }
 
+  const uploadFile = () => {
+    dispatch(showModal("modalCoderWorkspace"));
+  };
+  const resetChat = () => {
+    if (!window.confirm(`Сбросить историю диалога?`)) {
+      return false;
+    }
+    setTerminalKey(terminalKey + 1);
+  };
+  const openFile = () => {
+    console.log("openFile");
+  };
+  const closeChat = () => {
+    setTextCommand("/query");
+  };
+
   const setTextCommand = (command = "") => {
     const storageKey = `workspace_chat_mode_${workspace.slug}`;
 
@@ -82,6 +102,41 @@ export default function PromptInput({
     <div
       className={"absolute main-form p-1 md:p-8 bottom-0 left-0 right-0 !pb-0"}>
       <div className={"bg-white pt-2 pb-8"}>
+        {analyst ? <div
+          className="ssh-controls relative flex flex-wrap justify-center gap-2 lg:gap-4 whitespace-nowrap">
+          <button
+            onClick={() => {
+              uploadFile();
+            }}
+            className="p-2 text-slate-500 bg-transparent rounded-md hover:bg-gray-200 dark:hover:bg-stone-500 dark:hover:text-slate-200"
+          >
+            <span>Загрузить файл</span>
+          </button>
+          <button
+            onClick={() => {
+              resetChat();
+            }}
+            className="p-2 text-slate-500 bg-transparent rounded-md hover:bg-gray-200 dark:hover:bg-stone-500 dark:hover:text-slate-200"
+          >
+            <span>Сброс чата</span>
+          </button>
+          <button
+            onClick={() => {
+              openFile();
+            }}
+            className="p-2 text-slate-500 bg-transparent rounded-md hover:bg-gray-200 dark:hover:bg-stone-500 dark:hover:text-slate-200"
+          >
+            <span>Открыть файл</span>
+          </button>
+          <button
+            onClick={() => {
+              closeChat();
+            }}
+            className="p-2 text-slate-500 bg-transparent rounded-md hover:bg-gray-200 dark:hover:bg-stone-500 dark:hover:text-slate-200"
+          >
+            <span>Закрыть</span>
+          </button>
+        </div> : null}
         <form
           onSubmit={handleSubmit}
           className="relative flex flex-col gap-y-1 bg-white dark:bg-black-900 lg:w-3/4 w-full mx-auto"

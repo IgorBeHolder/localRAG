@@ -17,94 +17,47 @@ export default function ChatContainer({workspace, knownHistory = []}) {
   const mode = window.localStorage.getItem(storageKey);
 
   const [loadingResponse, setLoadingResponse] = useState(mode === "analyst");
-  // if (mode === "analyst") {
-  //Public API that will echo messages sent to it back to the client
-  const [socketUrl, setSocketUrl] = useState(WS_URL);
-  const [messageHistory, setMessageHistory] = useState([]);
+  if (mode === "analyst") {
+    //Public API that will echo messages sent to it back to the client
+    const [socketUrl, setSocketUrl] = useState(WS_URL);
+    const [messageHistory, setMessageHistory] = useState([]);
 
-  const onWsMessage = useCallback(() => {
-    setLoadingResponse(true);
-  }, [setLoadingResponse]);
+    const onWsMessage = useCallback(() => {
+      setLoadingResponse(true);
+    }, [setLoadingResponse]);
 
-  const {sendMessage, lastMessage, readyState} = useWebSocket(socketUrl, {
-    shouldReconnect: (closeEvent) => true,
-    share: true,
-    reconnectAttempts: 10,
-    onMessage: () => {
-      onWsMessage();
-    },
-    //attemptNumber will be 0 the first time it attempts to reconnect, so this equation results in a reconnect pattern of 1 second, 2 seconds, 4 seconds, 8 seconds, and then caps at 10 seconds until the maximum number of attempts is reached
-    reconnectInterval: (attemptNumber) => {
-      console.log("reconnectInterval", attemptNumber);
-      Math.min(Math.pow(2, attemptNumber) * 1000, 10000)
-    }
-  });
+    const {sendMessage, lastMessage, readyState} = useWebSocket(socketUrl, {
+      shouldReconnect: (closeEvent) => true,
+      share: true,
+      reconnectAttempts: 10,
+      onMessage: () => {
+        onWsMessage();
+      },
+      //attemptNumber will be 0 the first time it attempts to reconnect, so this equation results in a reconnect pattern of 1 second, 2 seconds, 4 seconds, 8 seconds, and then caps at 10 seconds until the maximum number of attempts is reached
+      reconnectInterval: (attemptNumber) => {
+        console.log("reconnectInterval", attemptNumber);
+        Math.min(Math.pow(2, attemptNumber) * 1000, 10000)
+      }
+    });
 
-  const connectionStatus = {
-    [ReadyState.CONNECTING]: "Connecting",
-    [ReadyState.OPEN]: "Open",
-    [ReadyState.CLOSING]: "Closing",
-    [ReadyState.CLOSED]: "Closed",
-    [ReadyState.UNINSTANTIATED]: "Uninstantiated"
-  }[readyState];
+    const connectionStatus = {
+      [ReadyState.CONNECTING]: "Connecting",
+      [ReadyState.OPEN]: "Open",
+      [ReadyState.CLOSING]: "Closing",
+      [ReadyState.CLOSED]: "Closed",
+      [ReadyState.UNINSTANTIATED]: "Uninstantiated"
+    }[readyState];
 
-  useEffect(() => {
-    console.log('lastMessage', lastMessage);
+    useEffect(() => {
+      console.log('lastMessage', lastMessage);
 
-    if (lastMessage !== null && loadingResponse && (messageHistory.length ? messageHistory[messageHistory.length - 1] !== lastMessage.data : true)) {
-      setMessageHistory((prev) => prev.concat(lastMessage.data));
+      if (lastMessage !== null && loadingResponse && (messageHistory.length ? messageHistory[messageHistory.length - 1] !== lastMessage.data : true)) {
+        setMessageHistory((prev) => prev.concat(lastMessage.data));
 
-      const remHistory = chatHistory.length > 0 ? chatHistory.slice(0, -1) : [];
-      let _chatHistory = [...remHistory];
-
-      const chatResult = JSON.parse(lastMessage.data);
-
-      console.log("chatResult", chatResult);
-
-      handleChat(
-        chatResult,
-        setLoadingResponse,
-        setChatHistory,
-        remHistory,
-        _chatHistory
-      );
-    }
-  }, [lastMessage, chatHistory, setMessageHistory, setChatHistory]);
-
-  const sendCommand = useCallback(() => {
-    if (connectionStatus === "Open") {
-      sendMessage(command);
-    }
-  }, [command, connectionStatus, sendMessage]);
-
-  useEffect(() => {
-    sendCommand();
-  }, [command]);
-
-  useEffect(() => {
-    setConnStatus(connectionStatus);
-  }, [connectionStatus]);
-  // } else {
-  useEffect(() => {
-    async function fetchReply() {
-      console.log("fetchReply", mode);
-      if (mode === "analyst") {
-        //sendCommand();
-      } else {
-        const promptMessage = chatHistory.length > 0 ? chatHistory[chatHistory.length - 1] : null;
         const remHistory = chatHistory.length > 0 ? chatHistory.slice(0, -1) : [];
         let _chatHistory = [...remHistory];
 
-        if (!promptMessage || !promptMessage?.userMessage) {
-          setLoadingResponse(false);
-          return false;
-        }
-
-        const chatResult = await Workspace.sendChat(
-          workspace,
-          promptMessage.userMessage,
-          mode ?? "query"
-        );
+        const chatResult = JSON.parse(lastMessage.data);
 
         console.log("chatResult", chatResult);
 
@@ -116,13 +69,60 @@ export default function ChatContainer({workspace, knownHistory = []}) {
           _chatHistory
         );
       }
-    }
+    }, [lastMessage, chatHistory, setMessageHistory, setChatHistory]);
 
-    if (loadingResponse) {
-      fetchReply();
-    }
-  }, [loadingResponse, chatHistory, workspace, mode]);
-  // }
+    const sendCommand = useCallback(() => {
+      if (connectionStatus === "Open") {
+        sendMessage(command);
+      }
+    }, [command, connectionStatus, sendMessage]);
+
+    useEffect(() => {
+      sendCommand();
+    }, [command]);
+
+    useEffect(() => {
+      setConnStatus(connectionStatus);
+    }, [connectionStatus]);
+  } else {
+    useEffect(() => {
+      async function fetchReply() {
+        console.log("fetchReply", mode);
+        if (mode === "analyst") {
+          //sendCommand();
+        } else {
+          const promptMessage = chatHistory.length > 0 ? chatHistory[chatHistory.length - 1] : null;
+          const remHistory = chatHistory.length > 0 ? chatHistory.slice(0, -1) : [];
+          let _chatHistory = [...remHistory];
+
+          if (!promptMessage || !promptMessage?.userMessage) {
+            setLoadingResponse(false);
+            return false;
+          }
+
+          const chatResult = await Workspace.sendChat(
+            workspace,
+            promptMessage.userMessage,
+            mode ?? "query"
+          );
+
+          console.log("chatResult", chatResult);
+
+          handleChat(
+            chatResult,
+            setLoadingResponse,
+            setChatHistory,
+            remHistory,
+            _chatHistory
+          );
+        }
+      }
+
+      if (loadingResponse) {
+        fetchReply();
+      }
+    }, [loadingResponse, chatHistory, workspace, mode]);
+  }
 
   const handleMessageChange = (event) => {
     setMessage(event.target.value);
@@ -167,6 +167,7 @@ export default function ChatContainer({workspace, knownHistory = []}) {
         </div>
       </div>
       <PromptInput
+        analyst={mode === "analyst"}
         mode={mode}
         workspace={workspace}
         message={message}

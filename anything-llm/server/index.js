@@ -116,7 +116,7 @@ function executeSSHCommand(command, sshConnection, ws) {
               let chatResult = {
                 id: uuidv4(),
                 type: "textResponse",
-                textResponse: "Connection closed",
+                textResponse: "Connection close event",
                 sources: [],
                 error: null,
                 close: true

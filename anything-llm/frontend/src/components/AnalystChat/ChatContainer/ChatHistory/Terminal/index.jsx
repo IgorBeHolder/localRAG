@@ -3,7 +3,7 @@ import useWebSocket, {ReadyState} from "react-use-websocket";
 import {WS_URL} from "../../../../../utils/constants.js";
 import Terminal from "terminal-in-react/lib/bundle/terminal-react";
 import {showModal} from "../../../../../store/popupSlice.js";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {Menu} from "react-feather";
 
 const TerminalComponent = ({handleSubmit, toggleMenu, setTextCommand, children}) => {
