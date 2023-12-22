@@ -6,9 +6,12 @@ import react from "@vitejs/plugin-react";
 import dns from "dns";
 import {visualizer} from "rollup-plugin-visualizer";
 
-const envPath = path.resolve(__dirname, '../../client-files/.env');
-
-dotenv.config({path: envPath});
+if (process.env.NODE_ENV === "development") {
+  const envPath = path.resolve(__dirname, '../../client-files/.env');
+  dotenv.config({path: envPath});
+} else {
+  dotenv.config();
+}
 
 dns.setDefaultResultOrder("verbatim");
 

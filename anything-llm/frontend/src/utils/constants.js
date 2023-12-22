@@ -5,6 +5,8 @@ export const IS_CODER = process.env.IS_CODER === "TRUE" || false;
 export const CHAT_MAX_LENGTH = 16384;
 export const WS_URL = "ws://localhost:3030";
 
+console.log('IS_CODER', IS_CODER);
+
 export const MSG_STYLE = (user = false) => {
   return "p-2 xl:p-4 w-fit max-w-[75%] rounded-t-2xl " + (user ? "rounded-bl-2xl rounded-br-sm mr-2" : "rounded-br-2xl rounded-bl-sm ml-2");
 };
