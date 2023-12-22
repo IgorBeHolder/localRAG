@@ -69,7 +69,7 @@ function workspaceEndpoints(app) {
     "/workspace/:slug/upload",
     handleUploads.single("file"),
     async function (request, response) {
-      const originalname = fixEncoding(request.file.originalname);
+      const originalname = request.file.originalname;
       const processingOnline = await checkPythonAppAlive();
 
       if (!processingOnline) {

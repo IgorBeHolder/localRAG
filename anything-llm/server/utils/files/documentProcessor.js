@@ -49,7 +49,6 @@ async function processDocument(filename = "") {
 }
 
 async function processCsvDocument(filename = "") {
-  console.log("processCsvDocument", filename.substring(0, 30));
   if (!filename) return false;
   // send filename to python app:
   return await fetch(`${PYTHON_API}/save_csv`, {

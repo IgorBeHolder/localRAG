@@ -1,9 +1,11 @@
 import React, {useState, useEffect, memo} from "react";
+import {v4 as uuidv4} from "uuid";
 import Workspace from "../../../../../models/workspace";
 import truncate from "truncate";
 import {humanFileSize, milliToHms} from "../../../../../utils/numbers";
 import {CheckCircle, XCircle} from "react-feather";
 import {Grid} from "react-loading-icons";
+import {UPLOAD_FILENAME_LEN_LIMIT} from "../../../../../utils/constants.js";
 
 function FileUploadProgressComponent({
                                        slug,
@@ -21,7 +23,11 @@ function FileUploadProgressComponent({
     async function uploadFile() {
       const start = Number(new Date());
       const formData = new FormData();
-      formData.append("file", file, file.name);
+      const fileExt = file.name.split('.')?.pop() || "";
+      // const fileName = uuidv4() + (fileExt ? "." + fileExt : "");
+      const fileName = (file.name.replace(/\.[^/.]+$/, "")).slice(0, UPLOAD_FILENAME_LEN_LIMIT) + (fileExt ? "." + fileExt : "");
+
+      formData.append("file", file, fileName);
       const timer = setInterval(() => {
         setTimerMs(Number(new Date()) - start);
       }, 100);
