@@ -24,7 +24,7 @@ function format_messages(messages = []) {
 }
 
 const model_prefix = 
-  process.env.DEVICE == ('cpu') ? '/app/model-store/' : '/model-store/';
+  process.env.LLM_ENGINE == ('llama-cpp') ? '/app/model-store/' : '/model-store/';
 
 async function v1_chat_completions(messages, temperature) {
 
@@ -32,19 +32,24 @@ async function v1_chat_completions(messages, temperature) {
   const messages2string = messages;  // skip the formatting 
 
   const base_url = process.env.COMPLETION_MODEL_ENDPOINT;
+  const url = base_url + '/v1/chat/completions';
   const repeat_penalty = process.env.R_PENALTY;
   const top_p = process.env.TOP_P;
-  console.log('v1_chat_completions: *** base_url:', base_url);
   const compl_model = process.env.COMPLETION_MODEL_NAME;
-  console.log('v1_chat_completions: *** completion_model:', compl_model);
+
+  
+  console.log('v1_chat_completions: *** url:', url);
+  console.log('v1_chat_completions: *** completion_model:', compl_model + ' (model_prefix: ' + model_prefix + ')');
   console.log('v1_chat_completions: *** temperature:', temperature);
+  console.log('v1_chat_completions: *** repeat_penalty:', repeat_penalty);
+  console.log('v1_chat_completions: *** top_p:', top_p);
+
   console.log('v1_chat_completions: *** messages:', messages2string);
-  const url = base_url + '/v1/chat/completions';
+  
   const payload = {
     // add the prefix to the model name like '/app'
     "model": model_prefix + compl_model,
     "messages": messages2string,
-    // "max_tokens": 512,
     "temperature": temperature,
     "top_p": top_p,
     // "presence_penalty": 0,

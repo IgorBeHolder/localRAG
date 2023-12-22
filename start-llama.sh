@@ -13,12 +13,19 @@ container_id=$(docker ps -a -q -f name=^/llm-server$)
 if [ ! -z "$container_id" ]; then
     echo "Stopping existing container with name 'llm-server'..."
     docker stop $container_id
+    docker rm -f $container_id
 fi
 
-cd llama-cpp-python/docker/simple &&
-# todo revert
-#git checkout main &&
-docker-compose -p localrag up -d --build
-# docker-compose -p localrag build --no-cache
+if [ $DEVICE="cpu" ]; then
+    cd llama-cpp-python/docker/simple
+    echo "Building the LLAMA powered for CPU container..."
+
+    docker-compose -p localrag up -d --build
+else
+    cd llama-cpp-python/docker/cuda_simple
+    echo "Building the LLAMA powered for CUDA container..."
+
+    docker-compose -p localrag up -d --build
+fi
 
 )
