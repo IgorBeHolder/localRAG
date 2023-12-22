@@ -25,4 +25,6 @@ RUN CMAKE_ARGS="-DLLAMA_CUBLAS=on" pip install llama-cpp-python
 # RUN CMAKE_ARGS="-DLLAMA_CUBLAS=on" FORCE_CMAKE=1 pip install llama-cpp-python[server]
 
 # Run the server
-CMD python3 -m llama_cpp.server
+# CMD python3 -m llama_cpp.server
+COPY --chmod=755 run.sh /run.sh
+CMD ["/bin/sh", "/run.sh"]
