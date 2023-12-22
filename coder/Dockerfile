@@ -58,7 +58,7 @@ RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/
 
 EXPOSE 22
 
-RUN mkdir /home/coder/content
+RUN mkdir /home/content
 COPY interpreter/terminal_interface/config.yaml \
     /usr/local/lib/python3.11/site-packages/interpreter/terminal_interface/config.yaml
 
