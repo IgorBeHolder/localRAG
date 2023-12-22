@@ -1,5 +1,6 @@
 export const API_BASE = import.meta.env.VITE_API_BASE || "/api";
-export const PYTHON_API = `http://${process.env.NODE_ENV === "production" ? "0.0.0.0" : "localhost"}:3005`;
+export const PYTHON_API = "http://localhost:3005";
+export const UPLOAD_FILENAME_LEN_LIMIT = 68;
 export const IS_CODER = import.meta.env.VITE_IS_CODER === "TRUE" || false;
 export const CHAT_MAX_LENGTH = 16384;
 export const WS_URL = "ws://localhost:3030";
