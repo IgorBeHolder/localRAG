@@ -10,7 +10,7 @@ sudo chmod 755 "$BASE_DIR"
 # Download files and set permissions
 declare -a files=(
   ".gitattributes" "README.md" "config.json" 
-  "mixtral-8x7b-instruct-v0.1.Q4_K_M.gguf"
+  "mixtral-8x7b-instruct-v0.1.Q5_K_M.gguf"
 )
 
 for file in "${files[@]}"
