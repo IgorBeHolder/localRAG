@@ -9,7 +9,6 @@ import {safeTagsReplace} from "../../../utils/functions.js";
 
 export default function ChatContainer({workspace, knownHistory = []}) {
   const [message, setMessage] = useState("");
-  const [connStatus, setConnStatus] = useState("");
   const [chatHistory, setChatHistory] = useState(knownHistory);
   const [command, setCommand] = useState("");
 
@@ -97,31 +96,6 @@ export default function ChatContainer({workspace, knownHistory = []}) {
       [ReadyState.UNINSTANTIATED]: "Uninstantiated"
     }[readyState];
 
-    // useEffect(() => {
-    //   console.log('lastMessage', lastMessage);
-    //
-    //   if (lastMessage !== null && (messageHistory.length ? messageHistory[messageHistory.length - 1] !== lastMessage.data : true)) {
-    //     setMessageHistory((prev) => prev.concat(lastMessage.data));
-    //
-    //     const remHistory = chatHistory.length > 0 ? chatHistory.slice(0, -1) : [];
-    //     let _chatHistory = [...remHistory];
-    //
-    //     let chatResult = JSON.parse(lastMessage.data);
-    //
-    //     chatResult.close = newWsMessage;
-    //
-    //     console.log("chatResult", chatResult);
-    //
-    //     handleChat(
-    //       chatResult,
-    //       setLoadingResponse,
-    //       setChatHistory,
-    //       remHistory,
-    //       _chatHistory
-    //     );
-    //   }
-    // }, [lastMessage, chatHistory, setMessageHistory, setChatHistory, newWsMessage]);
-
     const sendCommand = useCallback(() => {
       if (connectionStatus === "Open") {
         sendMessage(command);
@@ -132,9 +106,6 @@ export default function ChatContainer({workspace, knownHistory = []}) {
       sendCommand();
     }, [command]);
 
-    useEffect(() => {
-      setConnStatus(connectionStatus);
-    }, [connectionStatus]);
   } else {
     useEffect(() => {
       async function fetchReply() {
@@ -209,6 +180,35 @@ export default function ChatContainer({workspace, knownHistory = []}) {
 
     if (mode === "analyst") {
       setNewWsMessage(true);
+      setCommand(message);
+    } else {
+      setLoadingResponse(true);
+    }
+  };
+
+  return (
+    <div
+      className="main-content flex-1 lg:max-w-[var(--max-content)] relative bg-white dark:bg-black-900 lg:h-full"
+    >
+      <div className="main-box relative flex flex-col w-full h-full overflow-y-auto p-[16px] lg:p-[32px] !pb-0">
+        <div className="flex flex-col flex-1 w-full bg-white shadow-md relative">
+          <ChatHistory mode={mode} history={chatHistory} workspace={workspace} analyst={mode === "analyst"}/>
+        </div>
+      </div>
+      <PromptInput
+        analyst={mode === "analyst"}
+        resetChatSSH={resetChatSSH}
+        mode={mode}
+        workspace={workspace}
+        message={message}
+        submit={handleSubmit}
+        onChange={handleMessageChange}
+        inputDisabled={loadingResponse}
+        buttonDisabled={loadingResponse}
+      />
+    </div>
+  );
+}
       setCommand(message);
     } else {
       setLoadingResponse(true);
