@@ -43,7 +43,8 @@ def setup_openai_coding_llm(interpreter):
         # Add OpenAI's recommended function message
         messages[0][
             "content"
-        ] += "\n\nOnly use the function you have been provided with."
+        ] += "\n\nИспользуйте только ту функцию, которая вам предоставлена."
+        # ] += "\n\nOnly use the function you have been provided with."
 
         # Seperate out the system_message from messages
         # (We expect the first message to always be a system_message)
