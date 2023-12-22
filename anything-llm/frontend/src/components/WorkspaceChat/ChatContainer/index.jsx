@@ -36,7 +36,7 @@ export default function ChatContainer({workspace, knownHistory = []}) {
         return m;
       });
 
-      let _chatHistory = [...remHistory];
+      let updatedChatHistory = [...remHistory];
 
       let chatResult = JSON.parse(msg.data);
 
