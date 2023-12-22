@@ -3,7 +3,7 @@ export const PYTHON_API = `http://${process.env.VITE_USE_DOCKER === "FALSE" ? "0
 export const UPLOAD_FILENAME_LEN_LIMIT = 68;
 export const IS_CODER = true; // process.env.IS_CODER === "TRUE" || false;
 export const CHAT_MAX_LENGTH = 16384;
-export const WS_URL = "ws://localhost:" + (process.env.WS_PORT || process.env.VITE_WS_PORT || 3006);
+export const WS_URL = process.env.VITE_USE_DOCKER === "FALSE" ? ("ws://localhost:" + (process.env.WS_PORT || process.env.VITE_WS_PORT || 3006)) : "ws://coder:3006";
 
 console.log('IS_CODER', IS_CODER, 'PYTHON_API', PYTHON_API, 'WS_URL', WS_URL);
 
