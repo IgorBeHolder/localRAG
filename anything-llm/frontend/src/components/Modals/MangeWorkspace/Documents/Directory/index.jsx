@@ -21,7 +21,11 @@ export default function Directory({
   const [isExpanded, toggleExpanded] = useState(false);
   const [showDetails, toggleDetails] = useState(false);
   const [showZap, setShowZap] = useState(false);
-  const handleDelete = async (name, meta) => {
+  import React, {useState, useCallback} from "react";
+  
+  //...
+  
+  const handleDelete = useCallback(async (name, meta) => {
     if (
       !window.confirm(
         "Вы уверены, что хотите удалить этот документ?\nДля этого вам потребуется повторно загрузить и повторно встроить его.\nЭтот документ будет удален из любого рабочего пространства, которая в данный момент ссылается на него.\nЭто действие необратимо."
@@ -30,11 +34,7 @@ export default function Directory({
       return false;
     document?.getElementById(meta?.id)?.remove();
     await System.deleteDocument(name, meta);
-  };
-
-  if (files.type === "folder") {
-    return (
-      <div style={{marginLeft: nested}} className="">
+  }, []);
         <div
           className={`flex items-center p-2 hover:bg-gray-100 gap-x-2 text-gray-800 dark:text-stone-200 dark:hover:bg-stone-800 px-2 rounded-lg`}
         >
