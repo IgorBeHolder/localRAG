@@ -25,6 +25,10 @@ services:
       - "../../../model-store:/app/model-store" 
     ports:
       - ${MM_PORT}:${MM_PORT}
+    ulimits:
+      memlock:
+        soft: 17179869184
+        hard: 17179869184            
     deploy:
       resources:
         reservations:

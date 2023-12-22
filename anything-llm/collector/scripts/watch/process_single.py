@@ -9,9 +9,8 @@ RESERVED = ['__HOTDIR__.md']
 # only occupy additional disk space.
 def process_single(directory, target_doc):
   if os.path.isdir(f"{directory}/{target_doc}") or target_doc in RESERVED: return (False, "Not a file")
-  print(f"Processing {target_doc}...")
-  # original_str.encode('latin1').decode('utf-8')
-  if os.path.exists(f"{directory}/{target_doc}") is False:
+  
+  if os.path.exists(f"{directory}/{target_doc}") is False: 
     print(f"{directory}/{target_doc} does not exist.")
     return (False, f"{directory}/{target_doc} does not exist.")
 
