@@ -67,7 +67,7 @@ function chatEndpoints(app) {
         await Telemetry.sendTelemetry("sent_chat", {
           multiUserMode: multiUserMode(response),
           LLMSelection: process.env.LLM_PROVIDER || "openai",
-          VectorDbSelection: process.env.VECTOR_DB || "pinecone",
+          VectorDbSelection: process.env.VECTOR_DB || "lancedb",
         });
         response.status(200).json({ ...result });
       } catch (e) {

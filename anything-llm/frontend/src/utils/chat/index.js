@@ -9,8 +9,8 @@ export default function handleChat(
   remHistory,
   _chatHistory
 ) {
-  const {uuid, textResponse: text, type, sources = [], error, close} = chatResult;
-  const textResponse = safeTagsReplace(text);
+  const {uuid, textResponse: text, type, sources = [], error, close, typeWriter} = chatResult;
+  const textResponse = (text);
 
   if (type === "abort") {
     setChatHistory([
@@ -40,6 +40,7 @@ export default function handleChat(
       {
         uuid,
         content: textResponse,
+        typeWriter: false,
         role: "assistant",
         sources,
         closed: close,
@@ -50,6 +51,7 @@ export default function handleChat(
     _chatHistory.push({
       uuid,
       content: textResponse,
+      typeWriter: typeWriter,
       role: "assistant",
       sources,
       closed: close,

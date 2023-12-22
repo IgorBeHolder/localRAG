@@ -5,12 +5,8 @@
 
 const mode = process.env.MODE;
 
-let PYTHON_API;
-if (mode == "production") {
-  PYTHON_API = "http://localhost:3005";  // doc server running in docker container
-} else {
-  PYTHON_API = "http://0.0.0.0:3005";  //  doc server running on host machine
-}
+let PYTHON_API = mode === "production" ? "http://localhost:3005" : "http://0.0.0.0:3005";
+//                   doc server running   in docker container       on host machine
 
 console.log("PYTHON_API:*********************", PYTHON_API);
 
@@ -39,7 +35,7 @@ async function processDocument(filename = "") {
       "Content-Type": "application/json"
     },
     // limit filename to 30 characters
-    body: JSON.stringify({ filename })
+    body: JSON.stringify({filename})
   })
     .then((res) => {
       if (!res.ok) throw new Error("Запрос не удался");
@@ -48,7 +44,7 @@ async function processDocument(filename = "") {
     .then((res) => res)
     .catch((e) => {
       console.log(e.message);
-      return { success: false, reason: e.message };
+      return {success: false, reason: e.message};
     });
 }
 
@@ -58,7 +54,7 @@ async function processCsvDocument(filename = "") {
   // send filename to python app:
   return await fetch(`${PYTHON_API}/save_csv`, {
     method: "POST",
-    body: JSON.stringify({ filename })
+    body: JSON.stringify({filename})
   })
     .then((res) => {
       if (!res.ok) throw new Error("Запрос не удался");
@@ -67,7 +63,7 @@ async function processCsvDocument(filename = "") {
     .then((res) => res)
     .catch((e) => {
       console.log(e.message);
-      return { success: false, reason: e.message };
+      return {success: false, reason: e.message};
     });
 }
 
