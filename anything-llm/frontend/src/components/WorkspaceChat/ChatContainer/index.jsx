@@ -30,12 +30,18 @@ export default function ChatContainer({workspace, knownHistory = []}) {
 
       console.log('onWsMessage', msg, chatHistory);
 
-      const remHistory = [];
+      const remHistory = (chatHistory.length > 0 ? chatHistory.slice(0, -1) : []).map(m => {
+        m.typeWriter = false;
+        m.content = safeTagsReplace(m.content);
+        return m;
+      });
+
       let _chatHistory = [...remHistory];
 
       let chatResult = JSON.parse(msg.data);
 
       chatResult.typeWriter = true;
+      chatResult.textResponse = chatResult.textResponse.trim();
 
       console.log("chatResult", chatResult, _chatHistory);
 
@@ -183,6 +189,8 @@ export default function ChatContainer({workspace, knownHistory = []}) {
     event.preventDefault();
 
     if (!message || message === "") return false;
+
+    console.log('handleSubmit', message, chatHistory);
 
     const prevChatHistory = [
       ...chatHistory,

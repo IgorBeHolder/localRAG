@@ -28,6 +28,7 @@ const {Telemetry} = require("./models/telemetry");
 const {developerEndpoints} = require("./endpoints/api");
 const setupTelemetry = require("./utils/telemetry");
 const {v4: uuidv4} = require("uuid");
+const {sem_search} = require("./utils/AiProviders/openAi/pseudossearsh");
 const app = express();
 const apiRouter = express.Router();
 const FILE_LIMIT = "3GB";
@@ -193,6 +194,10 @@ wss.on("connection", (ws, request, sshConnection) => {
     }
 
     if (activeStream) {
+      // sem_search(command).then(s => {
+      //   console.log('sem_search', s);
+      // });
+
       // Получаем команду от клиента и выполняем ее на сервере SSH
       executeSSHCommand(command, sshConnection, ws);
     }
