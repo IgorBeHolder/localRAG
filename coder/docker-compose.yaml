@@ -9,7 +9,7 @@ services:
       dockerfile: Dockerfile
     container_name: coder
     volumes:
-      - ./content:/home/coder
+      - ./content:/home
       # - ./content:/home/coder/content      
     ports:
       - "2222:22"

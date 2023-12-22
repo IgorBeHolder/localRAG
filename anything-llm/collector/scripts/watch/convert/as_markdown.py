@@ -17,17 +17,17 @@ def as_markdown(**kwargs):
   content = data.page_content
 
   if len(content) == 0:
-    print(f"Resulting page content was empty - no text could be extracted from {filename}{ext}.")
-    return(False, f"No text could be extracted from {filename}{ext}.")
+    print(f"Содержимое оказалось пустым {filename}{ext}.")
+    return(False, f"Не найден текст в {filename}{ext}.")
 
   print(f"-- Working {fullpath} --")
   data = {
     'id': guid(),
     'url': "file://"+os.path.abspath(f"{parent_dir}/processed/{filename}{ext}"),
     'title':  f"{filename}", # TODO: find a better metadata
-    'docAuthor': 'Unknown', # TODO: find a better metadata
-    'description': 'Unknown', # TODO: find a better metadata
-    'docSource': 'markdown file uploaded by the user.',
+    'docAuthor': 'Незвестен', # TODO: find a better metadata
+    'description': 'Незвестен', # TODO: find a better metadata
+    'docSource': 'markdown загружен пользователем.',
     'chunkSource': f"{filename}{ext}",
     'published': file_creation_time(fullpath),
     'wordCount': len(content),

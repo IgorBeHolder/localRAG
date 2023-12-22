@@ -17,17 +17,17 @@ def as_docx(**kwargs):
   content = data.page_content
 
   if len(content) == 0:
-    print(f"Resulting text content was empty for {filename}{ext}.")
-    return(False, f"No text content found in {filename}{ext}")
+    print(f"Содержимое страницы было пустым: {filename}{ext}.")
+    return(False, f"Текст не найлен: {filename}{ext}")
 
   print(f"-- Working {fullpath} --")
   data = {
     'id': guid(),
     'url': "file://"+os.path.abspath(f"{parent_dir}/processed/{filename}{ext}"),
     'title': f"{filename}{ext}",
-    'docAuthor': 'Unknown', # TODO: Find a better author
-    'description': 'Unknown', # TODO: Find a better bescription
-    'docSource': 'Docx Text file uploaded by the user.',
+    'docAuthor': 'Неизвестен', # TODO: Find a better author
+    'description': 'Неизвестен', # TODO: Find a better bescription
+    'docSource': 'Docx Text файл загружен пользователем.',
     'chunkSource': f"{filename}{ext}",
     'published': file_creation_time(fullpath),
     'wordCount': len(content),
@@ -53,17 +53,17 @@ def as_odt(**kwargs):
   content = data.page_content
 
   if len(content) == 0:
-    print(f"Resulting text content was empty for {filename}{ext}.")
-    return(False, f"No text content found in {filename}{ext}")
+    print(f"Содержимое оказалось пустым {filename}{ext}.")
+    return(False, f"В {filename}{ext} текст не найден")
 
   print(f"-- Working {fullpath} --")
   data = {
     'id': guid(),
     'url': "file://"+os.path.abspath(f"{parent_dir}/processed/{filename}{ext}"),
     'title': f"{filename}{ext}",
-    'author': 'Unknown', # TODO: Find a better author
-    'description': 'Unknown', # TODO: Find a better bescription
-    'docSource': 'ODT Text file uploaded by the user.',
+    'author': 'Незвестен', # TODO: Find a better author
+    'description': 'Незвестен', # TODO: Find a better bescription
+    'docSource': 'ODT Text загружен пользователем.',
     'chunkSource': f"{filename}{ext}",
     'published': file_creation_time(fullpath),
     'wordCount': len(content),
