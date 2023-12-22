@@ -62,19 +62,13 @@ RUN mkdir /home/content
 COPY interpreter/terminal_interface/config.yaml \
     /usr/local/lib/python3.11/site-packages/interpreter/terminal_interface/config.yaml
 
-COPY oi-venv/lib/python3.11/site-packages/interpreter/terminal_interface/terminal_interface.py \
+COPY interpreter/terminal_interface/terminal_interface.py \
     /usr/local/lib/python3.11/site-packages/interpreter/terminal_interface/terminal_interface.py
 
-COPY oi-venv/lib/python3.11/site-packages/interpreter/core/llm/setup_text_llm.py \
-    /usr/local/lib/python3.11/site-packages/interpreter/core/llm/setup_text_llm.py
-
-COPY oi-venv/lib/python3.11/site-packages/interpreter/core/llm/setup_openai_coding_llm.py \
+COPY interpreter/core/llm/setup_openai_coding_llm.py \
     /usr/local/lib/python3.11/site-packages/interpreter/core/llm/setup_openai_coding_llm.py
 
-COPY oi-venv/lib/python3.11/site-packages/interpreter/core/llm/setup_openai_coding_llm.py \
-    /usr/local/lib/python3.11/site-packages/interpreter/core/llm/setup_openai_coding_llm.py
-
-COPY oi-venv/lib/python3.11/site-packages/interpreter/core/llm/convert_to_coding_llm.py \
+COPY interpreter/core/llm/convert_to_coding_llm.py \
     /usr/local/lib/python3.11/site-packages/interpreter/core/llm/convert_to_coding_llm.py
 
 

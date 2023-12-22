@@ -2,10 +2,10 @@ from ..utils.convert_to_openai_messages import convert_to_openai_messages
 from .setup_text_llm import setup_text_llm
 
 
-def convert_to_coding_llm(text_llm, debug_mode=False, vision=False):
+def convert_to_coding_llm(text_llm, debug_mode=False):
     """
     Takes a text_llm
-    returns an OI Coding LLM.
+    returns an OI Coding LLM (a generator that takes OI messages and streams deltas with `message`, 'language', and `code`).
     """
 
     def coding_llm(messages):
@@ -14,8 +14,8 @@ def convert_to_coding_llm(text_llm, debug_mode=False, vision=False):
         # System message method:
         assert messages[0]["role"] == "system"
         messages[0][
-            "content"
-        ] += "\nTo execute code on the user's machine, write a markdown code block. Specify the language after the ```. You will receive the output. Use python."
+            "message"
+        ] += "\nЧтобы выполнить код на компьютере, напишите блок кода формате markdown. Укажите язык прогаммирования после ```. Вы получите результат. Используйте только python."
 
         # Gaslight method (DISABLED):
         '''
@@ -48,9 +48,15 @@ def convert_to_coding_llm(text_llm, debug_mode=False, vision=False):
             messages.append({"role": "assistant", "message": gaslight})
         '''
 
-        messages = convert_to_openai_messages(
-            messages, function_calling=False, vision=vision
-        )
+        # If it tried to use Jupyter, let it know.
+        if "code" in messages[-1]:
+            if any([line.startswith("!") for line in messages[-1]["code"].split("\n")]):
+                if "syntax" in messages[-1]["output"].lower():  # Detect error
+                    messages[-1][
+                        "output"
+                    ] += "\nRemember you are not in a Jupyter notebook. Run shell by writing a markdown shell codeblock, not '!'."
+
+        messages = convert_to_openai_messages(messages, function_calling=False)
 
         inside_code_block = False
         accumulated_block = ""
@@ -94,12 +100,20 @@ def convert_to_coding_llm(text_llm, debug_mode=False, vision=False):
                         # Removes hallucinations containing spaces or non letters.
                         language = "".join(char for char in language if char.isalpha())
 
-                # If we do have a `language`, send it out
-                if language:
-                    yield {"type": "code", "format": language, "content": content}
+                    output = {"language": language}
+
+                    # If we recieved more than just the language in this chunk, send that
+                    if content.split("\n")[1]:
+                        output["code"] = content.split("\n")[1]
+
+                    yield output
+
+                # If we do have a `language`, send the output as code
+                elif language:
+                    yield {"code": content}
 
             # If we're not in a code block, send the output as a message
             if not inside_code_block:
-                yield {"type": "message", "content": content}
+                yield {"message": content}
 
     return coding_llm
