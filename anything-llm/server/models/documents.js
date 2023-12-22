@@ -70,7 +70,7 @@ const Document = {
 
     await Telemetry.sendTelemetry("documents_embedded_in_workspace", {
       LLMSelection: process.env.LLM_PROVIDER || "openai",
-      VectorDbSelection: process.env.VECTOR_DB || "pinecone",
+      VectorDbSelection: process.env.VECTOR_DB || "lancedb",
     });
     return;
   },
@@ -101,7 +101,7 @@ const Document = {
 
     await Telemetry.sendTelemetry("documents_removed_in_workspace", {
       LLMSelection: process.env.LLM_PROVIDER || "openai",
-      VectorDbSelection: process.env.VECTOR_DB || "pinecone",
+      VectorDbSelection: process.env.VECTOR_DB || "lancedb",
     });
     return true;
   },

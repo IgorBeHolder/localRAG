@@ -27,7 +27,7 @@ function workspaceEndpoints(app) {
       await Telemetry.sendTelemetry("workspace_created", {
         multiUserMode: multiUserMode(response),
         LLMSelection: process.env.LLM_PROVIDER || "openai",
-        VectorDbSelection: process.env.VECTOR_DB || "pinecone"
+        VectorDbSelection: process.env.VECTOR_DB || "lancedb"
       });
       response.status(200).json({workspace, message});
     } catch (e) {
