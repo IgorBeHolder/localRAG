@@ -7,3 +7,10 @@ collector/venv/scripts/activate
 { set FLASK_ENV = "development" && set FLASK_APP="wsgi.py" && cd ./collector && flask run --host=0.0.0.0 --port=3005; }
 # wait -n
 # exit $?
+
+# powershell
+# cd .\anything-llm\collector\
+# venv/scripts/activate
+# $env:FLASK_ENV = "production"
+# $env:FLASK_APP="wsgi.py"
+# flask run --host=0.0.0.0 --port=3005

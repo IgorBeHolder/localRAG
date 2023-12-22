@@ -144,7 +144,7 @@ export default function Directory({
             className="w-full items-center flex cursor-pointer"
             onClick={() => toggleDetails(!showDetails)}
           >
-            <h3 className="text-sm break-all">{fixEncoding(String(meta.title))}</h3>
+            <h3 className="text-sm break-all">{fixEncoding(String(meta.chunkSource || meta.title))}</h3>
             <br/>
           </div>
         </div>
