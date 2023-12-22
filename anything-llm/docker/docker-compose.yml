@@ -24,7 +24,8 @@ services:
       - "../collector/outputs/:/app/collector/outputs"
     user: "${ARG_UID}:${ARG_GID}"
     ports:
-      - "3001:3001"
+      - 3001:3001
+      - 3006:3006
     networks:
       - llm-net
 networks:
