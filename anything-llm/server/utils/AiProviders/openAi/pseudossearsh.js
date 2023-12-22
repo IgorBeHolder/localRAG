@@ -11,7 +11,7 @@ async function sem_search(text_prompt) {
 
   return new Promise((res, rej) => {
     // search for the response (value from da-osp.txt)
-    fs.readFile("../../coder/interpreter/terminal_interface/da-osp.txt", "utf8", (err, data) => {
+    const data = await fs.promises.readFile("../../coder/interpreter/terminal_interface/da-osp.txt", "utf8");
       if (err) {
         rej(err);
       }
