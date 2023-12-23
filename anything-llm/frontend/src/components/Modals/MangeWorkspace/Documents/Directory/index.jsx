@@ -85,8 +85,6 @@ export default function Directory({
 
   const {name, type: _type, ...meta} = files;
 
-  console.log('files', files);
-
   return (
     <div className="ml-[20px] my-2" id={meta.id}>
       <div className="flex items-center">

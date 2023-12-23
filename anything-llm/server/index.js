@@ -1,11 +1,14 @@
 process.env.NODE_ENV === "development"
   ? require("dotenv").config({path: `.env.${process.env.NODE_ENV}`})
   : require("dotenv").config();
+console.log("*** WS_PORT", process.env.WS_PORT);
 console.log("*** IS_CODER", process.env.IS_CODER);
 console.log("*** COMPLETION_MODEL_ENDPOINT", process.env.COMPLETION_MODEL_ENDPOINT);
 console.log("*** COMPLETION_MODEL_NAME", process.env.COMPLETION_MODEL_NAME);
 console.log("*** EMBEDDING_MODEL_ENDPOINT", process.env.EMBEDDING_MODEL_ENDPOINT);
 console.log("*** EMBEDDING_MODEL_NAME", process.env.EMBEDDING_MODEL_NAME);
+
+const WS_PORT = process.env.WS_PORT || 3006;
 
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -214,10 +217,10 @@ wss.on("connection", (ws, request, sshConnection) => {
   });
 });
 
-server.listen(3030, () => {
-  if (process.env.NODE_ENV === "development") {
-    console.log(`##################### WS Server is running on port ${3030}`);
-  }
+server.listen(WS_PORT, () => {
+  // if (process.env.NODE_ENV === "development") {
+  console.log(`##################### WS Server is running on port ${WS_PORT}`);
+  // }
 });
 
 systemEndpoints(apiRouter);

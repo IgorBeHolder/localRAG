@@ -1,4 +1,4 @@
-import {useState, useEffect, useCallback} from "react";
+import {useCallback, useEffect, useState} from "react";
 import ChatHistory from "./ChatHistory";
 import PromptInput from "./PromptInput";
 import Workspace from "../../../models/workspace";
@@ -53,22 +53,22 @@ export default function ChatContainer({workspace, knownHistory = []}) {
 
           console.log('lastMessage', lastMessage, _chatHistory);
         } else {
-          handleChat(
-            chatResult,
-            setLoadingResponse,
-            setChatHistory,
-            remHistory,
-            _chatHistory
-          );
+          // handleChat(
+          //   chatResult,
+          //   setLoadingResponse,
+          //   setChatHistory,
+          //   remHistory,
+          //   _chatHistory
+          // );
         }
       } else {
-        handleChat(
-          chatResult,
-          setLoadingResponse,
-          setChatHistory,
-          remHistory,
-          _chatHistory
-        );
+        // handleChat(
+        //   chatResult,
+        //   setLoadingResponse,
+        //   setChatHistory,
+        //   remHistory,
+        //   _chatHistory
+        // );
       }
 
       setChatHistory(_chatHistory);
@@ -137,12 +137,18 @@ export default function ChatContainer({workspace, knownHistory = []}) {
     }, [connectionStatus]);
   } else {
     useEffect(() => {
+      const promptMessage = chatHistory.length > 0 ? chatHistory[chatHistory.length - 1] : null;
+
       async function fetchReply() {
-        console.log("fetchReply", mode);
-        if (mode === "analyst") {
-          //sendCommand();
-        } else {
-          const promptMessage = chatHistory.length > 0 ? chatHistory[chatHistory.length - 1] : null;
+        return await Workspace.sendChat(
+          workspace,
+          promptMessage.userMessage,
+          mode ?? "query"
+        );
+      }
+
+      if (loadingResponse && mode !== "analyst") {
+        fetchReply().then(chatResult => {
           const remHistory = chatHistory.length > 0 ? chatHistory.slice(0, -1) : [];
           let _chatHistory = [...remHistory];
 
@@ -151,14 +157,6 @@ export default function ChatContainer({workspace, knownHistory = []}) {
             return false;
           }
 
-          const chatResult = await Workspace.sendChat(
-            workspace,
-            promptMessage.userMessage,
-            mode ?? "query"
-          );
-
-          console.log("chatResult", chatResult);
-
           handleChat(
             chatResult,
             setLoadingResponse,
@@ -166,11 +164,7 @@ export default function ChatContainer({workspace, knownHistory = []}) {
             remHistory,
             _chatHistory
           );
-        }
-      }
-
-      if (loadingResponse) {
-        fetchReply();
+        });
       }
     }, [loadingResponse, chatHistory, workspace, mode]);
   }

@@ -19,18 +19,19 @@ export default function WorkspaceChat({loading, workspace, analystRoute}) {
 
   useEffect(() => {
     async function getHistory() {
-      if (loading) return;
-      if (!workspace?.slug) {
-        setLoadingHistory(false);
-        return false;
-      }
-
-      const chatHistory = await Workspace.chatHistory(workspace.slug);
-      setHistory(chatHistory);
-      setLoadingHistory(false);
+      return await Workspace.chatHistory(workspace.slug);
     }
 
-    getHistory();
+    if (!loading) {
+      if (!workspace?.slug || analystRoute || window.localStorage.getItem(storageKey) === "query") {
+        setLoadingHistory(false);
+      } else {
+        getHistory().then(chatHistory => {
+          setHistory(chatHistory);
+          setLoadingHistory(false);
+        });
+      }
+    }
   }, [workspace, loading]);
 
   if (loadingHistory) {
