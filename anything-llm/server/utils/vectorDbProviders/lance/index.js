@@ -311,10 +311,11 @@ const LanceDb = {
       queryVector
     );
     // FORMING THE MEMORY LIST FOR THE QUERY
-    const { BOS, EOS, assistance_prefix, end_of_turn, user_prefix } = prompt_templates();
+    // const { BOS, EOS, assistance_prefix, end_of_turn, user_prefix } = prompt_templates();
     const sys_prompt = {
       role: "system",
-      content: BOS + workspace.openAiPrompt
+      // content: BOS + workspace.openAiPrompt
+      content: workspace.openAiPrompt
     };
 
     const prompt = {
