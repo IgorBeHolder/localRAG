@@ -4,6 +4,9 @@ import {Loader, Menu, X} from "react-feather";
 import {CHAT_MAX_LENGTH, IS_CODER} from "../../../../utils/constants.js";
 import {showModal} from "../../../../store/popupSlice.js";
 import {useDispatch} from "react-redux";
+import OutsideClickHandler from "react-outside-click-handler";
+
+const MENU_ITEM_STYLE = "p-2 text-slate-500 bg-transparent rounded-md hover:bg-gray-200 dark:hover:bg-stone-500 dark:hover:text-slate-200";
 
 export default function PromptInput({
                                       analyst = false,
@@ -108,7 +111,7 @@ export default function PromptInput({
             onClick={() => {
               uploadFile();
             }}
-            className="p-2 text-slate-500 bg-transparent rounded-md hover:bg-gray-200 dark:hover:bg-stone-500 dark:hover:text-slate-200"
+            className={MENU_ITEM_STYLE}
           >
             <span>Загрузить файл</span>
           </button>
@@ -116,7 +119,7 @@ export default function PromptInput({
             onClick={() => {
               resetChat();
             }}
-            className="p-2 text-slate-500 bg-transparent rounded-md hover:bg-gray-200 dark:hover:bg-stone-500 dark:hover:text-slate-200"
+            className={MENU_ITEM_STYLE}
           >
             <span>Сброс чата</span>
           </button>
@@ -124,7 +127,7 @@ export default function PromptInput({
             onClick={() => {
               openFile();
             }}
-            className="p-2 text-slate-500 bg-transparent rounded-md hover:bg-gray-200 dark:hover:bg-stone-500 dark:hover:text-slate-200"
+            className={MENU_ITEM_STYLE}
           >
             <span>Открыть файл</span>
           </button>
@@ -132,7 +135,7 @@ export default function PromptInput({
             onClick={() => {
               closeChat();
             }}
-            className="p-2 text-slate-500 bg-transparent rounded-md hover:bg-gray-200 dark:hover:bg-stone-500 dark:hover:text-slate-200"
+            className={MENU_ITEM_STYLE}
           >
             <span>Закрыть</span>
           </button>
@@ -142,17 +145,23 @@ export default function PromptInput({
           className="relative flex flex-col gap-y-1 bg-white dark:bg-black-900 lg:w-3/4 w-full mx-auto"
         >
           <div className="flex items-center py-2 px-4 rounded-lg">
-            <CommandMenu
-              workspace={workspace}
-              show={showMenu}
-              handleClick={setTextCommand}
-              hide={() => setShowMenu(false)}
-              mode={mode}
-            />
+            <OutsideClickHandler
+              onOutsideClick={() => {
+                setShowMenu(false);
+              }}
+            >
+              <CommandMenu
+                workspace={workspace}
+                show={showMenu}
+                handleClick={setTextCommand}
+                hide={() => setShowMenu(false)}
+                mode={mode}
+              />
+            </OutsideClickHandler>
             <button
               onClick={() => setShowMenu(!showMenu)}
               type="button"
-              className="p-2 text-slate-500 bg-transparent rounded-md hover:bg-gray-200 dark:hover:bg-stone-500 dark:hover:text-slate-200"
+              className={MENU_ITEM_STYLE}
             >
               <Menu className="w-4 h-4 md:h-6 md:w-6"/>
             </button>
