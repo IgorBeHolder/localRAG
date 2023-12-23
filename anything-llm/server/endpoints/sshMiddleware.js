@@ -4,8 +4,8 @@ const {Client} = require("ssh2");
 
 function sshMiddleware(req, res, next) {
   const sshConfig = {
-    host: "localhost",
-    port: 2222,
+    host: "coder",
+    port: 22,
     username: "coder",
     password: "coder"
   };

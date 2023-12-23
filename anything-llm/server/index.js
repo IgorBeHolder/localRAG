@@ -8,7 +8,8 @@ console.log("*** COMPLETION_MODEL_NAME", process.env.COMPLETION_MODEL_NAME);
 console.log("*** EMBEDDING_MODEL_ENDPOINT", process.env.EMBEDDING_MODEL_ENDPOINT);
 console.log("*** EMBEDDING_MODEL_NAME", process.env.EMBEDDING_MODEL_NAME);
 
-const WS_PORT = process.env.WS_PORT || 3006;
+// const WS_PORT = process.env.WS_PORT || 3006;
+const WS_PORT = 3006;
 
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -38,10 +39,10 @@ const apiRouter = express.Router();
 const FILE_LIMIT = "3GB";
 
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: 'http://localhost:3001',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   allowedHeaders: 'Content-Type,Authorization',
-  //origin: true
+  origin: true
 }));
 app.use(bodyParser.text({limit: FILE_LIMIT}));
 app.use(bodyParser.json({limit: FILE_LIMIT}));
