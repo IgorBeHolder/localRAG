@@ -8,7 +8,7 @@ export default function handleChat(
   _chatHistory
 ) {
   const {uuid, textResponse: text, type, sources = [], error, close, typeWriter} = chatResult;
-  const textResponse = text;
+  const textResponse = (text);
 
   console.log('textResponse', remHistory, typeWriter, textResponse);
 
@@ -41,11 +41,11 @@ export default function handleChat(
       ...remHistory,
       {
         uuid,
-        content: safeTagsReplace(textResponse),
+        content: textResponse,
         typeWriter: false,
         role: "assistant",
         sources,
-        closed: typeWriter || close,
+        closed: close,
         error,
         animate: true,
       },

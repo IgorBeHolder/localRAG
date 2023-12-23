@@ -1,6 +1,8 @@
 process.env.NODE_ENV === "development"
   ? require("dotenv").config({path: `.env.${process.env.NODE_ENV}`})
   : require("dotenv").config();
+console.log("*** SSH_HOST", process.env.SSH_HOST);
+console.log("*** SSH_PORT", process.env.SSH_PORT);
 console.log("*** WS_PORT", process.env.WS_PORT);
 console.log("*** IS_CODER", process.env.IS_CODER);
 console.log("*** COMPLETION_MODEL_ENDPOINT", process.env.COMPLETION_MODEL_ENDPOINT);
@@ -38,10 +40,10 @@ const apiRouter = express.Router();
 const FILE_LIMIT = "3GB";
 
 app.use(cors({
-  origin: 'http://localhost:3000',
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  allowedHeaders: 'Content-Type,Authorization',
-  //origin: true
+  // origin: 'http://localhost:3000',
+  // methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  // allowedHeaders: 'Content-Type,Authorization',
+  origin: true
 }));
 app.use(bodyParser.text({limit: FILE_LIMIT}));
 app.use(bodyParser.json({limit: FILE_LIMIT}));
@@ -88,9 +90,9 @@ function executeSSHCommand(command, sshConnection, ws) {
 
         let result = "";
         stream
-          .on("data", (data, ...rest) => {
+          .on("data", (data) => {
             if (process.env.NODE_ENV === "development") {
-              console.log("@@@@@@@@@@ CommandOutput:", data, `'${data.toString()}'`, rest);
+              console.log("@@@@@@@@@@ CommandOutput:", data, `'${data.toString()}'`);
             }
 
             result = data.toString();
@@ -183,7 +185,10 @@ server.on("upgrade", (request, socket, head) => {
 
 wss.on("connection", (ws, request, sshConnection) => {
   if (process.env.NODE_ENV === "development") {
-    console.log("##################### WS connection", activeStream);
+    console.log("##################### WS connection", activeStream ? {
+      keys: Object.keys(activeStream),
+      stdout: Object.keys(activeStream.stdout)
+    } : activeStream);
   }
 
   activeStream = null;
@@ -218,9 +223,9 @@ wss.on("connection", (ws, request, sshConnection) => {
 });
 
 server.listen(WS_PORT, () => {
-  // if (process.env.NODE_ENV === "development") {
-  console.log(`##################### WS Server is running on port ${WS_PORT}`);
-  // }
+  if (process.env.NODE_ENV === "development") {
+    console.log(`##################### WS Server is running on port ${WS_PORT}`);
+  }
 });
 
 systemEndpoints(apiRouter);

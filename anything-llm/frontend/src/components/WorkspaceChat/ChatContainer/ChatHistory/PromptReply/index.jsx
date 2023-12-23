@@ -1,5 +1,4 @@
-import {forwardRef, memo, useEffect, useRef} from "react";
-import Typewriter from 'typewriter-effect/dist/core';
+import {forwardRef, memo} from "react";
 import {AlertTriangle} from "react-feather";
 import Jazzicon from "../../../../UserIcon";
 import renderMarkdown from "../../../../../utils/chat/markdown";
@@ -13,26 +12,11 @@ const PromptReply = forwardRef(({
                                   error,
                                   workspace,
                                   sources = [],
+                                  typeWriterRef,
                                   closed = true,
                                   typeWriter = false
                                 }, ref) => {
     if (!reply && sources.length === 0 && !pending && !error) return null;
-
-    const typeWriterRef = useRef(null);
-
-    useEffect(() => {
-      if (typeWriter && typeWriterRef.current) {
-        const tw = new Typewriter(typeWriterRef.current, {
-          delay: 75,
-          autoStart: false,
-        });
-
-        tw
-          .pauseFor(100)
-          .typeString(reply)
-          .start();
-      }
-    }, [typeWriterRef, typeWriter, reply]);
 
     if (pending) {
       return (
@@ -69,8 +53,7 @@ const PromptReply = forwardRef(({
           className={MSG_STYLE() + " bg-gray-400 dark:bg-stone-700 border border-gray-700"}>
           {typeWriter ? <div
               ref={typeWriterRef}
-              className="overflow-auto whitespace-pre-line text-slate-800 dark:text-slate-200 font-[500] md:font-semibold text-sm md:text-base">
-            </div> :
+              className="typewriter-block overflow-auto whitespace-pre-line text-slate-800 dark:text-slate-200 font-[500] md:font-semibold text-sm md:text-base"/> :
             <div
               className="break-all-in-children overflow-auto whitespace-pre-line text-slate-800 dark:text-slate-200 flex flex-col gap-y-1 font-[500] md:font-semibold text-sm md:text-base"
               dangerouslySetInnerHTML={{__html: renderMarkdown(reply)}}
