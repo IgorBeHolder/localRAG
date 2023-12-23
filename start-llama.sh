@@ -1,7 +1,7 @@
 #!/bin/bash
 
 (
-echo "Building the main model container..."
+echo "Building the LLM engine (main model) container..."
 set -a
 echo $PWD
 source ./client-files/.env
