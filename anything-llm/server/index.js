@@ -90,9 +90,9 @@ function executeSSHCommand(command, sshConnection, ws) {
 
         let result = "";
         stream
-          .on("data", (data, ...rest) => {
+          .on("data", (data) => {
             if (process.env.NODE_ENV === "development") {
-              console.log("@@@@@@@@@@ CommandOutput:", data, `'${data.toString()}'`, rest);
+              console.log("@@@@@@@@@@ CommandOutput:", data, `'${data.toString()}'`);
             }
 
             result = data.toString();
@@ -185,7 +185,10 @@ server.on("upgrade", (request, socket, head) => {
 
 wss.on("connection", (ws, request, sshConnection) => {
   if (process.env.NODE_ENV === "development") {
-    console.log("##################### WS connection", activeStream);
+    console.log("##################### WS connection", activeStream ? {
+      keys: Object.keys(activeStream),
+      stdout: Object.keys(activeStream.stdout)
+    } : activeStream);
   }
 
   activeStream = null;
@@ -220,9 +223,9 @@ wss.on("connection", (ws, request, sshConnection) => {
 });
 
 server.listen(WS_PORT, () => {
-  // if (process.env.NODE_ENV === "development") {
-  console.log(`##################### WS Server is running on port ${WS_PORT}`);
-  // }
+  if (process.env.NODE_ENV === "development") {
+    console.log(`##################### WS Server is running on port ${WS_PORT}`);
+  }
 });
 
 systemEndpoints(apiRouter);

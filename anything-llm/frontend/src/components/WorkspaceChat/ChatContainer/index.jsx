@@ -5,15 +5,17 @@ import Typewriter from 'typewriter-effect/dist/core';
 import Workspace from "../../../models/workspace";
 import handleChat from "../../../utils/chat";
 import useWebSocket, {ReadyState} from "react-use-websocket";
-import {WS_URL} from "../../../utils/constants.js";
+import {TYPE_EFFECT_DELAY, TYPE_STRING_DELAY, WS_URL} from "../../../utils/constants.js";
 import {safeTagsReplace} from "../../../utils/functions.js";
+import renderMarkdown from "../../../utils/chat/markdown.js";
 
 export default function ChatContainer({workspace, knownHistory = []}) {
   const [message, setMessage] = useState("");
   const [connStatus, setConnStatus] = useState("");
   const [chatHistory, setChatHistory] = useState(knownHistory);
   const [command, setCommand] = useState("");
-  const [typeWriterStack, setTypeWriterStack] = useState(['123']);
+  const [typeWriterStack, setTypeWriterStack] = useState([]);
+  const [typeWriterIsBusy, setTypeWriterIsBusy] = useState(false);
   const [typeWriterRef, setTypeWriterRef] = useState(null);
   const [typeWriterInstance, setTypeWriterInstance] = useState(null);
   const storageKey = `workspace_chat_mode_${workspace.slug}`;
@@ -28,7 +30,7 @@ export default function ChatContainer({workspace, knownHistory = []}) {
     if (mode === "analyst") {
       if (ref?.current) {
         const tw = new Typewriter(ref.current, {
-          delay: 75,
+          delay: TYPE_EFFECT_DELAY,
           autoStart: false
         });
 
@@ -36,12 +38,15 @@ export default function ChatContainer({workspace, knownHistory = []}) {
           typeWriterStack.forEach(str => {
             tw
               .typeString(str)
-              .pauseFor(300);
+              .pauseFor(TYPE_STRING_DELAY);
           });
+
+          setTypeWriterIsBusy(true);
 
           tw
             .callFunction((e) => {
               console.log('callFunction', e);
+              setTypeWriterIsBusy(false);
               setTypeWriterStack([]);
             })
             .start();
@@ -51,54 +56,32 @@ export default function ChatContainer({workspace, knownHistory = []}) {
         setTypeWriterInstance(tw);
       }
     }
-  }, [mode, typeWriterStack]);
-
-  // useEffect(() => {
-  //   const twReady = Boolean(typeWriterRef && typeWriterInstance?.state);
-  //   console.log('typeWriterRef', twReady, typeWriterRef, typeWriterInstance?.state);
-  //
-  //   if (twReady) {
-  //     console.log('isEqualNode', typeWriterRef.isEqualNode(typeWriterInstance?.state.elements.container));
-  //   }
-  //
-  //   if ((!twReady && typeWriterRef) || (twReady && !typeWriterRef.isEqualNode(typeWriterInstance?.state.elements.container))) {
-  //     const tw = new Typewriter(typeWriterRef, {
-  //       strings: typeWriterStack,
-  //       delay: 75,
-  //       autoStart: true,
-  //       callFunction: (e) => {
-  //         console.log('callFunction', e);
-  //         setTypeWriterStack([]);
-  //       }
-  //     });
-  //
-  //     setTypeWriterInstance(tw);
-  //   }
-  // }, [typeWriterRef, typeWriterInstance, typeWriterStack]);
+  }, [mode, typeWriterStack, typeWriterIsBusy]);
 
   const typeMessage = useCallback((text) => {
     console.log('typeMessage', typeWriterRef, typeWriterInstance?.state.elements.container, text);
     if (mode === "analyst") {
       if (typeWriterRef?.current && typeWriterInstance?.state) {
-        typeWriterInstance
-          .pauseFor(100)
-          .typeString(text)
-          .start();
+        if (typeWriterIsBusy) {
+          console.log('typeWriterIsBusy', typeWriterIsBusy);
+        } else {
+          typeWriterInstance
+            .pauseFor(100)
+            .typeString(text)
+            .start();
+        }
       } else {
         console.log('repeat');
         setTypeWriterStack(typeWriterStack.concat(text));
       }
     }
-  }, [typeWriterRef, typeWriterInstance, mode]);
+  }, [typeWriterRef, typeWriterInstance, mode, typeWriterStack, typeWriterIsBusy]);
 
   if (mode === "analyst") {
     //Public API that will echo messages sent to it back to the client
     const [socketUrl, setSocketUrl] = useState(WS_URL);
-    const [messageHistory, setMessageHistory] = useState([]);
 
     const onWsMessage = useCallback((msg) => {
-      // setNewWsMessage(false);
-
       console.log('onWsMessage', msg, chatHistory);
 
       const remHistory = (chatHistory.length > 0 ? chatHistory.slice(0, -1) : []).map((m, mi) => {
@@ -115,17 +98,17 @@ export default function ChatContainer({workspace, knownHistory = []}) {
       let chatResult = JSON.parse(msg.data);
 
       chatResult.typeWriter = true;
-      chatResult.textResponse = chatResult.textResponse.trim();
+      chatResult.textResponse = (chatResult.textResponse.trim());
 
       console.log("chatResult", chatResult, _chatHistory);
 
       if (_chatHistory.length) {
-        let lastMessage = _chatHistory[_chatHistory.length - 1];
+        let lastChatMessage = _chatHistory[_chatHistory.length - 1];
 
-        if (lastMessage.role !== "user") {
-          _chatHistory[_chatHistory.length - 1].content += chatResult.textResponse;
+        if (lastChatMessage.role === "assistant") {
+          _chatHistory[_chatHistory.length - 1].content += safeTagsReplace(chatResult.textResponse);
 
-          console.log('lastMessage', lastMessage, _chatHistory);
+          console.log('lastChatMessage', lastChatMessage, _chatHistory);
         } else {
           handleChat(
             chatResult,
@@ -143,9 +126,9 @@ export default function ChatContainer({workspace, knownHistory = []}) {
           remHistory,
           _chatHistory
         );
-
-        typeMessage(chatResult.textResponse);
       }
+
+      typeMessage(((chatResult.textResponse)));
 
       setChatHistory(_chatHistory);
       setLoadingResponse(false);
@@ -172,31 +155,6 @@ export default function ChatContainer({workspace, knownHistory = []}) {
       [ReadyState.CLOSED]: "Closed",
       [ReadyState.UNINSTANTIATED]: "Uninstantiated"
     }[readyState];
-
-    // useEffect(() => {
-    //   console.log('lastMessage', lastMessage);
-    //
-    //   if (lastMessage !== null && (messageHistory.length ? messageHistory[messageHistory.length - 1] !== lastMessage.data : true)) {
-    //     setMessageHistory((prev) => prev.concat(lastMessage.data));
-    //
-    //     const remHistory = chatHistory.length > 0 ? chatHistory.slice(0, -1) : [];
-    //     let _chatHistory = [...remHistory];
-    //
-    //     let chatResult = JSON.parse(lastMessage.data);
-    //
-    //     chatResult.close = newWsMessage;
-    //
-    //     console.log("chatResult", chatResult);
-    //
-    //     handleChat(
-    //       chatResult,
-    //       setLoadingResponse,
-    //       setChatHistory,
-    //       remHistory,
-    //       _chatHistory
-    //     );
-    //   }
-    // }, [lastMessage, chatHistory, setMessageHistory, setChatHistory, newWsMessage]);
 
     const sendCommand = useCallback(() => {
       if (connectionStatus === "Open") {
