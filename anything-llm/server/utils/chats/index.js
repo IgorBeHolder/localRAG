@@ -4,7 +4,6 @@ const {WorkspaceChats} = require("../../models/workspaceChats");
 const {resetMemory} = require("./commands/reset");
 const moment = require("moment");
 const {getVectorDbClass, getLLMProvider} = require("../helpers");
-const {AzureOpenAi} = require("../AiProviders/zazureOpenAi");
 const {prompt_templates} = require("../vectorDbProviders/lance/index");
 
 // const { BOS, EOS, assistance_prefix, end_of_turn, user_prefix } = prompt_templates();
