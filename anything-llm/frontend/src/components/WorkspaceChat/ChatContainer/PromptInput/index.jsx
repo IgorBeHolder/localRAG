@@ -104,6 +104,7 @@ export default function PromptInput({
         {analyst ? <div
           className="ssh-controls relative flex flex-wrap justify-center gap-2 lg:gap-4 whitespace-nowrap">
           <button
+            disabled={inputDisabled || buttonDisabled}
             onClick={() => {
               uploadFile();
             }}
