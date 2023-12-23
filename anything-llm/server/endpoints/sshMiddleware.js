@@ -2,10 +2,13 @@ const {Client} = require("ssh2");
 //let Client = require("ssh2-sftp-client");
 //let sftp = new Client();
 
+const SSH_HOST = process.env.SSH_HOST || "coder";
+const SSH_PORT = process.env.SSH_PORT || 22;
+
 function sshMiddleware(req, res, next) {
   const sshConfig = {
-    host: "localhost",
-    port: 2222,
+    host: SSH_HOST,
+    port: SSH_PORT,
     username: "coder",
     password: "coder"
   };

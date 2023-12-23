@@ -4,8 +4,10 @@ export const UPLOAD_FILENAME_LEN_LIMIT = 68;
 export const IS_CODER = true; // process.env.IS_CODER === "TRUE" || false;
 export const CHAT_MAX_LENGTH = 16384;
 export const WS_URL = import.meta.env.VITE_USE_DOCKER === "FALSE" ? ("ws://localhost:" + (process.env.WS_PORT || process.env.VITE_WS_PORT || 3006)) : "ws://localhost:3006";
+export const SSH_URL = import.meta.env.VITE_USE_DOCKER === "FALSE" ? ("ws://localhost:" + (process.env.WS_PORT || process.env.VITE_WS_PORT || 3006)) : "ws://localhost:3006";
+export const SSH_PORT = import.meta.env.VITE_USE_DOCKER === "FALSE" ? 2222 : 22;
 
-console.log('IS_CODER', IS_CODER, 'PYTHON_API', PYTHON_API, 'WS_URL', WS_URL);
+console.log('IS_CODER', IS_CODER, 'PYTHON_API', PYTHON_API, 'WS_URL', WS_URL, 'SSH_PORT', SSH_PORT);
 
 export const MSG_STYLE = (user = false) => {
   return "p-2 xl:p-4 w-fit max-w-[75%] rounded-t-2xl " + (user ? "rounded-bl-2xl rounded-br-sm mr-2" : "rounded-br-2xl rounded-bl-sm ml-2");

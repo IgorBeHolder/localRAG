@@ -1,5 +1,4 @@
-import {forwardRef, memo, useEffect, useRef} from "react";
-import Typewriter from 'typewriter-effect/dist/core';
+import {forwardRef, memo} from "react";
 import {AlertTriangle} from "react-feather";
 import Jazzicon from "../../../../UserIcon";
 import renderMarkdown from "../../../../../utils/chat/markdown";
@@ -13,26 +12,11 @@ const PromptReply = forwardRef(({
                                   error,
                                   workspace,
                                   sources = [],
+                                  typeWriterRef,
                                   closed = true,
                                   typeWriter = false
                                 }, ref) => {
     if (!reply && sources.length === 0 && !pending && !error) return null;
-
-    const typeWriterRef = useRef(null);
-
-    useEffect(() => {
-      if (typeWriter && typeWriterRef.current) {
-        const tw = new Typewriter(typeWriterRef.current, {
-          delay: 75,
-          autoStart: false,
-        });
-
-        tw
-          .pauseFor(100)
-          .typeString(reply)
-          .start();
-      }
-    }, [typeWriterRef, typeWriter, reply]);
 
     if (pending) {
       return (

@@ -1,6 +1,7 @@
 import {useCallback, useEffect, useState} from "react";
 import ChatHistory from "./ChatHistory";
 import PromptInput from "./PromptInput";
+import Typewriter from 'typewriter-effect/dist/core';
 import Workspace from "../../../models/workspace";
 import handleChat from "../../../utils/chat";
 import useWebSocket, {ReadyState} from "react-use-websocket";
@@ -12,13 +13,83 @@ export default function ChatContainer({workspace, knownHistory = []}) {
   const [connStatus, setConnStatus] = useState("");
   const [chatHistory, setChatHistory] = useState(knownHistory);
   const [command, setCommand] = useState("");
-
+  const [typeWriterStack, setTypeWriterStack] = useState(['123']);
+  const [typeWriterRef, setTypeWriterRef] = useState(null);
+  const [typeWriterInstance, setTypeWriterInstance] = useState(null);
   const storageKey = `workspace_chat_mode_${workspace.slug}`;
 
   const mode = window.localStorage.getItem(storageKey);
 
   const [loadingResponse, setLoadingResponse] = useState(mode === "analyst");
   const [newWsMessage, setNewWsMessage] = useState(false);
+
+  const lastMessageRef = useCallback((ref) => {
+    console.log('lastMessageRef', ref);
+    if (mode === "analyst") {
+      if (ref?.current) {
+        const tw = new Typewriter(ref.current, {
+          delay: 75,
+          autoStart: false
+        });
+
+        if (typeWriterStack.length) {
+          typeWriterStack.forEach(str => {
+            tw
+              .typeString(str)
+              .pauseFor(300);
+          });
+
+          tw
+            .callFunction((e) => {
+              console.log('callFunction', e);
+              setTypeWriterStack([]);
+            })
+            .start();
+        }
+
+        setTypeWriterRef(ref);
+        setTypeWriterInstance(tw);
+      }
+    }
+  }, [mode, typeWriterStack]);
+
+  // useEffect(() => {
+  //   const twReady = Boolean(typeWriterRef && typeWriterInstance?.state);
+  //   console.log('typeWriterRef', twReady, typeWriterRef, typeWriterInstance?.state);
+  //
+  //   if (twReady) {
+  //     console.log('isEqualNode', typeWriterRef.isEqualNode(typeWriterInstance?.state.elements.container));
+  //   }
+  //
+  //   if ((!twReady && typeWriterRef) || (twReady && !typeWriterRef.isEqualNode(typeWriterInstance?.state.elements.container))) {
+  //     const tw = new Typewriter(typeWriterRef, {
+  //       strings: typeWriterStack,
+  //       delay: 75,
+  //       autoStart: true,
+  //       callFunction: (e) => {
+  //         console.log('callFunction', e);
+  //         setTypeWriterStack([]);
+  //       }
+  //     });
+  //
+  //     setTypeWriterInstance(tw);
+  //   }
+  // }, [typeWriterRef, typeWriterInstance, typeWriterStack]);
+
+  const typeMessage = useCallback((text) => {
+    console.log('typeMessage', typeWriterRef, typeWriterInstance?.state.elements.container, text);
+    if (mode === "analyst") {
+      if (typeWriterRef?.current && typeWriterInstance?.state) {
+        typeWriterInstance
+          .pauseFor(100)
+          .typeString(text)
+          .start();
+      } else {
+        console.log('repeat');
+        setTypeWriterStack(typeWriterStack.concat(text));
+      }
+    }
+  }, [typeWriterRef, typeWriterInstance, mode]);
 
   if (mode === "analyst") {
     //Public API that will echo messages sent to it back to the client
@@ -30,9 +101,12 @@ export default function ChatContainer({workspace, knownHistory = []}) {
 
       console.log('onWsMessage', msg, chatHistory);
 
-      const remHistory = (chatHistory.length > 0 ? chatHistory.slice(0, -1) : []).map(m => {
-        m.typeWriter = false;
-        m.content = safeTagsReplace(m.content);
+      const remHistory = (chatHistory.length > 0 ? chatHistory.slice(0, -1) : []).map((m, mi) => {
+        if (m.typeWriter) {
+          m.typeWriter = false;
+          m.content = safeTagsReplace(m.content);
+        }
+
         return m;
       });
 
@@ -53,27 +127,29 @@ export default function ChatContainer({workspace, knownHistory = []}) {
 
           console.log('lastMessage', lastMessage, _chatHistory);
         } else {
-          // handleChat(
-          //   chatResult,
-          //   setLoadingResponse,
-          //   setChatHistory,
-          //   remHistory,
-          //   _chatHistory
-          // );
+          handleChat(
+            chatResult,
+            setLoadingResponse,
+            setChatHistory,
+            remHistory,
+            _chatHistory
+          );
         }
       } else {
-        // handleChat(
-        //   chatResult,
-        //   setLoadingResponse,
-        //   setChatHistory,
-        //   remHistory,
-        //   _chatHistory
-        // );
+        handleChat(
+          chatResult,
+          setLoadingResponse,
+          setChatHistory,
+          remHistory,
+          _chatHistory
+        );
+
+        typeMessage(chatResult.textResponse);
       }
 
       setChatHistory(_chatHistory);
       setLoadingResponse(false);
-    }, [setLoadingResponse, setChatHistory, chatHistory]);
+    }, [setLoadingResponse, setChatHistory, chatHistory, typeWriterRef, typeWriterInstance]);
 
     const {sendMessage, lastMessage, readyState} = useWebSocket(socketUrl, {
       shouldReconnect: (closeEvent) => true,
@@ -218,7 +294,14 @@ export default function ChatContainer({workspace, knownHistory = []}) {
       {/*</div> : null}*/}
       <div className="main-box relative flex flex-col w-full h-full overflow-y-auto p-[16px] lg:p-[32px] !pb-0">
         <div className="flex flex-col flex-1 w-full bg-white shadow-md relative">
-          <ChatHistory mode={mode} history={chatHistory} workspace={workspace} analyst={mode === "analyst"}/>
+          {
+            // mode === "analyst" ?
+            // <div ref={analystChat}
+            //      className={`flex flex-col w-full flex-grow-1 p-1 md:p-8 lg:p-[50px] relative !pb-[350px]`}/>
+            // :
+            <ChatHistory mode={mode} history={chatHistory} workspace={workspace} analyst={mode === "analyst"}
+                         lastMessageRef={lastMessageRef}/>
+          }
         </div>
       </div>
       <PromptInput
