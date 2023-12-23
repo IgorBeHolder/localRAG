@@ -1,7 +1,7 @@
 # Constants
 # as we are at localRAG already, we can use relative paths:
-BASE_DIR="./model-store/openchat/openchat_3.5"
-BASE_URL="https://huggingface.co/openchat/openchat_3.5/resolve/main"
+BASE_DIR="./model-store/openchat/openchat-3.5-1210"
+BASE_URL="https://huggingface.co/openchat/openchat-3.5-1210/resolve/main"
 
 # Create the directory
 sudo mkdir -p "$BASE_DIR"
