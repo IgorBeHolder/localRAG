@@ -12,7 +12,7 @@ services:
       - ./content:/home
       # - ./content:/home/coder/content      
     ports:
-      - 2222:22
+      - 3006:22
     networks:
       - llm-net
 networks:

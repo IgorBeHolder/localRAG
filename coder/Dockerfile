@@ -39,7 +39,8 @@ RUN pip3 install --upgrade pip
 
 RUN --mount=type=cache,target=/tmp/pip_cache pip3 install \
     matplotlib seaborn openpyxl \
-    sweetviz open-interpreter
+    sweetviz open-interpreter websockets
+
     # pydantic==2.4.0 pandas-profiling
     # dataprep scikit-learn
 # RUN --mount=type=cache,target=/tmp/pip_cache pip3 install
@@ -57,6 +58,8 @@ RUN chown -R coder:root /home
 RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 
 EXPOSE 22
+
+EXPOSE 3006
 
 RUN mkdir /home/content
 COPY interpreter/terminal_interface/config.yaml \
