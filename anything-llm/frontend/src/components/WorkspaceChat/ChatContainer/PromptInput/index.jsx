@@ -80,7 +80,7 @@ export default function PromptInput({
         return false;
       }
 
-      return simpleMode(command, storageKey);
+      simpleMode(command, storageKey);
     } else if (command === "/analyst") {
       if (!window.confirm(`Вы переходите в сеанс анализа данных.\nРабочее пространство "${workspace.name}" будет закрыто.`)) {
         return false;
@@ -90,13 +90,11 @@ export default function PromptInput({
       window.dispatchEvent(new Event("workspace_chat_mode_update"));
 
       window.location = "/analyst/" + workspace.name;
-
-      return;
-    } else if (command !== "/analyst") {
-      return simpleMode(command, storageKey);
+    } else if (command === "/reset") {
+      onChange({target: {value: `${command} ${message}`}});
+    } else {
+      simpleMode(command, storageKey);
     }
-
-    onChange({target: {value: `${command} ${message}`}});
   };
 
   return (
