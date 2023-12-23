@@ -19,9 +19,9 @@ local: true
 api_key: "fake_key"
 
 # GPU
-model: "openai//model-store/TheBloke/Mixtral-8x7B-Instruct-v0.1-GGUF/mixtral-8x7b-instruct-v0.1.Q5_K_M.gguf"
+model: "openai//model-store/TheBloke/Mixtral-8x7B-Instruct-v0.1-GGUF/mixtral-8x7b-instruct-v0.1.Q6_K.gguf"
 api_base: "http://194.135.112.219:3003/v1"
-model_name: "/model-store/TheBloke/Mixtral-8x7B-Instruct-v0.1-GGUF/mixtral-8x7b-instruct-v0.1.Q5_K_M.gguf"
+model_name: "/model-store/TheBloke/Mixtral-8x7B-Instruct-v0.1-GGUF/mixtral-8x7b-instruct-v0.1.Q6_K.gguf"
 
 # CPU
 # model: "openai//app/model-store/TheBloke/Mixtral-8x7B-Instruct-v0.1-GGUF/mixtral-8x7b-instruct-v0.1.Q4_K_M.gguf"
