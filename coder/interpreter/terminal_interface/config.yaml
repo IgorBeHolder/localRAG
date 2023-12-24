@@ -1,5 +1,5 @@
 system_message: |
- Вы, Open Interpreter - ведущий эксперт по программированию и дата аналитик мирового уровня, который может достичь любой цели, выполняя код на своем компьютере.
+ Вы, Open Interpreter - ведущий русскоговорящий эксперт по программированию и дата аналитик мирового уровня, который может достичь любой цели, выполняя код на своем компьютере.
  Вы выполняете на своем компьютере код, чтобы выполнить указания пользователя.
  Для вас предварительно установлены все необходимые библиотеки python. 
  Не устанавливайте новые библиотеки.
@@ -12,24 +12,28 @@ system_message: |
  При анализе данных с помощью python используйте итеративный подход, не загружайте снова и снова анализируемый файл, а загрузите его один раз и сохраните в переменную.
  Пользователь может не точно указывать название файла или столбца в данных, поэтому вам указывать наиболее близкие по смыслу сущности.
  'home' - ваш текущий рабочий каталог для загрузки, открытия и сохранения файлов .
- Отвечайте кратко и **только** на русском языке.
  Не надо предлагать пользователю варианты решения, а только исполнять код, который решает задачу.
+ Отвечайте кратко и **только на русском языке**.
 
 local: true
 api_key: "fake_key"
 
 # GPU
-# api_base: "http://194.135.112.219:3003/v1"
-# model: "openai//model-store/TheBloke/Mixtral-8x7B-Instruct-v0.1-GGUF/mixtral-8x7b-instruct-v0.1.Q6_K.gguf"
-# model_name: "/model-store/TheBloke/Mixtral-8x7B-Instruct-v0.1-GGUF/mixtral-8x7b-instruct-v0.1.Q6_K.gguf"
+api_base: "http://194.135.112.219:3003/v1"
+model: "openai//model-store/TheBloke/Mixtral-8x7B-Instruct-v0.1-GGUF/mixtral-8x7b-instruct-v0.1.Q6_K.gguf"
+model_name: "/model-store/TheBloke/Mixtral-8x7B-Instruct-v0.1-GGUF/mixtral-8x7b-instruct-v0.1.Q6_K.gguf"
+
 # model: "openai//model-store/openchat/openchat-3.5-1210"
 # model_name: "/model-store/openchat/openchat-3.5-1210"
 
 # CPU
-# model: "openai//app/model-store/TheBloke/TheBloke/openchat_3.5-16k-GGUF/openchat_3.5-16k.Q4_K_M.gguf"
-model: "openai//app/model-store/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/mistral-7b-instruct-v0.2.Q6_K.gguf"
-api_base: "http://46.254.21.170:3003/v1"
-model_name: "/model-store/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/mistral-7b-instruct-v0.2.Q6_K.gguf"
+# api_base: "http://46.254.21.170:3003/v1"
+# model: "openai//app/model-store/TheBloke/openchat-3.5-1210-GGUF/openchat-3.5-1210.Q6_K.gguf"
+# model_name: "/model-storeTheBloke/openchat-3.5-1210-GGUF/openchat-3.5-1210.Q6_K.gguf"
+
+# model: "openai//app/model-store/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/mistral-7b-instruct-v0.2.Q6_K.gguf"
+# model_name: "/model-store/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/mistral-7b-instruct-v0.2.Q6_K.gguf"
+
 
 context_window: 8192
 max_output: 4096

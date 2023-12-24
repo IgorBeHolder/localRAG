@@ -6,7 +6,6 @@ console.log("*** SSH_PORT", process.env.SSH_PORT);
 console.log("*** WS_PORT", process.env.WS_PORT);
 console.log("*** IS_CODER", process.env.IS_CODER);
 console.log("*** COMPLETION_MODEL_ENDPOINT", process.env.COMPLETION_MODEL_ENDPOINT);
-console.log("*** COMPLETION_MODEL_NAME", process.env.COMPLETION_MODEL_NAME);
 console.log("*** EMBEDDING_MODEL_ENDPOINT", process.env.EMBEDDING_MODEL_ENDPOINT);
 console.log("*** EMBEDDING_MODEL_NAME", process.env.EMBEDDING_MODEL_NAME);
 
