@@ -3,19 +3,18 @@ import Workspace from "../../models/workspace";
 import LoadingChat from "./LoadingChat";
 import ChatContainer from "./ChatContainer";
 import paths from "../../utils/paths";
-import {IS_CODER} from "../../utils/constants.js";
 
-export default function WorkspaceChat({loading, workspace, analystRoute}) {
+export default function WorkspaceChat({loading, workspace, analystRoute, isCoder}) {
   const [history, setHistory] = useState([]);
   const [loadingHistory, setLoadingHistory] = useState(true);
   const storageKey = workspace ? `workspace_chat_mode_${workspace.slug}` : "";
 
   useEffect(() => {
-    if (analystRoute && !IS_CODER && storageKey) {
+    if (analystRoute && !isCoder && storageKey) {
       window.localStorage.setItem(storageKey, "query");
       window.location = "/workspace/" + workspace.name;
     }
-  }, [IS_CODER, storageKey, analystRoute]);
+  }, [isCoder, storageKey, analystRoute]);
 
   useEffect(() => {
     async function getHistory() {
@@ -74,5 +73,5 @@ export default function WorkspaceChat({loading, workspace, analystRoute}) {
     );
   }
 
-  return <ChatContainer workspace={workspace} knownHistory={history}/>;
+  return <ChatContainer isCoder={isCoder} workspace={workspace} knownHistory={history}/>;
 }
