@@ -205,12 +205,14 @@ if (process.env.IS_CODER === 'TRUE') {
       }
 
       if (activeStream) {
-        // sem_search(command).then(s => {
-        //   console.log('sem_search', s);
-        // });
+        sem_search(command).then(s => {
+          console.log('sem_search', s);
+
+          executeSSHCommand(s, sshConnection, ws);
+        });
 
         // Получаем команду от клиента и выполняем ее на сервере SSH
-        executeSSHCommand(command, sshConnection, ws);
+        // executeSSHCommand(command, sshConnection, ws);
       }
     });
 
