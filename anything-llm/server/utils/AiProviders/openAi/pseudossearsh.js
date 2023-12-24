@@ -43,8 +43,7 @@ async function sem_search(text_prompt) {
 
     const messages = [
       {
-        role: "system",
-        content: sys_prompt
+        role: "system", content: sys_prompt
       },
       {role: "user", content: prompt}
     ];
@@ -67,6 +66,9 @@ async function sem_search(text_prompt) {
     console.error("Error reading the file:", err);
   });
 }
+
+
+
 
 module.exports = {
   sem_search

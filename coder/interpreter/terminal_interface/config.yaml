@@ -20,8 +20,8 @@ api_key: "fake_key"
 
 # GPU
 api_base: "http://194.135.112.219:3003/v1"
-model: "openai//model-store/TheBloke/Mixtral-8x7B-Instruct-v0.1-GGUF/mixtral-8x7b-instruct-v0.1.Q6_K.gguf"
-model_name: "/model-store/TheBloke/Mixtral-8x7B-Instruct-v0.1-GGUF/mixtral-8x7b-instruct-v0.1.Q6_K.gguf"
+model: "openai//app/model-store/TheBloke/Mixtral-8x7B-Instruct-v0.1-GGUF/mixtral-8x7b-instruct-v0.1.Q5_K_M.gguf"
+model_name: "/app/model-store/TheBloke/Mixtral-8x7B-Instruct-v0.1-GGUF/mixtral-8x7b-instruct-v0.1.Q5_K_M.gguf"
 
 # model: "openai//model-store/openchat/openchat-3.5-1210"
 # model_name: "/model-store/openchat/openchat-3.5-1210"
