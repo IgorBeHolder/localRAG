@@ -1,5 +1,5 @@
 process.env.NODE_ENV === "development"
-  ? require("dotenv").config({ path: `.env.${process.env.NODE_ENV}` })
+  ? require("dotenv").config({path: `.env.${process.env.NODE_ENV}`})
   : require("dotenv").config();
 
 const prisma = require("../utils/prisma");
@@ -17,7 +17,8 @@ const SystemSettings = {
     const llmProvider = process.env.LLM_PROVIDER || "openai";
     const vectorDB = process.env.VECTOR_DB || "lancedb";
     return {
-      CanDebug: !!!process.env.NO_DEBUG,
+      isCoder: process.env.IS_CODER === 'TRUE',
+      CanDebug: !process.env.NO_DEBUG,
       RequiresAuth: !!process.env.AUTH_TOKEN,
       AuthToken: !!process.env.AUTH_TOKEN,
       JWTSecret: !!process.env.JWT_SECRET,
@@ -26,52 +27,52 @@ const SystemSettings = {
       VectorDB: vectorDB,
       ...(vectorDB === "pinecone"
         ? {
-            PineConeEnvironment: process.env.PINECONE_ENVIRONMENT,
-            PineConeKey: !!process.env.PINECONE_API_KEY,
-            PineConeIndex: process.env.PINECONE_INDEX,
-          }
+          PineConeEnvironment: process.env.PINECONE_ENVIRONMENT,
+          PineConeKey: !!process.env.PINECONE_API_KEY,
+          PineConeIndex: process.env.PINECONE_INDEX,
+        }
         : {}),
       ...(vectorDB === "chroma"
         ? {
-            ChromaEndpoint: process.env.CHROMA_ENDPOINT,
-            ChromaApiHeader: process.env.CHROMA_API_HEADER,
-            ChromaApiKey: !!process.env.CHROMA_API_KEY,
-          }
+          ChromaEndpoint: process.env.CHROMA_ENDPOINT,
+          ChromaApiHeader: process.env.CHROMA_API_HEADER,
+          ChromaApiKey: !!process.env.CHROMA_API_KEY,
+        }
         : {}),
       ...(vectorDB === "weaviate"
         ? {
-            WeaviateEndpoint: process.env.WEAVIATE_ENDPOINT,
-            WeaviateApiKey: process.env.WEAVIATE_API_KEY,
-          }
+          WeaviateEndpoint: process.env.WEAVIATE_ENDPOINT,
+          WeaviateApiKey: process.env.WEAVIATE_API_KEY,
+        }
         : {}),
       ...(vectorDB === "qdrant"
         ? {
-            QdrantEndpoint: process.env.QDRANT_ENDPOINT,
-            QdrantApiKey: process.env.QDRANT_API_KEY,
-          }
+          QdrantEndpoint: process.env.QDRANT_ENDPOINT,
+          QdrantApiKey: process.env.QDRANT_API_KEY,
+        }
         : {}),
       LLMProvider: llmProvider,
       ...(llmProvider === "openai"
         ? {
-            OpenAiKey: !!process.env.OPEN_AI_KEY,
-            OpenAiModelPref: process.env.OPEN_MODEL_PREF || "gpt-3.5-turbo",
-          }
+          OpenAiKey: !!process.env.OPEN_AI_KEY,
+          OpenAiModelPref: process.env.OPEN_MODEL_PREF || "gpt-3.5-turbo",
+        }
         : {}),
 
       ...(llmProvider === "azure"
         ? {
-            AzureOpenAiEndpoint: process.env.AZURE_OPENAI_ENDPOINT,
-            AzureOpenAiKey: !!process.env.AZURE_OPENAI_KEY,
-            AzureOpenAiModelPref: process.env.OPEN_MODEL_PREF,
-            AzureOpenAiEmbeddingModelPref: process.env.EMBEDDING_MODEL_PREF,
-          }
+          AzureOpenAiEndpoint: process.env.AZURE_OPENAI_ENDPOINT,
+          AzureOpenAiKey: !!process.env.AZURE_OPENAI_KEY,
+          AzureOpenAiModelPref: process.env.OPEN_MODEL_PREF,
+          AzureOpenAiEmbeddingModelPref: process.env.EMBEDDING_MODEL_PREF,
+        }
         : {}),
     };
   },
 
   get: async function (clause = {}) {
     try {
-      const setting = await prisma.system_settings.findFirst({ where: clause });
+      const setting = await prisma.system_settings.findFirst({where: clause});
       return setting || null;
     } catch (error) {
       console.error(error.message);
@@ -98,7 +99,7 @@ const SystemSettings = {
         .filter((key) => this.supportedFields.includes(key))
         .map((key) => {
           return prisma.system_settings.upsert({
-            where: { label: key },
+            where: {label: key},
             update: {
               value: updates[key] === null ? null : String(updates[key]),
             },
@@ -110,16 +111,16 @@ const SystemSettings = {
         });
 
       await Promise.all(updatePromises);
-      return { success: true, error: null };
+      return {success: true, error: null};
     } catch (error) {
       console.error("FAILED TO UPDATE SYSTEM SETTINGS", error.message);
-      return { success: false, error: error.message };
+      return {success: false, error: error.message};
     }
   },
 
   isMultiUserMode: async function () {
     try {
-      const setting = await this.get({ label: "multi_user_mode" });
+      const setting = await this.get({label: "multi_user_mode"});
       return setting?.value === "true";
     } catch (error) {
       console.error(error.message);
@@ -129,7 +130,7 @@ const SystemSettings = {
 
   currentLogoFilename: async function () {
     try {
-      const setting = await this.get({ label: "logo_filename" });
+      const setting = await this.get({label: "logo_filename"});
       return setting?.value || null;
     } catch (error) {
       console.error(error.message);
@@ -139,7 +140,7 @@ const SystemSettings = {
 
   canDeleteWorkspaces: async function () {
     try {
-      const setting = await this.get({ label: "users_can_delete_workspaces" });
+      const setting = await this.get({label: "users_can_delete_workspaces"});
       return setting?.value === "true";
     } catch (error) {
       console.error(error.message);
