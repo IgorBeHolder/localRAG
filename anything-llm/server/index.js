@@ -59,7 +59,7 @@ app.use("/api", apiRouter);
 const APP_PORT = process.env.SERVER_PORT || 3001;
 
 // WS+SSH FOR CODER MODE
-if (process.env.IS_CODER) {
+if (process.env.IS_CODER === 'TRUE') {
   let activeStream = null;
 
   function executeSSHCommand(command, sshConnection, ws) {

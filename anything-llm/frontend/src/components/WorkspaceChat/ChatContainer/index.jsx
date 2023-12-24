@@ -42,7 +42,7 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
         if (typeWriterStack.length) {
           typeWriterStack.forEach(str => {
             tw
-              .typeString(str)
+              .typeString((str))
               .pauseFor(TYPE_STRING_DELAY);
           });
 

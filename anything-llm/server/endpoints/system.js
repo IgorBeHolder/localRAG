@@ -1,28 +1,28 @@
 process.env.NODE_ENV === "development"
-  ? require("dotenv").config({ path: `.env.${process.env.NODE_ENV}` })
+  ? require("dotenv").config({path: `.env.${process.env.NODE_ENV}`})
   : require("dotenv").config();
-const { viewLocalFiles } = require("../utils/files");
-const { exportData, unpackAndOverwriteImport } = require("../utils/files/data");
+const {viewLocalFiles} = require("../utils/files");
+const {exportData, unpackAndOverwriteImport} = require("../utils/files/data");
 const {
   checkPythonAppAlive,
   acceptedFileTypes,
 } = require("../utils/files/documentProcessor");
-const { purgeDocument } = require("../utils/files/purgeDocument");
-const { getVectorDbClass } = require("../utils/helpers");
-const { updateENV, dumpENV } = require("../utils/helpers/updateENV");
+const {purgeDocument} = require("../utils/files/purgeDocument");
+const {getVectorDbClass} = require("../utils/helpers");
+const {updateENV, dumpENV} = require("../utils/helpers/updateENV");
 const {
   reqBody,
   makeJWT,
   userFromSession,
   multiUserMode,
 } = require("../utils/http");
-const { setupDataImports, setupLogoUploads } = require("../utils/files/multer");
-const { v4 } = require("uuid");
-const { SystemSettings } = require("../models/systemSettings");
-const { User } = require("../models/user");
-const { validatedRequest } = require("../utils/middleware/validatedRequest");
-const { handleImports } = setupDataImports();
-const { handleLogoUploads } = setupLogoUploads();
+const {setupDataImports, setupLogoUploads} = require("../utils/files/multer");
+const {v4} = require("uuid");
+const {SystemSettings} = require("../models/systemSettings");
+const {User} = require("../models/user");
+const {validatedRequest} = require("../utils/middleware/validatedRequest");
+const {handleImports} = setupDataImports();
+const {handleLogoUploads} = setupLogoUploads();
 const fs = require("fs");
 const path = require("path");
 const {
@@ -34,15 +34,15 @@ const {
   removeCustomLogo,
   DARK_LOGO_FILENAME,
 } = require("../utils/files/logo");
-const { Telemetry } = require("../models/telemetry");
-const { WelcomeMessages } = require("../models/welcomeMessages");
-const { ApiKey } = require("../models/apiKeys");
+const {Telemetry} = require("../models/telemetry");
+const {WelcomeMessages} = require("../models/welcomeMessages");
+const {ApiKey} = require("../models/apiKeys");
 
 function systemEndpoints(app) {
   if (!app) return;
 
   app.get("/ping", (_, response) => {
-    response.status(200).json({ online: true });
+    response.status(200).json({online: true});
   });
 
   app.get("/migrate", async (_, response) => {
@@ -63,7 +63,7 @@ function systemEndpoints(app) {
   app.get("/setup-complete", async (_, response) => {
     try {
       const results = await SystemSettings.currentSettings();
-      response.status(200).json({ results });
+      response.status(200).json({results});
     } catch (e) {
       console.log(e.message, e);
       response.sendStatus(500).end();
@@ -97,8 +97,8 @@ function systemEndpoints(app) {
   app.post("/request-token", async (request, response) => {
     try {
       if (await SystemSettings.isMultiUserMode()) {
-        const { username, password } = reqBody(request);
-        const existingUser = await User.get({ username });
+        const {username, password} = reqBody(request);
+        const existingUser = await User.get({username});
 
         if (!existingUser) {
           response.status(200).json({
@@ -135,14 +135,14 @@ function systemEndpoints(app) {
           valid: true,
           user: existingUser,
           token: makeJWT(
-            { id: existingUser.id, username: existingUser.username },
+            {id: existingUser.id, username: existingUser.username},
             "30d"
           ),
           message: null,
         });
         return;
       } else {
-        const { password } = reqBody(request);
+        const {password} = reqBody(request);
         if (password !== process.env.AUTH_TOKEN) {
           response.status(401).json({
             valid: false,
@@ -154,7 +154,7 @@ function systemEndpoints(app) {
 
         response.status(200).json({
           valid: true,
-          token: makeJWT({ p: password }, "30d"),
+          token: makeJWT({p: password}, "30d"),
           message: null,
         });
       }
@@ -168,7 +168,7 @@ function systemEndpoints(app) {
     try {
       const VectorDb = getVectorDbClass();
       const vectorCount = await VectorDb.totalVectors();
-      response.status(200).json({ vectorCount });
+      response.status(200).json({vectorCount});
     } catch (e) {
       console.log(e.message, e);
       response.sendStatus(500).end();
@@ -180,7 +180,7 @@ function systemEndpoints(app) {
     [validatedRequest],
     async (request, response) => {
       try {
-        const { name, meta } = reqBody(request);
+        const {name, meta} = reqBody(request);
         await purgeDocument(name, meta);
         response.sendStatus(200).end();
       } catch (e) {
@@ -193,7 +193,7 @@ function systemEndpoints(app) {
   app.get("/system/local-files", [validatedRequest], async (_, response) => {
     try {
       const localFiles = await viewLocalFiles();
-      response.status(200).json({ localFiles });
+      response.status(200).json({localFiles});
     } catch (e) {
       console.log(e.message, e);
       response.sendStatus(500).end();
@@ -225,7 +225,7 @@ function systemEndpoints(app) {
           return;
         }
 
-        response.status(200).json({ types });
+        response.status(200).json({types});
       } catch (e) {
         console.log(e.message, e);
         response.sendStatus(500).end();
@@ -249,9 +249,9 @@ function systemEndpoints(app) {
           }
         }
 
-        const { newValues, error } = updateENV(body);
+        const {newValues, error} = updateENV(body);
         if (process.env.NODE_ENV === "production") await dumpENV();
-        response.status(200).json({ newValues, error });
+        response.status(200).json({newValues, error});
       } catch (e) {
         console.log(e.message, e);
         response.sendStatus(500).end();
@@ -270,8 +270,8 @@ function systemEndpoints(app) {
           return;
         }
 
-        const { usePassword, newPassword } = reqBody(request);
-        const { error } = updateENV(
+        const {usePassword, newPassword} = reqBody(request);
+        const {error} = updateENV(
           {
             AuthToken: usePassword ? newPassword : "",
             JWTSecret: usePassword ? v4() : "",
@@ -279,7 +279,7 @@ function systemEndpoints(app) {
           true
         );
         if (process.env.NODE_ENV === "production") await dumpENV();
-        response.status(200).json({ success: !error, error });
+        response.status(200).json({success: !error, error});
       } catch (e) {
         console.log(e.message, e);
         response.sendStatus(500).end();
@@ -292,7 +292,7 @@ function systemEndpoints(app) {
     [validatedRequest],
     async (request, response) => {
       try {
-        const { username, password } = reqBody(request);
+        const {username, password} = reqBody(request);
         const multiUserModeEnabled = await SystemSettings.isMultiUserMode();
         if (multiUserModeEnabled) {
           response.status(200).json({
@@ -302,7 +302,7 @@ function systemEndpoints(app) {
           return;
         }
 
-        const { user, error } = await User.create({
+        const {user, error} = await User.create({
           username,
           password,
           role: "admin",
@@ -323,7 +323,7 @@ function systemEndpoints(app) {
         );
         if (process.env.NODE_ENV === "production") await dumpENV();
         await Telemetry.sendTelemetry("enabled_multi_user_mode");
-        response.status(200).json({ success: !!user, error });
+        response.status(200).json({success: !!user, error});
       } catch (e) {
         console.log(e.message, e);
         response.sendStatus(500).end();
@@ -333,8 +333,8 @@ function systemEndpoints(app) {
 
   app.get("/system/data-export", [validatedRequest], async (_, response) => {
     try {
-      const { filename, error } = await exportData();
-      response.status(200).json({ filename, error });
+      const {filename, error} = await exportData();
+      response.status(200).json({filename, error});
     } catch (e) {
       console.log(e.message, e);
       response.sendStatus(500).end();
@@ -374,9 +374,9 @@ function systemEndpoints(app) {
     "/system/data-import",
     handleImports.single("file"),
     async function (request, response) {
-      const { originalname } = request.file;
-      const { success, error } = await unpackAndOverwriteImport(originalname);
-      response.status(200).json({ success, error });
+      const {originalname} = request.file;
+      const {success, error} = await unpackAndOverwriteImport(originalname);
+      response.status(200).json({success, error});
     }
   );
 
@@ -384,7 +384,7 @@ function systemEndpoints(app) {
     try {
       const defaultFilename = getDefaultFilename(request.params.mode);
       const logoPath = await determineLogoFilepath(defaultFilename);
-      const { buffer, size, mime } = fetchLogo(logoPath);
+      const {buffer, size, mime} = fetchLogo(logoPath);
       response.writeHead(200, {
         "Content-Type": mime || "image/png",
         "Content-Disposition": `attachment; filename=${path.basename(
@@ -396,7 +396,7 @@ function systemEndpoints(app) {
       return;
     } catch (error) {
       console.error("Error processing the logo request:", error);
-      response.status(500).json({ message: "Внутренняя ошибка сервера" });
+      response.status(500).json({message: "Внутренняя ошибка сервера"});
     }
   });
 
@@ -406,7 +406,7 @@ function systemEndpoints(app) {
     handleLogoUploads.single("logo"),
     async (request, response) => {
       if (!request.file || !request.file.originalname) {
-        return response.status(400).json({ message: "Лого не предоставлено." });
+        return response.status(400).json({message: "Лого не предоставлено."});
       }
 
       if (!validFilename(request.file.originalname)) {
@@ -427,7 +427,7 @@ function systemEndpoints(app) {
         const existingLogoFilename = await SystemSettings.currentLogoFilename();
         await removeCustomLogo(existingLogoFilename);
 
-        const { success, error } = await SystemSettings.updateSettings({
+        const {success, error} = await SystemSettings.updateSettings({
           logo_filename: newFilename,
         });
 
@@ -438,7 +438,7 @@ function systemEndpoints(app) {
         });
       } catch (error) {
         console.error("Error processing the logo upload:", error);
-        response.status(500).json({ message: "Ошибка выгрузки лого." });
+        response.status(500).json({message: "Ошибка выгрузки лого."});
       }
     }
   );
@@ -457,7 +457,7 @@ function systemEndpoints(app) {
 
         const currentLogoFilename = await SystemSettings.currentLogoFilename();
         await removeCustomLogo(currentLogoFilename);
-        const { success, error } = await SystemSettings.updateSettings({
+        const {success, error} = await SystemSettings.updateSettings({
           logo_filename: DARK_LOGO_FILENAME,
         });
 
@@ -468,7 +468,7 @@ function systemEndpoints(app) {
         });
       } catch (error) {
         console.error("Ошибка обработки:", error);
-        response.status(500).json({ message: "Ошибка при удалении лого." });
+        response.status(500).json({message: "Ошибка при удалении лого."});
       }
     }
   );
@@ -479,15 +479,15 @@ function systemEndpoints(app) {
     async function (request, response) {
       try {
         if (!response.locals.multiUserMode) {
-          return response.status(200).json({ canDelete: true });
+          return response.status(200).json({canDelete: true});
         }
 
         if (response.locals.user?.role === "admin") {
-          return response.status(200).json({ canDelete: true });
+          return response.status(200).json({canDelete: true});
         }
 
         const canDelete = await SystemSettings.canDeleteWorkspaces();
-        response.status(200).json({ canDelete });
+        response.status(200).json({canDelete});
       } catch (error) {
         console.error("Ошибка при удалении рабочего пространства:", error);
         response.status(500).json({
@@ -502,12 +502,12 @@ function systemEndpoints(app) {
   app.get("/system/welcome-messages", async function (request, response) {
     try {
       const welcomeMessages = await WelcomeMessages.getMessages();
-      response.status(200).json({ success: true, welcomeMessages });
+      response.status(200).json({success: true, welcomeMessages});
     } catch (error) {
       console.error("Ошибка обработки приветственных сообщений:", error);
       response
         .status(500)
-        .json({ success: false, message: "Внутренняя ошибка сервера" });
+        .json({success: false, message: "Внутренняя ошибка сервера"});
     }
   });
 
@@ -523,7 +523,7 @@ function systemEndpoints(app) {
           return response.sendStatus(401).end();
         }
 
-        const { messages = [] } = reqBody(request);
+        const {messages = []} = reqBody(request);
         if (!Array.isArray(messages)) {
           return response.status(400).json({
             success: false,
@@ -576,7 +576,7 @@ function systemEndpoints(app) {
         }
 
         await ApiKey.delete();
-        const { apiKey, error } = await ApiKey.create();
+        const {apiKey, error} = await ApiKey.create();
         return response.status(200).json({
           apiKey,
           error,
@@ -606,4 +606,4 @@ function systemEndpoints(app) {
   });
 }
 
-module.exports = { systemEndpoints };
+module.exports = {systemEndpoints};
