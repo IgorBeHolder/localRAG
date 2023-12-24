@@ -6,15 +6,22 @@ import paths from "../../utils/paths";
 import {AUTH_TIMESTAMP, AUTH_TOKEN, AUTH_USER} from "../../utils/constants";
 import {userFromStorage} from "../../utils/request";
 import System from "../../models/system";
+import {useSelector} from "react-redux";
 
 // Used only for Multi-user mode only as we permission specific pages based on auth role.
 // When in single user mode we just bypass any authchecks.
 function useIsAuthenticated() {
+  const settings = useSelector((state) => state.settings);
   const [isAuthd, setIsAuthed] = useState(null);
+  const [isCoder, setIsCoder] = useState(false);
 
   useEffect(() => {
     const validateSession = async () => {
-      const multiUserMode = (await System.keys())?.MultiUserMode;
+      // const settings = await System.keys();
+      const multiUserMode = settings?.MultiUserMode;
+
+      setIsCoder(Boolean(settings?.isCoder))
+
       if (!multiUserMode) {
         setIsAuthed(true);
         return;
@@ -41,16 +48,18 @@ function useIsAuthenticated() {
     validateSession();
   }, []);
 
-  return isAuthd;
+  return {isAuthd, isCoder};
 }
 
 export function AdminRoute({Component}) {
-  const authed = useIsAuthenticated();
+  const userAuth = useIsAuthenticated();
+  const authed = userAuth.isAuthd;
+  const isCoder = userAuth.isCoder;
   if (authed === null) return <FullScreenLoader/>;
 
   const user = userFromStorage();
   return authed && user?.role === "admin" ? (
-    <Component/>
+    <Component isCoder={isCoder}/>
   ) : (
     <Navigate to={paths.home()}/>
   );
@@ -58,8 +67,10 @@ export function AdminRoute({Component}) {
 
 export default function PrivateRoute(props) {
   const {Component} = props;
-  const authed = useIsAuthenticated();
+  const userAuth = useIsAuthenticated();
+  const authed = userAuth.isAuthd;
+  const isCoder = userAuth.isCoder;
   if (authed === null) return <FullScreenLoader/>;
 
-  return authed ? <Component analystRoute={props.analystRoute}/> : <Navigate to={paths.home()}/>;
+  return authed ? <Component isCoder={isCoder} analystRoute={props.analystRoute}/> : <Navigate to={paths.home()}/>;
 }

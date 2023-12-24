@@ -38,6 +38,8 @@ export default function Sidebar() {
 }
 
 export function SidebarMobileHeader() {
+  const settings = useSelector((state) => state.settings);
+
   const {logo} = useLogo();
   const sidebarRef = useRef(null);
   const [showSidebar, setShowSidebar] = useState(false);
@@ -57,7 +59,7 @@ export function SidebarMobileHeader() {
 
   // Settings
   const [tab, setTab] = useState(null);
-  const [settings, setSettings] = useState(null);
+  // const [settings, setSettings] = useState(null);
   const [loading, setLoading] = useState(true);
   const {
     showing: showingSettings,
@@ -118,7 +120,7 @@ export function SidebarMobileHeader() {
         <SettingsOverlay setTab={setTab}
                          tab={tab}
                          settings={settings}
-                         setSettings={setSettings}
+                         // setSettings={setSettings}
                          showModal={showModalSettings}
                          hideModal={hideModalSettings}
                          setLoading={setLoading}

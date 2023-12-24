@@ -37,13 +37,15 @@ export default function SettingsOverlay({
   };
 
   useEffect(() => {
-    async function fetchKeys() {
-      const _settings = await System.keys();
-      setSettings(_settings);
-      setLoading(false);
-    }
+    // async function fetchKeys() {
+    // const _settings = await System.keys();
+    // setSettings(_settings);
+    // setLoading(false);
+    // }
 
-    fetchKeys();
+    setLoading(false);
+
+    // fetchKeys();
   }, []);
 
   return (

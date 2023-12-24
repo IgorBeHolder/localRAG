@@ -1,7 +1,7 @@
 import React, {useState, useRef, memo, useEffect} from "react";
 import {isMobile} from "react-device-detect";
 import {Loader, Menu, X} from "react-feather";
-import {CHAT_MAX_LENGTH, IS_CODER} from "../../../../utils/constants.js";
+import {CHAT_MAX_LENGTH} from "../../../../utils/constants.js";
 import TerminalComponent from "../../../AnalystChat/ChatContainer/ChatHistory/Terminal/index.jsx";
 
 export default function PromptInput({
@@ -198,10 +198,6 @@ const Tracking = memo(({workspaceSlug}) => {
     watchForChatModeChange();
   }, [workspaceSlug]);
 
-  useEffect(() => {
-
-  }, [IS_CODER, chatMode, workspaceSlug]);
-
   return (
     <div className="flex flex-col md:flex-row w-full justify-center items-center gap-2 mb-2 px-4 mx:px-0">
       <p
@@ -232,12 +228,12 @@ function CommandMenu({workspace, show, handleClick, hide, mode}) {
     }
   ];
 
-  if (IS_CODER) {
-    COMMANDS.unshift({
-      cmd: "/analyst",
-      description: "- перейти в режим кодинга."
-    });
-  }
+  // if (IS_CODER) {
+  //   COMMANDS.unshift({
+  //     cmd: "/analyst",
+  //     description: "- перейти в режим кодинга."
+  //   });
+  // }
 
   return (
     <div

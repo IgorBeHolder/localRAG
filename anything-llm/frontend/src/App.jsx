@@ -4,6 +4,8 @@ import {ContextWrapper} from "./AuthContext";
 import PrivateRoute, {AdminRoute} from "./components/PrivateRoute";
 import {ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import {useDispatch} from "react-redux";
+import {fetchUserSettings} from "./store/settingsSlice";
 
 const Main = lazy(() => import("./pages/Main"));
 const InvitePage = lazy(() => import("./pages/Invite"));
@@ -18,6 +20,10 @@ const AdminAppearance = lazy(() => import("./pages/Admin/Appearance"));
 const AdminApiKeys = lazy(() => import("./pages/Admin/ApiKeys"));
 
 export default function App() {
+  const dispatch = useDispatch();
+
+  dispatch(fetchUserSettings());
+
   return (
     <Suspense fallback={<div/>}>
       <ContextWrapper>

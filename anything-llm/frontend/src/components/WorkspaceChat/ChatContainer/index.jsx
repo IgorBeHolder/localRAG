@@ -9,7 +9,7 @@ import {TYPE_EFFECT_DELAY, TYPE_STRING_DELAY, WS_URL} from "../../../utils/const
 import {safeTagsReplace} from "../../../utils/functions.js";
 import renderMarkdown from "../../../utils/chat/markdown.js";
 
-export default function ChatContainer({workspace, knownHistory = []}) {
+export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
   const [message, setMessage] = useState("");
   const [connStatus, setConnStatus] = useState("");
   const [chatHistory, setChatHistory] = useState(knownHistory);
@@ -266,6 +266,7 @@ export default function ChatContainer({workspace, knownHistory = []}) {
         analyst={mode === "analyst"}
         resetChatSSH={resetChatSSH}
         mode={mode}
+        isCoder={isCoder}
         workspace={workspace}
         message={message}
         submit={handleSubmit}

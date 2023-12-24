@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { X } from "react-feather";
+import React, {useEffect, useState} from "react";
+import {X} from "react-feather";
 import ExportOrImportData from "./ExportImport";
 import PasswordProtection from "./PasswordProtection";
 import System from "../../../models/system";
@@ -9,6 +9,7 @@ import VectorDBSelection from "./VectorDbs";
 import LLMSelection from "./LLMSelection";
 import Appearance from "./Appearance";
 import ApiKey from "./ApiKey";
+import {useSelector} from "react-redux";
 
 export const TABS = {
   llm: LLMSelection,
@@ -21,23 +22,30 @@ export const TABS = {
 };
 
 const noop = () => false;
-export default function SystemSettingsModal({ tab = null, hideModal = noop }) {
-  const { user } = useUser();
+export default function SystemSettingsModal({tab = null, hideModal = noop}) {
+  const {user} = useUser();
+
   const [loading, setLoading] = useState(true);
-  const [settings, setSettings] = useState(null);
+  // const [settings, setSettings] = useState(null);
   const Component = TABS[tab || "llm"];
+  const settings = useSelector((state) => state.settings);
 
   useEffect(() => {
     async function fetchKeys() {
-      const _settings = await System.keys();
-      setSettings(_settings);
+      // const _settings = await System.keys();
+
+      console.log('fetchKeys', settings);
+
+      // setSettings(settings);
       setLoading(false);
     }
+
     fetchKeys();
   }, []);
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-100 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] h-full bg-black bg-opacity-50 flex items-center justify-center">
+    <div
+      className="fixed top-0 left-0 right-0 z-100 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] h-full bg-black bg-opacity-50 flex items-center justify-center">
       <div
         className="flex fixed top-0 left-0 right-0 w-full h-full"
         onClick={hideModal}
@@ -55,16 +63,16 @@ export default function SystemSettingsModal({ tab = null, hideModal = noop }) {
                 className="transition-all duration-300 text-gray-400 bg-transparent hover:bg-blue-100 hover:text-blue-600 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
                 data-modal-hide="staticModal"
               >
-                <X className="text-__gray-300 text-lg" />
+                <X className="text-__gray-300 text-lg"/>
               </button>
             </div>
           </div>
           {loading ? (
             <div className="w-full flex h-[400px] p-6">
-              <div className="w-full flex h-full bg-gray-200 dark:bg-stone-600 animate-pulse rounded-lg" />
+              <div className="w-full flex h-full bg-gray-200 dark:bg-stone-600 animate-pulse rounded-lg"/>
             </div>
           ) : (
-            <Component hideModal={hideModal} user={user} settings={settings} />
+            <Component hideModal={hideModal} user={user} settings={settings}/>
           )}
         </div>
       </div>
@@ -81,5 +89,5 @@ export function useSystemSettingsModal() {
     setShowing(false);
   };
 
-  return { showing, showModal, hideModal };
+  return {showing, showModal, hideModal};
 }
