@@ -20,7 +20,12 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
   const [typeWriterInstance, setTypeWriterInstance] = useState(null);
   const storageKey = `workspace_chat_mode_${workspace.slug}`;
 
-  const mode = window.localStorage.getItem(storageKey);
+  let mode = window.localStorage.getItem(storageKey);
+
+  if (mode === "analyst" && !isCoder) {
+    mode = "query";
+    window.localStorage.setItem(storageKey, mode);
+  }
 
   const [loadingResponse, setLoadingResponse] = useState(mode === "analyst");
   const [newWsMessage, setNewWsMessage] = useState(false);
@@ -77,7 +82,7 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
     }
   }, [typeWriterRef, typeWriterInstance, mode, typeWriterStack, typeWriterIsBusy]);
 
-  if (mode === "analyst") {
+  if (mode === "analyst" && isCoder) {
     //Public API that will echo messages sent to it back to the client
     const [socketUrl, setSocketUrl] = useState(WS_URL);
 
