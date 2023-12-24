@@ -8,7 +8,7 @@ export default function handleChat(
   _chatHistory
 ) {
   const {uuid, textResponse: text, type, sources = [], error, close, typeWriter} = chatResult;
-  const textResponse = safeTagsReplace(text);
+  const textResponse = typeWriter ? safeTagsReplace(text) : text;
 
   console.log('textResponse', remHistory, typeWriter, type, textResponse);
 

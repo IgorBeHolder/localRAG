@@ -8,7 +8,7 @@ const {
   acceptedFileTypes,
 } = require("../utils/files/documentProcessor");
 const {purgeDocument} = require("../utils/files/purgeDocument");
-const {getVectorDbClass} = require("../utils/helpers");
+const {getVectorDbClass, serverLog} = require("../utils/helpers");
 const {updateENV, dumpENV} = require("../utils/helpers/updateENV");
 const {
   reqBody,
@@ -395,7 +395,7 @@ function systemEndpoints(app) {
       response.end(Buffer.from(buffer, "base64"));
       return;
     } catch (error) {
-      console.error("Error processing the logo request:", error);
+      serverLog("Error processing the logo request:", error);
       response.status(500).json({message: "Внутренняя ошибка сервера"});
     }
   });

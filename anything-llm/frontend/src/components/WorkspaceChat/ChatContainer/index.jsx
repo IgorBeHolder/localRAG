@@ -101,21 +101,25 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
     const onWsMessage = useCallback((msg) => {
       console.log('onWsMessage', msg, chatHistory);
 
-      const remHistory = (chatHistory.length > 0 ? chatHistory.slice(0, -1) : []).map((m, mi) => {
-        if (m.typeWriter) {
-          m.typeWriter = false;
-          m.content = safeTagsReplace(m.content);
-        }
-
-        return m;
-      });
-
-      let _chatHistory = [...remHistory];
-
       let chatResult = JSON.parse(msg.data);
+
+      const getRemHistory = (slice) => {
+        return (chatHistory.length > 0 ? chatHistory.slice(0, slice) : []).map((m, mi) => {
+          if (m.typeWriter) {
+            m.typeWriter = false;
+            m.content = safeTagsReplace(m.content);
+          }
+
+          return m;
+        });
+      }
 
       if (chatResult.error) {
         chatResult.type = "abort";
+
+        const remHistory = getRemHistory(chatHistory.length - 1);
+
+        let _chatHistory = [...remHistory];
 
         handleChat(
           chatResult,
@@ -127,6 +131,10 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
       } else {
         chatResult.typeWriter = true;
         chatResult.textResponse = (chatResult.textResponse.trim());
+
+        const remHistory = getRemHistory(-1);
+
+        let _chatHistory = [...remHistory];
 
         console.log("chatResult", chatResult, _chatHistory);
 

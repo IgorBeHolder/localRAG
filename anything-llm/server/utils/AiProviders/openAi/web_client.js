@@ -1,22 +1,22 @@
 const axios = require('axios');
-const { prompt_templates } = require('../../vectorDbProviders/lance/index');
-const { fetchModelName } = require("./model_name_fetch");
+const {prompt_templates} = require('../../vectorDbProviders/lance/index');
+const {fetchModelName} = require("./model_name_fetch");
 const {BOS, EOS, assistance_prefix, end_of_turn, user_prefix} = prompt_templates();
 
 const base_url = process.env.COMPLETION_MODEL_ENDPOINT;
 const url = base_url + '/v1/models';
 fetchModelName(url)
-    .then(modelId => {
-        if (modelId) {
-          global.COMPLETION_MODEL_NAME = modelId;
-          console.log("*** COMPLETION_MODEL_NAME", modelId);
-        } else {
-            console.log('No model ID returned or error occurred');
-        }
-    })
-    .catch(error => {
-        console.error('Error in fetching model:', error);
-    });
+  .then(modelId => {
+    if (modelId) {
+      global.COMPLETION_MODEL_NAME = modelId;
+      console.log("*** COMPLETION_MODEL_NAME", modelId);
+    } else {
+      console.log('No model ID returned or error occurred');
+    }
+  })
+  .catch(error => {
+    console.error('Error in fetching model:', error);
+  });
 
 function format_messages(messages = []) {
   const formattedHistory = [];
