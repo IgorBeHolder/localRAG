@@ -132,7 +132,12 @@ if (process.env.IS_CODER === 'TRUE') {
                   close: true
                 };
 
-                chatResult.error = {code, text: (code === 127 ? "-bash: no such command" : "-bash: unknown error")};
+                chatResult.error = {
+                  code,
+                  text: (code === 127 ? "-bash: no such command" :
+                    (code === 1 ? "-ssh: answered with error" :
+                      "-bash: unknown error"))
+                };
 
                 if (process.env.NODE_ENV === "development") {
                   console.warn("@@@@@@@ SSH Result", code, signal);
@@ -204,14 +209,19 @@ if (process.env.IS_CODER === 'TRUE') {
       }
 
       if (activeStream) {
-        sem_search(command).then(s => {
-          console.log('sem_search', s);
-
-          executeSSHCommand(s, sshConnection, ws);
-        });
-
         // Получаем команду от клиента и выполняем ее на сервере SSH
-        // executeSSHCommand(command, sshConnection, ws);
+
+        sem_search(command, function (s) {
+          if (s.error) {
+            if (process.env.NODE_ENV === "development") {
+              console.log("##################### WS sem_search", s.error);
+            }
+
+            executeSSHCommand(command, sshConnection, ws);
+          } else if (s.result) {
+            executeSSHCommand(s.result, sshConnection, ws);
+          }
+        });
       }
     });
 
