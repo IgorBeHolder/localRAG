@@ -40,7 +40,7 @@ RUN pip3 install --upgrade pip
 RUN --mount=type=cache,target=/tmp/pip_cache pip3 install \
     matplotlib seaborn plotly openpyxl \
     sweetviz open-interpreter websockets \
-    scikit-learn
+    scikit-learn datetime
 
     # pydantic==2.4.0 pandas-profiling
     # dataprep scikit-learn
