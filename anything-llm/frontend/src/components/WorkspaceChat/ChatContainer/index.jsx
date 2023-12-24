@@ -114,18 +114,38 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
 
       let chatResult = JSON.parse(msg.data);
 
-      chatResult.typeWriter = true;
-      chatResult.textResponse = (chatResult.textResponse.trim());
+      if (chatResult.error) {
+        chatResult.type = "abort";
 
-      console.log("chatResult", chatResult, _chatHistory);
+        handleChat(
+          chatResult,
+          setLoadingResponse,
+          setChatHistory,
+          remHistory,
+          _chatHistory
+        );
+      } else {
+        chatResult.typeWriter = true;
+        chatResult.textResponse = (chatResult.textResponse.trim());
 
-      if (_chatHistory.length) {
-        let lastChatMessage = _chatHistory[_chatHistory.length - 1];
+        console.log("chatResult", chatResult, _chatHistory);
 
-        if (lastChatMessage.role === "assistant") {
-          _chatHistory[_chatHistory.length - 1].content += safeTagsReplace(chatResult.textResponse);
+        if (_chatHistory.length) {
+          let lastChatMessage = _chatHistory[_chatHistory.length - 1];
 
-          console.log('lastChatMessage', lastChatMessage, _chatHistory);
+          if (lastChatMessage.role === "assistant") {
+            _chatHistory[_chatHistory.length - 1].content += safeTagsReplace(chatResult.textResponse);
+
+            console.log('lastChatMessage', lastChatMessage, _chatHistory);
+          } else {
+            handleChat(
+              chatResult,
+              setLoadingResponse,
+              setChatHistory,
+              remHistory,
+              _chatHistory
+            );
+          }
         } else {
           handleChat(
             chatResult,
@@ -135,20 +155,12 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
             _chatHistory
           );
         }
-      } else {
-        handleChat(
-          chatResult,
-          setLoadingResponse,
-          setChatHistory,
-          remHistory,
-          _chatHistory
-        );
+
+        typeMessage(((chatResult.textResponse)));
+
+        setChatHistory(_chatHistory);
+        setLoadingResponse(false);
       }
-
-      typeMessage(((chatResult.textResponse)));
-
-      setChatHistory(_chatHistory);
-      setLoadingResponse(false);
     }, [setLoadingResponse, setChatHistory, chatHistory, typeWriterRef, typeWriterInstance]);
 
     const {sendMessage, lastMessage, readyState} = useWebSocket(socketUrl, {
