@@ -38,7 +38,7 @@ function sem_search(text_prompt, cb) {
       {
         role: "system", content: sys_prompt
       },
-      { role: "user", content: prompt }
+      {role: "user", content: prompt}
     ];
 
     return new Promise((res, rej) => {
@@ -49,10 +49,10 @@ function sem_search(text_prompt, cb) {
       });
     }).then(response => {
       const process_response = response !== null ? (jsonData[response] === "нет точного соответствия" ? "" : jsonData[response] ?? "") : "";
-      cb({ result: (text_prompt + "\n" + process_response).trim() });
+      cb({result: (process_response + "\nQ:" + text_prompt + "\A:").trim()});
     });
   }).catch(err => {
-    cb({ error: err });
+    cb({error: err});
   });
 }
 
