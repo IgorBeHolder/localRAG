@@ -147,7 +147,6 @@ export default function PromptInput({
           <div className="flex items-center py-2 px-4 rounded-lg">
             <OutsideClickHandler
               onOutsideClick={() => {
-                console.log('onOutsideClick');
                 setShowMenu(false);
               }}
             >
