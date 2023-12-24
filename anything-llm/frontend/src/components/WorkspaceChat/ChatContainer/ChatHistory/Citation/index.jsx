@@ -53,6 +53,8 @@ const Citation = memo(({source, id}) => {
     });
   };
 
+  const titleNormalized = fixEncoding(String(title));
+
   return (
     <div
       key={id || v4()}
@@ -62,10 +64,9 @@ const Citation = memo(({source, id}) => {
       }`}
     >
       <div
-        className="rounded-t-lg bg-gray-300 dark:bg-stone-900 px-4 py-2 w-full h-fit flex items-center justify-between">
-        <p className="text-base text-gray-800 dark:text-slate-400 italic truncate w-3/4">
-          {fixEncoding(String(title))}
-        </p>
+        className="rounded-t-lg bg-gray-300 dark:bg-stone-900 px-4 py-2 w-full h-fit flex items-start justify-between">
+        <p className={"text-base text-gray-800 dark:text-slate-400 italic" + (maximized ? " truncate w-3/4" : "")}
+           title={maximized ? titleNormalized : null}>{titleNormalized}</p>
         <button
           onClick={handleMinMax}
           className="hover:dark:bg-stone-800 hover:bg-gray-200 dark:text-slate-400 text-gray-800 rounded-full p-1"

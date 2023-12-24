@@ -1,4 +1,5 @@
 import {useCallback, useEffect, useState} from "react";
+import {useRoutes} from "react-router-dom";
 import ChatHistory from "./ChatHistory";
 import PromptInput from "./PromptInput";
 import Typewriter from 'typewriter-effect/dist/core';
@@ -21,6 +22,7 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
   const storageKey = `workspace_chat_mode_${workspace.slug}`;
 
   let mode = window.localStorage.getItem(storageKey);
+
 
   if (mode === "analyst" && !isCoder) {
     mode = "query";
