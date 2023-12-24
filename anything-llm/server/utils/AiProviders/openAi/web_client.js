@@ -1,6 +1,22 @@
 const axios = require('axios');
-const {prompt_templates} = require('../../vectorDbProviders/lance/index');
+const { prompt_templates } = require('../../vectorDbProviders/lance/index');
+const { fetchModelName } = require("./model_name_fetch");
 const {BOS, EOS, assistance_prefix, end_of_turn, user_prefix} = prompt_templates();
+
+const base_url = process.env.COMPLETION_MODEL_ENDPOINT;
+const url = base_url + '/v1/models';
+fetchModelName(url)
+    .then(modelId => {
+        if (modelId) {
+          global.COMPLETION_MODEL_NAME = modelId;
+          console.log("*** COMPLETION_MODEL_NAME", modelId);
+        } else {
+            console.log('No model ID returned or error occurred');
+        }
+    })
+    .catch(error => {
+        console.error('Error in fetching model:', error);
+    });
 
 function format_messages(messages = []) {
   const formattedHistory = [];
@@ -22,29 +38,37 @@ function format_messages(messages = []) {
   return formattedHistory;
 }
 
-const model_prefix = process.env.DEVICE == ('cpu') ? '/app' : '';
+const model_prefix =
+  process.env.LLM_ENGINE == ('llama-cpp') ? '/app/model-store/' : '/model-store/';
 
 async function v1_chat_completions(messages, temperature) {
 
   // const messages2string = format_messages(messages);
-  const messages2string = messages;
+  const messages2string = messages;  // skip the formatting
 
-  const base_url = process.env.COMPLETION_MODEL_ENDPOINT;
-  console.log('v1_chat_completions: *** base_url:', base_url);
-  const compl_model = process.env.COMPLETION_MODEL_NAME;
-  console.log('v1_chat_completions: *** completion_model:', compl_model);
-  console.log('v1_chat_completions: *** temperature:', temperature);
-  console.log('v1_chat_completions: *** messages:', messages2string);
   const url = base_url + '/v1/chat/completions';
+  const repeat_penalty = process.env.R_PENALTY;
+  const top_p = process.env.TOP_P;
+  const compl_model = global.COMPLETION_MODEL_NAME;
+
+
+  console.log('v1_chat_completions: *** url:', url);
+  console.log('v1_chat_completions: *** completion_model:', compl_model + ' (model_prefix: ' + model_prefix + ')');
+  console.log('v1_chat_completions: *** temperature:', temperature);
+  console.log('v1_chat_completions: *** repeat_penalty:', repeat_penalty);
+  console.log('v1_chat_completions: *** top_p:', top_p);
+
+  console.log('v1_chat_completions: *** messages:', messages2string);
+
   const payload = {
     // add the prefix to the model name like '/app'
-    "model": model_prefix + "/model-store/" + compl_model,
+    "model": model_prefix + compl_model,
     "messages": messages2string,
-    // "max_tokens": 512,
     "temperature": temperature,
-    "top_p": 0.95,
+    "top_p": top_p,
     // "presence_penalty": 0,
-    "frequency_penalty": 1.3
+    "frequency_penalty": repeat_penalty
+    // "repeat_penalty": repeat_penalty
   };
   // The presence penalty is a one - off additive contribution that applies to all tokens that
   // have been sampled at least once and the frequency penalty is a contribution that is proportional
@@ -71,6 +95,7 @@ async function v1_chat_completions(messages, temperature) {
     return null;
   }
 }
+
 
 async function v1_embeddings_openllm(textInput) {
 
