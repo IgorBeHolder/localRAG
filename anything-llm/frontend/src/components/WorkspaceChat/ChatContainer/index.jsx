@@ -1,5 +1,4 @@
 import {useCallback, useEffect, useState} from "react";
-import {useRoutes} from "react-router-dom";
 import ChatHistory from "./ChatHistory";
 import PromptInput from "./PromptInput";
 import Typewriter from 'typewriter-effect/dist/core';
@@ -23,10 +22,20 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
 
   let mode = window.localStorage.getItem(storageKey);
 
-
-  if (mode === "analyst" && !isCoder) {
+  const setQueryMode = () => {
     mode = "query";
     window.localStorage.setItem(storageKey, mode);
+  }
+
+  if (mode === "analyst") {
+    if (!isCoder) {
+      setQueryMode();
+    }
+
+    if (!window.location.pathname.startsWith('/analyst/')) {
+      setQueryMode();
+      window.location = "/workspace/" + workspace.slug;
+    }
   }
 
   const [loadingResponse, setLoadingResponse] = useState(mode === "analyst");
@@ -71,6 +80,7 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
       if (typeWriterRef?.current && typeWriterInstance?.state) {
         if (typeWriterIsBusy) {
           console.log('typeWriterIsBusy', typeWriterIsBusy);
+          debugger;
         } else {
           typeWriterInstance
             .pauseFor(100)
