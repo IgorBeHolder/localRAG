@@ -55,8 +55,6 @@ async function sem_search(text_prompt) {
         res(data);
       });
     }).then(response => {
-      debugger;
-
       const process_response = response !== null ? (jsonData[response] === "нет точного соответствия" ? "" : jsonData[response] ?? "") : "";
 
       console.log("v1_chat_completions_response", response, process_response);
