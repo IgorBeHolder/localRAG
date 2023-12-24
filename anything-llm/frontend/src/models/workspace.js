@@ -1,4 +1,4 @@
-import {API_BASE} from "../utils/constants";
+import {API_BASE, PYTHON_API} from "../utils/constants";
 import {baseHeaders} from "../utils/request";
 
 const Workspace = {
@@ -107,6 +107,16 @@ const Workspace = {
   },
   uploadFile: async function (slug, formData) {
     const response = await fetch(`${API_BASE}/workspace/${slug}/upload`, {
+      method: "POST",
+      body: formData,
+      headers: baseHeaders()
+    });
+
+    const data = await response.json();
+    return {response, data};
+  },
+  uploadCsvFile: async function (slug, formData) {
+    const response = await fetch(`${PYTHON_API}/save_csv`, {
       method: "POST",
       body: formData,
       headers: baseHeaders()

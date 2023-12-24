@@ -4,10 +4,11 @@ const {Document} = require("../models/documents");
 const {DocumentVectors} = require("../models/vectors");
 const {WorkspaceChats} = require("../models/workspaceChats");
 const {convertToChatHistory} = require("../utils/chats");
-const {getVectorDbClass} = require("../utils/helpers");
+const {getVectorDbClass, fixEncoding} = require("../utils/helpers");
 const {setupMulter} = require("../utils/files/multer");
 const {
   checkPythonAppAlive,
+  processCsvDocument,
   processDocument
 } = require("../utils/files/documentProcessor");
 const {validatedRequest} = require("../utils/middleware/validatedRequest");
@@ -26,7 +27,7 @@ function workspaceEndpoints(app) {
       await Telemetry.sendTelemetry("workspace_created", {
         multiUserMode: multiUserMode(response),
         LLMSelection: process.env.LLM_PROVIDER || "openai",
-        VectorDbSelection: process.env.VECTOR_DB || "pinecone"
+        VectorDbSelection: process.env.VECTOR_DB || "lancedb"
       });
       response.status(200).json({workspace, message});
     } catch (e) {
@@ -68,7 +69,7 @@ function workspaceEndpoints(app) {
     "/workspace/:slug/upload",
     handleUploads.single("file"),
     async function (request, response) {
-      const {originalname} = request.file;
+      const originalname = request.file.originalname;
       const processingOnline = await checkPythonAppAlive();
 
       if (!processingOnline) {
@@ -89,7 +90,73 @@ function workspaceEndpoints(app) {
       }
 
       console.log(
-        `Document ${originalname} uploaded processed and successfully. It is now available in documents.`
+        `Document ${originalname} uploaded and processed successfully. It is now available in documents.`
+      );
+      await Telemetry.sendTelemetry("document_uploaded");
+      response.status(200).json({success: true, error: null});
+    }
+  );
+
+  app.post(
+    "/workspace/:slug/save_csv",
+    handleUploads.single("file"),
+    async function (request, response) {
+      const {originalname} = request.file;
+      const processingOnline = await checkPythonAppAlive();
+
+      console.log("originalname", processingOnline, originalname);
+
+      if (!processingOnline) {
+        response
+          .status(500)
+          .json({
+            success: false,
+            error: `CSV processing API is not online. Document ${originalname} will not be processed automatically.`
+          })
+          .end();
+        return;
+      }
+
+      const {success, reason} = await processCsvDocument(originalname);
+      if (!success) {
+        response.status(500).json({success: false, error: reason}).end();
+        return;
+      }
+
+      console.log(
+        `Document ${originalname} uploaded and processed successfully. It is now available in documents.`
+      );
+      await Telemetry.sendTelemetry("document_uploaded");
+      response.status(200).json({success: true, error: null});
+    }
+  );
+
+  app.post(
+    "/save_csv",
+    handleUploads.single("file"),
+    async function (request, response) {
+      const {originalname} = request.file;
+      const processingOnline = await checkPythonAppAlive();
+
+      if (!processingOnline) {
+        response
+          .status(500)
+          .json({
+            success: false,
+            error: `Python processing API is not online. Document ${originalname} will not be processed automatically.`
+          })
+          .end();
+        return;
+      }
+
+      const {success, reason} = await processCsvDocument(originalname);
+      if (!success) {
+        response.status(500).json({success: false, error: reason}).end();
+        return;
+      }
+
+      console.log(
+        `Document ${originalname} uploaded and processed successfully. It is now available in documents.`
       );
       await Telemetry.sendTelemetry("document_uploaded");
       response.status(200).json({success: true, error: null});

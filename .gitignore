@@ -1,9 +1,14 @@
 .DS_Store
 venv/
 model-store/
+client-files/.env
 .vscode/
 # anything-llm/server/package-lock.json
 # anything-llm/server/yarn.lock
 test/
 *.gz
 *.tar
+embed-server/nginx/local-rag-docs.conf
+anything-llm/server/yarn.lock
+
+start-dp.sh

@@ -1,9 +1,5 @@
 #!/bin/bash
 
-# Stop the container
-echo "Stopping ANYTH container..."
-docker stop anyth && \
-
 # Function to remove a file if it exists
 remove_if_exists() {
   if [ -f "$1" ]; then
@@ -15,10 +11,20 @@ remove_if_exists() {
 # Function to remove a directory if it exists
 remove_dir_if_exists() {
   if [ -d "$1" ]; then
+    sudo chmod -R 777 "$1"
     rm -rf "$1"
     echo "Removed $1"
   fi
 }
+
+# Check if container exists and stop it
+container_id=$(docker ps -a -q -f name=^/anyth$)
+if [ ! -z "$container_id" ]; then
+  echo "Stopping ANYTH container..."
+  docker stop "$container_id"
+else
+  echo "No ANYTH container found to stop."
+fi
 
 echo "Removing db, cache files..."
 remove_if_exists "./anything-llm/server/storage/anythingllm.db"
@@ -30,24 +36,23 @@ echo "Copying db file..."
 cp ./client-files/anythingllm.db ./anything-llm/server/storage/anythingllm.db
 chmod 777 ./anything-llm/server/storage/anythingllm.db
 
-(
-  echo "Starting web server (main app container) ..."
-  container_id=$(docker ps -a -q -f name=^/anyth$)
+  echo "Starting the WEB server..."
+container_id=$(docker ps -a -q -f name=^/anyth$)
 if [ ! -z "$container_id" ]; then
-    echo "Removing existing container with name 'anyth'..."
-    docker rm -f $container_id
+  docker start "$container_id"
+else
+  docker run -d --restart always \
+    --name anyth \
+    --platform linux/amd64 \
+    --env-file ./client-files/.env \
+    --user "${ARG_UID}:${ARG_GID}" \
+    -v ./anything-llm/server/storage:/app/server/storage \
+    -v ./anything-llm/collector/hotdir/:/app/collector/hotdir \
+    -v ./anything-llm/collector/outputs/:/app/collector/outputs \
+    -p 3001:3001 \
+    --network llm-net \
+    anyth:last_com
 fi
-# ./start.sh
-docker run -d --restart always \
-  --name anyth \
-  --platform linux/amd64 \
-  --env-file ./client-files/.env \
-  --user "${ARG_UID}:${ARG_GID}" \
-  -v ./anything-llm/server/storage:/app/server/storage \
-  -v ./anything-llm/collector/hotdir/:/app/collector/hotdir \
-  -v ./anything-llm/collector/outputs/:/app/collector/outputs \
-  -p 3001:3001 \
-  --network llm-net \
-  anyth:v1
 echo -e "Web server started.\n-----------------------------"
-)
+
+

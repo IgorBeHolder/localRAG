@@ -3,17 +3,21 @@ import HistoricalMessage from "./HistoricalMessage";
 import PromptReply from "./PromptReply";
 import {useEffect, useRef} from "react";
 
-export default function ChatHistory({mode, history = [], workspace}) {
+export default function ChatHistory({mode, history = [], workspace, lastMessageRef}) {
   const replyRef = useRef(null);
-
+  const typeWriterRef = useRef(null);
 
   useEffect(() => {
-    if (replyRef.current) {
+    if (replyRef.current && replyRef.current.hasOwnProperty('scrollIntoView')) {
       setTimeout(() => {
         replyRef.current.scrollIntoView({behavior: "smooth", block: "end"});
       }, 700);
     }
-  }, [history]);
+
+    if (typeWriterRef.current) {
+      lastMessageRef(typeWriterRef);
+    }
+  }, [history, replyRef, typeWriterRef]);
 
   if (history.length === 0) {
     return (
@@ -37,12 +41,14 @@ export default function ChatHistory({mode, history = [], workspace}) {
       {history.map((props, index) => {
         const isLastMessage = index === history.length - 1;
 
-        if (props.role === "assistant" && props.animate) {
+        if (props.role === "assistant" && (props.animate || props.typeWriter)) {
           return (
             <PromptReply
               key={index}
               ref={isLastMessage ? replyRef : null}
               uuid={props.uuid}
+              typeWriterRef={typeWriterRef}
+              typeWriter={isLastMessage && props.typeWriter}
               reply={props.content}
               pending={props.pending}
               sources={props.sources}

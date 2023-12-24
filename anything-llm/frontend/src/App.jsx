@@ -4,7 +4,6 @@ import {ContextWrapper} from "./AuthContext";
 import PrivateRoute, {AdminRoute} from "./components/PrivateRoute";
 import {ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {TerminalContextProvider} from "react-terminal";
 
 const Main = lazy(() => import("./pages/Main"));
 const InvitePage = lazy(() => import("./pages/Invite"));
@@ -22,50 +21,48 @@ export default function App() {
   return (
     <Suspense fallback={<div/>}>
       <ContextWrapper>
-        <TerminalContextProvider>
-          <Routes>
-            <Route path="/" element={<Main/>}/>
-            <Route
-              path="/workspace/:slug"
-              element={<PrivateRoute Component={WorkspaceChat}/>}
-            />
-            <Route
-              path="/analyst/:slug"
-              element={<PrivateRoute Component={WorkspaceChat}/>}
-            />
-            <Route path="/accept-invite/:code" element={<InvitePage/>}/>
+        <Routes>
+          <Route path="/" element={<Main/>}/>
+          <Route
+            path="/workspace/:slug"
+            element={<PrivateRoute Component={WorkspaceChat}/>}
+          />
+          <Route
+            path="/analyst/:slug"
+            element={<PrivateRoute analystRoute={true} Component={WorkspaceChat}/>}
+          />
+          <Route path="/accept-invite/:code" element={<InvitePage/>}/>
 
-            {/* Admin Routes */}
-            <Route
-              path="/admin/system-preferences"
-              element={<AdminRoute Component={AdminSystem}/>}
-            />
-            <Route
-              path="/admin/invites"
-              element={<AdminRoute Component={AdminInvites}/>}
-            />
-            <Route
-              path="/admin/users"
-              element={<AdminRoute Component={AdminUsers}/>}
-            />
-            <Route
-              path="/admin/workspaces"
-              element={<AdminRoute Component={AdminWorkspaces}/>}
-            />
-            <Route
-              path="/admin/workspace-chats"
-              element={<AdminRoute Component={AdminChats}/>}
-            />
-            <Route
-              path="/admin/appearance"
-              element={<AdminRoute Component={AdminAppearance}/>}
-            />
-            <Route
-              path="/admin/api-keys"
-              element={<AdminRoute Component={AdminApiKeys}/>}
-            />
-          </Routes>
-        </TerminalContextProvider>
+          {/* Admin Routes */}
+          <Route
+            path="/admin/system-preferences"
+            element={<AdminRoute Component={AdminSystem}/>}
+          />
+          <Route
+            path="/admin/invites"
+            element={<AdminRoute Component={AdminInvites}/>}
+          />
+          <Route
+            path="/admin/users"
+            element={<AdminRoute Component={AdminUsers}/>}
+          />
+          <Route
+            path="/admin/workspaces"
+            element={<AdminRoute Component={AdminWorkspaces}/>}
+          />
+          <Route
+            path="/admin/workspace-chats"
+            element={<AdminRoute Component={AdminChats}/>}
+          />
+          <Route
+            path="/admin/appearance"
+            element={<AdminRoute Component={AdminAppearance}/>}
+          />
+          <Route
+            path="/admin/api-keys"
+            element={<AdminRoute Component={AdminApiKeys}/>}
+          />
+        </Routes>
         <ToastContainer/>
       </ContextWrapper>
     </Suspense>

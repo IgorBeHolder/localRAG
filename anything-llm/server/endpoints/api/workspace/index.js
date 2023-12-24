@@ -66,7 +66,7 @@ function apiWorkspaceEndpoints(app) {
       await Telemetry.sendTelemetry("workspace_created", {
         multiUserMode: multiUserMode(response),
         LLMSelection: process.env.LLM_PROVIDER || "openai",
-        VectorDbSelection: process.env.VECTOR_DB || "pinecone"
+        VectorDbSelection: process.env.VECTOR_DB || "lancedb"
       });
       response.status(200).json({workspace, message});
     } catch (e) {
@@ -491,7 +491,7 @@ function apiWorkspaceEndpoints(app) {
         const result = await chatWithWorkspace(workspace, message, mode, null, request);
         await Telemetry.sendTelemetry("sent_chat", {
           LLMSelection: process.env.LLM_PROVIDER || "openai",
-          VectorDbSelection: process.env.VECTOR_DB || "pinecone"
+          VectorDbSelection: process.env.VECTOR_DB || "lancedb"
         });
         response.status(200).json({...result});
       } catch (e) {

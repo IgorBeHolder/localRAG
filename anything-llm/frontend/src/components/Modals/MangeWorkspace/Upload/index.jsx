@@ -170,7 +170,7 @@ function ModalWrapper({deleteWorkspace, children}) {
         <div className="flex flex-col gap-y-1 w-full">
           <div className="flex flex-col mb-2">
             <p className="text-gray-800 dark:text-stone-200 text-base ">
-              Добавьте документы в свое рабочее пространство.
+              Добавьте файл с данными в рабочее пространство для анализа данных.
             </p>
             <p className="text-gray-600 dark:text-stone-400 text-xs ">
               Эти файлы будут загружены в процессор документов, работающий на этом экземпляре Sherpa AI Server. Эти

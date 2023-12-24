@@ -1,0 +1,24 @@
+version: '3.9'
+
+services:
+  coder:
+    restart:  always
+    image: coder:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: coder
+    volumes:
+      - ./content:/home
+      # - ./content:/home/coder/content      
+    ports:
+      - 2222:22
+    networks:
+      - llm-net
+networks:
+  llm-net:
+    name: llm-net
+    external: true
+
+# docker-compose -p localrag up -d --build
+# ssh coder@localhost -p 2222

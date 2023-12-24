@@ -58,7 +58,7 @@ const LanceDb = {
     const response = await collection
       .search(queryVector)
       .metricType("cosine")
-      .limit(3) // limit the number of results returned. Was 5
+      .limit(5) // limit the number of results returned. Was 5
       .execute();
 
     response.forEach((item) => {
@@ -311,10 +311,11 @@ const LanceDb = {
       queryVector
     );
     // FORMING THE MEMORY LIST FOR THE QUERY
-    const { BOS, EOS, assistance_prefix, end_of_turn, user_prefix } = prompt_templates();
+    // const { BOS, EOS, assistance_prefix, end_of_turn, user_prefix } = prompt_templates();
     const sys_prompt = {
       role: "system",
-      content: BOS + workspace.openAiPrompt
+      // content: BOS + workspace.openAiPrompt
+      content: workspace.openAiPrompt
     };
 
     const prompt = {
@@ -389,8 +390,8 @@ const LanceDb = {
 
 
 function prompt_templates() {
-  const model_name_is_openchat = process.env.COMPLETION_MODEL_NAME.includes('openchat');
-  const model_name_is_mistral = process.env.COMPLETION_MODEL_NAME.includes('mistral');
+  const model_name_is_openchat = global.COMPLETION_MODEL_NAME ? global.COMPLETION_MODEL_NAME.includes('openchat') : false;
+  const model_name_is_mistral = global.COMPLETION_MODEL_NAME ? global.COMPLETION_MODEL_NAME.includes('mistral') : false;
 
   const user_prefix = model_name_is_openchat
     ? 'GPT4 Correct User: '

@@ -43,7 +43,7 @@ def as_mbox(**kwargs):
             'title': message['Subject'],
             'docAuthor': message['From'],
             'description': f"email {message['From']} to {message['To']}",
-            'docSource': "mbox file uploaded by the user.",
+            'docSource': "mbox загружен пользователем.",
             'published': file_creation_time(fullpath),
             'sender': message['From'],
             'recipient': message['To'],

@@ -144,7 +144,7 @@ class OpenAi {
 
       return data.choices[0].message.content;
 
-    } else {
+    } else {  // OFFLINE MODE /////////////////////////////////////////////
       return await v1_chat_completions(messages, temperature);
     }
   }

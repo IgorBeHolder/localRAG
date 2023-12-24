@@ -18,8 +18,8 @@ def as_pdf(**kwargs):
   pages = loader.load()
 
   if len(pages) == 0:
-    print(f"{fullpath} parsing resulted in no pages - nothing to do.")
-    return(False, f"No pages found for {filename}{ext}!")
+    print(f"{fullpath} парсинг не дал результатов - процессинг не запущен.")
+    return(False, f"Для {filename}{ext} не было найдено страниц!")
   
   # Set doc to the first page so we can still get the metadata from PyMuPDF but without all the unicode issues.
   doc = pages[0]
@@ -33,8 +33,8 @@ def as_pdf(**kwargs):
     page_content += page.get_text('text')
 
   if len(page_content) == 0:
-    print(f"Resulting page content was empty - no text could be extracted from the document.")
-    return(False, f"No text content could be extracted from {filename}{ext}!")
+    print(f"Содержимое страницы было пустым — из документа не удалось извлечь текст.")
+    return(False, f"Tекстовое содержимое не может быть извлечено из {filename}{ext}!")
 
   title = doc.metadata.get('title')
   author = doc.metadata.get('author')
@@ -43,9 +43,9 @@ def as_pdf(**kwargs):
     'id': guid(),
     'url': "file://"+os.path.abspath(f"{parent_dir}/processed/{filename}{ext}"),
     'title': title if title else f"{filename}{ext}",
-    'docAuthor': author if author else 'No author found',
-    'description': subject if subject else 'No description found.',
-    'docSource': 'pdf file uploaded by the user.',
+    'docAuthor': author if author else 'Автор неизвестен',
+    'description': subject if subject else 'Описание неизвестно',
+    'docSource': 'pdf файл загруженный пользователем.',
     'chunkSource': f"{filename}{ext}",
     'published': file_creation_time(fullpath),
     'wordCount': len(page_content), # Technically a letter count :p

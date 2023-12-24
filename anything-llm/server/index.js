@@ -1,10 +1,15 @@
 process.env.NODE_ENV === "development"
   ? require("dotenv").config({path: `.env.${process.env.NODE_ENV}`})
   : require("dotenv").config();
+console.log("*** SSH_HOST", process.env.SSH_HOST);
+console.log("*** SSH_PORT", process.env.SSH_PORT);
+console.log("*** WS_PORT", process.env.WS_PORT);
+console.log("*** IS_CODER", process.env.IS_CODER);
 console.log("*** COMPLETION_MODEL_ENDPOINT", process.env.COMPLETION_MODEL_ENDPOINT);
-console.log("*** COMPLETION_MODEL_NAME", process.env.COMPLETION_MODEL_NAME);
 console.log("*** EMBEDDING_MODEL_ENDPOINT", process.env.EMBEDDING_MODEL_ENDPOINT);
 console.log("*** EMBEDDING_MODEL_NAME", process.env.EMBEDDING_MODEL_NAME);
+
+const WS_PORT = process.env.WS_PORT || 3006;
 
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -28,11 +33,17 @@ const {Telemetry} = require("./models/telemetry");
 const {developerEndpoints} = require("./endpoints/api");
 const setupTelemetry = require("./utils/telemetry");
 const {v4: uuidv4} = require("uuid");
+const {sem_search} = require("./utils/AiProviders/openAi/pseudossearsh");
 const app = express();
 const apiRouter = express.Router();
 const FILE_LIMIT = "3GB";
 
-app.use(cors({origin: true}));
+app.use(cors({
+  // origin: 'http://localhost:3000',
+  // methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  // allowedHeaders: 'Content-Type,Authorization',
+  origin: true
+}));
 app.use(bodyParser.text({limit: FILE_LIMIT}));
 app.use(bodyParser.json({limit: FILE_LIMIT}));
 app.use(
@@ -78,8 +89,11 @@ function executeSSHCommand(command, sshConnection, ws) {
 
         let result = "";
         stream
-          .on("data", (data, ...rest) => {
-            console.log("@@@@@@@@@@ CommandOutput:", data, `'${data.toString()}'`, rest);
+          .on("data", (data) => {
+            if (process.env.NODE_ENV === "development") {
+              console.log("@@@@@@@@@@ CommandOutput:", data, `'${data.toString()}'`);
+            }
+
             result = data.toString();
 
             if (result === "> ") {
@@ -88,14 +102,18 @@ function executeSSHCommand(command, sshConnection, ws) {
 
             let chatResult = {
               id: uuidv4(),
-              textResponse: data.toString(),
+              type: "textResponse",
+              textResponse: result,
               sources: [],
               error: null,
               close: true
             };
 
             ws.send(JSON.stringify(chatResult));
-            console.log("Stream is open, result was sent");
+
+            if (process.env.NODE_ENV === "development") {
+              console.log("Stream is open, result was sent");
+            }
           })
           .on("close", (code, signal) => {
             activeStream = null;
@@ -103,7 +121,8 @@ function executeSSHCommand(command, sshConnection, ws) {
             if (code) {
               let chatResult = {
                 id: uuidv4(),
-                textResponse: "Connection closed",
+                type: "textResponse",
+                textResponse: "Connection close event",
                 sources: [],
                 error: null,
                 close: true
@@ -111,10 +130,15 @@ function executeSSHCommand(command, sshConnection, ws) {
 
               chatResult.error = {code, text: (code === 127 ? "-bash: no such command" : "-bash: unknown error")};
 
-              console.warn("@@@@@@@ SSH Result", code, signal);
+              if (process.env.NODE_ENV === "development") {
+                console.warn("@@@@@@@ SSH Result", code, signal);
+              }
 
               ws.send(JSON.stringify(chatResult));
-              console.log("Stream closed with code " + code + " and signal " + signal + " result was sent");
+
+              if (process.env.NODE_ENV === "development") {
+                console.log("Stream closed with code " + code + " and signal " + signal + " result was sent");
+              }
             }
           })
           .on("exit", (code) => {
@@ -126,7 +150,9 @@ function executeSSHCommand(command, sshConnection, ws) {
       });
     }
   } catch (e) {
-    console.log("@@@@@@@ executeSSHCommand", e);
+    if (process.env.NODE_ENV === "development") {
+      console.log("@@@@@@@ executeSSHCommand", e);
+    }
   }
 }
 
@@ -140,20 +166,29 @@ const wss = new WebSocket.Server({noServer: true});
 
 // Используем middleware для управления соединением SSH
 server.on("upgrade", (request, socket, head) => {
-  console.log("##################### WS upgrade");
+  if (process.env.NODE_ENV === "development") {
+    console.log("##################### WS upgrade");
+  }
   sshMiddleware(request, {}, () => {
     wss.handleUpgrade(request, socket, head, (ws) => {
       if (request?.sshConnection) {
         wss.emit("connection", ws, request, request?.sshConnection);
       } else {
-        console.log("##################### WS NO connection");
+        if (process.env.NODE_ENV === "development") {
+          console.log("##################### WS NO connection");
+        }
       }
     });
   });
 });
 
 wss.on("connection", (ws, request, sshConnection) => {
-  console.log("##################### WS connection", activeStream);
+  if (process.env.NODE_ENV === "development") {
+    console.log("##################### WS connection", activeStream ? {
+      keys: Object.keys(activeStream),
+      stdout: Object.keys(activeStream.stdout)
+    } : activeStream);
+  }
 
   activeStream = null;
 
@@ -162,9 +197,15 @@ wss.on("connection", (ws, request, sshConnection) => {
   ws.on("message", (message) => {
     const command = message.toString();
 
-    console.log("##################### WS message", command);
+    if (process.env.NODE_ENV === "development") {
+      console.log("##################### WS message", command);
+    }
 
     if (activeStream) {
+      // sem_search(command).then(s => {
+      //   console.log('sem_search', s);
+      // });
+
       // Получаем команду от клиента и выполняем ее на сервере SSH
       executeSSHCommand(command, sshConnection, ws);
     }
@@ -175,13 +216,15 @@ wss.on("connection", (ws, request, sshConnection) => {
 
     if (activeStream) {
       // Получаем команду от клиента и выполняем ее на сервере SSH
-      executeSSHCommand("exit\n", sshConnection, ws);
+      // executeSSHCommand("exit\n", sshConnection, ws);
     }
   });
 });
 
-server.listen(3030, () => {
-  console.log(`##################### WS Server is running on port ${3030}`);
+server.listen(WS_PORT, () => {
+  if (process.env.NODE_ENV === "development") {
+    console.log(`##################### WS Server is running on port ${WS_PORT}`);
+  }
 });
 
 systemEndpoints(apiRouter);
@@ -215,7 +258,7 @@ apiRouter.post("/v/:command", async (request, response) => {
       response.status(500).json({error: e.message});
     }
   } catch (e) {
-    console.log(e.message, e);
+    // console.log(e.message, e);
     response.sendStatus(500).end();
   }
 });
@@ -242,9 +285,9 @@ app.all("*", function (_, response) {
 app
   .listen(APP_PORT, async () => {
     await setupTelemetry();
-    console.log(
-      `Example app listening on port ${APP_PORT}`
-    );
+    if (process.env.NODE_ENV === "development") {
+      console.log(`Example app listening on port ${APP_PORT}`);
+    }
   })
   .on("error", function (err) {
     process.once("SIGUSR2", function () {

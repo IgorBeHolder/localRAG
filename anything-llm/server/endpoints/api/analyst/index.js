@@ -65,7 +65,7 @@ function apiAnalystEndpoints(app) {
       await Telemetry.sendTelemetry("analyst_created", {
         multiUserMode: multiUserMode(response),
         LLMSelection: process.env.LLM_PROVIDER || "openai",
-        VectorDbSelection: process.env.VECTOR_DB || "pinecone"
+        VectorDbSelection: process.env.VECTOR_DB || "lancedb"
       });
       response.status(200).json({analyst, message});
     } catch (e) {

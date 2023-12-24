@@ -62,7 +62,7 @@ export default function PromptInput({
   console.log("workspace", workspace);
 
   return (
-    <div className="main-form absolute p-1 md:p-8 lg:p-[50px] position-absolute bottom-0 left-0 right-0 !pb-0">
+    <div className="main-form absolute p-1 md:p-8 lg:p-[50px] bottom-0 left-0 right-0 !pb-0">
       <div className="bg-white pt-2 pb-8">
         <div className="flex flex-col gap-y-1 bg-white dark:bg-black-900 lg:w-3/4 w-full mx-auto">
           <div className="flex items-center py-2 px-4 rounded-lg">

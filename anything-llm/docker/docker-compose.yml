@@ -4,7 +4,7 @@ services:
   anyth:
     container_name: anyth
     restart: always
-    image: anyth:v1
+    image: anyth:last_com
     platform: linux/amd64
     env_file:
       - ../../client-files/.env
@@ -15,6 +15,8 @@ services:
         ARG_UID: ${ARG_UID}
         ARG_GID: ${ARG_GID}
         DOCKER_BUILDKIT: 1  
+    environment:
+      - DOCKER_BUILDKIT=1
     volumes:
     # ensure all host dirs have the same permissions as the container user
       - "../server/storage/:/app/server/storage"
@@ -22,7 +24,8 @@ services:
       - "../collector/outputs/:/app/collector/outputs"
     user: "${ARG_UID}:${ARG_GID}"
     ports:
-      - "3001:3001"
+      - 3001:3001
+      - 3006:3006
     networks:
       - llm-net
 networks:

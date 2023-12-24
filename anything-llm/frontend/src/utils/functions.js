@@ -49,3 +49,17 @@ export const fixEncoding = (str) => {
   const decoder = new TextDecoder("utf-8");
   return decoder.decode(bytes);
 };
+
+const tagsToReplace = {
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;'
+};
+
+export function replaceTag(tag) {
+  return tagsToReplace[tag] || tag;
+}
+
+export function safeTagsReplace(str) {
+  return String(str).replace(/[&<>]/g, replaceTag);
+}

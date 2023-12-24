@@ -9,12 +9,9 @@ import ManageWorkspace, {
 import paths from "../../../utils/paths";
 import {useParams} from "react-router-dom";
 
-export default function ActiveWorkspaces({setSelectedWs, selectedWs, setWorkspaces, workspaces, showModal}) {
+export default function ActiveWorkspaces({setSelectedWs, selectedWs, showModalCoder, setWorkspaces, workspaces, showModal}) {
   const {slug} = useParams();
   const [loading, setLoading] = useState(true);
-  //const [workspaces, setWorkspaces] = useState([]);
-  //const [selectedWs, setSelectedWs] = useState(null);
-  //const {showing, showModal, hideModal} = useManageWorkspaceModal();
 
   useEffect(() => {
     async function getWorkspaces() {
