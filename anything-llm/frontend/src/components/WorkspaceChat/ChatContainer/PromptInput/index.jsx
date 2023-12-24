@@ -1,7 +1,7 @@
 import React, {useState, useRef, memo, useEffect} from "react";
 import {isMobile} from "react-device-detect";
 import {Loader, Menu, X} from "react-feather";
-import {CHAT_MAX_LENGTH, IS_CODER} from "../../../../utils/constants.js";
+import {CHAT_MAX_LENGTH} from "../../../../utils/constants.js";
 import {showModal} from "../../../../store/popupSlice.js";
 import {useDispatch} from "react-redux";
 import OutsideClickHandler from "react-outside-click-handler";
@@ -16,12 +16,12 @@ export default function PromptInput({
                                       message,
                                       submit,
                                       onChange,
+                                      isCoder,
                                       inputDisabled,
                                       buttonDisabled
                                     }) {
   const dispatch = useDispatch();
   const [showMenu, setShowMenu] = useState(false);
-
   const formRef = useRef(null);
   const [_, setFocused] = useState(false);
   const handleSubmit = (e) => {
@@ -147,24 +147,28 @@ export default function PromptInput({
           <div className="flex items-center py-2 px-4 rounded-lg">
             <OutsideClickHandler
               onOutsideClick={() => {
+                console.log('onOutsideClick');
                 setShowMenu(false);
               }}
             >
               <CommandMenu
+                isCoder={isCoder}
                 workspace={workspace}
                 show={showMenu}
                 handleClick={setTextCommand}
                 hide={() => setShowMenu(false)}
                 mode={mode}
               />
+              <button
+                onClick={() => {
+                  setShowMenu(!showMenu);
+                }}
+                type="button"
+                className={MENU_ITEM_STYLE}
+              >
+                <Menu className="w-4 h-4 md:h-6 md:w-6"/>
+              </button>
             </OutsideClickHandler>
-            <button
-              onClick={() => setShowMenu(!showMenu)}
-              type="button"
-              className={MENU_ITEM_STYLE}
-            >
-              <Menu className="w-4 h-4 md:h-6 md:w-6"/>
-            </button>
 
             <textarea
               onKeyUp={adjustTextArea}
@@ -238,10 +242,6 @@ const Tracking = memo(({workspaceSlug}) => {
     watchForChatModeChange();
   }, [workspaceSlug]);
 
-  useEffect(() => {
-
-  }, [IS_CODER, chatMode, workspaceSlug]);
-
   return (
     <div className="flex flex-col md:flex-row w-full justify-center items-center gap-2 mb-2 px-4 mx:px-0">
       <p
@@ -255,7 +255,7 @@ const Tracking = memo(({workspaceSlug}) => {
   );
 });
 
-function CommandMenu({workspace, show, handleClick, hide, mode}) {
+function CommandMenu({workspace, show, handleClick, hide, mode, isCoder}) {
   if (!show) return null;
   const COMMANDS = [
     {
@@ -272,7 +272,7 @@ function CommandMenu({workspace, show, handleClick, hide, mode}) {
     }
   ];
 
-  if (IS_CODER) {
+  if (isCoder) {
     COMMANDS.unshift({
       cmd: "/analyst",
       description: "- перейти в режим кодинга."

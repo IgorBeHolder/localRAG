@@ -10,21 +10,21 @@ import {FullScreenLoader} from "../../components/Preloader";
 
 export default function WorkspaceChat(props) {
   const {loading, requiresAuth, mode} = usePasswordModal();
-  const {analystRoute} = props;
+  const {analystRoute, isCoder} = props;
 
   if (loading) return <FullScreenLoader/>;
   if (requiresAuth !== false) {
     return <>{requiresAuth !== null && <PasswordModal mode={mode}/>}</>;
   }
 
-  return <ShowWorkspaceChat analystRoute={analystRoute}/>;
+  return <ShowWorkspaceChat isCoder={isCoder} analystRoute={analystRoute}/>;
 }
 
 function ShowWorkspaceChat(props) {
   const {slug} = useParams();
   const [workspace, setWorkspace] = useState(null);
   const [loading, setLoading] = useState(true);
-  const {analystRoute} = props;
+  const {analystRoute, isCoder} = props;
 
   useEffect(() => {
     async function getWorkspace() {
@@ -40,7 +40,7 @@ function ShowWorkspaceChat(props) {
   return (
     <div className="w-screen h-screen overflow-hidden bg-gray-400 dark:bg-stone-700 lg:flex">
       <Sidebar/>
-      <WorkspaceChatContainer analystRoute={analystRoute} loading={loading} workspace={workspace}/>
+      <WorkspaceChatContainer isCoder={isCoder} analystRoute={analystRoute} loading={loading} workspace={workspace}/>
     </div>
   );
 }
