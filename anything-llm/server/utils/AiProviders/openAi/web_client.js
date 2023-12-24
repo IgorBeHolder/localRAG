@@ -38,8 +38,6 @@ function format_messages(messages = []) {
   return formattedHistory;
 }
 
-const model_prefix =
-  process.env.LLM_ENGINE == ('llama-cpp') ? '/app/model-store/' : '/model-store/';
 
 async function v1_chat_completions(messages, temperature) {
 
@@ -53,7 +51,7 @@ async function v1_chat_completions(messages, temperature) {
 
 
   console.log('v1_chat_completions: *** url:', url);
-  console.log('v1_chat_completions: *** completion_model:', compl_model + ' (model_prefix: ' + model_prefix + ')');
+  console.log('v1_chat_completions: *** completion_model:', compl_model);
   console.log('v1_chat_completions: *** temperature:', temperature);
   console.log('v1_chat_completions: *** repeat_penalty:', repeat_penalty);
   console.log('v1_chat_completions: *** top_p:', top_p);
@@ -62,7 +60,7 @@ async function v1_chat_completions(messages, temperature) {
 
   const payload = {
     // add the prefix to the model name like '/app'
-    "model": model_prefix + compl_model,
+    "model": compl_model,
     "messages": messages2string,
     "temperature": temperature,
     "top_p": top_p,
