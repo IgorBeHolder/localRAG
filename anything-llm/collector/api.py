@@ -5,12 +5,19 @@ from scripts.watch.filetypes import ACCEPTED_MIMES
 import logging
 from dotenv import load_dotenv
 load_dotenv()
+import sys
+
+
+
 
 logging.basicConfig(level=logging.INFO)
 
 
 
 api = Flask(__name__)
+
+api.logger.addHandler(logging.StreamHandler(sys.stdout))
+api.logger.setLevel(logging.INFO)
 
 WATCH_DIRECTORY = "hotdir"
 
@@ -56,6 +63,7 @@ def save_csv_file():
     print(f"Received a request to save {os.path.join(DEST_DIRECTORY, file.filename)} file!.")
     # If the user does not select a file, the browser submits an
     # empty file without a filename.
+    api.logger.info(f"Received a request to save {os.path.join(DEST_DIRECTORY, file.filename)} file!.")
     if file.filename == "":
         return jsonify({"message": "Файл не выбран"}), 400
 
@@ -64,7 +72,7 @@ def save_csv_file():
         if not os.path.exists(DEST_DIRECTORY):
             os.makedirs(DEST_DIRECTORY)
 
-        print(f"Received a request to save {os.path.join(DEST_DIRECTORY, file.filename)} file.")
+
 
         # Construct the file path
         file_path = os.path.join(DEST_DIRECTORY, file.filename)
