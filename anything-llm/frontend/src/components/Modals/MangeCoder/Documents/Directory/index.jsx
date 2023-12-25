@@ -9,7 +9,7 @@ import {
 } from "react-feather";
 import {nFormatter} from "../../../../../utils/numbers";
 import System from "../../../../../models/system";
-import {fixEncoding} from "../../../../../utils/functions.js";
+import {fixEncoding, pluralAny} from "../../../../../utils/functions.js";
 
 export default function Directory({
                                     files,
@@ -33,6 +33,18 @@ export default function Directory({
   };
 
   if (files.type === "folder") {
+    const {fileCount, folderCount} = files.items.reduce((acc, file) => {
+      if (file.type === "folder") {
+        acc.folderCount += 1;
+      } else {
+        acc.fileCount += 1;
+      }
+      return acc;
+    }, {
+      fileCount: 0,
+      folderCount: 0
+    });
+
     return (
       <div style={{marginLeft: nested}} className="">
         <div
@@ -55,17 +67,10 @@ export default function Directory({
             onClick={() => toggleExpanded(!isExpanded)}
           >
             <h2 className="text-base md:text-2xl">{files.name}</h2>
-            {files.items.some((files) => files.type === "folder") ? (
-              <p className="text-xs italic">{files.items.length} папок</p>
-            ) : (
-              <p className="text-xs italic">
-                {files.items.length} документов |{" "}
-                {nFormatter(
-                  files.items.reduce((a, b) => a + b.token_count_estimate, 0)
-                )}{" "}
-                токенов
-              </p>
-            )}
+            <p className="text-xs italic">
+              {pluralAny(folderCount, 'папка', 'папки', 'папок', true)}{" | "}
+              {pluralAny(fileCount, 'файл', 'файла', 'файлов', true)}
+            </p>
           </div>
         </div>
         {isExpanded &&
@@ -83,7 +88,7 @@ export default function Directory({
     );
   }
 
-  const {name, type: _type, ...meta} = files;
+  const {name, canSelect, type: _type, ...meta} = files;
 
   return (
     <div className="ml-[20px] my-2" id={meta.id}>
@@ -140,14 +145,20 @@ export default function Directory({
           </button>
           <div
             className="w-full items-center flex cursor-pointer"
-            onClick={() => toggleDetails(!showDetails)}
+            onClick={() => {
+              if (canSelect) {
+                toggleSelection(`${parent}/${name}`);
+              } else {
+                toggleDetails(!showDetails);
+              }
+            }}
           >
-            <h3 className="text-sm break-all">{fixEncoding(String(meta.chunkSource || meta.title))}</h3>
+            <h3 className="text-sm break-all">{fixEncoding(String(meta.chunkSource || meta.title || name))}</h3>
             <br/>
           </div>
         </div>
       </div>
-      {showDetails && (
+      {(canSelect && showDetails) && (
         <div className="w-full flex flex-col">
           <div
             className="ml-[20px] flex flex-col gap-y-1 my-1 p-2 rounded-md bg-slate-200 font-mono text-sm overflow-x-scroll">

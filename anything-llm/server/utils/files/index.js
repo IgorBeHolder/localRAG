@@ -99,51 +99,57 @@ async function viewLocalFiles() {
 async function viewCoderFiles() {
   const folder =
     process.env.NODE_ENV === "development"
-      ? path.resolve(__dirname, `../../coder/content`)
-      : path.resolve(process.env.CODER_DIR, `content`);
+      ? path.resolve(__dirname, "../../../../coder/content")
+      : path.resolve(process.env.CODER_DIR, "../../content");
   const dirExists = fs.existsSync(folder);
+
+  console.log('viewCoderFiles', folder, dirExists);
+
   if (!dirExists) fs.mkdirSync(folder);
 
   const directory = {
-    name: "документы",
+    name: "файлы",
     type: "folder",
     items: [],
   };
 
-  console.log('viewCoderFiles', folder);
-
   for (const file of fs.readdirSync(folder)) {
-    if (path.extname(file) === ".md") continue;
-
     const folderPath =
       process.env.NODE_ENV === "development"
-        ? path.resolve(__dirname, `../../coder/content/${file}`)
-        : path.resolve(process.env.STORAGE_DIR, `content/${file}`);
+        ? path.resolve(__dirname, `../../../../coder/content/${file}`)
+        : path.resolve(process.env.STORAGE_DIR, `../../content/${file}`);
 
     const isFolder = fs.lstatSync(folderPath).isDirectory();
+
     if (isFolder) {
       const subdocs = {
         name: file,
         type: "folder",
+        canSelect: true,
         items: [],
       };
       const subfiles = fs.readdirSync(folderPath);
 
       for (const subfile of subfiles) {
-        if (path.extname(subfile) !== ".json") continue;
         const filePath = path.join(folderPath, subfile);
-        const rawData = fs.readFileSync(filePath, "utf8");
-        const cachefilename = `${file}/${subfile}`;
-        const {pageContent, ...metadata} = JSON.parse(rawData);
+
+        if (fs.statSync(filePath).isDirectory()) continue;
 
         subdocs.items.push({
           name: subfile,
           type: "file",
-          ...metadata,
-          cached: await cachedVectorInformation(cachefilename, true),
+          cached: false,
+          canSelect: true,
         });
       }
       directory.items.push(subdocs);
+    } else {
+      directory.items.push({
+        name: file,
+        type: "file",
+        cached: false,
+        canSelect: true,
+      });
     }
   }
 

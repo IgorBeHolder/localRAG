@@ -104,6 +104,8 @@ function workspaceEndpoints(app) {
       const {originalname} = request.file;
       const processingOnline = await checkPythonAppAlive();
 
+      console.log('processCsvDocument', processingOnline, originalname);
+
       if (!processingOnline) {
         response
           .status(500)
