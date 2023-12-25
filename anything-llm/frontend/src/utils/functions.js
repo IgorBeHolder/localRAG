@@ -40,6 +40,10 @@ export function getTimeAgo(input) {
   }
 }
 
+export function pluralAny(n, str1, str2, str5, show) {
+  return (show ? n + ' ' : '') + ((((n % 10) === 1) && ((n % 100) !== 11)) ? (str1) : (((((n % 10) >= 2) && ((n % 10) <= 4)) && (((n % 100) < 10) || ((n % 100) >= 20))) ? (str2) : (str5)))
+}
+
 export const fixEncoding = (str) => {
   const bytes = new Uint8Array(str.length);
   for (let i = 0; i < str.length; i++) {
