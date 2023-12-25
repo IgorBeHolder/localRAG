@@ -15,8 +15,11 @@ declare -a files=(
   "config.json" 
   "generation_config.json" 
   "model-00001-of-00003.safetensors" 
+  # SHA256: c65531d6a5a9bb8345aa117528f3f4105b0bf357eab647519c19b4dca952e89b
   "model-00002-of-00003.safetensors" 
+  # SHA256: 26b18d5d207afd2257427cfa2a7f5f041bea575b77113855a25faae88d82c408
   "model-00003-of-00003.safetensors" 
+  # SHA256: 3ff9fa33b10323cb7604dfa9da1d0fac1af5f2aa485744031b5f43d0d8885563
   "model.safetensors.index.json" 
   "openchat.json" 
   "special_tokens_map.json" 
