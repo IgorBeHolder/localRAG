@@ -89,7 +89,7 @@ COPY --chown=anythingllm:anythingllm ./collector/ ./collector/
 RUN --mount=type=cache,target=/tmp/pip_cache cd /app/collector && \
     python3 -m virtualenv v-env && \
     . v-env/bin/activate && \
-    pip install -r requirements.txt && \
+    pip install -r req.txt && \
     rm -rf /tmp/pip_cache/*
 
 
