@@ -32,11 +32,12 @@ def root():
 
 
 # Destination directory for the CSV file
-DEST_DIRECTORY = "../server/storage/coder"
+DEST_DIRECTORY = "./server/storage/coder"
 
 @api.route("/save_csv", methods=["POST"])
 def save_csv_file():
     # Check if the post request has the file part
+
     if "file" not in request.files:
         return jsonify({"message": "No file part in the request"}), 400
 
