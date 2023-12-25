@@ -20,19 +20,22 @@ export default function DocumentSettings({workspace}) {
   const [canDelete, setCanDelete] = useState(false);
 
   async function fetchKeys(refetchWorkspace = false) {
-    const localFiles = await System.localFiles();
+    const coderFiles = await System.coderFiles();
+
+    console.log('coderFiles', coderFiles);
+
     const currentWorkspace = refetchWorkspace
       ? await Workspace.bySlug(slug ?? workspace.slug)
       : workspace;
     const originalDocs =
       currentWorkspace.documents.map((doc) => doc.docpath) || [];
-    const hasAnyFiles = localFiles.items.some(
+    const hasAnyFiles = coderFiles.items.some(
       (folder) => folder?.items?.length > 0
     );
 
     const canDelete = await System.getCanDeleteWorkspaces();
     setCanDelete(canDelete);
-    setDirectories(localFiles);
+    setDirectories(coderFiles);
     setOriginalDocuments([...originalDocs]);
     setSelectFiles([...originalDocs]);
     setHasFiles(hasAnyFiles);

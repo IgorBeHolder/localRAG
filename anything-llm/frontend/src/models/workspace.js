@@ -116,7 +116,7 @@ const Workspace = {
     return {response, data};
   },
   uploadCsvFile: async function (slug, formData) {
-    const response = await fetch(`${PYTHON_API}/save_csv`, {
+    const response = await fetch(`http://localhost:3005/save_csv`, {
       method: "POST",
       body: formData,
       headers: baseHeaders()

@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const { v5: uuidv5 } = require("uuid");
+const {v5: uuidv5} = require("uuid");
 
 async function collectDocumentData(folderName = null) {
   if (!folderName) throw new Error("No docPath provided in request");
@@ -80,7 +80,61 @@ async function viewLocalFiles() {
         const filePath = path.join(folderPath, subfile);
         const rawData = fs.readFileSync(filePath, "utf8");
         const cachefilename = `${file}/${subfile}`;
-        const { pageContent, ...metadata } = JSON.parse(rawData);
+        const {pageContent, ...metadata} = JSON.parse(rawData);
+
+        subdocs.items.push({
+          name: subfile,
+          type: "file",
+          ...metadata,
+          cached: await cachedVectorInformation(cachefilename, true),
+        });
+      }
+      directory.items.push(subdocs);
+    }
+  }
+
+  return directory;
+}
+
+async function viewCoderFiles() {
+  const folder =
+    process.env.NODE_ENV === "development"
+      ? path.resolve(__dirname, `../../coder/content`)
+      : path.resolve(process.env.CODER_DIR, `content`);
+  const dirExists = fs.existsSync(folder);
+  if (!dirExists) fs.mkdirSync(folder);
+
+  const directory = {
+    name: "документы",
+    type: "folder",
+    items: [],
+  };
+
+  console.log('viewCoderFiles', folder);
+
+  for (const file of fs.readdirSync(folder)) {
+    if (path.extname(file) === ".md") continue;
+
+    const folderPath =
+      process.env.NODE_ENV === "development"
+        ? path.resolve(__dirname, `../../coder/content/${file}`)
+        : path.resolve(process.env.STORAGE_DIR, `content/${file}`);
+
+    const isFolder = fs.lstatSync(folderPath).isDirectory();
+    if (isFolder) {
+      const subdocs = {
+        name: file,
+        type: "folder",
+        items: [],
+      };
+      const subfiles = fs.readdirSync(folderPath);
+
+      for (const subfile of subfiles) {
+        if (path.extname(subfile) !== ".json") continue;
+        const filePath = path.join(folderPath, subfile);
+        const rawData = fs.readFileSync(filePath, "utf8");
+        const cachefilename = `${file}/${subfile}`;
+        const {pageContent, ...metadata} = JSON.parse(rawData);
 
         subdocs.items.push({
           name: subfile,
@@ -100,8 +154,8 @@ async function viewLocalFiles() {
 // document and can instead push directly to vector db.
 async function cachedVectorInformation(filename = null, checkOnly = false) {
   if (!process.env.CACHE_VECTORS)
-    return checkOnly ? false : { exists: false, chunks: [] };
-  if (!filename) return checkOnly ? false : { exists: false, chunks: [] };
+    return checkOnly ? false : {exists: false, chunks: []};
+  if (!filename) return checkOnly ? false : {exists: false, chunks: []};
 
   const digest = uuidv5(filename, uuidv5.URL);
   const file =
@@ -111,13 +165,13 @@ async function cachedVectorInformation(filename = null, checkOnly = false) {
   const exists = fs.existsSync(file);
 
   if (checkOnly) return exists;
-  if (!exists) return { exists, chunks: [] };
+  if (!exists) return {exists, chunks: []};
 
   console.log(
     `Cached vectorized results of ${filename} found! Using cached data to save on embed costs.`
   );
   const rawData = fs.readFileSync(file, "utf8");
-  return { exists: true, chunks: JSON.parse(rawData) };
+  return {exists: true, chunks: JSON.parse(rawData)};
 }
 
 // vectorData: pre-chunked vectorized data for a given file that includes the proper metadata and chunk-size limit so it can be iterated and dumped into Pinecone, etc
@@ -184,6 +238,7 @@ module.exports = {
   cachedVectorInformation,
   collectDocumentData,
   viewLocalFiles,
+  viewCoderFiles,
   purgeSourceDocument,
   purgeVectorCache,
   storeVectorResult,

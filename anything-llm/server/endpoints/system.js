@@ -1,7 +1,7 @@
 process.env.NODE_ENV === "development"
   ? require("dotenv").config({path: `.env.${process.env.NODE_ENV}`})
   : require("dotenv").config();
-const {viewLocalFiles} = require("../utils/files");
+const {viewLocalFiles, viewCoderFiles} = require("../utils/files");
 const {exportData, unpackAndOverwriteImport} = require("../utils/files/data");
 const {
   checkPythonAppAlive,
@@ -194,6 +194,16 @@ function systemEndpoints(app) {
     try {
       const localFiles = await viewLocalFiles();
       response.status(200).json({localFiles});
+    } catch (e) {
+      console.log(e.message, e);
+      response.sendStatus(500).end();
+    }
+  });
+
+  app.get("/system/coder-files", [validatedRequest], async (_, response) => {
+    try {
+      const files = await viewCoderFiles();
+      response.status(200).json({files});
     } catch (e) {
       console.log(e.message, e);
       response.sendStatus(500).end();

@@ -39,6 +39,17 @@ const System = {
       .then((res) => res.localFiles)
       .catch(() => null);
   },
+  coderFiles: async function () {
+    return await fetch(`${API_BASE}/system/coder-files`, {
+      headers: baseHeaders(),
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("Could not find setup information.");
+        return res.json();
+      })
+      .then((res) => res.files)
+      .catch(() => null);
+  },
   needsAuthCheck: function () {
     const lastAuthCheck = window.localStorage.getItem(AUTH_TIMESTAMP);
     if (!lastAuthCheck) return true;

@@ -117,7 +117,7 @@ function workspaceEndpoints(app) {
 
       const {success, reason} = await processCsvDocument(originalname);
       if (!success) {
-        console.log("save_csv error", originalname, reason);
+        console.log("save_csv error processingOnline", processingOnline, originalname, reason);
         response.status(500).json({success: false, error: reason}).end();
         return;
       }
