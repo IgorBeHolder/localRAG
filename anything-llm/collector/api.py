@@ -2,6 +2,13 @@ import os
 from flask import Flask, json, request, jsonify
 from scripts.watch.process_single import process_single
 from scripts.watch.filetypes import ACCEPTED_MIMES
+import logging
+from dotenv import load_dotenv
+load_dotenv()
+
+logging.basicConfig(level=logging.INFO)
+
+
 
 api = Flask(__name__)
 
@@ -31,8 +38,12 @@ def root():
     return "<p>Use POST /process with filename key in JSON body in order to process a file. File by that name must exist in hotdir already.</p>"
 
 
-# Destination directory for the CSV file
+# read DEST_DIRECTORY from .env file
+# DEST_DIRECTORY = os.getenv("CODER_DIR")
+
+
 DEST_DIRECTORY = "./server/storage/coder"
+
 
 @api.route("/save_csv", methods=["POST"])
 def save_csv_file():
@@ -42,7 +53,7 @@ def save_csv_file():
         return jsonify({"message": "No file part in the request"}), 400
 
     file = request.files["file"]
-
+    print(f"Received a request to save {os.path.join(DEST_DIRECTORY, file.filename)} file!.")
     # If the user does not select a file, the browser submits an
     # empty file without a filename.
     if file.filename == "":
@@ -53,8 +64,11 @@ def save_csv_file():
         if not os.path.exists(DEST_DIRECTORY):
             os.makedirs(DEST_DIRECTORY)
 
+        print(f"Received a request to save {os.path.join(DEST_DIRECTORY, file.filename)} file.")
+
         # Construct the file path
         file_path = os.path.join(DEST_DIRECTORY, file.filename)
+
 
         # Save the file
         file.save(file_path)
