@@ -41,6 +41,17 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
   const [loadingResponse, setLoadingResponse] = useState(mode === "analyst");
   const [newWsMessage, setNewWsMessage] = useState(false);
 
+  const resetTypewriter = (arr) => {
+    return arr.map((m, mi) => {
+      if (m.typeWriter) {
+        m.typeWriter = false;
+        // m.content = safeTagsReplace(m.content);
+      }
+
+      return m;
+    })
+  }
+
   const lastMessageRef = useCallback((ref) => {
     console.log('lastMessageRef', ref);
     if (mode === "analyst") {
@@ -80,7 +91,7 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
       if (typeWriterRef?.current && typeWriterInstance?.state) {
         if (typeWriterIsBusy) {
           console.log('typeWriterIsBusy', typeWriterIsBusy);
-          debugger;
+          setTypeWriterStack(typeWriterStack.concat(text));
         } else {
           typeWriterInstance
             .pauseFor(100)
@@ -103,21 +114,10 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
 
       let chatResult = JSON.parse(msg.data);
 
-      const getRemHistory = (slice) => {
-        return (chatHistory.length > 0 ? chatHistory.slice(0, slice) : []).map((m, mi) => {
-          if (m.typeWriter) {
-            m.typeWriter = false;
-            m.content = safeTagsReplace(m.content);
-          }
-
-          return m;
-        });
-      }
-
       if (chatResult.error) {
         chatResult.type = "abort";
 
-        const remHistory = getRemHistory(chatHistory.length - 1);
+        const remHistory = resetTypewriter([...chatHistory]);
 
         let _chatHistory = [...remHistory];
 
@@ -132,7 +132,7 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
         chatResult.typeWriter = true;
         chatResult.textResponse = (chatResult.textResponse.trim());
 
-        const remHistory = getRemHistory(-1);
+        const remHistory = resetTypewriter(chatHistory.slice(0, -1));
 
         let _chatHistory = [...remHistory];
 
@@ -246,6 +246,33 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
     }
   };
 
+  const sendEnterSSH = useCallback(() => {
+    if (mode === "analyst") {
+      let chatResult = {
+        type: "textResponse",
+        textResponse: "> ",
+        sources: [],
+        error: null,
+        close: false,
+        typeWriter: true
+      };
+
+      const remHistory = resetTypewriter([...chatHistory]);
+
+      let _chatHistory = [...remHistory];
+
+      handleChat(
+        chatResult,
+        setLoadingResponse,
+        setChatHistory,
+        remHistory,
+        _chatHistory
+      );
+
+      setCommand("\n");
+    }
+  }, [chatHistory]);
+
   const handleMessageChange = (event) => {
     setMessage(event.target.value);
   };
@@ -302,6 +329,7 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
       <PromptInput
         analyst={mode === "analyst"}
         resetChatSSH={resetChatSSH}
+        sendEnterSSH={sendEnterSSH}
         mode={mode}
         isCoder={isCoder}
         workspace={workspace}

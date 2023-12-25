@@ -176,10 +176,11 @@ if (process.env.IS_CODER === 'TRUE') {
   });
 
   wss.on("connection", (ws, request, sshConnection) => {
-    serverLog("##################### WS connection", activeStream ? {
-      keys: Object.keys(activeStream),
-      stdout: Object.keys(activeStream.stdout)
-    } : activeStream);
+    serverLog("##################### WS activeStream", activeStream !== null);
+    // serverLog("##################### WS connection", activeStream ? {
+    //   keys: Object.keys(activeStream),
+    //   stdout: Object.keys(activeStream.stdout)
+    // } : activeStream);
 
     activeStream = null;
 
