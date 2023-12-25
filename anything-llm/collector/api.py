@@ -14,7 +14,8 @@ logging.basicConfig(level=logging.INFO)
 
 
 api = Flask(__name__)
-CORS(api, resources={r"*": {"origins": "*"}})
+# CORS(api, resources={r"*": {"origins": "*"}})
+CORS(api)
 
 logging.basicConfig(level=logging.INFO)
 api.logger.addHandler(logging.StreamHandler(sys.stdout))
