@@ -4,21 +4,17 @@ from scripts.watch.process_single import process_single
 from scripts.watch.filetypes import ACCEPTED_MIMES
 import logging
 from dotenv import load_dotenv
+
 load_dotenv()
 import sys
 from flask_cors import CORS
 
 
-
-
-
-
 logging.basicConfig(level=logging.INFO)
 
 
-
 api = Flask(__name__)
-CORS(app, resources={r"*": {"origins": "*"}})
+CORS(api, resources={r"*": {"origins": "*"}})
 
 logging.basicConfig(level=logging.INFO)
 api.logger.addHandler(logging.StreamHandler(sys.stdout))
