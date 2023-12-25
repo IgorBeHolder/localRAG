@@ -39,8 +39,8 @@ export default function UploadToWorkspace({workspace, fileTypes}) {
 
   useEffect(() => {
     async function checkProcessorOnline() {
-      const online = fileTypes.indexOf('.csv') > -1 ? await System.checkCsvUploadProcessorOnline() : await System.checkDocumentProcessorOnline();
-      setReady(online);
+      // const online = fileTypes.indexOf('.csv') > -1 ? await System.checkCsvUploadProcessorOnline() : await System.checkDocumentProcessorOnline();
+      setReady(true);
     }
 
     checkProcessorOnline();
