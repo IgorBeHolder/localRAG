@@ -1,6 +1,6 @@
 export const API_BASE = import.meta.env.VITE_API_BASE || "/api";
 
-export const ID_DEV = !!import.meta.env.VITE_API_BASE;
+export const ID_DEV = import.meta?.env?.hasOwnProperty('VITE_API_BASE');
 
 export const PYTHON_API = ID_DEV ? `http://${import.meta.env.VITE_USE_DOCKER === "FALSE" ? "localhost" : "0.0.0.0"}:3005` : API_BASE;
 export const UPLOAD_FILENAME_LEN_LIMIT = 68;
@@ -9,7 +9,7 @@ export const TYPE_EFFECT_DELAY = 30;
 export const TYPE_STRING_DELAY = 10;
 export const WS_URL = import.meta.env.VITE_USE_DOCKER === "FALSE" ? ("ws://localhost:" + (process.env.WS_PORT || process.env.VITE_WS_PORT || 3006)) : "ws://localhost:3006";
 
-console.log('PYTHON_API', PYTHON_API, 'WS_URL', WS_URL);
+console.log('ID_DEV', ID_DEV, import.meta?.env?.hasOwnProperty('VITE_API_BASE'), 'PYTHON_API', PYTHON_API, 'WS_URL', WS_URL);
 
 export const MSG_STYLE = (user = false) => {
   return "p-2 xl:p-4 w-fit max-w-[75%] rounded-t-2xl " + (user ? "rounded-bl-2xl rounded-br-sm mr-2" : "rounded-br-2xl rounded-bl-sm ml-2");

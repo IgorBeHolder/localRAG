@@ -58,7 +58,7 @@ async function processCsvDocument(filename = "") {
   return await fetch(`${PYTHON_API}/save_csv`, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "text/csv"
     },
     body: JSON.stringify({filename})
   })
