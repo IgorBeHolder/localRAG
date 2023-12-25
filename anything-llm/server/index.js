@@ -40,6 +40,10 @@ const app = express();
 const apiRouter = express.Router();
 const FILE_LIMIT = "3GB";
 
+console.log("*** CODER_DIR", process.env.NODE_ENV === "development"
+  ? path.resolve(__dirname, `../../coder/content`)
+  : path.resolve(process.env.CODER_DIR, `content`));
+
 app.use(cors({
   // origin: 'http://localhost:3000',
   // methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
