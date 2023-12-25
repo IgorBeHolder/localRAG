@@ -57,10 +57,13 @@ async function processCsvDocument(filename = "") {
   // send filename to python app:
   return await fetch(`${PYTHON_API}/save_csv`, {
     method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
     body: JSON.stringify({filename})
   })
     .then((res) => {
-      if (!res.ok) throw new Error("Запрос не удался");
+      if (!res.ok) throw new Error("Запрос на загрузку csv файла не удался");
       return res.json();
     })
     .then((res) => res)
@@ -69,6 +72,7 @@ async function processCsvDocument(filename = "") {
       return {success: false, reason: e.message};
     });
 }
+
 
 module.exports = {
   checkPythonAppAlive,
