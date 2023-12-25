@@ -18,8 +18,8 @@ logging.basicConfig(level=logging.INFO)
 
 
 api = Flask(__name__)
-CORS(api, resources={r"/save_csv": {"origins": "http://194.135.112.219:3001"}})
-# CORS(api, resources={r"/save_csv": {"origins": "http://localhost:3001"}})
+CORS(app, resources={r"*": {"origins": "*"}})
+
 logging.basicConfig(level=logging.INFO)
 api.logger.addHandler(logging.StreamHandler(sys.stdout))
 api.logger.setLevel(logging.INFO)
