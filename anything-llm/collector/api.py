@@ -32,7 +32,7 @@ def root():
 
 
 # Destination directory for the CSV file
-DEST_DIRECTORY = "../../coder/content"
+DEST_DIRECTORY = "../server/storage/coder"
 
 @api.route("/save_csv", methods=["POST"])
 def save_csv_file():

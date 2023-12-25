@@ -51,27 +51,29 @@ async function processDocument(filename = "") {
       return {success: false, reason: e.message};
     });
 }
+async function processCsvDocument(file) {
+  if (!file) return false;
 
-async function processCsvDocument(filename = "") {
-  if (!filename) return false;
-  // send filename to python app:
+  // Construct FormData and append the file
+  const formData = new FormData();
+  formData.append("file", file);
+
+  // Send file to Python API
   return await fetch(`${PYTHON_API}/save_csv`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({filename})
+    body: formData
   })
-    .then((res) => {
-      if (!res.ok) throw new Error("Запрос на загрузку csv файла не удался");
-      return res.json();
-    })
-    .then((res) => res)
-    .catch((e) => {
-      serverLog("PYTHON_API:******* ERROR", PYTHON_API, e);
-      return {success: false, reason: e.message};
-    });
+  .then((res) => {
+    if (!res.ok) throw new Error("Запрос на загрузку csv файла не удался");
+    return res.json();
+  })
+  .then((res) => res)
+  .catch((e) => {
+    serverLog("PYTHON_API:******* ERROR", PYTHON_API, e);
+    return {success: false, reason: e.message};
+  });
 }
+
 
 
 module.exports = {
