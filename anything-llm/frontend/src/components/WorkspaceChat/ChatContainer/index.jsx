@@ -5,7 +5,7 @@ import Typewriter from 'typewriter-effect/dist/core';
 import Workspace from "../../../models/workspace";
 import handleChat from "../../../utils/chat";
 import useWebSocket, {ReadyState} from "react-use-websocket";
-import {TYPE_EFFECT_DELAY, TYPE_STRING_DELAY, WS_URL} from "../../../utils/constants.js";
+import {ID_DEV, TYPE_EFFECT_DELAY, TYPE_STRING_DELAY, WS_URL} from "../../../utils/constants.js";
 import {safeTagsReplace} from "../../../utils/functions.js";
 import renderMarkdown from "../../../utils/chat/markdown.js";
 
@@ -311,9 +311,9 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
     <div
       className="main-content flex-1 lg:max-w-[var(--max-content)] relative bg-white dark:bg-black-900 lg:h-full"
     >
-      {/*{mode === "analyst" && connStatus ? <div className="absolute top-0 left-0 z-10 bg-white p-2">*/}
-      {/*  WS Status: {connStatus}*/}
-      {/*</div> : null}*/}
+      {ID_DEV && mode === "analyst" && connStatus ? <div className="absolute top-0 left-0 z-10 bg-white p-2">
+        WS Status: {connStatus}
+      </div> : null}
       <div className="main-box relative flex flex-col w-full h-full overflow-y-auto p-[16px] lg:p-[32px] !pb-0">
         <div className="flex flex-col flex-1 w-full bg-white shadow-md relative">
           {

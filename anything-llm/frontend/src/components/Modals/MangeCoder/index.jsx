@@ -1,22 +1,37 @@
-import React, {useState, useEffect} from "react";
-import {UploadCloud, X} from "react-feather";
+import React, {useState, useEffect, useMemo} from "react";
+import {UploadCloud, X, Archive} from "react-feather";
 import {useParams} from "react-router-dom";
 import Workspace from "../../../models/workspace";
-import UploadToWorkspace from "./Upload";
 import {hideModal} from "../../../store/popupSlice.js";
 import {useDispatch} from "react-redux";
-
-const TABS = {
-  upload: UploadToWorkspace
-};
+import UploadToWorkspace from "./Upload";
+import DocumentSettings from "./Documents";
 
 const noop = () => false;
-export default function CoderWorkspaceModal({providedSlug = null}) {
+export default function CoderWorkspaceModal({providedSlug = null, tabList = [], modalName = ""}) {
   const {slug} = useParams();
-  const [selectedTab, setSelectedTab] = useState("upload");
+  const [selectedTab, setSelectedTab] = useState(tabList.length ? tabList[0] : "");
   const [workspace, setWorkspace] = useState(null);
   const [fileTypes, setFileTypes] = useState([".csv"]);
   const dispatch = useDispatch();
+
+  let TABS = useMemo(() => {
+    let tabs = {};
+
+    if (tabList.length) {
+      tabList.forEach(tab => {
+        if (tab === 'documents') {
+          tabs.documents = DocumentSettings;
+        }
+        if (tab === 'upload') {
+          tabs.upload = UploadToWorkspace;
+        }
+      });
+    }
+
+    return tabs;
+  }, [tabList]);
+
 
   useEffect(() => {
     async function fetchWorkspace() {
@@ -28,12 +43,13 @@ export default function CoderWorkspaceModal({providedSlug = null}) {
   }, [selectedTab, slug]);
 
   const closeModal = () => {
-    dispatch(hideModal("modalCoderWorkspace"));
+    dispatch(hideModal(modalName));
   };
 
   if (!workspace) return null;
 
-  const Component = TABS[selectedTab || "Документы"];
+  const Component = TABS[selectedTab];
+
   return (
     <div
       className="fixed top-0 left-0 right-0 z-100 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] h-full bg-black bg-opacity-50 flex items-center justify-center">
@@ -67,7 +83,9 @@ export default function CoderWorkspaceModal({providedSlug = null}) {
             />
           </div>
           <Component
-            hideModal={hideModal}
+            hideModal={() => {
+              closeModal()
+            }}
             workspace={workspace}
             fileTypes={fileTypes}
           />
@@ -82,13 +100,20 @@ function WorkspaceSettingTabs({selectedTab, changeTab}) {
     <div>
       <ul
         className="flex md:flex-wrap overflow-x-scroll no-scroll -mb-px text-sm gap-x-2 font-medium text-center text-gray-500 dark:text-gray-400">
-        <WorkspaceTab
-          active={selectedTab === "upload"}
+        {selectedTab === "documents" ? <WorkspaceTab
+          active={true}
+          displayName="Документы"
+          tabName="documents"
+          icon={<Archive className="h-4 w-4 flex-shrink-0"/>}
+          onClick={changeTab}
+        /> : null}
+        {selectedTab === "upload" ? <WorkspaceTab
+          active={true}
           displayName="Загрузить документы"
           tabName="upload"
           icon={<UploadCloud className="h-4 w-4 flex-shrink-0"/>}
           onClick={changeTab}
-        />
+        /> : null}
       </ul>
     </div>
   );
@@ -118,18 +143,4 @@ function WorkspaceTab({
       </button>
     </li>
   );
-}
-
-export function useCoderWorkspaceModal() {
-  const [showing, setShowing] = useState(false);
-  const showModal = () => {
-    setShowing(true);
-    return false;
-  };
-  const hideModal = () => {
-    setShowing(false);
-    return false;
-  };
-
-  return {showing, showModal, hideModal};
 }

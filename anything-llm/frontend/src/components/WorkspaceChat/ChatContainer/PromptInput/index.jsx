@@ -76,6 +76,8 @@ export default function PromptInput({
   };
   const openFile = () => {
     console.log("openFile");
+
+    dispatch(showModal("modalCoderFiles"));
   };
   const closeChat = () => {
     setTextCommand("/query");
@@ -131,6 +133,7 @@ export default function PromptInput({
             <span>Загрузить файл</span>
           </button>
           <button
+            disabled={inputDisabled || buttonDisabled}
             onClick={() => {
               resetChat();
             }}
@@ -139,6 +142,7 @@ export default function PromptInput({
             <span>Сброс чата</span>
           </button>
           <button
+            disabled={inputDisabled || buttonDisabled}
             onClick={() => {
               openFile();
             }}
@@ -147,6 +151,7 @@ export default function PromptInput({
             <span>Открыть файл</span>
           </button>
           <button
+            disabled={inputDisabled || buttonDisabled}
             onClick={() => {
               closeChat();
             }}
