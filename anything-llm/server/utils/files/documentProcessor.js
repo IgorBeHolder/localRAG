@@ -3,6 +3,7 @@
 // so no additional security is needed on the endpoint directly. Auth is done however by the express
 // middleware prior to leaving the node-side of the application so that is good enough >:)
 
+const {serverLog} = require("../helpers");
 const mode = process.env.MODE;
 
 let PYTHON_API = mode === "production" ? "http://localhost:3005" : "http://0.0.0.0:3005";
@@ -13,7 +14,10 @@ console.log("PYTHON_API:*********************", PYTHON_API);
 async function checkPythonAppAlive() {
   return await fetch(`${PYTHON_API}`)
     .then((res) => res.ok)
-    .catch((e) => false);
+    .catch((e) => {
+      serverLog("PYTHON_API:******* ERROR", PYTHON_API, e);
+      return false;
+    });
 }
 
 async function acceptedFileTypes() {
@@ -61,7 +65,7 @@ async function processCsvDocument(filename = "") {
     })
     .then((res) => res)
     .catch((e) => {
-      console.log(e.message);
+      serverLog("PYTHON_API:******* ERROR", PYTHON_API, e);
       return {success: false, reason: e.message};
     });
 }
