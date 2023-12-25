@@ -5,6 +5,7 @@ console.log("*** SSH_HOST", process.env.SSH_HOST);
 console.log("*** SSH_PORT", process.env.SSH_PORT);
 console.log("*** WS_PORT", process.env.WS_PORT);
 console.log("*** IS_CODER", process.env.IS_CODER);
+console.log("*** USE_SEM_SEARCH", process.env.USE_SEM_SEARCH);
 console.log("*** COMPLETION_MODEL_ENDPOINT", process.env.COMPLETION_MODEL_ENDPOINT);
 console.log("*** EMBEDDING_MODEL_ENDPOINT", process.env.EMBEDDING_MODEL_ENDPOINT);
 console.log("*** EMBEDDING_MODEL_NAME", process.env.EMBEDDING_MODEL_NAME);
@@ -211,17 +212,21 @@ if (process.env.IS_CODER === 'TRUE') {
       if (activeStream) {
         // Получаем команду от клиента и выполняем ее на сервере SSH
 
-        sem_search(command, function (s) {
-          if (s.error) {
-            if (process.env.NODE_ENV === "development") {
-              console.log("##################### WS sem_search", s.error);
-            }
+        if (process.env.USE_SEM_SEARCH === "TRUE") {
+          sem_search(command, function (s) {
+            if (s.error) {
+              if (process.env.NODE_ENV === "development") {
+                console.log("##################### WS sem_search", s.error);
+              }
 
-            executeSSHCommand(command, sshConnection, ws);
-          } else if (s.result) {
-            executeSSHCommand(s.result, sshConnection, ws);
-          }
-        });
+              executeSSHCommand(command, sshConnection, ws);
+            } else if (s.result) {
+              executeSSHCommand(s.result, sshConnection, ws);
+            }
+          });
+        } else {
+          executeSSHCommand(command, sshConnection, ws);
+        }
       }
     });
 
