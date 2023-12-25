@@ -5,7 +5,7 @@ const {
 } = require("../openAi/web_client.js");
 const fs = require("fs");
 
-function sem_search(text_prompt, cb) {
+function sem_search(text_prompt, no_matches_phrase, cb) {
   // read the KEYS from the file
 
   new Promise((res, rej) => {
@@ -24,12 +24,12 @@ function sem_search(text_prompt, cb) {
 
     const key_list_string = key_list.map(m => `"${m}"`).join(",");
 
-    const sys_prompt = "Вы полезный поисковый ассистент. Ваши ответы должны быть точными и краткими. Отвечайте на русском языке. Выбирайте только из предложенных вариантов или укажите, что 'нет точного соответствия'.";
+    const sys_prompt = `Вы полезный поисковый ассистент. Ваши ответы должны быть точными и краткими. Отвечайте на русском языке. Выбирайте только из предложенных вариантов или укажите, что "${no_matches_phrase}".`;
     const prompt = `
     Q: Какое из выражений [${key_list_string}] точно соответствует фразе 'Выполните EDA для файла 'data.csv' и сохраните отчет.'?
     A: разведочный (EDA) aнализ
     Q: Какое из выражений [${key_list_string}] точно соответствует фразе 'Как на линукс обновить apt'?
-    A: "нет точного соответствия"
+    A: "${no_matches_phrase}"
     Q: Какое из выражений [${key_list_string}] точно соответствует фразе '${text_prompt}'?
     A:
     `;
@@ -48,15 +48,13 @@ function sem_search(text_prompt, cb) {
         res(data);
       });
     }).then(response => {
-      const process_response = response !== null ? (jsonData[response] === "нет точного соответствия" ? "" : jsonData[response] ?? "") : "";
+      const process_response = response !== null ? (jsonData[response] === no_matches_phrase ? "" : jsonData[response] ?? "") : "";
       cb({result: (process_response + "\nQ:" + text_prompt + "\A:").trim()});
     });
   }).catch(err => {
     cb({error: err});
   });
 }
-
-
 
 
 module.exports = {

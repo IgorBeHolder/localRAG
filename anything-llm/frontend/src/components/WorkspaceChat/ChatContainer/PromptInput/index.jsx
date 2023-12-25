@@ -6,11 +6,14 @@ import {showModal} from "../../../../store/popupSlice.js";
 import {useDispatch} from "react-redux";
 import OutsideClickHandler from "react-outside-click-handler";
 
-const MENU_ITEM_STYLE = "p-2 text-slate-500 bg-transparent rounded-md hover:bg-gray-200 dark:hover:bg-stone-500 dark:hover:text-slate-200";
+const MENU_ITEM_STYLE = (disabled) => {
+  return "p-2 text-slate-500 bg-transparent rounded-md disabled:cursor-not-allowed" + (disabled ? "" : " hover:bg-gray-200 dark:hover:bg-stone-500 dark:hover:text-slate-200");
+};
 
 export default function PromptInput({
                                       analyst = false,
                                       resetChatSSH,
+                                      sendEnterSSH,
                                       mode,
                                       workspace,
                                       message,
@@ -68,8 +71,13 @@ export default function PromptInput({
     }
     resetChatSSH();
   };
+  const sendEnter = () => {
+    sendEnterSSH();
+  };
   const openFile = () => {
     console.log("openFile");
+
+    dispatch(showModal("modalCoderFiles"));
   };
   const closeChat = () => {
     setTextCommand("/query");
@@ -109,33 +117,45 @@ export default function PromptInput({
           <button
             disabled={inputDisabled || buttonDisabled}
             onClick={() => {
+              sendEnter();
+            }}
+            className={MENU_ITEM_STYLE(inputDisabled || buttonDisabled)}
+          >
+            <span>Enter</span>
+          </button>
+          <button
+            disabled={inputDisabled || buttonDisabled}
+            onClick={() => {
               uploadFile();
             }}
-            className={MENU_ITEM_STYLE}
+            className={MENU_ITEM_STYLE(inputDisabled || buttonDisabled)}
           >
             <span>Загрузить файл</span>
           </button>
           <button
+            disabled={inputDisabled || buttonDisabled}
             onClick={() => {
               resetChat();
             }}
-            className={MENU_ITEM_STYLE}
+            className={MENU_ITEM_STYLE(inputDisabled || buttonDisabled)}
           >
             <span>Сброс чата</span>
           </button>
           <button
+            disabled={inputDisabled || buttonDisabled}
             onClick={() => {
               openFile();
             }}
-            className={MENU_ITEM_STYLE}
+            className={MENU_ITEM_STYLE(inputDisabled || buttonDisabled)}
           >
             <span>Открыть файл</span>
           </button>
           <button
+            disabled={inputDisabled || buttonDisabled}
             onClick={() => {
               closeChat();
             }}
-            className={MENU_ITEM_STYLE}
+            className={MENU_ITEM_STYLE(inputDisabled || buttonDisabled)}
           >
             <span>Закрыть</span>
           </button>
@@ -163,7 +183,7 @@ export default function PromptInput({
                   setShowMenu(!showMenu);
                 }}
                 type="button"
-                className={MENU_ITEM_STYLE}
+                className={MENU_ITEM_STYLE()}
               >
                 <Menu className="w-4 h-4 md:h-6 md:w-6"/>
               </button>
@@ -182,7 +202,7 @@ export default function PromptInput({
                 adjustTextArea(e);
               }}
               value={message}
-              className="cursor-text max-h-[100px] md:min-h-[40px] block mx-2 md:mx-4 p-2.5 w-full text-[16px] md:text-sm rounded-lg border bg-gray-50 border-gray-300 placeholder-gray-200 text-gray-900 dark:text-white dark:bg-stone-600 dark:border-stone-700 dark:placeholder-stone-400"
+              className="cursor-text disabled:cursor-not-allowed max-h-[100px] md:min-h-[40px] block mx-2 md:mx-4 p-2.5 w-full text-[16px] md:text-sm rounded-lg border bg-gray-50 border-gray-300 placeholder-gray-200 text-gray-900 dark:text-white dark:bg-stone-600 dark:border-stone-700 dark:placeholder-stone-400"
               placeholder={
                 isMobile
                   ? "Введите ваше сообщение здесь."
@@ -193,7 +213,7 @@ export default function PromptInput({
               ref={formRef}
               type="submit"
               disabled={buttonDisabled}
-              className="transition-all duration-300 inline-flex justify-center p-0 md:p-2 rounded-full cursor-pointer text-gray-200 dark:text-slate-200 hover:bg-blue-100 hover:text-blue-600 dark:hover:bg-stone-500 group"
+              className={"transition-all duration-300 inline-flex justify-center p-0 md:p-2 rounded-full cursor-pointer text-gray-200 dark:text-slate-200 group disabled:cursor-default" + (buttonDisabled ? "" : " hover:bg-blue-100 hover:text-blue-600 dark:hover:bg-stone-500")}
             >
               {buttonDisabled ? (
                 <Loader className="w-6 h-6 animate-spin"/>

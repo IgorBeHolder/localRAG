@@ -1,5 +1,8 @@
 export const API_BASE = import.meta.env.VITE_API_BASE || "/api";
-export const PYTHON_API = `http://${process.env.VITE_USE_DOCKER === "FALSE" ? "0.0.0.0" : "localhost"}:3005`;
+
+export const ID_DEV = !!import.meta.env.VITE_API_BASE;
+
+export const PYTHON_API = ID_DEV ? `http://${import.meta.env.VITE_USE_DOCKER === "FALSE" ? "localhost" : "0.0.0.0"}:3005` : API_BASE;
 export const UPLOAD_FILENAME_LEN_LIMIT = 68;
 export const CHAT_MAX_LENGTH = 16384;
 export const TYPE_EFFECT_DELAY = 30;

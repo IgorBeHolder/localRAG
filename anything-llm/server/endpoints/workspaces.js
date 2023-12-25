@@ -4,7 +4,7 @@ const {Document} = require("../models/documents");
 const {DocumentVectors} = require("../models/vectors");
 const {WorkspaceChats} = require("../models/workspaceChats");
 const {convertToChatHistory} = require("../utils/chats");
-const {getVectorDbClass, fixEncoding} = require("../utils/helpers");
+const {getVectorDbClass, fixEncoding, serverLog} = require("../utils/helpers");
 const {setupMulter} = require("../utils/files/multer");
 const {
   checkPythonAppAlive,
@@ -31,7 +31,7 @@ function workspaceEndpoints(app) {
       });
       response.status(200).json({workspace, message});
     } catch (e) {
-      console.log(e.message, e);
+      serverLog(e.message, e);
       response.sendStatus(500).end();
     }
   });
@@ -59,7 +59,7 @@ function workspaceEndpoints(app) {
         );
         response.status(200).json({workspace, message});
       } catch (e) {
-        console.log(e.message, e);
+        serverLog(e.message, e);
         response.sendStatus(500).end();
       }
     }
@@ -89,41 +89,7 @@ function workspaceEndpoints(app) {
         return;
       }
 
-      console.log(
-        `Document ${originalname} uploaded and processed successfully. It is now available in documents.`
-      );
-      await Telemetry.sendTelemetry("document_uploaded");
-      response.status(200).json({success: true, error: null});
-    }
-  );
-
-  app.post(
-    "/workspace/:slug/save_csv",
-    handleUploads.single("file"),
-    async function (request, response) {
-      const {originalname} = request.file;
-      const processingOnline = await checkPythonAppAlive();
-
-      console.log("originalname", processingOnline, originalname);
-
-      if (!processingOnline) {
-        response
-          .status(500)
-          .json({
-            success: false,
-            error: `CSV processing API is not online. Document ${originalname} will not be processed automatically.`
-          })
-          .end();
-        return;
-      }
-
-      const {success, reason} = await processCsvDocument(originalname);
-      if (!success) {
-        response.status(500).json({success: false, error: reason}).end();
-        return;
-      }
-
-      console.log(
+      serverLog(
         `Document ${originalname} uploaded and processed successfully. It is now available in documents.`
       );
       await Telemetry.sendTelemetry("document_uploaded");
@@ -151,13 +117,12 @@ function workspaceEndpoints(app) {
 
       const {success, reason} = await processCsvDocument(originalname);
       if (!success) {
+        console.log("save_csv error processingOnline", processingOnline, originalname, reason);
         response.status(500).json({success: false, error: reason}).end();
         return;
       }
 
-      console.log(
-        `Document ${originalname} uploaded and processed successfully. It is now available in documents.`
-      );
+      serverLog(`Document ${originalname} uploaded and processed successfully. It is now available in documents.`);
       await Telemetry.sendTelemetry("document_uploaded");
       response.status(200).json({success: true, error: null});
     }
@@ -185,7 +150,7 @@ function workspaceEndpoints(app) {
         const updatedWorkspace = await Workspace.get({id: currWorkspace.id});
         response.status(200).json({workspace: updatedWorkspace});
       } catch (e) {
-        console.log(e.message, e);
+        serverLog(e.message, e);
         response.sendStatus(500).end();
       }
     }
@@ -226,11 +191,11 @@ function workspaceEndpoints(app) {
         try {
           await VectorDb["delete-namespace"]({namespace: slug});
         } catch (e) {
-          console.error(e.message);
+          serverLog(e.message);
         }
         response.sendStatus(200).end();
       } catch (e) {
-        console.log(e.message, e);
+        serverLog(e.message, e);
         response.sendStatus(500).end();
       }
     }
@@ -245,13 +210,12 @@ function workspaceEndpoints(app) {
 
       response.status(200).json({workspaces});
     } catch (e) {
-      console.log(e.message, e);
+      serverLog(e.message, e);
       response.sendStatus(500).end();
     }
   });
 
   app.get("/workspace/:slug", [validatedRequest], async (request, response) => {
-    console.log("workspace", request);
     try {
       const {slug} = request.params;
       const user = await userFromSession(request, response);
@@ -261,7 +225,7 @@ function workspaceEndpoints(app) {
 
       response.status(200).json({workspace});
     } catch (e) {
-      console.log(e.message, e);
+      serverLog(e.message, e);
       response.sendStatus(500).end();
     }
   });
@@ -288,7 +252,7 @@ function workspaceEndpoints(app) {
 
         response.status(200).json({history: convertToChatHistory(history)});
       } catch (e) {
-        console.log(e.message, e);
+        serverLog(e.message, e);
         response.sendStatus(500).end();
       }
     }

@@ -5,7 +5,7 @@ import Typewriter from 'typewriter-effect/dist/core';
 import Workspace from "../../../models/workspace";
 import handleChat from "../../../utils/chat";
 import useWebSocket, {ReadyState} from "react-use-websocket";
-import {TYPE_EFFECT_DELAY, TYPE_STRING_DELAY, WS_URL} from "../../../utils/constants.js";
+import {ID_DEV, TYPE_EFFECT_DELAY, TYPE_STRING_DELAY, WS_URL} from "../../../utils/constants.js";
 import {safeTagsReplace} from "../../../utils/functions.js";
 import renderMarkdown from "../../../utils/chat/markdown.js";
 
@@ -40,6 +40,17 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
 
   const [loadingResponse, setLoadingResponse] = useState(mode === "analyst");
   const [newWsMessage, setNewWsMessage] = useState(false);
+
+  const resetTypewriter = (arr) => {
+    return arr.map((m, mi) => {
+      if (m.typeWriter) {
+        m.typeWriter = false;
+        // m.content = safeTagsReplace(m.content);
+      }
+
+      return m;
+    })
+  }
 
   const lastMessageRef = useCallback((ref) => {
     console.log('lastMessageRef', ref);
@@ -80,7 +91,7 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
       if (typeWriterRef?.current && typeWriterInstance?.state) {
         if (typeWriterIsBusy) {
           console.log('typeWriterIsBusy', typeWriterIsBusy);
-          debugger;
+          setTypeWriterStack(typeWriterStack.concat(text));
         } else {
           typeWriterInstance
             .pauseFor(100)
@@ -101,21 +112,14 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
     const onWsMessage = useCallback((msg) => {
       console.log('onWsMessage', msg, chatHistory);
 
-      const remHistory = (chatHistory.length > 0 ? chatHistory.slice(0, -1) : []).map((m, mi) => {
-        if (m.typeWriter) {
-          m.typeWriter = false;
-          m.content = safeTagsReplace(m.content);
-        }
-
-        return m;
-      });
-
-      let _chatHistory = [...remHistory];
-
       let chatResult = JSON.parse(msg.data);
 
       if (chatResult.error) {
         chatResult.type = "abort";
+
+        const remHistory = resetTypewriter([...chatHistory]);
+
+        let _chatHistory = [...remHistory];
 
         handleChat(
           chatResult,
@@ -127,6 +131,10 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
       } else {
         chatResult.typeWriter = true;
         chatResult.textResponse = (chatResult.textResponse.trim());
+
+        const remHistory = resetTypewriter(chatHistory.slice(0, -1));
+
+        let _chatHistory = [...remHistory];
 
         console.log("chatResult", chatResult, _chatHistory);
 
@@ -238,6 +246,33 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
     }
   };
 
+  const sendEnterSSH = useCallback(() => {
+    if (mode === "analyst") {
+      let chatResult = {
+        type: "textResponse",
+        textResponse: "> ",
+        sources: [],
+        error: null,
+        close: false,
+        typeWriter: true
+      };
+
+      const remHistory = resetTypewriter([...chatHistory]);
+
+      let _chatHistory = [...remHistory];
+
+      handleChat(
+        chatResult,
+        setLoadingResponse,
+        setChatHistory,
+        remHistory,
+        _chatHistory
+      );
+
+      setCommand("\n");
+    }
+  }, [chatHistory]);
+
   const handleMessageChange = (event) => {
     setMessage(event.target.value);
   };
@@ -276,9 +311,9 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
     <div
       className="main-content flex-1 lg:max-w-[var(--max-content)] relative bg-white dark:bg-black-900 lg:h-full"
     >
-      {/*{mode === "analyst" && connStatus ? <div className="absolute top-0 left-0 z-10 bg-white p-2">*/}
-      {/*  WS Status: {connStatus}*/}
-      {/*</div> : null}*/}
+      {ID_DEV && mode === "analyst" && connStatus ? <div className="absolute top-0 left-0 z-10 bg-white p-2">
+        WS Status: {connStatus}
+      </div> : null}
       <div className="main-box relative flex flex-col w-full h-full overflow-y-auto p-[16px] lg:p-[32px] !pb-0">
         <div className="flex flex-col flex-1 w-full bg-white shadow-md relative">
           {
@@ -294,6 +329,7 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
       <PromptInput
         analyst={mode === "analyst"}
         resetChatSSH={resetChatSSH}
+        sendEnterSSH={sendEnterSSH}
         mode={mode}
         isCoder={isCoder}
         workspace={workspace}

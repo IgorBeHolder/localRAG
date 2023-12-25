@@ -1,14 +1,14 @@
 process.env.NODE_ENV === "development"
   ? require("dotenv").config({path: `.env.${process.env.NODE_ENV}`})
   : require("dotenv").config();
-const {viewLocalFiles} = require("../utils/files");
+const {viewLocalFiles, viewCoderFiles} = require("../utils/files");
 const {exportData, unpackAndOverwriteImport} = require("../utils/files/data");
 const {
   checkPythonAppAlive,
   acceptedFileTypes,
 } = require("../utils/files/documentProcessor");
 const {purgeDocument} = require("../utils/files/purgeDocument");
-const {getVectorDbClass} = require("../utils/helpers");
+const {getVectorDbClass, serverLog} = require("../utils/helpers");
 const {updateENV, dumpENV} = require("../utils/helpers/updateENV");
 const {
   reqBody,
@@ -194,6 +194,16 @@ function systemEndpoints(app) {
     try {
       const localFiles = await viewLocalFiles();
       response.status(200).json({localFiles});
+    } catch (e) {
+      console.log(e.message, e);
+      response.sendStatus(500).end();
+    }
+  });
+
+  app.get("/system/coder-files", [validatedRequest], async (_, response) => {
+    try {
+      const files = await viewCoderFiles();
+      response.status(200).json({files});
     } catch (e) {
       console.log(e.message, e);
       response.sendStatus(500).end();
@@ -395,7 +405,7 @@ function systemEndpoints(app) {
       response.end(Buffer.from(buffer, "base64"));
       return;
     } catch (error) {
-      console.error("Error processing the logo request:", error);
+      serverLog("Error processing the logo request:", error);
       response.status(500).json({message: "Внутренняя ошибка сервера"});
     }
   });

@@ -1,10 +1,10 @@
-import {createSlice} from "@reduxjs/toolkit"
-import CoderWorkspaceModal from "../components/Modals/MangeCoder/index.jsx";
+import {createSlice} from "@reduxjs/toolkit";
 
 export const counterSlice = createSlice({
   name: "popup",
   initialState: {
-    modalCoderWorkspace: false
+    modalCoderWorkspace: false,
+    modalCoderFiles: false
   },
   reducers: {
     showModal: (state, data) => {

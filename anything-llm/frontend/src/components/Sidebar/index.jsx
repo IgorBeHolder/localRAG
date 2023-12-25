@@ -20,7 +20,7 @@ import useLogo from "../../hooks/useLogo";
 import SettingsOverlay, {useSystemSettingsOverlay} from "./SettingsOverlay";
 import ManageWorkspace, {useManageWorkspaceModal} from "../Modals/MangeWorkspace/index.jsx";
 import SystemSettingsModal, {useSystemSettingsModal} from "../Modals/Settings/index.jsx";
-import CoderWorkspaceModal, {useCoderWorkspaceModal} from "../Modals/MangeCoder/index.jsx";
+import CoderWorkspaceModal from "../Modals/MangeCoder/index.jsx";
 
 export default function Sidebar() {
   const {
@@ -53,7 +53,10 @@ export function SidebarMobileHeader() {
   const [workspaces, setWorkspaces] = useState([]);
   const [selectedWs, setSelectedWs] = useState(null);
   const {showing, showModal, hideModal} = useManageWorkspaceModal();
-  const showModalCoderWorkspace = useSelector((state) => state.popup.modalCoderWorkspace);
+  const {
+    modalCoderWorkspace: showModalCoderWorkspace,
+    modalCoderFiles: showModalCoderFiles
+  } = useSelector((state) => state.popup);
 
   // Settings
   const [tab, setTab] = useState(null);
@@ -173,7 +176,9 @@ export function SidebarMobileHeader() {
 
       {showingNewWsModal && <NewWorkspaceModal hideModal={hideNewWsModal}/>}
 
-      {showModalCoderWorkspace && <CoderWorkspaceModal/>}
+      {showModalCoderWorkspace && <CoderWorkspaceModal modalName={"modalCoderWorkspace"} tabList={['upload']}/>}
+
+      {showModalCoderFiles && <CoderWorkspaceModal modalName={"modalCoderFiles"} tabList={['documents']}/>}
 
       {showingSettings && !!tab && (
         <SystemSettingsModal tab={tab} hideModal={handleModalClose}/>
