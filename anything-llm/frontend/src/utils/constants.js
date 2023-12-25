@@ -2,7 +2,8 @@ export const API_BASE = import.meta.env.VITE_API_BASE || "/api";
 
 export const ID_DEV = import.meta?.env?.hasOwnProperty('VITE_API_BASE');
 
-export const PYTHON_API = `http://${(import.meta.env.VITE_USE_DOCKER === "FALSE" || !ID_DEV) ? "localhost" : "0.0.0.0"}:3005`;
+// export const PYTHON_API = `http://${(import.meta.env.VITE_USE_DOCKER === "FALSE" || !ID_DEV) ? "localhost" : "0.0.0.0"}:3005`;
+export const PYTHON_API = `http://${(import.meta.env.VITE_USE_DOCKER === "FALSE" || !ID_DEV) ? "anyth" : "0.0.0.0"}:3005`;
 export const UPLOAD_FILENAME_LEN_LIMIT = 68;
 export const CHAT_MAX_LENGTH = 16384;
 export const TYPE_EFFECT_DELAY = 30;
