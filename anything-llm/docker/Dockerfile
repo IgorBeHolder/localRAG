@@ -106,5 +106,7 @@ ENV PATH=/app/collector/v-env/bin:$PATH
 HEALTHCHECK --interval=1m --timeout=10s --start-period=1m \
   CMD /bin/bash /usr/local/bin/docker-healthcheck.sh || exit 1
 
+COPY --chown=anythingllm:anythingllm ./server/storage/coder ./server/storage/coder/
+
 # Run the server
 ENTRYPOINT ["/bin/bash", "/usr/local/bin/docker-entrypoint.sh"]

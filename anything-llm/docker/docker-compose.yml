@@ -22,10 +22,12 @@ services:
       - "../server/storage/:/app/server/storage"
       - "../collector/hotdir/:/app/collector/hotdir"
       - "../collector/outputs/:/app/collector/outputs"
+      - "../server/storage/coder:/app/server/storage/coder"
     user: "${ARG_UID}:${ARG_GID}"
     ports:
       - 3001:3001
       - 3006:3006
+      - 3005:3005
     networks:
       - llm-net
 networks:
