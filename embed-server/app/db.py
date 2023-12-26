@@ -203,7 +203,7 @@ async def get_similar_text(
         print(f"*** Exception during embedding: {e}")
         raise e
 
-    search_embedding = embedding["data"][0]["embedding"]
+    search_embedding = embedding.data[0].embedding
 
     if search_in_embeddings_only:
         # Search only in embeddings table
