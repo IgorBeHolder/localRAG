@@ -8,7 +8,7 @@ source ./client-files/.env
 set +a
 echo -e "Environment variables loaded."
 echo -e "Build for $DEVICE."
-echo -e "$COMPLETION_MODEL_NAME\n--------------------------------------------------------"
+echo -e "$EMBEDDING_MODEL_NAME\n--------------------------------------------------------"
 
 # Check if the "llm-server" container is already running and remove it if it is
 container_id=$(docker ps -a -q -f name=^/llm-server$)
