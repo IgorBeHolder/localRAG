@@ -7,7 +7,7 @@ echo $PWD
 source ./client-files/.env
 set +a
 echo -e "Environment variables loaded.\nBuild for $DEVICE.\n$EMBEDDING_MODEL_NAME\n"
-echo -e "--------------------------------------------------"
+echo -e "---------------------------------------------------------------"
 
 
 # Define a function to remove a container by name if it exists
