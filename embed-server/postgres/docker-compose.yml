@@ -26,3 +26,4 @@ volumes:
 # docker-compose -p localrag up -d --build
 
 # this instructions are implemented in composite docker-compose.yml at one level up folder
+# to reinitialize database run:  embed-server/postgres/reinit-db.sh
