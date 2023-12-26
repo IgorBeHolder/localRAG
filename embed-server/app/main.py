@@ -5,27 +5,42 @@ from contextlib import asynccontextmanager
 from typing import Dict, List, Optional, Union
 
 from asyncpg import Connection, create_pool
-from db import insert_to_db, get_similar_text, vectorize_document
+
+from db import insert_to_db, vectorize_document, get_similar_text
 
 from fastapi import Depends, FastAPI, HTTPException, Request, UploadFile, File
 from fastapi.responses import JSONResponse
 from models.model_manager import ModelManager
 from schemas import (
-    EmbeddingInput, EmbeddingData, EmbeddingOutput, 
-    DocumentInput, DocumentProcessInput, DocumentProcessOutput, 
-    SearchRequest, SearchResult
+    EmbeddingInput,
+    EmbeddingData,
+    EmbeddingOutput,
+    DocumentInput,
+    DocumentProcessInput,
+    DocumentProcessOutput,
+    SearchRequest,
+    SearchResult,
 )
 
 
 # from services.x_auth_token import get_x_token_key
 
+# HINT: postgresql://username:password@host:port/database
+#       host=postgres (service name in docker-compose)
+# postgres running in a CONTAINER as a service
+# DATABASE_URL=postgresql://postgres:example@postgres:5432/postgres
+# postgres as a process running locally on mac
+# DATABASE_URL=postgresql://postgres:example@localhost:5432/postgres
 
-PORT = int(os.getenv("EM_PORT", 3004))
+EM_PORT = int(os.getenv("EM_PORT", 3004))
 HOST = os.getenv("HOST", "0.0.0.0")
+
+POSTGRES_USER = os.getenv("POSTGRES_USER", "postgres")
+POSTGRES_DB = os.getenv("POSTGRES_DB", "postgres")
+POSTGRES_HOST = os.getenv("POSTGRES_HOST", "postgres")
 EMBEDDING_MODEL_NAME = os.getenv("EMBEDDING_MODEL_NAME", "no_name_model")
-DATABASE_URL = os.getenv(
-    "DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/postgres"
-)
+POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD", "example")
+DATABASE_URL = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:5432/{POSTGRES_DB}"
 
 
 @asynccontextmanager
@@ -62,6 +77,21 @@ app = FastAPI(
 executor = ThreadPoolExecutor(max_workers=os.cpu_count() // 2)
 
 embed_model: Optional[ModelManager] = None
+
+
+# model name **********************************************************************************
+@app.get(
+    "/model_name",
+    response_model=str,
+    summary="Get the name of the model currently in use.",
+)
+async def get_model_name():
+    """
+    Returns the name of the model currently in use.
+    """
+    if not EMBEDDING_MODEL_NAME:
+        raise HTTPException(status_code=404, detail="Model name not set")
+    return JSONResponse(content={"model_name": EMBEDDING_MODEL_NAME})
 
 
 # /v1/embeddings ******************************************************************************
@@ -105,42 +135,7 @@ async def text_processor_endpoint(data: DocumentProcessInput, request: Request):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-# search ***************************************************************************************
-
-@app.post("/v1/search", response_model=SearchResult)
-async def semantic_search(input: SearchRequest, request: Request):
-    try:
-        async with get_db_connection(request) as connection:
-            async with connection.transaction():
-                results = await get_similar_text(
-                    connection=connection,
-                    embed_model=embed_model,
-                    text_for_search=input.text_for_search,
-                    n_top=input.n_top,
-                    search_in_embeddings_only=input.search_in_embeddings_only,
-                )
-            return SearchResult(matched_texts=results)
-    except Exception as e:
-        print(e)
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-# model ***************************************************************************************
-@app.get(
-    "/model_name",
-    response_model=str,
-    summary="Get the name of the model currently in use.",
-)
-async def get_model_name():
-    """
-    Returns the name of the model currently in use.
-    """
-    if not EMBEDDING_MODEL_NAME:
-        raise HTTPException(status_code=404, detail="Model name not set")
-    return JSONResponse(content={"model_name": EMBEDDING_MODEL_NAME})
-
-
-# ingest_documents ***************************************************************************************
+# ingest_documents ****************************************************************************
 @app.post("/ingest_document")
 async def ingest_document(request: Request, file: UploadFile = File(...)):
     try:
@@ -171,14 +166,31 @@ async def ingest_document(request: Request, file: UploadFile = File(...)):
         raise HTTPException(status_code=500, detail=str(e))
 
 
+# search *************************************************************************************
+@app.post("/v1/search", response_model=SearchResult)
+async def semantic_search(input: SearchRequest, request: Request):
+    try:
+        async with get_db_connection(request) as connection:
+            async with connection.transaction():
+                results = await get_similar_text(
+                    connection=connection,
+                    embed_model=embed_model,
+                    text_for_search=input.text_for_search,
+                    n_top=input.n_top,
+                    search_in_embeddings_only=input.search_in_embeddings_only,
+                )
+            return SearchResult(matched_texts=results)
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 def run():
     import uvicorn
-    print(f"Starting the server on {HOST}:{PORT}")
-    uvicorn.run("main:app", host=HOST, port=PORT, reload=True)
 
+    print(f"Starting the server on {HOST}:{EM_PORT}")
+    uvicorn.run("main:app", host=HOST, port=EM_PORT, reload=False)
 
-# to avoid postrges connection error
-# comment line 40: lifespan=app_lifespan,
 
 # changes while debugging in VSC:
 # 1. client-files/.env: change HOST to localhost

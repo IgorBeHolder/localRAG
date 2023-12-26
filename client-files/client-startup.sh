@@ -155,7 +155,7 @@ if [ ! -z "$container_id" ]; then
 else
   docker run -d --name postgres \
     --restart always \
-    -e POSTGRES_PASSWORD=example \
+    -e POSTGRES_PASSWORD="${POSTGRES_PASSWORD}" \
     -p 5432:5432 \
     -v pgdata:/var/lib/postgresql/data \
     --network llm-net \

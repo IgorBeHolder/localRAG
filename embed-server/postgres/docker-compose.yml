@@ -6,10 +6,12 @@ services:
     # build: .  
     image: pgembeding
     restart: always
-    environment:
-      POSTGRES_PASSWORD: example
+    env_file:
+      - ../../client-files/.env
+    # environment:
+      # POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
-      - "5432:5432"
+      - 5432:5432
     volumes:
       - pgdata:/var/lib/postgresql/data
     networks:
