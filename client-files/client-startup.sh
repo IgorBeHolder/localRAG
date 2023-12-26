@@ -36,12 +36,14 @@ echo "Creating folders for document processor..."
 mkdir -p ./anything-llm/server/storage
 mkdir -p ./anything-llm/collector/hotdir
 mkdir -p ./anything-llm/collector/outputs
+mkdir -p ./anything-llm/server/storage/coder
 
 # set permissions for document processor folders
 echo "Setting permissions for document processor folders..."
 sudo chmod -R 777 ./anything-llm/server/storage
 sudo chmod -R 777 ./anything-llm/collector/hotdir
 sudo chmod -R 777 ./anything-llm/collector/outputs
+sudo chmod -R 777 ./anything-llm/server/storage/coder
 
 (
 echo "Starting the EMBEDDING model server..."
