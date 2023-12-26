@@ -1,34 +1,34 @@
 #!/bin/bash
 
 (
-echo "Building the LLM engine (main model) container..."
+echo "Starting the embedding model server..."
 set -a
 echo $PWD
 source ./client-files/.env
 set +a
-echo -e "Environment variables loaded."
-echo -e "Build for $DEVICE."
-echo -e "$EMBEDDING_MODEL_NAME\n--------------------------------------------------------"
+echo -e "Environment variables loaded.\nBuild for $DEVICE.\n$EMBEDDING_MODEL_NAME\n"
+echo -e "---------------------------------------------------------------"
 
-# Check if the "llm-server" container is already running and remove it if it is
-container_id=$(docker ps -a -q -f name=^/llm-server$)
-if [ ! -z "$container_id" ]; then
-    echo "Stopping existing container with name 'llm-server'..."
+
+# Define a function to remove a container by name if it exists
+stop_container_if_exists() {
+  local container_name=$1
+  local container_id=$(docker ps -a -q -f name=^/${container_name}$)
+  if [ ! -z "$container_id" ]; then
+    echo "Stopping existing container with name '${container_name}'..."
     docker stop $container_id
-    echo "Removing existing container with name 'llm-server'..."
-    docker rm -f $container_id
-fi
+  fi
+}
 
-if [ "$DEVICE" = "cpu" ]; then
-    cd llama-cpp-python/docker/simple
-    echo "Building the LLAMA powered for CPU container..."
+# Remove containers if they exist
+stop_container_if_exists "embed"
+stop_container_if_exists "nginx"
+stop_container_if_exists "postgres"
 
-    docker-compose -p localrag up -d --build
-else
-    cd llama-cpp-python/docker/cuda_simple
-    echo "Building the LLAMA powered for CUDA container..."
-
-    docker-compose -p localrag up -d --build
-fi
+cd embed-server &&
+# todo revert
+#git checkout main &&
+docker-compose -p localrag up -d --build
 
 )
+
