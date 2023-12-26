@@ -215,7 +215,7 @@ async def get_similar_text(
         """
         results = await connection.fetch(query, search_embedding, n_top)
         document_ids = [result["document_id"] for result in results]
-        print(f"*** Document ids: {document_ids}")
+        # print(f"*** Document ids: {document_ids}")
     else:
         # Search in both embeddings and documents tables
         query_embeddings = """
