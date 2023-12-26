@@ -86,7 +86,7 @@ async function v1_chat_completions(messages, temperature) {
       }
     );
 
-    return response.data.choices[0].message.content; // the COMPLETION text
+    return response?.data?.choices?.[0]?.message?.content ?? compl_model + " not answered";
 
   } catch (error) {
     console.error('Error sending payload (prompt):', error);
