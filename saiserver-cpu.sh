@@ -2,7 +2,7 @@
 set -e
 
 tarball_name="sais-mistral-cpu"
-container_names=("anyth" "nginx")
+container_names=("anyth" "nginx" "coder")
 images_to_save=()
 
 for container_name in "${container_names[@]}"; do
