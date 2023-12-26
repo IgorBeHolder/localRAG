@@ -38,7 +38,7 @@ RUN poetry install --no-dev
 RUN pip3 install --upgrade pip
 
 RUN --mount=type=cache,target=/tmp/pip_cache pip3 install \
-    matplotlib seaborn plotly openpyxl os \
+    matplotlib seaborn plotly openpyxl \
     sweetviz open-interpreter websockets \
     scikit-learn datetime
 
