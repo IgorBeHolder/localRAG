@@ -8,7 +8,7 @@ tarball_name="models_cpu_v0.5.tar.gz"
 echo "Compressing tarball..."
 tar -czvf "$tarball_name" \
   ./model-store/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 \
-  ./model-store/TheBloke/openchat-3.5-1210-GGUF/openchat-3.5-1210.Q6_K.gguf"
+  ./model-store/TheBloke/openchat-3.5-1210-GGUF/openchat-3.5-1210.Q6_K.gguf
 
 echo "Tarball compressed."
 
