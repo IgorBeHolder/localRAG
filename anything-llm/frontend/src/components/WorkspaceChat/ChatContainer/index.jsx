@@ -1,7 +1,8 @@
 import {useCallback, useEffect, useState} from "react";
 import ChatHistory from "./ChatHistory";
 import PromptInput from "./PromptInput";
-import Typewriter from 'typewriter-effect/dist/core';
+import Typewriter from "typewriter-effect/dist/core";
+import GraphemeSplitter from "grapheme-splitter";
 import Workspace from "../../../models/workspace";
 import handleChat from "../../../utils/chat";
 import useWebSocket, {ReadyState} from "react-use-websocket";
@@ -52,27 +53,38 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
     })
   }
 
+  const stringSplitter = (string) => {
+    const splitter = new GraphemeSplitter();
+    return splitter.splitGraphemes(string);
+  };
+
   const lastMessageRef = useCallback((ref) => {
     console.log('lastMessageRef', ref);
     if (mode === "analyst") {
       if (ref?.current) {
         const tw = new Typewriter(ref.current, {
           delay: TYPE_EFFECT_DELAY,
-          autoStart: false
+          // skipAddStyles: true,
+          autoStart: false,
+          stringSplitter
         });
 
         if (typeWriterStack.length) {
+          setTypeWriterIsBusy(true);
+
           typeWriterStack.forEach(str => {
             tw
               .typeString((str))
+              .callFunction((e) => {
+                setTimeout(() => {
+                  e.elements.container.scrollIntoView({behavior: "smooth", block: "start"});
+                }, 10 + TYPE_STRING_DELAY);
+              })
               .pauseFor(TYPE_STRING_DELAY);
           });
 
-          setTypeWriterIsBusy(true);
-
           tw
             .callFunction((e) => {
-              console.log('callFunction', e);
               setTypeWriterIsBusy(false);
               setTypeWriterStack([]);
             })
@@ -88,19 +100,34 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
   const typeMessage = useCallback((text) => {
     console.log('typeMessage', typeWriterRef, typeWriterInstance?.state.elements.container, text);
     if (mode === "analyst") {
+      const print = text.split('\n');
+
       if (typeWriterRef?.current && typeWriterInstance?.state) {
         if (typeWriterIsBusy) {
           console.log('typeWriterIsBusy', typeWriterIsBusy);
-          setTypeWriterStack(typeWriterStack.concat(text));
+          setTypeWriterStack(typeWriterStack.concat(print));
         } else {
+          print.forEach(s => {
+            typeWriterInstance
+              .pauseFor(TYPE_STRING_DELAY)
+              .typeString(s)
+              .callFunction((e) => {
+                setTimeout(() => {
+                  e.elements.container.scrollIntoView({behavior: "smooth", block: "start"});
+                }, 10 + TYPE_STRING_DELAY);
+              });
+          });
+
           typeWriterInstance
-            .pauseFor(100)
-            .typeString(text)
+            .callFunction((e) => {
+              setTypeWriterIsBusy(false);
+              setTypeWriterStack([]);
+            })
             .start();
         }
       } else {
         console.log('repeat');
-        setTypeWriterStack(typeWriterStack.concat(text));
+        setTypeWriterStack(typeWriterStack.concat(print));
       }
     }
   }, [typeWriterRef, typeWriterInstance, mode, typeWriterStack, typeWriterIsBusy]);
@@ -138,31 +165,54 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
 
         console.log("chatResult", chatResult, _chatHistory);
 
-        if (_chatHistory.length) {
-          let lastChatMessage = _chatHistory[_chatHistory.length - 1];
+        // const prevChatHistory = [
+        //   ...resetTypewriter(chatHistory),
+        //   {
+        //     ...chatResult
+        // content: safeTagsReplace(chatResult.textResponse),
+        // role: "assistant",
+        // typeWriter: false,
+        // pending: false,
+        // userMessage: message,
+        // animate: false
+        //   }
+        // ];
 
-          if (lastChatMessage.role === "assistant") {
-            _chatHistory[_chatHistory.length - 1].content += safeTagsReplace(chatResult.textResponse);
+        // setChatHistory(prevChatHistory);
 
-            console.log('lastChatMessage', lastChatMessage, _chatHistory);
-          } else {
-            handleChat(
-              chatResult,
-              setLoadingResponse,
-              setChatHistory,
-              remHistory,
-              _chatHistory
-            );
-          }
-        } else {
-          handleChat(
-            chatResult,
-            setLoadingResponse,
-            setChatHistory,
-            remHistory,
-            _chatHistory
-          );
-        }
+        handleChat(
+          chatResult,
+          setLoadingResponse,
+          setChatHistory,
+          remHistory,
+          _chatHistory
+        );
+
+        // if (_chatHistory.length) {
+        //   let lastChatMessage = _chatHistory[_chatHistory.length - 1];
+        //
+        //   if (lastChatMessage.role === "assistant") {
+        //     _chatHistory[_chatHistory.length - 1].content += safeTagsReplace(chatResult.textResponse);
+        //
+        //     console.log('lastChatMessage', lastChatMessage, _chatHistory);
+        //   } else {
+        //     handleChat(
+        //       chatResult,
+        //       setLoadingResponse,
+        //       setChatHistory,
+        //       remHistory,
+        //       _chatHistory
+        //     );
+        //   }
+        // } else {
+        //   handleChat(
+        //     chatResult,
+        //     setLoadingResponse,
+        //     setChatHistory,
+        //     remHistory,
+        //     _chatHistory
+        //   );
+        // }
 
         typeMessage(((chatResult.textResponse)));
 
@@ -285,7 +335,7 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
     console.log('handleSubmit', message, chatHistory);
 
     const prevChatHistory = [
-      ...chatHistory,
+      ...resetTypewriter(chatHistory),
       {content: message, role: "user"},
       {
         content: "",

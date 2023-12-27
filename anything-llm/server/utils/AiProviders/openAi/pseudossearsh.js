@@ -4,13 +4,21 @@ const {
   v1_embeddings_openllm
 } = require("../openAi/web_client.js");
 const fs = require("fs");
+const path = require("path");
+const {serverLog} = require("../../helpers");
 
 function sem_search(text_prompt, no_matches_phrase, cb) {
   // read the KEYS from the file
+  const coderPath =
+    process.env.NODE_ENV === "development"
+      ? path.resolve(__dirname, `../../../../coder/interpreter`)
+      : path.resolve(process.env.STORAGE_DIR, `../../interpreter`);
+
+  serverLog('coderPath', coderPath, path.resolve(coderPath + "/terminal_interface/da-osp.txt"));
 
   new Promise((res, rej) => {
     // search for the response (value from da-osp.txt)
-    fs.readFile("../../coder/interpreter/terminal_interface/da-osp.txt", "utf8", (err, data) => {
+    fs.readFile(path.resolve(coderPath + "/terminal_interface/da-osp.txt"), "utf8", (err, data) => {
       if (err) {
         rej(err);
       }

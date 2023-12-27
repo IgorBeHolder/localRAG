@@ -6,7 +6,7 @@ export const ID_DEV = import.meta?.env?.hasOwnProperty('VITE_API_BASE');
 export const PYTHON_API = `http://${(import.meta.env.VITE_USE_DOCKER === "FALSE" || !ID_DEV) ? "localhost" : "0.0.0.0"}:3005`;
 export const UPLOAD_FILENAME_LEN_LIMIT = 68;
 export const CHAT_MAX_LENGTH = 16384;
-export const TYPE_EFFECT_DELAY = 30;
+export const TYPE_EFFECT_DELAY = 20;
 export const TYPE_STRING_DELAY = 10;
 export const WS_URL = import.meta.env.VITE_USE_DOCKER === "FALSE" ? ("ws://localhost:" + (process.env.WS_PORT || process.env.VITE_WS_PORT || 3006)) : "ws://localhost:3006";
 

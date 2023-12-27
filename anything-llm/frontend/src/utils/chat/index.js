@@ -13,8 +13,6 @@ export default function handleChat(
   console.log('textResponse', remHistory, typeWriter, type, textResponse);
 
   if (type === "abort") {
-    debugger;
-
     setChatHistory([
       ...remHistory,
       {

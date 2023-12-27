@@ -119,7 +119,6 @@ const Workspace = {
     const response = await fetch(`${PYTHON_API}/save_csv`, {
       method: "POST",
       body: formData
-      // headers: baseHeaders()
     });
 
     const data = await response.json();
