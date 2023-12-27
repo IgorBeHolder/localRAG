@@ -10,55 +10,55 @@ import {ID_DEV, TYPE_EFFECT_DELAY, TYPE_STRING_DELAY, WS_URL} from "../../../uti
 import {safeTagsReplace} from "../../../utils/functions.js";
 import renderMarkdown from "../../../utils/chat/markdown.js";
 
-export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
-  const [message, setMessage] = useState("");
-  const [connStatus, setConnStatus] = useState("");
-  const [chatHistory, setChatHistory] = useState(knownHistory);
-  const [command, setCommand] = useState("");
-  const [typeWriterStack, setTypeWriterStack] = useState([]);
-  const [typeWriterIsBusy, setTypeWriterIsBusy] = useState(false);
-  const [typeWriterRef, setTypeWriterRef] = useState(null);
-  const [typeWriterInstance, setTypeWriterInstance] = useState(null);
-  const storageKey = `workspace_chat_mode_${workspace.slug}`;
+const WebSocketHandler = ({ onMessage, command, connStatus, setConnStatus, ...props }) => {
+  const [socketUrl, setSocketUrl] = useState(WS_URL);
 
-  let mode = window.localStorage.getItem(storageKey);
-
-  const setQueryMode = () => {
-    mode = "query";
-    window.localStorage.setItem(storageKey, mode);
-  }
-
-  if (mode === "analyst") {
-    if (!isCoder) {
-      setQueryMode();
+  const {sendMessage, lastMessage, readyState} = useWebSocket(socketUrl, {
+    shouldReconnect: (closeEvent) => true,
+    share: true,
+    reconnectAttempts: 10,
+    onMessage: (msg) => {
+      onMessage(msg);
+    },
+    reconnectInterval: (attemptNumber) => {
+      Math.min(Math.pow(2, attemptNumber) * 1000, 10000)
     }
+  });
 
-    if (!window.location.pathname.startsWith('/analyst/')) {
-      setQueryMode();
-      window.location = "/workspace/" + workspace.slug;
+  const connectionStatus = {
+    [ReadyState.CONNECTING]: "Connecting",
+    [ReadyState.OPEN]: "Open",
+    [ReadyState.CLOSING]: "Closing",
+    [ReadyState.CLOSED]: "Closed",
+    [ReadyState.UNINSTANTIATED]: "Uninstantiated"
+  }[readyState];
+
+  const sendCommand = useCallback(() => {
+    if (connectionStatus === "Open") {
+      sendMessage(command);
     }
-  }
+  }, [command, connectionStatus, sendMessage]);
 
-  const [loadingResponse, setLoadingResponse] = useState(mode === "analyst");
-  const [newWsMessage, setNewWsMessage] = useState(false);
+  useEffect(() => {
+    sendCommand();
+  }, [command]);
 
-  const resetTypewriter = (arr) => {
-    return arr.map((m, mi) => {
-      if (m.typeWriter) {
-        m.typeWriter = false;
-        // m.content = safeTagsReplace(m.content);
-      }
+  useEffect(() => {
+    setConnStatus(connectionStatus);
+  }, [connectionStatus]);
 
-      return m;
-    })
-  }
+  return null;
+};
 
-  const stringSplitter = (string) => {
-    const splitter = new GraphemeSplitter();
-    return splitter.splitGraphemes(string);
-  };
-
-  const lastMessageRef = useCallback((ref) => {
+const ChatContainer = ({ workspace, isCoder, knownHistory = [] }) => {
+  // ...
+  return (
+    <div>
+      <WebSocketHandler onMessage={handleWsMessage} command={command} connStatus={connStatus} setConnStatus={setConnStatus} />
+      {/* Other components */}
+    </div>
+  );
+};
     console.log('lastMessageRef', ref);
     if (mode === "analyst") {
       if (ref?.current) {
