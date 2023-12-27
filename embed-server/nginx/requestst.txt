@@ -46,18 +46,43 @@ curl -X 'POST' 'http://194.135.112.219:3003/v1/chat/completions' -H 'accept: app
 
 through router: ********************************************************************************************************************
 curl -X 'GET' 'http://46.254.21.170:3002/v1/models' -H 'accept: application/json' -H 'Content-Type: application/json'
+curl -X 'GET' 'http://46.254.21.170:3002/v1/model_name' -H 'accept: application/json' -H 'Content-Type: application/json'
+curl -X 'GET' 'http://46.254.21.170:3002/v1/emb_models' -H 'accept: application/json' -H 'Content-Type: application/json'
+curl -X 'GET' 'http://46.254.21.170:3002/v1/embeddings' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{"model": "all-MiniLM-L6-v2", "input": ["This is an example sentence", "Each sentence is converted"]}'
+curl -X 'POST' 'http://46.254.21.170:3002/v1/search' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{ "n_top": 5,  "text_for_search": "What were relations between Pierre and Natasha?",   "search_in_embeddings_only": true}'
+curl -X 'POST' 'http://46.254.21.170:3002/v1/ingest' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{"model": "all-MiniLM-L6-v2", "input": ["This is an example sentence", "Each sentence is converted"]}'
+
+
+curl -X 'GET' 'http://0.0.0.0:3002/v1/models' -H 'accept: application/json' -H 'Content-Type: application/json'
+curl -X 'GET' 'http://0.0.0.0:3002/v1/emb_models' -H 'accept: application/json' -H 'Content-Type: application/json'
+curl -X 'POST' 'http://0.0.0.0:3002/v1/embeddings' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{"model": "all-MiniLM-L6-v2", "input": ["This is an example sentence", "Each sentence is converted"]}'
+curl -X 'POST' 'http://0.0.0.0:3002/v1/ingest' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{
+  "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+  "input": { "text_chunk": ["Благодарим Вас за то, что вы выбрали акустику Focal!  Сабвуфер. Излучатель низких частот."]
+}}'
+
+curl -X 'GET' 'http://194.135.112.219:3002/v1/models' -H 'accept: application/json'
+curl -X 'GET' 'http://194.135.112.219:3002/v1/models' -H 'accept: application/json' -H 'Content-Type: application/json'
+curl -X 'GET' 'http://194.135.112.219:3002/v1/emb_models' -H 'accept: application/json' -H 'Content-Type: application/json'
+curl -X 'POST' 'http://194.135.112.219:3002/v1/embeddings' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{"model": "all-MiniLM-L6-v2", "input": ["This is an example sentence", "Each sentence is converted"]}'
+curl -X 'POST' 'http://194.135.112.219:3002/v1/ingest' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{
+  "model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+  "input": { "text_chunk": ["Благодарим Вас за то, что вы выбрали акустику Focal!  Сабвуфер. Излучатель низких частот."]
+}}'
+
+
 
 curl -X 'GET' 'http://46.254.21.170:3002/v1/emb_models' -H 'accept: application/json' -H 'Content-Type: application/json'
-
-
 curl -X 'POST' 'http://46.254.21.170:3002/v1/completions' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{ "model":"/app/model-store/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/mistral-7b-instruct-v0.2.Q4_K_M.gguf", "stream":"false", "prompt": "\n\n### Instructions:\nWhat is the capital of France?\n\n### Response:\n",  "max_tokens":"512"}'
-
 curl -X 'POST' 'http://46.254.21.170:3002/v1/chat/completions' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{"model":"/app/model-store/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/mistral-7b-instruct-v0.2.Q4_K_M.gguf", "messages": [{"content": "You are a helpful assistant.", "role": "system"}, {"content": "Compose a dialog between Einstein and Ghandi. Answer in russian", "role": "user"}], "max_tokens":"2048"}'
-
 curl -X 'POST' 'http://46.254.21.170:3002/v1/embeddings' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{"model": "all-MiniLM-L6-v2", "input": ["This is an example sentence", "Each sentence is converted"]}'
 
 
-curl -X 'POST' 'http://0.0.0.0:3004/v1/search' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{ "n_top": 5,  "text_for_search": "What were relations between Pierre and Natasha?",   "search_in_embeddings_only": true}'
+
+
+
+
+curl -X 'POST' 'http://46.254.21.170:3002/v1/search' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{ "n_top": 5,  "text_for_search": "What were relations between Pierre and Natasha?",   "search_in_embeddings_only": true}'
 
 
 openchat: ********************************************************************************************************************

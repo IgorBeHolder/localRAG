@@ -160,7 +160,9 @@ async def ingest_document(request: Request, file: UploadFile = File(...)):
             # Clean up: Delete the temporary file after processing
             os.remove(temp_filename)
 
-        return {"message": f"Document {file.filename} processed successfully. {num_chunks} chunks created."}
+        return {
+            "message": f"Document {file.filename} processed successfully. {num_chunks} chunks created."
+        }
     except Exception as e:
         print(e)
         raise HTTPException(status_code=500, detail=str(e))
