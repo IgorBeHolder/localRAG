@@ -18,6 +18,8 @@ print(f"*** MODELS_PATH: {MODELS_PATH}")
 
 
 class ModelManager:
+    """Manage the Sentence Transformer model."""
+
     def __init__(self):
         """Initialize the Model Manager."""
         model_name = os.getenv("EMBEDDING_MODEL_NAME")
@@ -50,7 +52,9 @@ class ModelManager:
         print(f"{EMBEDDING_MODEL_NAME} is downloaded and saved to {model_path}")
         return model
 
-    async def embed_documents(self, text_list: Union[str, List[str]]) -> EmbeddingOutput:
+    async def embed_documents(
+        self, text_list: Union[str, List[str]]
+    ) -> EmbeddingOutput:
         """Generate embeddings for the provided text list and estimate token usage."""
         text_list = [text_list] if isinstance(text_list, str) else text_list
         embeddings = self.model.encode(text_list, device=self.device)

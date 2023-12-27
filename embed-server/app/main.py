@@ -127,7 +127,7 @@ async def text_processor_endpoint(data: DocumentProcessInput, request: Request):
         async with get_db_connection(request) as connection:
             async with connection.transaction():
                 # Convert the Pydantic model to a dictionary
-                document_dict = data.input.model_dump()
+                document_dict = data.input.dict()
                 response = await insert_to_db(connection, document_dict, embed_model)
             return response
     except Exception as e:
@@ -153,14 +153,14 @@ async def ingest_document(request: Request, file: UploadFile = File(...)):
                 file_object.write(file_content_str)
 
             # Process the document
-            await vectorize_document(
+            num_chunks = await vectorize_document(
                 temp_filename, connection, embed_model
             )  # Adjust as needed
 
             # Clean up: Delete the temporary file after processing
             os.remove(temp_filename)
 
-        return {"message": f"Document {file.filename} processed successfully"}
+        return {"message": f"Document {file.filename} processed successfully. {num_chunks} chunks created."}
     except Exception as e:
         print(e)
         raise HTTPException(status_code=500, detail=str(e))

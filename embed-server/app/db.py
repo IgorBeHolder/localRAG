@@ -4,7 +4,7 @@ from models.model_manager import ModelManager
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 import json
 from pprint import pprint
-from schemas import DocumentProcessOutput
+from schemas import DocumentProcessOutput, DocumentInput
 import re
 
 whitespace_pattern = re.compile(r"\s+")
@@ -134,7 +134,10 @@ async def insert_to_db(
                     # )
                     uuids.append(str(document_guid))
                     total_tokens += sum(
-                        [embedding.usage["prompt_tokens"] for embedding in embeddings_response.data]
+                        [
+                            embedding.usage["prompt_tokens"]
+                            for embedding in embeddings_response.data
+                        ]
                     )
 
             except Exception as e:
@@ -156,7 +159,7 @@ async def vectorize_document(
     file_path: str, connection: Connection, embed_model: ModelManager
 ) -> None:
     """
-    Vectorize the document and insert it into the database.
+    Vectorize the document and insert it's chunks into the database.
     """
     with open(file_path, "r") as file:
         document_content = file.read()
@@ -169,6 +172,7 @@ async def vectorize_document(
         separators=["\n\n", "\n"],
         keep_separator=True,
     )
+    cnt = 0
     for chunk in document_chunks:
         # Process each chunk with insert_to_db
         document = {
@@ -179,9 +183,15 @@ async def vectorize_document(
             "tables": [],
             "images": [],
             "metadata": {},
-            "text_chunk": chunk,
+            "text_chunk": [
+                chunk
+            ],  # wrap to a list of text chunks to prevent splitting on characters
         }
         await insert_to_db(connection, document, embed_model)
+        cnt += 1
+        if cnt % 500 == 0:
+            print(f"*** {cnt} chunks processed")
+    return cnt
 
 
 async def get_similar_text(
