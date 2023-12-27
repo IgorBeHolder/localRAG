@@ -62,7 +62,7 @@ EXPOSE 22
 
 EXPOSE 3006
 
-RUN mkdir /home/content
+# RUN mkdir /home/content
 COPY interpreter/terminal_interface/config.yaml \
     /usr/local/lib/python3.11/site-packages/interpreter/terminal_interface/config.yaml
 

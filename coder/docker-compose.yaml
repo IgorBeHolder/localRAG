@@ -9,8 +9,7 @@ services:
       dockerfile: Dockerfile
     container_name: coder
     volumes:
-      - ./content:/home
-      # - ./content:/home/coder/content      
+      - ../anything-llm/server/storage/coder:/home    
     ports:
       - 2222:22
     networks:
