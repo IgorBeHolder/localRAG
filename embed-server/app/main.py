@@ -41,6 +41,7 @@ POSTGRES_HOST = os.getenv("POSTGRES_HOST", "postgres")
 EMBEDDING_MODEL_NAME = os.getenv("EMBEDDING_MODEL_NAME", "no_name_model")
 POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD", "example")
 DATABASE_URL = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:5432/{POSTGRES_DB}"
+print(f"DATABASE_URL: {DATABASE_URL}")
 
 
 @asynccontextmanager
