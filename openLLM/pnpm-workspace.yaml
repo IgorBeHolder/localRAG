@@ -1,4 +1,0 @@
-packages:
-  - docs
-  - openllm-node
-  - openllm-contrib/clojure

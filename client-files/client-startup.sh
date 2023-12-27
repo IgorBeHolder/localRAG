@@ -1,7 +1,7 @@
 #!/bin/bash
 
-GPU_ARCHIVE="aiserver-openchat_v0.2.tar.gz"
-CPU_ARCHIVE="sais-mistral-cpu.tar.gz"
+# GPU_ARCHIVE="aiserver-openchat_v0.2.tar.gz"
+# CPU_ARCHIVE="sais-mistral-cpu.tar.gz"
 
 # Load environment variables from .env file
 set -a
