@@ -7,8 +7,8 @@ function sshMiddleware(req, res, next) {
   const sshConfig = {
     host: SSH_HOST,
     port: SSH_PORT,
-    username: "coder",
-    password: "coder"
+    username: process.env.SSH_USERNAME,
+    password: process.env.SSH_PASSWORD
   };
 
   const conn = new Client();
