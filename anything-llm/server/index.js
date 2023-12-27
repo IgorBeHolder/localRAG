@@ -162,7 +162,12 @@ if (process.env.IS_CODER === 'TRUE') {
     // Ваш обработчик HTTP-запросов (если необходимо)
   });
 
-  const wss = new WebSocket.Server({noServer: true});
+  const wss = new WebSocket.Server(
+    {
+      port: WS_PORT
+      // noServer: true
+    }
+  );
 
 // Используем middleware для управления соединением SSH
   server.on("upgrade", (request, socket, head) => {

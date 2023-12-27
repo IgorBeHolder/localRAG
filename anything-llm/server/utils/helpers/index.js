@@ -52,7 +52,7 @@ function fixEncoding(str) {
 }
 
 function serverLog(...arg) {
-  if (process.env.NODE_ENV === "development") {
+  if (1 || process.env.NODE_ENV === "development") {
     if (arg.length) {
       arg.forEach(a => {
         console.log(a);
