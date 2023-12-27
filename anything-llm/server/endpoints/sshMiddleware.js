@@ -1,5 +1,5 @@
 const {Client} = require("ssh2");
-
+const {serverLog} = require("../utils/helpers");
 const SSH_HOST = process.env.SSH_HOST || "coder";
 const SSH_PORT = process.env.SSH_PORT || 22;
 
@@ -14,7 +14,7 @@ function sshMiddleware(req, res, next) {
   const conn = new Client();
 
   conn.on("ready", () => {
-    console.log("$$$$$$$$$$$$$$ SSH connection established.");
+    serverLog("$$$$$$$$$$$$$$ SSH connection established.");
     req.sshConnection = conn; // Добавляем соединение в объект запроса
     next(); // Переходим к следующему middleware или маршруту
   });
@@ -25,7 +25,7 @@ function sshMiddleware(req, res, next) {
   });
 
   conn.on("end", () => {
-    console.log("$$$$$$$$$$$$$$ SSH connection closed.");
+    serverLog("$$$$$$$$$$$$$$ SSH connection closed.");
   });
 
   conn.connect(sshConfig);
