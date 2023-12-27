@@ -10,9 +10,6 @@ console.log("*** COMPLETION_MODEL_ENDPOINT", process.env.COMPLETION_MODEL_ENDPOI
 console.log("*** EMBEDDING_MODEL_ENDPOINT", process.env.EMBEDDING_MODEL_ENDPOINT);
 console.log("*** EMBEDDING_MODEL_NAME", process.env.EMBEDDING_MODEL_NAME);
 
-const NO_MATCHES_PHRASE = "нет точного соответствия";
-const WS_PORT = process.env.WS_PORT || 3006;
-
 const express = require("express");
 const bodyParser = require("body-parser");
 const serveIndex = require("serve-index");
@@ -40,9 +37,13 @@ const app = express();
 const apiRouter = express.Router();
 const FILE_LIMIT = "3GB";
 
-console.log("*** CODER_DIR", process.env.NODE_ENV === "development"
+const NO_MATCHES_PHRASE = "нет точного соответствия";
+const WS_PORT = process.env.WS_PORT || 3006;
+const CODER_DIR = process.env.NODE_ENV === "development"
   ? path.resolve(__dirname, `../../coder/content`)
-  : path.resolve(process.env.CODER_DIR, `content`));
+  : path.resolve(process.env.CODER_DIR, `content`);
+
+console.log("*** CODER_DIR", CODER_DIR);
 
 app.use(cors({
   // origin: 'http://localhost:3000',
@@ -67,7 +68,7 @@ const APP_PORT = process.env.SERVER_PORT || 3001;
 if (process.env.IS_CODER === 'TRUE') {
   let activeStream = null;
 
-  function executeSSHCommand(command, sshConnection, ws) {
+  const executeSSHCommand = (command, sshConnection, ws) => {
     serverLog("@@@@@@@ executeSSHCommand", command);
 
     try {
@@ -164,14 +165,14 @@ if (process.env.IS_CODER === 'TRUE') {
 
   const wss = new WebSocket.Server(
     {
-      port: WS_PORT
-      // noServer: true
+      // port: WS_PORT
+      noServer: true
     }
   );
 
 // Используем middleware для управления соединением SSH
   server.on("upgrade", (request, socket, head) => {
-    serverLog("##################### WS upgrade");
+    serverLog("##################### WS upgrade start sshMiddleware");
 
     sshMiddleware(request, {}, () => {
       wss.handleUpgrade(request, socket, head, (ws) => {
