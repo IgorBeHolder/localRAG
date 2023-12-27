@@ -35,7 +35,7 @@ services:
         context: .
         dockerfile: Dockerfile-nginx      
     ports:
-      - "3002:3002"
+      - 3002:3002
     depends_on:
       - embed  
     networks:
@@ -51,7 +51,7 @@ services:
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
-      - "5432:5432"
+      - 5432:5432
     volumes:
       - pgdata:/var/lib/postgresql/data
     networks:
