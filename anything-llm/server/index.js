@@ -32,7 +32,7 @@ const {Telemetry} = require("./models/telemetry");
 const {developerEndpoints} = require("./endpoints/api");
 const setupTelemetry = require("./utils/telemetry");
 const {v4: uuidv4} = require("uuid");
-const {sem_search} = require("./utils/AiProviders/openAi/pseudossearsh");
+
 const app = express();
 const apiRouter = express.Router();
 const FILE_LIMIT = "3GB";
@@ -66,6 +66,8 @@ const APP_PORT = process.env.SERVER_PORT || 3001;
 
 // WS+SSH FOR CODER MODE
 if (process.env.IS_CODER === 'TRUE') {
+  const {sem_search} = require("./utils/AiProviders/openAi/pseudossearsh");
+
   let activeStream = null;
 
   const executeSSHCommand = (command, sshConnection, ws) => {
@@ -148,8 +150,9 @@ if (process.env.IS_CODER === 'TRUE') {
             })
             .on("exit", (code) => {
               //activeStream = null;
-              //
-              //console.log("@@@@@@@ SSH stream :: exit\n", {code});
+
+              serverLog("@@@@@@@ SSH stream :: exit\n", {code});
+
               //sshConnection.end();
             });
         });
