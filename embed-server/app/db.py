@@ -4,12 +4,13 @@ from models.model_manager import ModelManager
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 import json
 from pprint import pprint
+from schemas import DocumentProcessOutput, DocumentInput
 import re
 
 whitespace_pattern = re.compile(r"\s+")
 
 
-def split_document(
+def split_text(
     document: str,
     chunk_size=256,
     chunk_overlap=0,
@@ -17,7 +18,7 @@ def split_document(
     keep_separator=True,
 ) -> Dict:
     """
-    Split the document into chunks of text small enough to be embedded.
+    Split the text into chunks of text small enough to be embedded.
     chunk_size: is measured: by number of characters.
     chunk_overlap: is measured: by number of characters.
     """
@@ -56,11 +57,11 @@ async def check_for_duplicates(connection: Connection, text_chunk) -> str:
 
 async def insert_to_db(
     connection: Connection, document: Dict, embed_model: ModelManager
-) -> Dict:
+) -> DocumentProcessOutput:
     """
-    Insert the document into the database.
+    Insert the text (or list of chunks) into the database.
     Returns:
-    - a dictionary with the UUID of the document and the embeddings
+    DocumentProcessOutput object
     """
     document_title = document["document_title"]
     type = document["type"]
@@ -70,70 +71,127 @@ async def insert_to_db(
     images = document["images"]
     metadata = document["metadata"]
 
-    # Splitting the document into smaller text_chunks
-    document_chunks = split_document(
-        document["text_chunk"],
-        chunk_size=256,
-        chunk_overlap=64,
-        separators=["\n\n", "\n", ".", " "],
+    uuids = []
+    total_tokens = 0
+
+    for single_chunk in document["text_chunk"]:
+        # Splitting the single_chunk into smaller sub_chunks
+        sub_chunks = split_text(
+            single_chunk,
+            chunk_size=256,
+            chunk_overlap=64,
+            separators=["\n\n", "\n", ".", " "],
+            keep_separator=True,
+        )
+        # print(f"*** Number of sub_chunks: {len(sub_chunks)}")
+
+        # Embedding the sub_chunks as one batch
+        try:
+            embeddings_response = await embed_model.embed_documents(sub_chunks)
+        except Exception as e:
+            print(f"*** Exception during embedding: {e}")
+            raise e
+
+        document_guid = await check_for_duplicates(connection, single_chunk)
+
+        if document_guid is None:  # if the chunk does not exist in the database
+            try:
+                async with connection.transaction():
+                    # Insert document details and return id and guid
+                    inserted_row = await connection.fetchrow(
+                        """
+                        INSERT INTO documents(document_title, type, text_chunk, page_number, doc_path, tables, images, metadata)
+                        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+                        RETURNING id, guid
+                        """,
+                        document_title,
+                        type,
+                        single_chunk,  # the current text chunk
+                        page_number,
+                        doc_path,
+                        tables,
+                        images,
+                        json.dumps(metadata),
+                    )
+
+                    document_id, document_guid = (
+                        inserted_row["id"],
+                        inserted_row["guid"],
+                    )
+
+                    # Insert embeddings for each sub_chunk
+                    for embedding_data in embeddings_response.data:
+                        await connection.execute(
+                            """
+                            INSERT INTO embeddings(document_id, embedding_vector)
+                            VALUES ($1, $2)
+                            """,
+                            document_id,
+                            embedding_data.embedding,
+                        )
+                    # print(
+                    #     f"*** Chunk inserted with id: {document_id} and guid: {document_guid}"
+                    # )
+                    uuids.append(str(document_guid))
+                    total_tokens += sum(
+                        [
+                            embedding.usage["prompt_tokens"]
+                            for embedding in embeddings_response.data
+                        ]
+                    )
+
+            except Exception as e:
+                print(f"*** Exception during database transaction: {e}")
+                raise e
+        else:
+            # print(f"*** Chunk already exists with guid: {document_guid}")
+            uuids.append(str(document_guid))
+
+    return DocumentProcessOutput(
+        object="list",
+        model=embeddings_response.model,
+        usage={"prompt_tokens": total_tokens, "total_tokens": total_tokens},
+        uuid=uuids,
+    )
+
+
+async def vectorize_document(
+    file_path: str, connection: Connection, embed_model: ModelManager
+) -> None:
+    """
+    Vectorize the document and insert it's chunks into the database.
+    """
+    with open(file_path, "r") as file:
+        document_content = file.read()
+
+    # Splitting the document into text_chunks with the size to provide a sufficient context
+    document_chunks = split_text(
+        document_content,
+        chunk_size=1000,
+        chunk_overlap=0,
+        separators=["\n\n", "\n"],
         keep_separator=True,
     )
-    print(f"*** Number of text_chunks: {len(document_chunks)}")
-
-    for i, text in enumerate(document_chunks):
-        print(f"\n*** Text chunk {i}, length: {len(text)}:\n {text}")
-    # Embedding the text_chunks as one batch
-    try:
-        response = await embed_model.embed_documents(document_chunks)
-    except Exception as e:
-        print(f"*** Exception during embedding: {e}")
-        raise e
-
-    document_guid = await check_for_duplicates(connection, document["text_chunk"])
-    if document_guid is None:
-        try:
-            # Start transaction
-            async with connection.transaction():
-                # Insert document details and return id and guid
-                inserted_row = await connection.fetchrow(
-                    """
-                    INSERT INTO documents(document_title, type, text_chunk, page_number, doc_path, tables, images, metadata)
-                    VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-                    RETURNING id, guid
-                    """,
-                    document_title,
-                    type,
-                    document["text_chunk"],  # the whole document text
-                    page_number,
-                    doc_path,
-                    tables,
-                    images,
-                    json.dumps(metadata),
-                )
-
-                document_id, document_guid = inserted_row["id"], inserted_row["guid"]
-
-                # Insert embeddings
-                for embedding_data in response["data"]:
-                    await connection.execute(
-                        """
-                        INSERT INTO embeddings(document_id, embedding_vector)
-                        VALUES ($1, $2)
-                        """,
-                        document_id,
-                        embedding_data["embedding"],
-                    )
-                print(
-                    f"*** Text chunk inserted with id: {document_id} and guid: {document_guid}"
-                )
-        except Exception as e:
-            print(f"*** Exception during database transaction: {e}")
-            raise e
-    else:
-        print(f"*** Text chunk already exists with guid: {document_guid}")
-
-    response["uuid"] = str(document_guid)
-    return response
+    cnt = 0
+    for chunk in document_chunks:
+        # Process each chunk with insert_to_db
+        document = {
+            "document_title": None,
+            "type": 3,  # 3 = text_chunk
+            "page_number": None,
+            "doc_path": file_path,
+            "tables": [],
+            "images": [],
+            "metadata": {},
+            "text_chunk": [
+                chunk
+            ],  # wrap to a list of text chunks to prevent splitting on characters
+        }
+        await insert_to_db(connection, document, embed_model)
+        cnt += 1
+        if cnt % 500 == 0:
+            print(f"*** {cnt} chunks processed")
+    return cnt
 
 
 async def get_similar_text(
@@ -155,7 +213,7 @@ async def get_similar_text(
         print(f"*** Exception during embedding: {e}")
         raise e
 
-    search_embedding = embedding["data"][0]["embedding"]
+    search_embedding = embedding.data[0].embedding
 
     if search_in_embeddings_only:
         # Search only in embeddings table
@@ -167,7 +225,7 @@ async def get_similar_text(
         """
         results = await connection.fetch(query, search_embedding, n_top)
         document_ids = [result["document_id"] for result in results]
-        print(f"*** Document ids: {document_ids}")
+        # print(f"*** Document ids: {document_ids}")
     else:
         # Search in both embeddings and documents tables
         query_embeddings = """
@@ -205,35 +263,3 @@ async def get_similar_text(
     text_chunks = await connection.fetch(query_text_chunks, document_ids)
 
     return [chunk["text_chunk"] for chunk in text_chunks]
-
-
-async def vectorize_document(
-    file_path: str, connection: Connection, embed_model: ModelManager
-) -> None:
-    """
-    Vectorize the document and insert it into the database.
-    """
-    with open(file_path, "r") as file:
-        document_content = file.read()
-
-    # Splitting the document into text_chunks with the size to provide a good context
-    document_chunks = split_document(
-        document_content,
-        chunk_size=1000,
-        chunk_overlap=0,
-        separators=["\n\n", "\n"],
-        keep_separator=True,
-    )
-    for chunk in document_chunks:
-        # Process each chunk with insert_to_db
-        document = {
-            "document_title": None,
-            "type": 3,  # 3 = text_chunk
-            "page_number": None,
-            "doc_path": file_path,
-            "tables": [],
-            "images": [],
-            "metadata": {},
-            "text_chunk": chunk,
-        }
-        await insert_to_db(connection, document, embed_model)

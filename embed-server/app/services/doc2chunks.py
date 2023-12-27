@@ -4,23 +4,31 @@ from docx.oxml.ns import qn
 from docx.shared import Pt
 import json
 
-def is_heading(paragraph):
+def is_heading(paragraph) -> bool:
+    '''Check if a paragraph is a heading'''
     if paragraph.style.name.startswith('Heading'):
         return True
     return False
 
-def convert_table_to_csv(table):
+
+def convert_table_to_csv(table) -> str:
+    '''Convert a table to CSV format'''
     csv_data = []
     for row in table.rows:
         row_data = [cell.text.replace('\n', ' ').strip() for cell in row.cells]
         csv_data.append(";".join(row_data))
     return "\n".join(csv_data)
 
-def summarize_text(text):
-    # This function would need an actual NLP model to perform summarization in a real-world scenario
+
+def summarize_text(text) -> str:
+    '''Summarize a text
+    This function would need an actual NLP model to perform summarization in a real-world scenario
+    '''
     return "Summarized text: " + text[:100]
 
-def process_word_document(doc_path):
+
+def process_word_document(doc_path) -> list:
+    '''Process a word document and return a list of chunks'''
     doc = Document(doc_path)
     json_structure = []
 
@@ -62,10 +70,13 @@ def process_word_document(doc_path):
 
     return json_structure
 
-def save_to_json(json_structure, output_filename):
+
+def save_to_json(json_structure, output_filename) -> None:
+    '''Save the json structure to a file'''
     json_output = json.dumps(json_structure, ensure_ascii=False, indent=2)
     with open(output_filename, 'w', encoding='utf-8') as json_file:
         json_file.write(json_output)
+
 
 if __name__ == "__main__":
     import sys

@@ -36,12 +36,14 @@ echo "Creating folders for document processor..."
 mkdir -p ./anything-llm/server/storage
 mkdir -p ./anything-llm/collector/hotdir
 mkdir -p ./anything-llm/collector/outputs
+mkdir -p ./anything-llm/server/storage/coder
 
 # set permissions for document processor folders
 echo "Setting permissions for document processor folders..."
 sudo chmod -R 777 ./anything-llm/server/storage
 sudo chmod -R 777 ./anything-llm/collector/hotdir
 sudo chmod -R 777 ./anything-llm/collector/outputs
+sudo chmod -R 777 ./anything-llm/server/storage/coder
 
 (
 echo "Starting the EMBEDDING model server..."
@@ -153,7 +155,7 @@ if [ ! -z "$container_id" ]; then
 else
   docker run -d --name postgres \
     --restart always \
-    -e POSTGRES_PASSWORD=example \
+    -e POSTGRES_PASSWORD="${POSTGRES_PASSWORD}" \
     -p 5432:5432 \
     -v pgdata:/var/lib/postgresql/data \
     --network llm-net \

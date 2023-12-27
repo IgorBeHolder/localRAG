@@ -2,6 +2,7 @@ export const API_BASE = import.meta.env.VITE_API_BASE || "/api";
 
 export const ID_DEV = import.meta?.env?.hasOwnProperty('VITE_API_BASE');
 
+// export const PYTHON_API = `http://${(import.meta.env.VITE_USE_DOCKER === "FALSE" || !ID_DEV) ? "localhost" : "0.0.0.0"}:3005`;
 export const PYTHON_API = `http://${(import.meta.env.VITE_USE_DOCKER === "FALSE" || !ID_DEV) ? "localhost" : "0.0.0.0"}:3005`;
 export const UPLOAD_FILENAME_LEN_LIMIT = 68;
 export const CHAT_MAX_LENGTH = 16384;
@@ -18,7 +19,7 @@ export const MSG_STYLE = (user = false) => {
 export const DEFAULT_CHAT_OPTIONS = {
   openAiHistory: 10,
   openAiTemp: 0.2,
-  openAiPrompt: "Вы полезный ассистент. Ваши ответы должны быть точными, конкретными и убедительными. Отвечайте на русском языке. Стройте план своих последовательных рассуждений, чтобы гарантировать правильный ответ на вопрос пользователя. Аргументируйте ваши ответы фактами."
+  openAiPrompt: "Вы полезный ассистент. Ваши ответы должны быть точными, краткими, конкретными и убедительными. Отвечайте на русском языке. Стройте план своих последовательных рассуждений, чтобы гарантировать правильный ответ на вопрос пользователя. Аргументируйте ваши ответы фактами."
 };
 
 export const AUTH_USER = "anythingllm_user";

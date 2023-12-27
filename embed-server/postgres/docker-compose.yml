@@ -6,10 +6,12 @@ services:
     # build: .  
     image: pgembeding
     restart: always
-    environment:
-      POSTGRES_PASSWORD: example
+    env_file:
+      - ../../client-files/.env
+    # environment:
+      # POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
-      - "5432:5432"
+      - 5432:5432
     volumes:
       - pgdata:/var/lib/postgresql/data
     networks:
@@ -26,3 +28,4 @@ volumes:
 # docker-compose -p localrag up -d --build
 
 # this instructions are implemented in composite docker-compose.yml at one level up folder
+# to reinitialize database run:  embed-server/postgres/reinit-db.sh

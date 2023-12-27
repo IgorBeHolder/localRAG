@@ -89,7 +89,7 @@ COPY --chown=anythingllm:anythingllm ./collector/ ./collector/
 RUN --mount=type=cache,target=/tmp/pip_cache cd /app/collector && \
     python3 -m virtualenv v-env && \
     . v-env/bin/activate && \
-    pip install -r requirements.txt && \
+    pip install -r req.txt && \
     rm -rf /tmp/pip_cache/*
 
 
@@ -107,6 +107,8 @@ HEALTHCHECK --interval=1m --timeout=10s --start-period=1m \
   CMD /bin/bash /usr/local/bin/docker-healthcheck.sh || exit 1
 
 COPY --chown=anythingllm:anythingllm ./server/storage/coder ./server/storage/coder/
+
+RUN chmod -R 777 ./server/storage/coder/
 
 # Run the server
 ENTRYPOINT ["/bin/bash", "/usr/local/bin/docker-entrypoint.sh"]
