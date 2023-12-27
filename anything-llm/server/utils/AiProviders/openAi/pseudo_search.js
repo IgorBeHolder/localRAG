@@ -1,24 +1,24 @@
 // "семантический" поиск:
 const {
-  v1_chat_completions,
-  v1_embeddings_openllm
+  v1_chat_completions
 } = require("../openAi/web_client.js");
 const fs = require("fs");
 const path = require("path");
-const {serverLog} = require("../../helpers");
+// const {serverLog} = require("../../helpers");
 
 function sem_search(text_prompt, no_matches_phrase, cb) {
   // read the KEYS from the file
-  const coderPath =
-    process.env.NODE_ENV === "development"
-      ? path.resolve(__dirname, `../../../../coder/content`)
-      : path.resolve(process.env.CODER_DIR, `../../content`);
-
-  serverLog('coderPath', coderPath, path.resolve(coderPath + "/terminal_interface/da-osp.txt"));
+  // const coderPath =
+  //   process.env.NODE_ENV === "development"
+      // ? path.resolve(__dirname, `../../../../coder/content`)
+      // : path.resolve(process.env.CODER_DIR, `../../content`);
+  
+  // serverLog('coderPath', coderPath, path.resolve(coderPath + "/terminal_interface/da-osp.txt"));
 
   new Promise((res, rej) => {
     // search for the response (value from da-osp.txt)
-    fs.readFile(path.resolve(coderPath + "/terminal_interface/da-osp.txt"), "utf8", (err, data) => {
+    // fs.readFile(path.resolve(coderPath + "/terminal_interface/da-osp.txt"), "utf8", (err, data) => {
+      fs.readFile(path.join(__dirname, "da-osp.txt"), "utf8", (err, data) => {
       if (err) {
         rej(err);
       }
