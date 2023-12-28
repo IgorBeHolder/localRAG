@@ -116,13 +116,11 @@ async function v1_embeddings_openllm(textInput) {
         'Accept': 'application/json'
       }
     });
-    const response = data.length > 0 &&
+    return data.length > 0 &&
     // return an array of embeddings
     data.every((embd) => embd.hasOwnProperty("embedding"))
       ? data.map((embd) => embd.embedding)
       : null;
-
-    return response;
   } catch (error) {
     console.error('Error sending payload (textinput):', error);
     return null;

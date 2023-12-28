@@ -39,11 +39,6 @@ const FILE_LIMIT = "3GB";
 
 const NO_MATCHES_PHRASE = "нет точного соответствия";
 const WS_PORT = process.env.WS_PORT || 3006;
-const CODER_DIR = process.env.NODE_ENV === "development"
-  ? path.resolve(__dirname, `../../coder/content`)
-  : path.resolve(process.env.CODER_DIR, `content`);
-
-console.log("*** CODER_DIR", CODER_DIR);
 
 app.use(cors({
   // origin: 'http://localhost:3000',
@@ -131,7 +126,7 @@ if (process.env.IS_CODER === 'TRUE') {
               if (code) {
                 let chatResult = {
                   id: uuidv4(),
-                  type: "textResponse",
+                  type: "abort",
                   textResponse: "Connection close event",
                   sources: [],
                   error: null,
@@ -177,15 +172,33 @@ if (process.env.IS_CODER === 'TRUE') {
   server.on("upgrade", (request, socket, head) => {
     serverLog("##################### WS upgrade start sshMiddleware");
 
-    sshMiddleware(request, {}, () => {
+    sshMiddleware(request, {}, (err) => {
       wss.handleUpgrade(request, socket, head, (ws) => {
-        if (request?.sshConnection) {
-          wss.emit("connection", ws, request, request?.sshConnection);
+        if (err) {
+          serverLog('##################### handleUpgrade', err);
+          wss.emit("sshError", ws, err);
         } else {
-          serverLog("##################### WS NO connection");
+          if (request?.sshConnection) {
+            wss.emit("connection", ws, request, request?.sshConnection);
+          } else {
+            serverLog("##################### WS NO connection");
+          }
         }
       });
     });
+  });
+
+  wss.on("sshError", (ws, error) => {
+    let chatResult = {
+      id: uuidv4(),
+      type: "abort",
+      textResponse: "NO SSH connection",
+      sources: [],
+      error: JSON.stringify(error),
+      close: true
+    };
+
+    ws.send(JSON.stringify(chatResult));
   });
 
   wss.on("connection", (ws, request, sshConnection) => {
@@ -266,12 +279,10 @@ apiRouter.post("/v/:command", async (request, response) => {
       const resBody = await VectorDb[command](body);
       response.status(200).json({...resBody});
     } catch (e) {
-      // console.error(e)
       serverLog(JSON.stringify(e));
       response.status(500).json({error: e.message});
     }
   } catch (e) {
-    // console.log(e.message, e);
     response.sendStatus(500).end();
   }
 });
@@ -298,9 +309,7 @@ app.all("*", function (_, response) {
 app
   .listen(APP_PORT, async () => {
     await setupTelemetry();
-    if (process.env.NODE_ENV === "development") {
-      console.log(`Example app listening on port ${APP_PORT}`);
-    }
+    serverLog(`Example app listening on port ${APP_PORT}`);
   })
   .on("error", function (err) {
     process.once("SIGUSR2", function () {

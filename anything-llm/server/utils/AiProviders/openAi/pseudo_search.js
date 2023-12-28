@@ -12,7 +12,7 @@ function sem_search(text_prompt, no_matches_phrase, cb) {
   //   process.env.NODE_ENV === "development"
       // ? path.resolve(__dirname, `../../../../coder/content`)
       // : path.resolve(process.env.CODER_DIR, `../../content`);
-  
+
   // serverLog('coderPath', coderPath, path.resolve(coderPath + "/terminal_interface/da-osp.txt"));
 
   new Promise((res, rej) => {
