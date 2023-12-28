@@ -1,17 +1,17 @@
-const {v4: uuidv4} = require("uuid");
-const {OpenAi} = require("../AiProviders/openAi");
-const {WorkspaceChats} = require("../../models/workspaceChats");
-const {resetMemory} = require("./commands/reset");
+const { v4: uuidv4 } = require("uuid");
+const { OpenAi } = require("../AiProviders/openAi");
+const { WorkspaceChats } = require("../../models/workspaceChats");
+const { resetMemory } = require("./commands/reset");
 const moment = require("moment");
-const {getVectorDbClass, getLLMProvider} = require("../helpers");
-const {prompt_templates} = require("../vectorDbProviders/lance/index");
+const { getVectorDbClass, getLLMProvider } = require("../helpers");
+const { prompt_templates } = require("../vectorDbProviders/lance/index");
 
 // const { BOS, EOS, assistance_prefix, end_of_turn, user_prefix } = prompt_templates();
 
 function convertToChatHistory(history = []) {
   const formattedHistory = [];
   history.forEach((history) => {
-    const {prompt, response, createdAt} = history;
+    const { prompt, response, createdAt } = history;
     const data = JSON.parse(response);
     formattedHistory.push([
       {
@@ -35,11 +35,11 @@ function convertToChatHistory(history = []) {
 function convertToPromptHistory(history = []) {
   const formattedHistory = [];
   history.forEach((history) => {
-    const {prompt, response} = history;
+    const { prompt, response } = history;
     const data = JSON.parse(response);
     formattedHistory.push([
-      {role: "user", content: prompt},
-      {role: "assistant", content: data.text}
+      { role: "user", content: prompt },
+      { role: "assistant", content: data.text }
     ]);
   });
   return formattedHistory.flat();
@@ -91,7 +91,7 @@ async function chatWithWorkspace(
       error: null
     }
   } else {
-    const {safe, reasons = []} = await LLMConnector.isSafe(message);
+    const { safe, reasons = [] } = await LLMConnector.isSafe(message);
     if (!safe) {
       return {
         id: uuid,
@@ -111,17 +111,23 @@ async function chatWithWorkspace(
     const hasVectorizedSpace = await VectorDb.hasNamespace(workspace.slug);
     const embeddingsCount = await VectorDb.namespaceCount(workspace.slug);
 
+    var messageLimit = workspace?.openAiHistory;
+    let chatHistory = [];
 
-    //  has NO vectorized space
+    if (chatMode === 'chat') {
+      const rawHistory = await WorkspaceChats.forWorkspace(workspace.id, messageLimit);
+      chatHistory = convertToPromptHistory(rawHistory);
+    }
+
+    //  has NO vectorized space - 
     if (!hasVectorizedSpace || embeddingsCount === 0) {
-      const rawHistory = await WorkspaceChats.forWorkspace(workspace.id);
-      const chatHistory = convertToPromptHistory(rawHistory);
+
       const response = await LLMConnector.sendChat(
         chatHistory,
         message,
         workspace
       );
-      const data = {text: response, sources: [], type: "query"};
+      const data = { text: response, sources: [], type: "query" };
 
       await WorkspaceChats.new({
         workspaceId: workspace.id,
@@ -140,18 +146,11 @@ async function chatWithWorkspace(
 
 
     } else {    //  HAS vectorized space
-      var messageLimit = workspace?.openAiHistory;
-
-      const rawHistory = await WorkspaceChats.forWorkspace(
-        workspace.id,
-        messageLimit
-      );
-      const chatHistory = convertToPromptHistory(rawHistory);
+      
       const {
         response,
         sources,
         message: error
-        //
       } = await VectorDb[chatMode]({
         namespace: workspace.slug,
         input: message,
@@ -169,7 +168,7 @@ async function chatWithWorkspace(
         };
       }
 
-      const data = {text: response, sources, type: chatMode};
+      const data = { text: response, sources, type: chatMode };
       await WorkspaceChats.new({
         workspaceId: workspace.id,
         prompt: message,
