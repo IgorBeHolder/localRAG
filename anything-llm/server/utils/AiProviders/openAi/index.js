@@ -60,10 +60,7 @@ class OpenAi {
 
 
 
-  // used in 
-  // 1. anything-llm/server/utils/chats/index.js:100 (if there is NO vectorized space (hasVectorizedSpace is false) 
-  // or if the number of embeddings is zero. )
-  // 2. anything-llm/frontend/src/models/workspace.js:60 (set as a property of Workspace)  workspace.openAiPrompt
+  // used in anything-llm/server/utils/chats/index.js:100 (no RAG  or if the number of embeddings is zero. )
   async sendChat(chatHistory = [], prompt, workspace = {}) {
 
     const model = process.env.OPEN_MODEL_PREF;
@@ -83,38 +80,37 @@ class OpenAi {
       { role: "user", content: prompt },
     ]; //  chat history with the user's   PROMPT at the END
 
-    // console.log('.anything-llm/server/utils/AiProviders/openAi/index.js messages:', messages);
     let textResponse;
-    if (!IS_OFFLINE) {
-      try {
-        const json = await this.openai
-          .createChatCompletion({
-            model,
-            temperature: Number(workspace.openAiTemp),
-            n: 1, // only one completion/response will be generated
-            messages: messages,
-          });
+    // if (!IS_OFFLINE) {
+    //   try {
+    //     const json = await this.openai
+    //       .createChatCompletion({
+    //         model,
+    //         temperature: Number(workspace.openAiTemp),
+    //         n: 1, // only one completion/response will be generated
+    //         messages: messages,
+    //       });
 
-        const res = json.data; // the response from online chat completion service (openai)
-        if (!res.hasOwnProperty("choices"))
-          throw new Error("OpenAI chat: No results!");
-        if (res.choices.length === 0)
-          throw new Error("OpenAI chat: No results length!");
-        textResponse = res.choices[0].message.content;
+    //     const res = json.data; // the response from online chat completion service (openai)
+    //     if (!res.hasOwnProperty("choices"))
+    //       throw new Error("OpenAI chat: No results!");
+    //     if (res.choices.length === 0)
+    //       throw new Error("OpenAI chat: No results length!");
+    //     textResponse = res.choices[0].message.content;
 
 
-        return res.choices[0].message.content; // the text COMLETION
-      }
-      catch (error) {
-        console.log(error);
-        throw new Error(
-          `OpenAI::createChatCompletion failed with: ${error.message}`
-        );
-      }
-    } else {
+    //     return res.choices[0].message.content; // the text COMLETION
+    //   }
+    //   catch (error) {
+    //     console.log(error);
+    //     throw new Error(
+    //       `OpenAI::createChatCompletion failed with: ${error.message}`
+    //     );
+    //   }
+    // } else {
 
       textResponse = await v1_chat_completions(messages, Number(workspace.openAiTemp));
-    }
+    // }
 
     return textResponse;
   }
@@ -127,26 +123,26 @@ class OpenAi {
     const IS_OFFLINE = true;
     const model = process.env.OPEN_MODEL_PREF || "gpt-3.5-turbo";
 
-    if (!IS_OFFLINE) {
-      const { data } = await this.openai.createChatCompletion({
-        model,
-        messages,
-        temperature,
-      });
+    // if (!IS_OFFLINE) {
+    //   const { data } = await this.openai.createChatCompletion({
+    //     model,
+    //     messages,
+    //     temperature,
+    //   });
 
-      if (!data.hasOwnProperty("choices")) {
-        throw new Error("OpenAI chat: No results!");
-      }
+    //   if (!data.hasOwnProperty("choices")) {
+    //     throw new Error("OpenAI chat: No results!");
+    //   }
 
-      if (data.choices.length === 0) {
-        throw new Error("OpenAI chat: No results length!");
-      }
+    //   if (data.choices.length === 0) {
+    //     throw new Error("OpenAI chat: No results length!");
+    //   }
 
-      return data.choices[0].message.content;
+    //   return data.choices[0].message.content;
 
-    } else {  // OFFLINE MODE /////////////////////////////////////////////
+    // } else {  // OFFLINE MODE /////////////////////////////////////////////
       return await v1_chat_completions(messages, temperature);
-    }
+    // }
   }
 
 
