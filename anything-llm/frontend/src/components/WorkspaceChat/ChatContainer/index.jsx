@@ -6,13 +6,14 @@ import GraphemeSplitter from "grapheme-splitter";
 import Workspace from "../../../models/workspace";
 import handleChat from "../../../utils/chat";
 import useWebSocket, {ReadyState} from "react-use-websocket";
-import {ID_DEV, TYPE_EFFECT_DELAY, TYPE_STRING_DELAY, WS_URL} from "../../../utils/constants.js";
+import {ID_DEV, TYPE_EFFECT_DELAY, TYPE_STRING_DELAY, WS_RECONNECT_ATTEMPTS, WS_URL} from "../../../utils/constants.js";
 import {safeTagsReplace} from "../../../utils/functions.js";
 import renderMarkdown from "../../../utils/chat/markdown.js";
 
 export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
   const [message, setMessage] = useState("");
   const [connStatus, setConnStatus] = useState("");
+  const [connAttempt, setConnAttempt] = useState(1);
   const [chatHistory, setChatHistory] = useState(knownHistory);
   const [command, setCommand] = useState("");
   const [typeWriterStack, setTypeWriterStack] = useState([]);
@@ -137,9 +138,9 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
     const [socketUrl, setSocketUrl] = useState(WS_URL);
 
     const onWsMessage = useCallback((msg) => {
-      console.log('onWsMessage', msg, chatHistory);
-
       let chatResult = JSON.parse(msg.data);
+
+      console.log('onWsMessage', msg, chatHistory, chatResult);
 
       if (chatResult.error) {
         chatResult.type = "abort";
@@ -224,19 +225,26 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
     const {sendMessage, lastMessage, readyState} = useWebSocket(socketUrl, {
       shouldReconnect: (closeEvent) => true,
       share: true,
-      reconnectAttempts: 10,
+      reconnectAttempts: WS_RECONNECT_ATTEMPTS,
       onMessage: (msg) => {
         onWsMessage(msg);
       },
       //attemptNumber will be 0 the first time it attempts to reconnect, so this equation results in a reconnect pattern of 1 second, 2 seconds, 4 seconds, 8 seconds, and then caps at 10 seconds until the maximum number of attempts is reached
       reconnectInterval: (attemptNumber) => {
         console.log("reconnectInterval", attemptNumber);
+
+        if ((attemptNumber + 1) < WS_RECONNECT_ATTEMPTS) {
+          setConnAttempt(attemptNumber + 1);
+        } else {
+          setConnAttempt(WS_RECONNECT_ATTEMPTS);
+        }
+
         Math.min(Math.pow(2, attemptNumber) * 1000, 10000)
       }
     });
 
     const connectionStatus = {
-      [ReadyState.CONNECTING]: "Connecting",
+      [ReadyState.CONNECTING]: "Connecting... attempt: " + connAttempt,
       [ReadyState.OPEN]: "Open",
       [ReadyState.CLOSING]: "Closing",
       [ReadyState.CLOSED]: "Closed",
@@ -363,9 +371,7 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
     <div
       className="main-content flex-1 lg:max-w-[var(--max-content)] relative bg-white dark:bg-black-900 lg:h-full"
     >
-      {ID_DEV && mode === "analyst" && connStatus ? <div className="absolute top-0 left-0 z-10 bg-white p-2">
-        WS Status: {connStatus}
-      </div> : null}
+
       <div className="main-box relative flex flex-col w-full h-full overflow-y-auto p-[16px] lg:p-[32px] !pb-0">
         <div className="flex flex-col flex-1 w-full bg-white shadow-md relative">
           {
@@ -373,8 +379,13 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
             // <div ref={analystChat}
             //      className={`flex flex-col w-full flex-grow-1 p-1 md:p-8 lg:p-[50px] relative !pb-[350px]`}/>
             // :
-            <ChatHistory mode={mode} history={chatHistory} workspace={workspace} analyst={mode === "analyst"}
-                         lastMessageRef={lastMessageRef}/>
+
+            (ID_DEV && mode === "analyst" && connStatus !== "Open") ?
+              <div className="flex flex-col w-full flex-grow-1 p-1 md:p-8 lg:p-[50px]">
+                WS Status: {connStatus}
+              </div> :
+              <ChatHistory mode={mode} history={chatHistory} workspace={workspace} analyst={mode === "analyst"}
+                           lastMessageRef={lastMessageRef}/>
           }
         </div>
       </div>

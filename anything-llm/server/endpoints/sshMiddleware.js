@@ -20,8 +20,7 @@ function sshMiddleware(req, res, next) {
   });
 
   conn.on("error", (err) => {
-    console.error("$$$$$$$$$$$$$$ Error connecting to the server:", err);
-    res.status(500).send("Error connecting to the server"); // Обработка ошибки подключения
+    next(err);
   });
 
   conn.on("end", () => {

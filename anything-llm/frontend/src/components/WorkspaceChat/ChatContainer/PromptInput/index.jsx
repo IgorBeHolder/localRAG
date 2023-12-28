@@ -265,7 +265,7 @@ const Tracking = memo(({workspaceSlug}) => {
     <div className="flex flex-col md:flex-row w-full justify-center items-center gap-2 mb-2 px-4 mx:px-0">
       <p
         className="whitespace-nowrap bg-gray-200 dark:bg-stone-600 text-gray-800 dark:text-slate-400 text-xs px-2 rounded-lg font-mono text-center">
-        Режим чата: {chatMode === "conversation" ? "chat" : "conversation"}
+        Режим чата: {chatMode === "conversation" ? "chat" : chatMode}
       </p>
       <p className="text-slate-400 text-xs text-center">
         Ответы системы могут быть неточными или недействительными. Используйте их с осторожностью.

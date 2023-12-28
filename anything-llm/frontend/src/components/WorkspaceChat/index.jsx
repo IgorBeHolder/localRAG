@@ -22,7 +22,7 @@ export default function WorkspaceChat({loading, workspace, analystRoute, isCoder
     }
 
     if (!loading) {
-      if (!workspace?.slug || analystRoute || window.localStorage.getItem(storageKey) === "query") {
+      if (!workspace?.slug || analystRoute) {
         setLoadingHistory(false);
       } else {
         getHistory().then(chatHistory => {
