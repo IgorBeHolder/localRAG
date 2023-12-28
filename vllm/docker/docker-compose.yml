@@ -15,12 +15,12 @@ services:
       CUDA_HOME: "/usr/local/cuda"
       NVIDIA_VISIBLE_DEVICES: all
       TP_SIZE: ${TP_SIZE}
-      CHAT_FORMAT: ${CHAT_FORMAT}
+      CHAT_FORMAT: ${CHAT_TEMPLATE}
     command:
       - "--host=${HOST}"
       - "--port=${MM_PORT}"
       - "--model=/model-store/${COMPLETION_MODEL_NAME}"
-      # - "--chat-template=${CHAT_FORMAT}"
+      - "--chat-template=${CHAT_FORMAT}"
       - "--tensor-parallel-size=${TP_SIZE}"
     volumes:
       - "../../model-store/:/model-store"
