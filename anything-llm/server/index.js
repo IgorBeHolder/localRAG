@@ -66,7 +66,7 @@ const APP_PORT = process.env.SERVER_PORT || 3001;
 
 // WS+SSH FOR CODER MODE
 if (process.env.IS_CODER === 'TRUE') {
-  const {sem_search} = require("./utils/AiProviders/openAi/pseudossearsh");
+  const {sem_search} = require("./utils/AiProviders/openAi/pseudo_search");
 
   let activeStream = null;
 
