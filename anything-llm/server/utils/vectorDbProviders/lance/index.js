@@ -224,6 +224,7 @@ const LanceDb = {
   },
   query: async function (reqBody = {}) {
     const { namespace = null, input, workspace = {} } = reqBody;
+    
     if (!namespace || !input) throw new Error("Invalid request body");
 
     const { client } = await this.connect();
