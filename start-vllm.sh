@@ -7,6 +7,7 @@ echo $PWD
 source ./client-files/.env
 set +a
 echo -e "Environment variables loaded.\nBuild for $DEVICE.\n$COMPLETION_MODEL_NAME\n-----------------------------"
+echo -e "\nR_PENALTY: $R_PENALTY.\nTOP_P: $TOP_P\n"
 
 cd vllm/docker
 git checkout main
