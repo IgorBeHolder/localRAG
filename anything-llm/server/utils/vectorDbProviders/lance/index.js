@@ -224,7 +224,7 @@ const LanceDb = {
   },
   query: async function (reqBody = {}) {
     const { namespace = null, input, workspace = {} } = reqBody;
-    
+
     if (!namespace || !input) throw new Error("Invalid request body");
 
     const { client } = await this.connect();
@@ -261,7 +261,7 @@ const LanceDb = {
     };
 
     const memory_list = [
-      { role: "system", content: workspace.openAiPrompt + '\nАргументируй ответ фактами из контекста. Отвечай кратко на русском языке только на последний вопрос.'},
+      { role: "system", content: workspace.openAiPrompt + '\nОтвечайте только на основании фактов из КОНТЕКСТа. Если в КОНТЕКСТе нет ответа, то ответьте "не знаю".' },
       context,
       {
         role: "user",
@@ -312,9 +312,7 @@ const LanceDb = {
     const sys_prompt = {
       role: "system",
       // content: BOS + workspace.openAiPrompt
-      content: workspace.openAiPrompt + '\nАргументируй ответ фактами из контекста. Отвечай кратко на русском языке только на последний вопрос.'
-    };
-
+      content: workspace.openAiPrompt + '\nОтвечайте только на основании фактов из КОНТЕКСТа. Если в КОНТЕКСТе нет ответа, то ответьте "не знаю".' };
     const prompt = {
       role: "assistant",
       content:
