@@ -49,7 +49,7 @@ async function v1_chat_completions(messages, temperature) {
   const F_PENALTY = process.env.F_PENALTY;
   const P_PENALTY = process.env.P_PENALTY;
   const L_PENALTY = process.env.L_PENALTY;
-  const top_p = process.env.TOP_P;
+  const TOP_P = process.env.TOP_P;
   const compl_model = global.COMPLETION_MODEL_NAME;
 
 
@@ -60,7 +60,7 @@ async function v1_chat_completions(messages, temperature) {
   console.log('v1_chat_completions: *** frequency_penalty F_PENALTY:', F_PENALTY);
   console.log('v1_chat_completions: *** presence_penalty P_PENALTY:', P_PENALTY);
   console.log('v1_chat_completions: *** presence_penalty L_PENALTY:', L_PENALTY);
-  console.log('v1_chat_completions: *** top_p:', top_p);
+  console.log('v1_chat_completions: *** top_p:', TOP_P);
 
   console.log('v1_chat_completions: *** messages:', messages2string);
 
@@ -69,7 +69,7 @@ async function v1_chat_completions(messages, temperature) {
     "model": compl_model,
     "messages": messages2string,
     "temperature": temperature,
-    "top_p": top_p,
+    "top_p": TOP_P,
     "repeat_penalty": R_PENALTY,
     "frequency_penalty": F_PENALTY,
     "presence_penalty": P_PENALTY,    
