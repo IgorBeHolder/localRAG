@@ -108,10 +108,10 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
           console.log('typeWriterIsBusy', typeWriterIsBusy);
           setTypeWriterStack(typeWriterStack.concat(print));
         } else {
-          print.forEach(s => {
+          print.forEach((str) => {
             typeWriterInstance
               .pauseFor(TYPE_STRING_DELAY)
-              .typeString(s)
+              .typeString((str))
               .callFunction((e) => {
                 setTimeout(() => {
                   e.elements.container.scrollIntoView({behavior: "smooth", block: "start"});
