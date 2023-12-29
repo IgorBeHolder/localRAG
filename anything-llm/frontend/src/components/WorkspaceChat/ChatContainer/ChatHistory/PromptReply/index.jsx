@@ -53,7 +53,8 @@ const PromptReply = forwardRef(({
           <Jazzicon size={30} user={{uid: workspace.slug}}/>
           <div className={MSG_STYLE() + " bg-red-50 ml-2 text-red-500 border border-red-300 flex flex-col"}>
               <span className={`inline-block`}>
-                <AlertTriangle className="h-4 w-4 mb-1 inline-block"/> Не удалось ответить на сообщение.
+                <AlertTriangle
+                  className="h-4 w-4 mb-1 inline-block"/> {reply || "Не удалось ответить на сообщение."}
               </span>
             <span className="text-xs">Причина: {error || "неизвестна"}</span>
           </div>
