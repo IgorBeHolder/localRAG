@@ -12,7 +12,7 @@ services:
       - "../../model-store/:/model-store"
     environment:
       HOST: ${HOST}
-      PORT: ${MM_PORT}
+      MM_PORT: ${MM_PORT}
       DEVICE: ${DEVICE}
       COMPLETION_MODEL_NAME: ${COMPLETION_MODEL_NAME}
       CUDA_HOME: "/usr/local/cuda"
