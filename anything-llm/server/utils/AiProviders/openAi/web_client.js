@@ -71,7 +71,7 @@ async function v1_chat_completions(messages, temperature) {
     "temperature": temperature,
     "top_p": TOP_P,
     // "repeat_penalty": R_PENALTY,
-    // "frequency_penalty": F_PENALTY,
+    "frequency_penalty": F_PENALTY,
     // "presence_penalty": P_PENALTY,    
     // "length_penalty": L_PENALTY
   };
