@@ -9,7 +9,7 @@ set +a
 echo -e "Environment variables loaded.\nBuild for $DEVICE.\n$COMPLETION_MODEL_NAME\n-----------------------------"
 echo -e "\nR_PENALTY: $R_PENALTY.  F_PENALTY: $F_PENALTY  P_PENALTY: $P_PENALTY TOP_P: $TOP_P\n"
 
-cd openchat
+
 # git checkout main
 
 
@@ -30,6 +30,7 @@ if [ ! -z "$container_id" ]; then
     docker rm -f $container_id
 fi
 
+cd openchat
 docker-compose -p localrag -f docker-compose.yml up --build
 # docker-compose -p localrag -f docker-compose.yml up -d
 
