@@ -70,10 +70,10 @@ async function v1_chat_completions(messages, temperature) {
     "messages": messages2string,
     "temperature": temperature,
     "top_p": TOP_P,
-    "repeat_penalty": R_PENALTY,
-    "frequency_penalty": F_PENALTY,
-    "presence_penalty": P_PENALTY,    
-    "length_penalty": L_PENALTY
+    // "repeat_penalty": R_PENALTY,
+    // "frequency_penalty": F_PENALTY,
+    // "presence_penalty": P_PENALTY,    
+    // "length_penalty": L_PENALTY
   };
   // The presence penalty is a one - off additive contribution that applies to all tokens that
   // have been sampled at least once and the frequency penalty is a contribution that is proportional
