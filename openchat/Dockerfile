@@ -3,15 +3,17 @@ FROM python:3.11-slim
 
 # COPY requirements.txt .
 
-RUN --mount=type=cache,target=/root/.cache/pip \
-    pip install --upgrade pip && \
-    pip install --no-cache-dir ochat && \
-    rm -rf /root/.cache/pip/*
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir ochat
+
 
 # COPY ./app ./app
 
 
 CMD ["/bin/sh", "/run.sh"]
+
+# TO BUILD THIS IMAGE:
+# docker build -t ollm:latest .
 
 # python -m ochat.serving.openai_api_server --model openchat/openchat-3.5-1210
 
