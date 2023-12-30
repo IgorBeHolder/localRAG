@@ -89,10 +89,19 @@ if (process.env.IS_CODER === 'TRUE') {
 
         activeStream.write(command + "\n");
       } else {
-        sshConnection.exec(command, (err, stream) => {
-          if (err) {
-            serverLog("Error executing command:", err);
-            ws.send("Error executing command");
+        sshConnection.exec(command, (error, stream) => {
+          if (error) {
+            serverLog("Error executing command:", error);
+            let chatResult = {
+              id: uuidv4(),
+              type: "abort",
+              textResponse: "Error executing SSH command",
+              sources: [],
+              error: JSON.stringify(error),
+              close: true
+            };
+
+            ws.send(JSON.stringify(chatResult));
             return;
           }
 
