@@ -11,6 +11,6 @@ printf "*************************"
 python -m ochat.serving.openai_api_server \
     --model=/model-store/${COMPLETION_MODEL_NAME} \
     --host $HOST \
-    --port $MM_PORT
+    --port $PORT
 
     # --model "/app/model-store/$COMPLETION_MODEL_NAME" \
