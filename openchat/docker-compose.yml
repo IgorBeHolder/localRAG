@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  vllm:
+    container_name: ollm
+    image: ollm:latest
+    restart: always
+    volumes:
+      - "../../model-store/:/model-store"
+    environment:
+      HOST: ${HOST}
+      PORT: ${MM_PORT}
+      DEVICE: ${DEVICE}
+      COMPLETION_MODEL_NAME: ${COMPLETION_MODEL_NAME}
+      CUDA_HOME: "/usr/local/cuda"
+      NVIDIA_VISIBLE_DEVICES: all
+      TP_SIZE: ${TP_SIZE}
+      CHAT_TEMPLATE: ${CHAT_TEMPLATE}      
+    ports:
+      - ${MM_PORT}:${MM_PORT}
+    ipc: host
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]      
+    networks:
+      - llm-net
+networks:
+  llm-net:
+    name: llm-net
+    external: true              
