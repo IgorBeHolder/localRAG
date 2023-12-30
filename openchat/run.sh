@@ -4,7 +4,7 @@ echo $PWD
 printf "Environment variables loaded.\n"
 printf "*************************"
 printf "Build for $DEVICE.\n"
-printf "$COMPLETION_MODEL_NAME\nHOST: $HOST PORT: $MM_PORT n_ctx: $N_CTX.\n"
+printf "ollm server: $COMPLETION_MODEL_NAME\nHOST: $HOST PORT: $MM_PORT n_ctx: $N_CTX.\n"
 printf "*************************"
 
 
