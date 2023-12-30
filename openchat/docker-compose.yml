@@ -18,7 +18,6 @@ services:
       CHAT_TEMPLATE: ${CHAT_TEMPLATE}      
     ports:
       - ${MM_PORT}:${MM_PORT}
-      - HOST:${HOST}
     ipc: host
     deploy:
       resources:
