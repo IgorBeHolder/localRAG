@@ -12,7 +12,7 @@ echo -e "\nR_PENALTY: $R_PENALTY.  F_PENALTY: $F_PENALTY  P_PENALTY: $P_PENALTY 
 cd openchat
 # git checkout main
 
-# Check if the "ollm-cont" container is running and stop it if it is
+
 container_id=$(docker ps -a -q -f name=^/ollm$)
 if [ ! -z "$container_id" ]; then
     echo "***** Removing existing container with name 'ollm'..."
@@ -23,7 +23,7 @@ if [ ! -z "$container_id" ]; then
     echo "***** Removing existing container with name 'vllm'..."
     docker rm -f $container_id
 fi
-# Check if the "llm-server" container is running and stop it if it is
+
 container_id=$(docker ps -a -q -f name=^/llm-server$)
 if [ ! -z "$container_id" ]; then
     echo "***** Removing existing container with name 'llm-server'..."
