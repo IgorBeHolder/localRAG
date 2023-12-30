@@ -12,7 +12,12 @@ echo -e "\nR_PENALTY: $R_PENALTY.  F_PENALTY: $F_PENALTY  P_PENALTY: $P_PENALTY 
 cd vllm/docker
 git checkout main
 
-# Check if the "vllm-cont" container is running and stop it if it is
+# Check if the "ollm-cont" container is running and stop it if it is
+container_id=$(docker ps -a -q -f name=^/ollm$)
+if [ ! -z "$container_id" ]; then
+    echo "***** Removing existing container with name 'ollm'..."
+    docker rm -f $container_id
+fi
 container_id=$(docker ps -a -q -f name=^/vllm$)
 if [ ! -z "$container_id" ]; then
     echo "***** Removing existing container with name 'vllm'..."

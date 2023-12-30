@@ -10,12 +10,21 @@ echo -e "Environment variables loaded."
 echo -e "Build for $DEVICE."
 echo -e "$COMPLETION_MODEL_NAME\n--------------------------------------------------------"
 
-# Check if the "llm-server" container is already running and remove it if it is
+# Check if the "ollm-cont" container is running and stop it if it is
+container_id=$(docker ps -a -q -f name=^/ollm$)
+if [ ! -z "$container_id" ]; then
+    echo "***** Removing existing container with name 'ollm'..."
+    docker rm -f $container_id
+fi
+container_id=$(docker ps -a -q -f name=^/vllm$)
+if [ ! -z "$container_id" ]; then
+    echo "***** Removing existing container with name 'vllm'..."
+    docker rm -f $container_id
+fi
+# Check if the "llm-server" container is running and stop it if it is
 container_id=$(docker ps -a -q -f name=^/llm-server$)
 if [ ! -z "$container_id" ]; then
-    echo "Stopping existing container with name 'llm-server'..."
-    docker stop $container_id
-    echo "Removing existing container with name 'llm-server'..."
+    echo "***** Removing existing container with name 'llm-server'..."
     docker rm -f $container_id
 fi
 

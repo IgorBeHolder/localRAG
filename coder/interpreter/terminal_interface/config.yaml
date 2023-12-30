@@ -18,7 +18,7 @@ local: true
 api_key: "fake_key"
 
 # GPU
-#api_base: "http://194.135.112.219:3003/v1"
+api_base: "http://194.135.112.219:3003/v1"
 # api_base: "http://llm-server:3003/v1"
 # model: "openai//app/model-store/TheBloke/openchat-3.5-1210-GGUF/openchat-3.5-1210.Q6_K.gguf"
 # model_name: "/app/model-store/TheBloke/openchat-3.5-1210-GGUF/openchat-3.5-1210.Q6_K.gguf"
@@ -26,14 +26,14 @@ api_key: "fake_key"
 # model: "openai//app/model-store/TheBloke/dolphin-2.5-mixtral-8x7b-GGUF/dolphin-2.5-mixtral-8x7b.Q6_K.gguf"
 # model_name: "/app/model-store/TheBloke/dolphin-2.5-mixtral-8x7b-GGUF/dolphin-2.5-mixtral-8x7b.Q6_K.gguf"
 
-#model: "openai//model-store/openchat/openchat_3.5"
-#model_name: "/model-store/openchat/openchat_3.5"
+model: "openai//model-store/openchat/openchat-3.5-1210"
+model_name: "/model-store/openchat/openchat-3.5-1210"
 
 # CPU
-api_base: "http://46.254.21.170:3003/v1"
+# api_base: "http://46.254.21.170:3003/v1"
 # api_base: "http://llm-server:3003/v1"
-model: "openai//app/model-store/TheBloke/openchat-3.5-1210-GGUF/openchat-3.5-1210.Q6_K.gguf"
-model_name: "/app/model-store/TheBloke/openchat-3.5-1210-GGUF/openchat-3.5-1210.Q6_K.gguf"
+# model: "openai//app/model-store/TheBloke/openchat-3.5-1210-GGUF/openchat-3.5-1210.Q6_K.gguf"
+# model_name: "/app/model-store/TheBloke/openchat-3.5-1210-GGUF/openchat-3.5-1210.Q6_K.gguf"
 
 # model: "openai//app/model-store/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/mistral-7b-instruct-v0.2.Q6_K.gguf"
 # model_name: "/model-store/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/mistral-7b-instruct-v0.2.Q6_K.gguf"
