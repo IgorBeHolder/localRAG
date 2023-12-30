@@ -5,6 +5,9 @@ services:
     container_name: ollm
     image: ollm:latest
     restart: always
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile    
     volumes:
       - "../../model-store/:/model-store"
     environment:
