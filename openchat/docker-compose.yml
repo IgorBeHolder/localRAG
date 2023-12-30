@@ -9,7 +9,7 @@ services:
       context: .
       dockerfile: ./Dockerfile    
     volumes:
-      - "../../model-store/:/model-store"
+      - "../model-store/:/model-store"
     environment:
       HOST: ${HOST}
       MM_PORT: ${MM_PORT}
