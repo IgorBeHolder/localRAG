@@ -31,8 +31,8 @@ if [ ! -z "$container_id" ]; then
 fi
 
 cd openchat
-docker-compose -p localrag -f docker-compose.yml up --build
-# docker-compose -p localrag -f docker-compose.yml up -d
+# docker-compose -p localrag -f docker-compose.yml up --build
+docker-compose -p localrag -f docker-compose.yml up -d
 
 )
 
