@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  vllm:
+    container_name: ollm
+    image: ollm:latest
+    restart: always
+    volumes:
+      - "../../model-store/:/model-store"
+    ports:
+      - ${MM_PORT}:${MM_PORT}
+      - HOST:${HOST}
+    ipc: host
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]      
+    networks:
+      - llm-net
+networks:
+  llm-net:
+    name: llm-net
+    external: true              

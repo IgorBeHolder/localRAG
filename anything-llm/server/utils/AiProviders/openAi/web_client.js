@@ -59,7 +59,7 @@ async function v1_chat_completions(messages, temperature) {
   console.log('v1_chat_completions: *** repeat_penalty R_PENALTY:', R_PENALTY);
   console.log('v1_chat_completions: *** frequency_penalty F_PENALTY:', F_PENALTY);
   console.log('v1_chat_completions: *** presence_penalty P_PENALTY:', P_PENALTY);
-  console.log('v1_chat_completions: *** presence_penalty L_PENALTY:', L_PENALTY);
+вщслук  console.log('v1_chat_completions: *** length_penalty L_PENALTY:', L_PENALTY);
   console.log('v1_chat_completions: *** top_p:', TOP_P);
 
   console.log('v1_chat_completions: *** messages:', messages2string);
