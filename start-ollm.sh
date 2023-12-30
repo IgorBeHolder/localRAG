@@ -1,7 +1,7 @@
 #!/bin/bash
 
 (
-echo "Building the VLLM container..."
+echo "Building the oLLM container..."
 set -a
 echo $PWD
 source ./client-files/.env

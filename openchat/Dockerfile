@@ -1,7 +1,7 @@
 # Stage 1: Builder stage
 FROM python:3.11-slim
 
-COPY requirements.txt .
+# COPY requirements.txt .
 
 RUN --mount=type=cache,target=/root/.cache/pip \
     pip install --upgrade pip && \
