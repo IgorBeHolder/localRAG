@@ -149,4 +149,4 @@ curl -X 'POST' 'http://194.135.112.219:3003/v1/completions' -H 'accept: applicat
  '{"model": "/app/model-store/TheBloke/Mixtral-8x7B-Instruct-v0.1-GGUF/mixtral-8x7b-instruct-v0.1.Q6_K.gguf", "stream":"false", "prompt": "\n\n### Instructions:\nWhat is the capital of Canada?\n\n### Response:\n",  "stop": ["\n", "###" ],"max_tokens":"2048"}'
 
  curl -X 'POST' 'http://194.135.112.219:3003/v1/completions' -H 'accept: application/json' -H 'Content-Type: application/json' -d \
- '{"model": "/app/model-store/TheBloke/Mixtral-8x7B-Instruct-v0.1-GGUF/mixtral-8x7b-instruct-v0.1.Q6_K.gguf", "stream":"false", "prompt": "\n\n### Instructions:\nWhat is the capital of Canada?\n\n### Response:\n",  "stop": ["\n", "###" ],"max_tokens":"2048", "tokenizer.ggml.add_bos_token": "false"}'
+ '{"model": "/app/model-store/TheBloke/Mixtral-8x7B-Instruct-v0.1-GGUF/mixtral-8x7b-instruct-v0.1.Q5_K_M.gguf", "stream":"false", "prompt": "What is the capital of Canada?",  "stop": ["\n", "###" ],"max_tokens":"2048", "tokenizer.ggml.add_bos_token": "false"}'
