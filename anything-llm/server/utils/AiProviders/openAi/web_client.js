@@ -69,14 +69,15 @@ async function v1_chat_completions(messages, temperature) {
   const payload = {
     // add the prefix to the model name like '/app'
     "model": compl_model,
-    "messages": messages2string,
-    "temperature": temperature,
-    "top_p": TOP_P,
-    "repetition_penalty": R_PENALTY,
-    "frequency_penalty": F_PENALTY,
-    "max_tokens": MAX_TOKENS,
-    "presence_penalty": P_PENALTY,    
-    "length_penalty": L_PENALTY
+    "messages": messages2string
+    // "temperature": temperature,
+    // "top_p": TOP_P,
+    // "repetition_penalty": R_PENALTY,
+    // "frequency_penalty": F_PENALTY,
+    // "max_tokens": MAX_TOKENS,
+    // "presence_penalty": P_PENALTY,    
+    // "length_penalty": L_PENALTY
+    // "tokenizer.ggml.add_bos_token": "false"
   };
   // The presence penalty is a one - off additive contribution that applies to all tokens that
   // have been sampled at least once and the frequency penalty is a contribution that is proportional

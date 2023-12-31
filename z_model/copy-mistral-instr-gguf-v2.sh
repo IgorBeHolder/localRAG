@@ -12,8 +12,10 @@ declare -a files=(
   ".gitattributes" 
   "README.md" 
   "config.json"
-  "mistral-7b-instruct-v0.2.Q6_K.gguf"
-# SHA256: a4643671c92f47eb6027d0eff50b9875562e8e172128a4b10b2be250bb4264de
+  # "mistral-7b-instruct-v0.2.Q6_K.gguf"
+  "mistral-7b-instruct-v0.2.Q5_K_M.gguf"
+# Q5_K_M SHA256: af12961e014037ee8c5c9f3bf7cf9fd99cadc9dabd50f528a4248c4a8ee8fe77
+# Q6_K SHA256: a4643671c92f47eb6027d0eff50b9875562e8e172128a4b10b2be250bb4264de
 )
 
 for file in "${files[@]}"
