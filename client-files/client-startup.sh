@@ -140,6 +140,7 @@ else
     -v ./anything-llm/server/storage:/app/server/storage \
     -v ./anything-llm/collector/hotdir/:/app/collector/hotdir \
     -v ./anything-llm/collector/outputs/:/app/collector/outputs \
+    -v ./anything-llm/server/storage/coder:/app/server/storage/coder \
     -p 3001:3001 \
     --network llm-net \
     anyth:last_com

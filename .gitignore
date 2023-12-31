@@ -20,7 +20,7 @@ _skbuild/
 
 .envrc
 .direnv
-
+coder_/
 models/
 
 # Byte-compiled / optimized / DLL files

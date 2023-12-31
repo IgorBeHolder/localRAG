@@ -11,9 +11,9 @@ interpreter --model azure/<your_deployment_id>
 ```
 
 ```python Python
-from interpreter import interpreter
+import interpreter
 
-interpreter.llm.model = "azure/<your_deployment_id>"
+interpreter.model = "azure/<your_deployment_id>"
 interpreter.chat()
 ```
 

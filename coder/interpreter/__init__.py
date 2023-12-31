@@ -1,6 +1,15 @@
-from .core.core import OpenInterpreter
+import sys
+from .core.core import Interpreter
 
-interpreter = OpenInterpreter()
+sys.modules["interpreter"] = Interpreter()
+
+# ^ This is done so when users `import interpreter`,
+# they get an instance.
+
+# **This is a controversial thing to do,**
+# because perhaps modules ought to behave like modules.
+
+# But I think it saves a step, removes friction, and looks good.
 
 #     ____                      ____      __                            __
 #    / __ \____  ___  ____     /  _/___  / /____  _________  ________  / /____  _____

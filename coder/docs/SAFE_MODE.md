@@ -36,7 +36,7 @@ The safe mode setting has three options:
 ```yaml
 model: gpt-4
 temperature: 0
-verbose: false
+debug_mode: false
 safe_mode: ask
 ```
 
@@ -52,7 +52,7 @@ You can adjust the `system_message` in your [config file](https://github.com/Kil
 
 ```yaml
 model: gpt-4
-verbose: false
+debug_mode: false
 safe_mode: ask
 system_message: |
   # normal system message here

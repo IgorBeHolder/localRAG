@@ -11,9 +11,9 @@ interpreter --model petals/petals-team/StableBeluga2
 ```
 
 ```python Python
-from interpreter import interpreter
+import interpreter
 
-interpreter.llm.model = "petals/petals-team/StableBeluga2"
+interpreter.model = "petals/petals-team/StableBeluga2"
 interpreter.chat()
 ```
 
@@ -39,8 +39,8 @@ interpreter --model petals/huggyllama/llama-65b
 ```
 
 ```python Python
-interpreter.llm.model = "petals/petals-team/StableBeluga2"
-interpreter.llm.model = "petals/huggyllama/llama-65b"
+interpreter.model = "petals/petals-team/StableBeluga2"
+interpreter.model = "petals/huggyllama/llama-65b"
 ```
 
 </CodeGroup>

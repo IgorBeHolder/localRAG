@@ -39,8 +39,9 @@ RUN pip3 install --upgrade pip
 
 RUN --mount=type=cache,target=/tmp/pip_cache pip3 install \
     matplotlib seaborn plotly openpyxl \
-    sweetviz open-interpreter websockets \
+    sweetviz open-interpreter==0.1.17 websockets \
     scikit-learn datetime
+
 
     # pydantic==2.4.0 pandas-profiling
     # dataprep scikit-learn
@@ -66,22 +67,18 @@ EXPOSE 3006
 COPY interpreter/terminal_interface/config.yaml \
     /usr/local/lib/python3.11/site-packages/interpreter/terminal_interface/config.yaml
 
-# COPY interpreter/terminal_interface/terminal_interface.py \
-#     /usr/local/lib/python3.11/site-packages/interpreter/terminal_interface/terminal_interface.py
+COPY interpreter/terminal_interface/terminal_interface.py \
+    /usr/local/lib/python3.11/site-packages/interpreter/terminal_interface/terminal_interface.py
 
-# COPY interpreter/core/llm/setup_openai_coding_llm.py \
-#     /usr/local/lib/python3.11/site-packages/interpreter/core/llm/setup_openai_coding_llm.py
+COPY interpreter/core/llm/setup_openai_coding_llm.py \
+    /usr/local/lib/python3.11/site-packages/interpreter/core/llm/setup_openai_coding_llm.py
 
-# COPY interpreter/core/llm/convert_to_coding_llm.py \
-#     /usr/local/lib/python3.11/site-packages/interpreter/core/llm/convert_to_coding_llm.py
+COPY interpreter/core/llm/convert_to_coding_llm.py \
+    /usr/local/lib/python3.11/site-packages/interpreter/core/llm/convert_to_coding_llm.py
 
 
     # RUN echo "interpreter && %reset" >> /home/coder/.bashrc
 
 # Start the SSH service
 CMD ["/usr/sbin/sshd", "-D"]
-
-# interpreter --config_file config.sherpa.yaml
-
-#interpreter --config --config_file config.sherpa.yaml
 

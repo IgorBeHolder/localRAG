@@ -1,12 +1,16 @@
-To create multiple instances, use the base class, `OpenInterpreter`:
+You may have noticed that `import interpreter` imports an _instance_ of Open Interpreter, which is unusual for a module.
+
+To create multiple instances, the instance exposes the base class via `interpreter.Interpreter`:
 
 ```python
-from interpreter import OpenInterpreter
+import interpreter
 
-agent_1 = OpenInterpreter()
+interpreter.system_message = "This is the instance imported by default."
+
+agent_1 = interpreter.Interpreter()
 agent_1.system_message = "This is a seperate instance."
 
-agent_2 = OpenInterpreter()
+agent_2 = interpreter.Interpreter()
 agent_2.system_message = "This is yet another instance."
 ```
 

@@ -33,32 +33,20 @@ class JupyterLanguage(BaseLanguage):
         # Give it our same matplotlib backend
         # backend = matplotlib.get_backend()
 
-        # Use Agg, which bubbles everything up as an image.
-        # Not perfect (I want interactive!) but it works.
+        # Get backend which bubbles everything up as images
         backend = "Agg"
 
-        code = f"""
+        code_to_run = f"""
         import matplotlib
         matplotlib.use('{backend}')
         """
-        for _ in self.run(code):
-            pass
-
-        # DISABLED because it doesn't work??
-        # Disable color outputs in the terminal, which don't look good in OI and aren't useful
-        # code = """
-        # from IPython.core.getipython import get_ipython
-        # get_ipython().colors = 'NoColor'
-        # """
-        # self.run(code)
+        self.run(code_to_run)
 
     def terminate(self):
         self.kc.stop_channels()
         self.km.shutdown_kernel()
 
     def run(self, code):
-        # exec(code)
-        # return
         self.finish_flag = False
         try:
             preprocessed_code = self.preprocess_code(code)
@@ -116,15 +104,11 @@ class JupyterLanguage(BaseLanguage):
                         {"type": "console", "format": "output", "content": line}
                     )
                 elif msg["msg_type"] == "error":
-                    content = "\n".join(content["traceback"])
-                    # Remove color codes
-                    ansi_escape = re.compile(r"\x1B\[[0-?]*[ -/]*[@-~]")
-                    content = ansi_escape.sub("", content)
                     message_queue.put(
                         {
                             "type": "console",
                             "format": "output",
-                            "content": content,
+                            "content": "\n".join(content["traceback"]),
                         }
                     )
                 elif msg["msg_type"] in ["display_data", "execute_result"]:
@@ -223,9 +207,7 @@ def preprocess_python(code):
     code = code.strip()
 
     # Add print commands that tell us what the active line is
-    # but don't do this if any line starts with ! or %
-    if not any(line.strip().startswith(("!", "%")) for line in code.split("\n")):
-        code = add_active_line_prints(code)
+    code = add_active_line_prints(code)
 
     # Wrap in a try except (DISABLED)
     # code = wrap_in_try_except(code)
@@ -251,14 +233,10 @@ def add_active_line_prints(code):
         if '"""' in line or "'''" in line:
             in_multiline_string = not in_multiline_string
         if not in_multiline_string and (line.strip().startswith("#") or line == ""):
-            whitespace = len(line) - len(line.lstrip(" "))
+            whitespace = len(line) - len(line.lstrip())
             code_lines[i] = " " * whitespace + "pass"
-    processed_code = "\n".join(code_lines)
-    try:
-        tree = ast.parse(processed_code)
-    except:
-        # If you can't parse the processed version, try the unprocessed version before giving up
-        tree = ast.parse(code)
+    code = "\n".join(code_lines)
+    tree = ast.parse(code)
     transformer = AddLinePrints()
     new_tree = transformer.visit(tree)
     return ast.unparse(new_tree)

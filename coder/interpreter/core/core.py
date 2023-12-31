@@ -1,24 +1,26 @@
 """
 This file defines the Interpreter class.
-It's the main file. `from interpreter import interpreter` will import an instance of this class.
+It's the main file. `import interpreter` will import an instance of this class.
 """
 
 import json
 import os
 from datetime import datetime
 
-from ..terminal_interface.start_terminal_interface import start_terminal_interface
-from ..terminal_interface.terminal_interface import terminal_interface
-from ..terminal_interface.utils.local_storage_path import get_storage_path
-from .computer.computer import Computer
-from .default_system_message import default_system_message
-from .extend_system_message import extend_system_message
-from .llm.llm import Llm
-from .respond import respond
-from .utils.truncate_output import truncate_output
+from terminal_interface import start_terminal_interface
+# from terminal_interface import terminal_interface
+import terminal_interface
+from terminal_interface.utils import get_config
+from terminal_interface.utils.local_storage_path import get_storage_path
+# from computer.computer import Computer
+# from computer import computer
+from interpreter.core import generate_system_message
+from interpreter.core.llm import setup_llm
+from interpreter.core import respond
+from interpreter.core.utils.truncate_output import truncate_output
 
 
-class OpenInterpreter:
+class Interpreter:
     def start_terminal_interface(self):
         start_terminal_interface(self)
 
@@ -26,37 +28,57 @@ class OpenInterpreter:
         # State
         self.messages = []
 
+        self.config_file = user_config_path
+
         # Settings
-        self.offline = False
+        self.local = False
         self.auto_run = False
-        self.verbose = False
-        self.max_output = 2800  # Max code block output visible to the LLM
+        self.debug_mode = False
+        self.max_output = 2000
         self.safe_mode = "off"
-        # this isn't right... this should be in the llm, and have a better name, and more customization:
-        self.shrink_images = (
-            False  # Shrinks all images passed into model to less than 1024 in width
-        )
+        self.disable_procedures = False
         self.force_task_completion = False
 
-        # Conversation history (this should not be here)
+        # Conversation history
         self.conversation_history = True
         self.conversation_filename = None
         self.conversation_history_path = get_storage_path("conversations")
 
-        # OS control mode related attributes
-        self.os = False
-        self.speak_messages = False
+        # LLM settings
+        self.model = ""
+        self.temperature = None
+        self.system_message = ""
+        self.context_window = None
+        self.max_tokens = None
+        self.api_base = None
+        self.api_key = None
+        self.api_version = None
+        self.max_budget = None
+        self._llm = None
+        self.function_calling_llm = None
+        self.vision = False  # LLM supports vision
 
-        # LLM
-        self.llm = Llm(self)
-
-        # These are LLM related, but they're actually not
-        # the responsibility of the stateless LLM to manage / remember!
-        self.system_message = default_system_message
-        self.custom_instructions = ""
-
-        # Computer
+        # Computer settings
         self.computer = Computer()
+        # Permitted languages, all lowercase
+        self.languages = [i.name.lower() for i in self.computer.terminal.languages]
+        # (Not implemented) Permitted functions
+        # self.functions = [globals]
+        # OS control mode
+        self.os = False
+
+        # Load config defaults
+        self.extend_config(self.config_file)
+
+        # Expose class so people can make new instances
+        self.Interpreter = Interpreter
+
+    def extend_config(self, config_path):
+        if self.debug_mode:
+            print(f"Extending configuration from `{config_path}`")
+
+        config = get_config(config_path)
+        self.__dict__.update(config)
 
     def chat(self, message=None, display=True, stream=False):
         if stream:
@@ -72,6 +94,10 @@ class OpenInterpreter:
         return self.messages[initial_message_count:]
 
     def _streaming_chat(self, message=None, display=True):
+        # Setup the LLM
+        if not self._llm:
+            self._llm = setup_llm(self)
+
         # Sometimes a little more code -> a much better experience!
         # Display mode actually runs interpreter.chat(display=False, stream=True) from within the terminal_interface.
         # wraps the vanilla .chat(display=False) generator in a display.
@@ -104,11 +130,11 @@ class OpenInterpreter:
             # REENABLE this when multimodal becomes more common:
 
             # Make sure we're using a model that can handle this
-            # if not self.llm.supports_vision:
+            # if not self.vision:
             #     for message in self.messages:
             #         if message["type"] == "image":
             #             raise Exception(
-            #                 "Use a multimodal model and set `interpreter.llm.supports_vision` to True to handle image messages."
+            #                 "Use a multimodal model and set `interpreter.vision` to True to handle image messages."
             #             )
 
             # This is where it all happens!
@@ -233,11 +259,11 @@ class OpenInterpreter:
         self.computer.terminate()  # Terminates all languages
 
         # Reset the function below, in case the user set it
-        self.extend_system_message = lambda: extend_system_message(self)
+        self.generate_system_message = lambda: generate_system_message(self)
 
         self.__init__()
 
     # These functions are worth exposing to developers
     # I wish we could just dynamically expose all of our functions to devs...
-    def extend_system_message(self):
-        return extend_system_message(self)
+    def generate_system_message(self):
+        return generate_system_message(self)

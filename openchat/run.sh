@@ -14,3 +14,8 @@ python -m ochat.serving.openai_api_server \
     --port $MM_PORT
 
     # --model "/app/model-store/$COMPLETION_MODEL_NAME" \
+
+    # python -m ochat.serving.openai_api_server --model openchat/openchat-3.5-1210
+
+# N is the number of tensor parallel GPUs
+# python -m ochat.serving.openai_api_server --model openchat/openchat-3.5-1210 --engine-use-ray --worker-use-ray --tensor-parallel-size N
