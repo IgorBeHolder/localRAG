@@ -14,7 +14,7 @@ declare -a files=(
   "config.json" 
   "dolphin-2.5-mixtral-8x7b.Q5_K_M.gguf"
 
-# Q5_K_M  SHA256:
+# Q5_K_M  SHA256: b0a57cd79a0a1b056e964984fcfb94f6802d4e7487efe463b18fba6d6147734e
 # Q6: SHA256: 7ffbe467a18122de2a16772e7fcd3ccd6131203c2ce721f53fab03446a246684
 )
 
