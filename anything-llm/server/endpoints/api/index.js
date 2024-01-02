@@ -16,7 +16,7 @@ function developerEndpoints(app, router) {
   apiAdminEndpoints(router);
   apiSystemEndpoints(router);
   apiWorkspaceEndpoints(router);
-  //apiAnalystEndpoints(router);
+  // apiAnalystEndpoints(router);
   apiDocumentEndpoints(router);
 }
 

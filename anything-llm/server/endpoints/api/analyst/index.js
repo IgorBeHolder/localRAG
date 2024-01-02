@@ -509,6 +509,31 @@ function apiAnalystEndpoints(app) {
       }
     }
   );
+
+  const DEST_DIR = './storage/coder/';
+
+  app.post(
+    "/save_csv",
+    handleUploads.single("file"),
+    async function (request, response) {
+      if (!request.file) {
+        response.status(400).json({ success: false, error: "No file uploaded" }).end();
+        return;
+      }
+
+      const { originalname, path: tempPath } = request.file;
+      const destFilePath = path.join(DEST_DIR, originalname);
+
+      try {
+        fs.renameSync(tempPath, destFilePath);
+        serverLog(`CSV file ${originalname} saved successfully in ${DEST_DIR}.`);
+        response.status(200).json({ success: true, error: null });
+      } catch (e) {
+        serverLog(`Error saving file: ${e.message}`, e);
+        response.status(500).json({ success: false, error: `Error saving file: ${e.message}` }).end();
+      }
+    }
+  );
 }
 
 module.exports = {apiAnalystEndpoints};

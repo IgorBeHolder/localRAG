@@ -116,11 +116,7 @@ const Workspace = {
     return { response, data };
   },
 
-  uploadCsvFile: async function (slug, file) {
-    // Create a FormData object
-    const formData = new FormData();
-    formData.append('file', file); // Append the file with key 'file'
-
+  uploadCsvFile: async function ( formData) {
     // Fetch configuration
     let headers = baseHeaders();
     // Make sure Content-Type is not set, or remove it
@@ -129,12 +125,13 @@ const Workspace = {
     const response = await fetch(`${(API_BASE)}/save_csv`, {
       method: "POST",
       body: formData,
-      headers: headers
+      // headers: headers
     });
 
     const data = await response.json();
     return { response, data };
   }
+
 };
 
 export default Workspace;
