@@ -8,9 +8,9 @@ export default function ChatHistory({mode, history = [], workspace, lastMessageR
   const typeWriterRef = useRef(null);
 
   useEffect(() => {
-    if (replyRef.current && replyRef.current.hasOwnProperty('scrollIntoView')) {
+    if (replyRef?.current) {
       setTimeout(() => {
-        replyRef.current.scrollIntoView({behavior: "smooth", block: "end"});
+        replyRef.current.scrollIntoView({behavior: "smooth", block: "start"});
       }, 700);
     }
 
