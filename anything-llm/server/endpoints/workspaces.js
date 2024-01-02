@@ -97,36 +97,32 @@ function workspaceEndpoints(app) {
     }
   );
 
+  const DEST_DIR = '../storage/coder/';
+
   app.post(
     "/save_csv",
     handleUploads.single("file"),
     async function (request, response) {
-      const {originalname} = request.file;
-      const processingOnline = await checkPythonAppAlive();
-
-      console.log('processCsvDocument', processingOnline, originalname);
-
-      if (!processingOnline) {
-        response
-          .status(500)
-          .json({
-            success: false,
-            error: `Python processing API is not online. Document ${originalname} will not be processed automatically.`
-          })
-          .end();
+      if (!request.file) {
+        response.status(400).json({success: false, error: "No file uploaded"}).end();
         return;
       }
 
-      const {success, reason} = await processCsvDocument(originalname);
-      if (!success) {
-        console.log("save_csv error processing Online", processingOnline, originalname, reason);
-        response.status(500).json({success: false, error: reason}).end();
-        return;
-      }
+      const {originalname, path: tempPath} = request.file;
 
-      serverLog(`Document ${originalname} uploaded and processed successfully. It is now available in documents.`);
-      await Telemetry.sendTelemetry("document_uploaded");
-      response.status(200).json({success: true, error: null});
+      // Construct the destination file path
+      const destFilePath = path.join(DEST_DIR, originalname);
+
+      try {
+        // Move the file from the temp path to the destination directory
+        fs.renameSync(tempPath, destFilePath);
+
+        serverLog(`CSV file ${originalname} saved successfully in ${DEST_DIR}.`);
+        response.status(200).json({success: true, error: null});
+      } catch (e) {
+        serverLog(e.message, e);
+        response.status(500).json({success: false, error: "Error saving file"}).end();
+      }
     }
   );
 
