@@ -1,3 +1,5 @@
+const path = require("path");
+const fs = require("fs");
 const {reqBody, multiUserMode, userFromSession} = require("../utils/http");
 const {Workspace} = require("../models/workspace");
 const {Document} = require("../models/documents");
@@ -14,6 +16,7 @@ const {validatedRequest} = require("../utils/middleware/validatedRequest");
 const {SystemSettings} = require("../models/systemSettings");
 const {Telemetry} = require("../models/telemetry");
 const {handleUploads} = setupMulter();
+const DEST_DIR = './storage/coder/';
 
 function workspaceEndpoints(app) {
   if (!app) return;
@@ -60,6 +63,29 @@ function workspaceEndpoints(app) {
       } catch (e) {
         serverLog(e.message, e);
         response.sendStatus(500).end();
+      }
+    }
+  );
+
+  app.post(
+    "/save_csv",
+    handleUploads.single("file"),
+    async function (request, response) {
+      if (!request.file) {
+        response.status(400).json({success: false, error: "No file uploaded"}).end();
+        return;
+      }
+
+      const {originalname, path: tempPath} = request.file;
+      const destFilePath = path.join(DEST_DIR, originalname);
+
+      try {
+        fs.renameSync(tempPath, destFilePath);
+        serverLog(`CSV file ${originalname} saved successfully in ${DEST_DIR}.`);
+        response.status(200).json({success: true, error: null});
+      } catch (e) {
+        serverLog(`Error saving file: ${e.message}`, e);
+        response.status(500).json({success: false, error: `Error saving file: ${e.message}`}).end();
       }
     }
   );
