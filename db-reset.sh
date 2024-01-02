@@ -40,7 +40,7 @@ chmod 777 ./anything-llm/server/storage/anythingllm.db
 container_id=$(docker ps -a -q -f name=^/anyth$)
 if [ ! -z "$container_id" ]; then
 
-  # docker start "$container_id"
+  docker start "$container_id"
     echo "Starting the WEB server..."
 else
   docker run -d --restart always \

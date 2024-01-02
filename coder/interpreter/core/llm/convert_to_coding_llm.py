@@ -54,7 +54,7 @@ def convert_to_coding_llm(text_llm, debug_mode=False):
                 if "syntax" in messages[-1]["output"].lower():  # Detect error
                     messages[-1][
                         "output"
-                    ] += "\nRemember you are not in a Jupyter notebook. Run shell by writing a markdown shell codeblock, not '!'."
+                    ] += "\nВы исполняете код не в среде Jupyter notebook. Запускайте shell, используя markdown shell codeblock, но не  '!'."
 
         messages = convert_to_openai_messages(messages, function_calling=False)
 
