@@ -126,7 +126,7 @@ const Workspace = {
     // Make sure Content-Type is not set, or remove it
     delete headers['Content-Type']; // Adjust this based on the structure of baseHeaders
 
-    const response = await fetch(`${(ID_DEV ? PYTHON_API : API_BASE)}/save_csv`, {
+    const response = await fetch(`${(API_BASE)}/save_csv`, {
       method: "POST",
       body: formData,
       headers: headers
