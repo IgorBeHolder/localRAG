@@ -109,25 +109,30 @@ if (process.env.IS_CODER === 'TRUE') {
           stream
             .on("data", (data) => {
               serverLog("@@@@@@@@@@ CommandOutput:", data, `'${data.toString()}'`);
-
               result = data.toString();
 
-              if (result === "> ") {
+              if (activeStream === null && result.trim().endsWith('(y/n):')) {
                 activeStream = stream;
+
+                executeSSHCommand("y\n", sshConnection, ws);
+              } else {
+                if (result === "> ") {
+                  activeStream = stream;
+                }
+
+                let chatResult = {
+                  id: uuidv4(),
+                  type: "textResponse",
+                  textResponse: result,
+                  sources: [],
+                  error: null,
+                  close: true
+                };
+
+                ws.send(JSON.stringify(chatResult));
+
+                serverLog("Stream is open, result was sent");
               }
-
-              let chatResult = {
-                id: uuidv4(),
-                type: "textResponse",
-                textResponse: result,
-                sources: [],
-                error: null,
-                close: true
-              };
-
-              ws.send(JSON.stringify(chatResult));
-
-              serverLog("Stream is open, result was sent");
             })
             .on("close", (code, signal) => {
               activeStream = null;
