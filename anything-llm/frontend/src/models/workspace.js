@@ -116,7 +116,7 @@ const Workspace = {
     return { response, data };
   },
 
-  uploadCsvFile: async function (slug, formData) {
+  uploadCsvFile: async function ( formData) {
     // Fetch configuration
     let headers = baseHeaders();
     // Make sure Content-Type is not set, or remove it
@@ -125,7 +125,7 @@ const Workspace = {
     const response = await fetch(`${(API_BASE)}/save_csv`, {
       method: "POST",
       body: formData,
-      headers: headers
+      // headers: headers
     });
 
     const data = await response.json();
