@@ -2,6 +2,8 @@ import os
 import pathlib
 from typing import List, Dict, Any, Union
 
+from schemas import EmbeddingOutput
+
 from sentence_transformers import SentenceTransformer
 
 
@@ -16,6 +18,8 @@ print(f"*** MODELS_PATH: {MODELS_PATH}")
 
 
 class ModelManager:
+    """Manage the Sentence Transformer model."""
+
     def __init__(self):
         """Initialize the Model Manager."""
         model_name = os.getenv("EMBEDDING_MODEL_NAME")
@@ -48,7 +52,9 @@ class ModelManager:
         print(f"{EMBEDDING_MODEL_NAME} is downloaded and saved to {model_path}")
         return model
 
-    async def embed_documents(self, text_list: Union[str, List[str]]) -> Dict[str, Any]:
+    async def embed_documents(
+        self, text_list: Union[str, List[str]]
+    ) -> EmbeddingOutput:
         """Generate embeddings for the provided text list and estimate token usage."""
         text_list = [text_list] if isinstance(text_list, str) else text_list
         embeddings = self.model.encode(text_list, device=self.device)
@@ -56,17 +62,17 @@ class ModelManager:
         # Calculate estimated token usage
         tokens = [len(text.split()) * float(AVER_WORD_TOKENS) for text in text_list]
 
-        return {
-            "object": "list",
-            "data": [
-                {"object": "embedding",
-                 "embedding": embedding.tolist(),
-                 "index": i,
-                 "usage": {"prompt_tokens": tokens[i],
-                           "total_tokens": tokens[i]}
-                 }
+        return EmbeddingOutput(
+            object="list",
+            data=[
+                {
+                    "object": "embedding",
+                    "embedding": embedding.tolist(),
+                    "index": i,
+                    "usage": {"prompt_tokens": tokens[i], "total_tokens": tokens[i]},
+                }
                 for i, embedding in enumerate(embeddings)
             ],
-            "model": self.model_name,
-            "usage": {"prompt_tokens": sum(tokens), "total_tokens": sum(tokens)},
-        }
+            model=self.model_name,
+            usage={"prompt_tokens": sum(tokens), "total_tokens": sum(tokens)},
+        )

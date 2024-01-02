@@ -31,15 +31,11 @@ services:
     container_name: nginx
     restart: always    
     image: nginx:last_com 
-    # environment variables are not used currently
-    # environment:
-    #   - HOST_SERVER_URI=${HOST_SERVER_URI} 
-    #   - MAIN_MODEL_SERVER_URI=${MAIN_MODEL_SERVER_URI}
     build: 
         context: .
         dockerfile: Dockerfile-nginx      
     ports:
-      - "3002:3002"
+      - 3002:3002
     depends_on:
       - embed  
     networks:
@@ -53,9 +49,9 @@ services:
     image: pgembeding
     restart: always
     environment:
-      POSTGRES_PASSWORD: example
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
-      - "5432:5432"
+      - 5432:5432
     volumes:
       - pgdata:/var/lib/postgresql/data
     networks:

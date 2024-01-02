@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
-tarball_name="sais-mistral-cpu"
-container_names=("anyth" "nginx")
+tarball_name="sais-openchat-cpu"
+container_names=("anyth" "nginx" )
 images_to_save=()
 
 for container_name in "${container_names[@]}"; do
@@ -19,7 +19,7 @@ for container_name in "${container_names[@]}"; do
     images_to_save+=("${container_name}:last_com")
 done
 
-images_to_save+=("llm-server:v2" "pgembeding" "embed:v1" )
+images_to_save+=("llm-server:v2" "pgembeding:latest" "embed:v1" "coder")
 
 echo "Saving docker images to a tarball..."
 docker save -o "$tarball_name.tar" "${images_to_save[@]}"

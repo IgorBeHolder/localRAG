@@ -116,7 +116,7 @@ class LogProbs(BaseModel):
 
 
 class CompletionResponseChoice(BaseModel):
-    index: int 
+    index: int
     text: str
     logprobs: Optional[LogProbs] = None
     finish_reason: Optional[Literal["stop", "length"]] = None

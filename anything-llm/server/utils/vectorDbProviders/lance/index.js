@@ -224,6 +224,7 @@ const LanceDb = {
   },
   query: async function (reqBody = {}) {
     const { namespace = null, input, workspace = {} } = reqBody;
+
     if (!namespace || !input) throw new Error("Invalid request body");
 
     const { client } = await this.connect();
@@ -260,19 +261,15 @@ const LanceDb = {
     };
 
     const memory_list = [
-      { role: "system", content: workspace.openAiPrompt },
+      { role: "system", content: workspace.openAiPrompt + '\nОтвечайте только на основании фактов из КОНТЕКСТа. Если в КОНТЕКСТе нет ответа, то ответьте "не знаю".' },
       context,
       {
         role: "user",
-        content: `Вопрос: ${input}"
-        В ответе используй информацию из предоставленного выше контекста.
-        Аргументируй ответ фактами только из контекста. Перед ответом внимательно изучи весь предоставленный контекст.
-        Отвечай кратко на русском языке только на последний вопрос.
-    `
+        content: '\nОтвечайте только на основании фактов из КОНТЕКСТа. Если в КОНТЕКСТе нет ответа, то ответьте "не знаю".\n Вопрос:' + input
       }];
     // console.log('LanceDb:QUERY memory:272', memory_list);
     const responseText = await LLMConnector.getChatCompletion(memory_list, {
-      temperature: workspace?.openAiTemp ?? 0.2,
+      temperature: workspace?.openAiTemp ?? 0.21,
     });
     return {
       response: responseText,
@@ -310,14 +307,12 @@ const LanceDb = {
       namespace,
       queryVector
     );
-    // FORMING THE MEMORY LIST FOR THE QUERY
+    // FORMING THE MEMORY LIST (chat mode)
     // const { BOS, EOS, assistance_prefix, end_of_turn, user_prefix } = prompt_templates();
     const sys_prompt = {
       role: "system",
       // content: BOS + workspace.openAiPrompt
-      content: workspace.openAiPrompt
-    };
-
+      content: workspace.openAiPrompt + '\nОтвечайте только на основании фактов из КОНТЕКСТа. Если в КОНТЕКСТе нет ответа, то ответьте "не знаю".' };
     const prompt = {
       role: "assistant",
       content:
@@ -331,14 +326,15 @@ const LanceDb = {
     const memory = [
       sys_prompt,
       prompt,
-      ...chatHistory,
+      ...chatHistory, // the chat history is added to the memory list
       {
         role: "user",
-        content: input + '\nАргументируй ответ фактами из контекста. Отвечай кратко на русском языке только на последний вопрос.'
+
+        content: input
       }];
     console.log('LanceDb:CHAT (from vectorized) memory:337', memory);
     const responseText = await LLMConnector.getChatCompletion(memory, {
-      temperature: workspace?.openAiTemp ?? 0.2,
+      temperature: workspace?.openAiTemp ?? 0.23,
     });
 
     return {

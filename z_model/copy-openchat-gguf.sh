@@ -13,6 +13,7 @@ declare -a files=(
   "README.md" 
   "config.json" 
   "openchat-3.5-1210.Q6_K.gguf" 
+  # SHA256: 697b7eb96a32befe3fc18761157085121346bbc7358caea1aa5fdf4c9bdfc69a
 )
 
 for file in "${files[@]}"

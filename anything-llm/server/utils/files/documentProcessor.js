@@ -3,6 +3,7 @@
 // so no additional security is needed on the endpoint directly. Auth is done however by the express
 // middleware prior to leaving the node-side of the application so that is good enough >:)
 
+const {serverLog} = require("../helpers");
 const mode = process.env.MODE;
 
 let PYTHON_API = mode === "production" ? "http://localhost:3005" : "http://0.0.0.0:3005";
@@ -13,7 +14,10 @@ console.log("PYTHON_API:*********************", PYTHON_API);
 async function checkPythonAppAlive() {
   return await fetch(`${PYTHON_API}`)
     .then((res) => res.ok)
-    .catch((e) => false);
+    .catch((e) => {
+      serverLog("PYTHON_API:******* ERROR", PYTHON_API, e);
+      return false;
+    });
 }
 
 async function acceptedFileTypes() {
@@ -48,23 +52,30 @@ async function processDocument(filename = "") {
     });
 }
 
-async function processCsvDocument(filename = "") {
-  if (!filename) return false;
-  // send filename to python app:
+async function processCsvDocument(file) {
+  if (!file) return false;
+
+  // Construct FormData and append the file
+  const formData = new FormData();
+  formData.append("file", file);
+
+  // Send file to Python API
   return await fetch(`${PYTHON_API}/save_csv`, {
     method: "POST",
-    body: JSON.stringify({filename})
+    body: formData
   })
-    .then((res) => {
-      if (!res.ok) throw new Error("Запрос не удался");
-      return res.json();
-    })
-    .then((res) => res)
-    .catch((e) => {
-      console.log(e.message);
-      return {success: false, reason: e.message};
-    });
+  .then((res) => {
+    if (!res.ok) throw new Error("Запрос на загрузку csv файла не удался");
+    return res.json();
+  })
+  .then((res) => res)
+  .catch((e) => {
+    serverLog("PYTHON_API:******* ERROR", PYTHON_API, e);
+    return {success: false, reason: e.message};
+  });
 }
+
+
 
 module.exports = {
   checkPythonAppAlive,

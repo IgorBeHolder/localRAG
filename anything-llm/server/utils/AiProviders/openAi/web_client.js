@@ -1,22 +1,22 @@
 const axios = require('axios');
-const { prompt_templates } = require('../../vectorDbProviders/lance/index');
-const { fetchModelName } = require("./model_name_fetch");
+const {prompt_templates} = require('../../vectorDbProviders/lance/index');
+const {fetchModelName} = require("./model_name_fetch");
 const {BOS, EOS, assistance_prefix, end_of_turn, user_prefix} = prompt_templates();
 
 const base_url = process.env.COMPLETION_MODEL_ENDPOINT;
 const url = base_url + '/v1/models';
 fetchModelName(url)
-    .then(modelId => {
-        if (modelId) {
-          global.COMPLETION_MODEL_NAME = modelId;
-          console.log("*** COMPLETION_MODEL_NAME", modelId);
-        } else {
-            console.log('No model ID returned or error occurred');
-        }
-    })
-    .catch(error => {
-        console.error('Error in fetching model:', error);
-    });
+  .then(modelId => {
+    if (modelId) {
+      global.COMPLETION_MODEL_NAME = modelId;
+      console.log("*** COMPLETION_MODEL_NAME", modelId);
+    } else {
+      console.log('No model ID returned or error occurred');
+    }
+  })
+  .catch(error => {
+    console.error('Error in fetching model:', error);
+  });
 
 function format_messages(messages = []) {
   const formattedHistory = [];
@@ -45,16 +45,29 @@ async function v1_chat_completions(messages, temperature) {
   const messages2string = messages;  // skip the formatting
 
   const url = base_url + '/v1/chat/completions';
-  const repeat_penalty = process.env.R_PENALTY;
-  const top_p = process.env.TOP_P;
+  const R_PENALTY = process.env.R_PENALTY;
+  const F_PENALTY = process.env.F_PENALTY;
+  const P_PENALTY = process.env.P_PENALTY;
+  const L_PENALTY = process.env.L_PENALTY;
+  const MAX_TOKENS = process.env.MAX_TOKENS;
+  const TOP_P = process.env.TOP_P;
+  const TOP_K = process.env.TOP_K;
+  const STOP = ["<|im_end|>", "<|im_start|>", "<|end_of_turn|>"];
   const compl_model = global.COMPLETION_MODEL_NAME;
 
 
   console.log('v1_chat_completions: *** url:', url);
   console.log('v1_chat_completions: *** completion_model:', compl_model);
   console.log('v1_chat_completions: *** temperature:', temperature);
-  console.log('v1_chat_completions: *** repeat_penalty:', repeat_penalty);
-  console.log('v1_chat_completions: *** top_p:', top_p);
+  console.log('v1_chat_completions: *** repetition_penalty R_PENALTY:', R_PENALTY);
+  console.log('v1_chat_completions: *** frequency_penalty F_PENALTY:', F_PENALTY);
+  console.log('v1_chat_completions: *** presence_penalty P_PENALTY:', P_PENALTY);
+  console.log('v1_chat_completions: *** length_penalty L_PENALTY:', L_PENALTY);
+  console.log('v1_chat_completions: *** max_tokens:', MAX_TOKENS);
+  console.log('v1_chat_completions: *** top_p:', TOP_P);
+  console.log('v1_chat_completions: *** top_k:', TOP_K);
+  console.log('v1_chat_completions: *** stop:', STOP);
+
 
   console.log('v1_chat_completions: *** messages:', messages2string);
 
@@ -63,19 +76,21 @@ async function v1_chat_completions(messages, temperature) {
     "model": compl_model,
     "messages": messages2string,
     "temperature": temperature,
-    "top_p": top_p,
-    // "presence_penalty": 0,
-    "frequency_penalty": repeat_penalty
-    // "repeat_penalty": repeat_penalty
-  };
-  // The presence penalty is a one - off additive contribution that applies to all tokens that
-  // have been sampled at least once and the frequency penalty is a contribution that is proportional
-  // to how often a particular token has already been sampled.
+    "top_p": TOP_P,
+    "top_k": TOP_K,
+    "repetition_penalty": R_PENALTY,
+    "frequency_penalty": F_PENALTY,
+    "max_tokens": MAX_TOKENS,
+    "presence_penalty": P_PENALTY,
+    // "length_penalty": L_PENALTY,
+    // "tokenizer.ggml.add_bos_token": "false",
+    "stop": STOP,
+    "spaces_between_special_tokens": "False"
 
-  // Reasonable values for the penalty coefficients are around 0.1 to 1 if the aim is to just reduce
-  // repetitive samples somewhat.If the aim is to strongly suppress repetition, then one can increase
-  // the coefficients up to 2, but this can noticeably degrade the quality of samples.Negative values
-  // can be used to increase the likelihood of repetition.
+  };
+
+  // https://github.com/vllm-project/vllm/blob/main/vllm/sampling_params.py
+  
   try {
     const response = await axios.post(url, payload,
       {
@@ -86,7 +101,7 @@ async function v1_chat_completions(messages, temperature) {
       }
     );
 
-    return response.data.choices[0].message.content; // the COMPLETION text
+    return response?.data?.choices?.[0]?.message?.content ?? compl_model + " not answered";
 
   } catch (error) {
     console.error('Error sending payload (prompt):', error);
@@ -112,13 +127,11 @@ async function v1_embeddings_openllm(textInput) {
         'Accept': 'application/json'
       }
     });
-    const response = data.length > 0 &&
+    return data.length > 0 &&
     // return an array of embeddings
     data.every((embd) => embd.hasOwnProperty("embedding"))
       ? data.map((embd) => embd.embedding)
       : null;
-
-    return response;
   } catch (error) {
     console.error('Error sending payload (textinput):', error);
     return null;

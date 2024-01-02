@@ -27,8 +27,8 @@ services:
       - ${MM_PORT}:${MM_PORT}
     ulimits:
       memlock:
-        soft: 17179869184
-        hard: 17179869184            
+        soft: -1
+        hard: -1            
     deploy:
       resources:
         reservations:

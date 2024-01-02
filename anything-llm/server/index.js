@@ -5,11 +5,10 @@ console.log("*** SSH_HOST", process.env.SSH_HOST);
 console.log("*** SSH_PORT", process.env.SSH_PORT);
 console.log("*** WS_PORT", process.env.WS_PORT);
 console.log("*** IS_CODER", process.env.IS_CODER);
+console.log("*** USE_SEM_SEARCH", process.env.USE_SEM_SEARCH);
 console.log("*** COMPLETION_MODEL_ENDPOINT", process.env.COMPLETION_MODEL_ENDPOINT);
 console.log("*** EMBEDDING_MODEL_ENDPOINT", process.env.EMBEDDING_MODEL_ENDPOINT);
 console.log("*** EMBEDDING_MODEL_NAME", process.env.EMBEDDING_MODEL_NAME);
-
-const WS_PORT = process.env.WS_PORT || 3006;
 
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -25,7 +24,7 @@ const {systemEndpoints} = require("./endpoints/system");
 const {workspaceEndpoints} = require("./endpoints/workspaces");
 //const {analystEndpoints} = require("./endpoints/analyst");
 const {chatEndpoints} = require("./endpoints/chat");
-const {getVectorDbClass} = require("./utils/helpers");
+const {getVectorDbClass, serverLog} = require("./utils/helpers");
 const {adminEndpoints} = require("./endpoints/admin");
 const {inviteEndpoints} = require("./endpoints/invite");
 const {utilEndpoints} = require("./endpoints/utils");
@@ -33,10 +32,13 @@ const {Telemetry} = require("./models/telemetry");
 const {developerEndpoints} = require("./endpoints/api");
 const setupTelemetry = require("./utils/telemetry");
 const {v4: uuidv4} = require("uuid");
-const {sem_search} = require("./utils/AiProviders/openAi/pseudossearsh");
+
 const app = express();
 const apiRouter = express.Router();
 const FILE_LIMIT = "3GB";
+
+const NO_MATCHES_PHRASE = "нет точного соответствия";
+const WS_PORT = process.env.WS_PORT || 3006;
 
 app.use(cors({
   // origin: 'http://localhost:3000',
@@ -59,10 +61,13 @@ const APP_PORT = process.env.SERVER_PORT || 3001;
 
 // WS+SSH FOR CODER MODE
 if (process.env.IS_CODER === 'TRUE') {
+  const {sem_search} = require("./utils/AiProviders/openAi/pseudo_search");
+
   let activeStream = null;
 
-  function executeSSHCommand(command, sshConnection, ws) {
-    console.log("@@@@@@@ executeSSHCommand", command);
+  const executeSSHCommand = (command, sshConnection, ws) => {
+    serverLog("@@@@@@@ executeSSHCommand", command);
+
     try {
       //sshConnection.exec(command, (err, stream) => {
       //  if (err) throw err;
@@ -79,14 +84,14 @@ if (process.env.IS_CODER === 'TRUE') {
       //  });
       //});
 
-
       if (activeStream) {
-        console.log("@@@@@@@@@@ activeStream", command);
+        serverLog("@@@@@@@@@@ activeStream", command);
+
         activeStream.write(command + "\n");
       } else {
         sshConnection.exec(command, (err, stream) => {
           if (err) {
-            console.error("Error executing command:", err);
+            serverLog("Error executing command:", err);
             ws.send("Error executing command");
             return;
           }
@@ -94,9 +99,7 @@ if (process.env.IS_CODER === 'TRUE') {
           let result = "";
           stream
             .on("data", (data) => {
-              if (process.env.NODE_ENV === "development") {
-                console.log("@@@@@@@@@@ CommandOutput:", data, `'${data.toString()}'`);
-              }
+              serverLog("@@@@@@@@@@ CommandOutput:", data, `'${data.toString()}'`);
 
               result = data.toString();
 
@@ -115,9 +118,7 @@ if (process.env.IS_CODER === 'TRUE') {
 
               ws.send(JSON.stringify(chatResult));
 
-              if (process.env.NODE_ENV === "development") {
-                console.log("Stream is open, result was sent");
-              }
+              serverLog("Stream is open, result was sent");
             })
             .on("close", (code, signal) => {
               activeStream = null;
@@ -125,38 +126,34 @@ if (process.env.IS_CODER === 'TRUE') {
               if (code) {
                 let chatResult = {
                   id: uuidv4(),
-                  type: "textResponse",
+                  type: "abort",
                   textResponse: "Connection close event",
                   sources: [],
                   error: null,
                   close: true
                 };
 
-                chatResult.error = {code, text: (code === 127 ? "-bash: no such command" : "-bash: unknown error")};
-
-                if (process.env.NODE_ENV === "development") {
-                  console.warn("@@@@@@@ SSH Result", code, signal);
-                }
+                chatResult.errorCode = code;
+                chatResult.error = (code === 127 ? "-bash: no such command" :
+                  (code === 1 ? "-ssh: answered with error" :
+                    "-bash: unknown error"));
 
                 ws.send(JSON.stringify(chatResult));
 
-                if (process.env.NODE_ENV === "development") {
-                  console.log("Stream closed with code " + code + " and signal " + signal + " result was sent");
-                }
+                serverLog("@@@@@@@ SSH Close code", code, "signal", signal);
               }
             })
             .on("exit", (code) => {
               //activeStream = null;
-              //
-              //console.log("@@@@@@@ SSH stream :: exit\n", {code});
+
+              serverLog("@@@@@@@ SSH stream :: exit\n", {code});
+
               //sshConnection.end();
             });
         });
       }
     } catch (e) {
-      if (process.env.NODE_ENV === "development") {
-        console.log("@@@@@@@ executeSSHCommand", e);
-      }
+      serverLog("@@@@@@@ executeSSHCommand", e);
     }
   }
 
@@ -164,33 +161,52 @@ if (process.env.IS_CODER === 'TRUE') {
     // Ваш обработчик HTTP-запросов (если необходимо)
   });
 
-  const wss = new WebSocket.Server({noServer: true});
+  const wss = new WebSocket.Server(
+    {
+      // port: WS_PORT
+      noServer: true
+    }
+  );
 
 // Используем middleware для управления соединением SSH
   server.on("upgrade", (request, socket, head) => {
-    if (process.env.NODE_ENV === "development") {
-      console.log("##################### WS upgrade");
-    }
-    sshMiddleware(request, {}, () => {
+    serverLog("##################### WS upgrade start sshMiddleware");
+
+    sshMiddleware(request, {}, (err) => {
       wss.handleUpgrade(request, socket, head, (ws) => {
-        if (request?.sshConnection) {
-          wss.emit("connection", ws, request, request?.sshConnection);
+        if (err) {
+          serverLog('##################### handleUpgrade', err);
+          wss.emit("sshError", ws, err);
         } else {
-          if (process.env.NODE_ENV === "development") {
-            console.log("##################### WS NO connection");
+          if (request?.sshConnection) {
+            wss.emit("connection", ws, request, request?.sshConnection);
+          } else {
+            serverLog("##################### WS NO connection");
           }
         }
       });
     });
   });
 
+  wss.on("sshError", (ws, error) => {
+    let chatResult = {
+      id: uuidv4(),
+      type: "abort",
+      textResponse: "NO SSH connection",
+      sources: [],
+      error: JSON.stringify(error),
+      close: true
+    };
+
+    ws.send(JSON.stringify(chatResult));
+  });
+
   wss.on("connection", (ws, request, sshConnection) => {
-    if (process.env.NODE_ENV === "development") {
-      console.log("##################### WS connection", activeStream ? {
-        keys: Object.keys(activeStream),
-        stdout: Object.keys(activeStream.stdout)
-      } : activeStream);
-    }
+    serverLog("##################### WS activeStream", activeStream !== null);
+    // serverLog("##################### WS connection", activeStream ? {
+    //   keys: Object.keys(activeStream),
+    //   stdout: Object.keys(activeStream.stdout)
+    // } : activeStream);
 
     activeStream = null;
 
@@ -199,19 +215,26 @@ if (process.env.IS_CODER === 'TRUE') {
     ws.on("message", (message) => {
       const command = message.toString();
 
-      if (process.env.NODE_ENV === "development") {
-        console.log("##################### WS message", command);
-      }
+      serverLog("##################### WS message", command);
 
       if (activeStream) {
-        sem_search(command).then(s => {
-          console.log('sem_search', s);
-
-          executeSSHCommand(s, sshConnection, ws);
-        });
-
         // Получаем команду от клиента и выполняем ее на сервере SSH
-        // executeSSHCommand(command, sshConnection, ws);
+
+        if (process.env.USE_SEM_SEARCH === "TRUE") {
+          sem_search(command, NO_MATCHES_PHRASE, function (s) {
+            if (s.error) {
+              serverLog("##################### WS sem_search", s.error);
+
+              executeSSHCommand(command, sshConnection, ws);
+            } else if (s.result) {
+              executeSSHCommand(s.result, sshConnection, ws);
+            }
+          });
+        } else {
+          serverLog("##################### skip sem_search");
+
+          executeSSHCommand(command, sshConnection, ws);
+        }
       }
     });
 
@@ -226,9 +249,7 @@ if (process.env.IS_CODER === 'TRUE') {
   });
 
   server.listen(WS_PORT, () => {
-    if (process.env.NODE_ENV === "development") {
-      console.log(`##################### WS Server is running on port ${WS_PORT}`);
-    }
+    serverLog(`##################### WS Server is running on port ${WS_PORT}`);
   });
 }
 
@@ -258,12 +279,10 @@ apiRouter.post("/v/:command", async (request, response) => {
       const resBody = await VectorDb[command](body);
       response.status(200).json({...resBody});
     } catch (e) {
-      // console.error(e)
-      console.error(JSON.stringify(e));
+      serverLog(JSON.stringify(e));
       response.status(500).json({error: e.message});
     }
   } catch (e) {
-    // console.log(e.message, e);
     response.sendStatus(500).end();
   }
 });
@@ -290,9 +309,7 @@ app.all("*", function (_, response) {
 app
   .listen(APP_PORT, async () => {
     await setupTelemetry();
-    if (process.env.NODE_ENV === "development") {
-      console.log(`Example app listening on port ${APP_PORT}`);
-    }
+    serverLog(`Example app listening on port ${APP_PORT}`);
   })
   .on("error", function (err) {
     process.once("SIGUSR2", function () {

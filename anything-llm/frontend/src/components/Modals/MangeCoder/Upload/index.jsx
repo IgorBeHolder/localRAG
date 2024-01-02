@@ -11,11 +11,9 @@ import showToast from "../../../../utils/toast";
 export default function UploadToWorkspace({workspace, fileTypes}) {
   const [ready, setReady] = useState(null);
   const [files, setFiles] = useState([]);
-
   const handleUploadSuccess = () => {
     showToast("Файл успешно загружен", "success");
   };
-
   const handleUploadError = (message) => {
     showToast(`Ошибка загрузки файла: ${message}`, "error");
   };
@@ -41,8 +39,8 @@ export default function UploadToWorkspace({workspace, fileTypes}) {
 
   useEffect(() => {
     async function checkProcessorOnline() {
-      const online = fileTypes.indexOf('.csv') > -1 ? await System.checkCsvUploadProcessorOnline() : await System.checkDocumentProcessorOnline();
-      setReady(online);
+      // const online = fileTypes.indexOf('.csv') > -1 ? await System.checkCsvUploadProcessorOnline() : await System.checkDocumentProcessorOnline();
+      setReady(true);
     }
 
     checkProcessorOnline();

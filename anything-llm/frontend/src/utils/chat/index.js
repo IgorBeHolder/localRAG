@@ -8,9 +8,9 @@ export default function handleChat(
   _chatHistory
 ) {
   const {uuid, textResponse: text, type, sources = [], error, close, typeWriter} = chatResult;
-  const textResponse = (text);
+  const textResponse = typeWriter ? safeTagsReplace(text) : text;
 
-  console.log('textResponse', remHistory, typeWriter, textResponse);
+  console.log('textResponse', remHistory, typeWriter, type, textResponse);
 
   if (type === "abort") {
     setChatHistory([

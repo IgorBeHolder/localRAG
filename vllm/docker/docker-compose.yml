@@ -7,18 +7,6 @@ services:
     # image: docker.io/vllm/vllm-openai:latest
     image: vllm/vllm-openai:latest
     restart: always
-    command:
-      - "--host"
-      - ${HOST}
-      - "--port"
-      - ${MM_PORT}
-      - "--model=/model-store/${COMPLETION_MODEL_NAME}"
-      # - "--tensor-parallel-size=${TP_SIZE}"
-    volumes:
-      - "../../model-store/:/model-store"
-    ports:
-      - ${MM_PORT}:${MM_PORT}
-    ipc: host
     environment:
       HOST: ${HOST}
       PORT: ${MM_PORT}
@@ -27,6 +15,22 @@ services:
       CUDA_HOME: "/usr/local/cuda"
       NVIDIA_VISIBLE_DEVICES: all
       TP_SIZE: ${TP_SIZE}
+      CHAT_TEMPLATE: ${CHAT_TEMPLATE}
+    ipc: host
+    command:
+      - "--host=${HOST}"
+      - "--port=${MM_PORT}"
+      - "--model=/model-store/${COMPLETION_MODEL_NAME}"
+      - "--tensor-parallel-size=${TP_SIZE}"
+      - "--trust_remote_code=True"
+      # - "--quantization=awq"
+      - "--chat-template=${CHAT_TEMPLATE}"
+    volumes:
+      - "../../model-store/:/model-store"
+    ports:
+      - ${MM_PORT}:${MM_PORT}
+
+
     deploy:
       resources:
         reservations:

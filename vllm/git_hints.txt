@@ -1,9 +1,0 @@
-#adding vllm as subtree:
-git remote add vllm https://github.com/vllm-project/vllm.git
-git fetch vllm
-git subtree add --prefix=vllm https://github.com/vllm-project/vllm.git main --squash
-
-
-# update vllm from the root repo path:
-git fetch vllm
-git subtree pull --prefix=vllm https://github.com/vllm-project/vllm.git main --squash

@@ -38,8 +38,10 @@ RUN poetry install --no-dev
 RUN pip3 install --upgrade pip
 
 RUN --mount=type=cache,target=/tmp/pip_cache pip3 install \
-    matplotlib seaborn openpyxl \
-    sweetviz open-interpreter websockets
+    matplotlib seaborn plotly openpyxl \
+    sweetviz open-interpreter==0.1.17 websockets \
+    scikit-learn datetime
+
 
     # pydantic==2.4.0 pandas-profiling
     # dataprep scikit-learn
@@ -61,7 +63,7 @@ EXPOSE 22
 
 EXPOSE 3006
 
-RUN mkdir /home/content
+# RUN mkdir /home/content
 COPY interpreter/terminal_interface/config.yaml \
     /usr/local/lib/python3.11/site-packages/interpreter/terminal_interface/config.yaml
 

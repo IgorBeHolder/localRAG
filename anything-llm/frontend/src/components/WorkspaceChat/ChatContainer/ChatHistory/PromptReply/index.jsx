@@ -12,11 +12,26 @@ const PromptReply = forwardRef(({
                                   error,
                                   workspace,
                                   sources = [],
-                                  typeWriterRef,
                                   closed = true,
+                                  typeWriterRef,
                                   typeWriter = false
                                 }, ref) => {
     if (!reply && sources.length === 0 && !pending && !error) return null;
+
+    if (typeWriter) {
+      return (
+        <div key={uuid} ref={ref} className="chat__message mb-4 flex justify-start items-end">
+          <Jazzicon size={30} user={{uid: workspace.slug}}/>
+          <div
+            className={MSG_STYLE() + " bg-gray-400 dark:bg-stone-700 border border-gray-700"}>
+            <div
+              ref={typeWriterRef}
+              className="typewriter-block overflow-auto whitespace-pre-line text-slate-800 dark:text-slate-200 font-[500] md:font-semibold text-sm md:text-base"/>
+            <Citations sources={sources}/>
+          </div>
+        </div>
+      );
+    }
 
     if (pending) {
       return (
@@ -38,7 +53,8 @@ const PromptReply = forwardRef(({
           <Jazzicon size={30} user={{uid: workspace.slug}}/>
           <div className={MSG_STYLE() + " bg-red-50 ml-2 text-red-500 border border-red-300 flex flex-col"}>
               <span className={`inline-block`}>
-                <AlertTriangle className="h-4 w-4 mb-1 inline-block"/> Не удалось ответить на сообщение.
+                <AlertTriangle
+                  className="h-4 w-4 mb-1 inline-block"/> {reply || "Не удалось ответить на сообщение."}
               </span>
             <span className="text-xs">Причина: {error || "неизвестна"}</span>
           </div>
@@ -47,17 +63,13 @@ const PromptReply = forwardRef(({
     }
 
     return (
-      <div key={uuid} ref={ref} className="mb-4 flex justify-start items-end">
+      <div key={uuid} ref={ref} className="chat__message mb-4 flex justify-start items-end">
         <Jazzicon size={30} user={{uid: workspace.slug}}/>
-        <div
-          className={MSG_STYLE() + " bg-gray-400 dark:bg-stone-700 border border-gray-700"}>
-          {typeWriter ? <div
-              ref={typeWriterRef}
-              className="typewriter-block overflow-auto whitespace-pre-line text-slate-800 dark:text-slate-200 font-[500] md:font-semibold text-sm md:text-base"/> :
-            <div
-              className="break-all-in-children overflow-auto whitespace-pre-line text-slate-800 dark:text-slate-200 flex flex-col gap-y-1 font-[500] md:font-semibold text-sm md:text-base"
-              dangerouslySetInnerHTML={{__html: renderMarkdown(reply)}}
-            />}
+        <div className={MSG_STYLE() + " bg-gray-400 dark:bg-stone-700 border border-gray-700"}>
+          <div
+            className="break-all-in-children overflow-auto whitespace-pre-line text-slate-800 dark:text-slate-200 flex flex-col gap-y-1 font-[500] md:font-semibold text-sm md:text-base"
+            dangerouslySetInnerHTML={{__html: renderMarkdown(reply)}}
+          />
           <Citations sources={sources}/>
         </div>
       </div>

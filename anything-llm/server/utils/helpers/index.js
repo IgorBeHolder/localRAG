@@ -51,9 +51,20 @@ function fixEncoding(str) {
   return decoder.decode(bytes);
 }
 
+function serverLog(...arg) {
+  if (process.env.NODE_ENV === "development") {
+    if (arg.length) {
+      arg.forEach(a => {
+        console.log(a);
+      });
+    }
+  }
+}
+
 module.exports = {
   getVectorDbClass,
   getLLMProvider,
+  serverLog,
   toChunks,
   fixEncoding
 };
