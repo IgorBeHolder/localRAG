@@ -67,7 +67,7 @@ const PromptReply = forwardRef(({
         <Jazzicon size={30} user={{uid: workspace.slug}}/>
         <div className={MSG_STYLE() + " bg-gray-400 dark:bg-stone-700 border border-gray-700"}>
           <div
-            className="break-all-in-children overflow-auto whitespace-pre-line text-slate-800 dark:text-slate-200 flex flex-col gap-y-1 font-[500] md:font-semibold text-sm md:text-base"
+            className="bre-ak-all-in-children overflow-auto whitespace-pre-line text-slate-800 dark:text-slate-200 flex flex-col gap-y-1 font-[500] md:font-semibold text-sm md:text-base"
             dangerouslySetInnerHTML={{__html: renderMarkdown(reply)}}
           />
           <Citations sources={sources}/>

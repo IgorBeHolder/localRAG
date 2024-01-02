@@ -101,7 +101,7 @@ if (process.env.IS_CODER === 'TRUE') {
             .on("data", (data) => {
               serverLog("@@@@@@@@@@ CommandOutput:", data, `${data.toString()}`);
 
-              result = data.toString();
+              result = data.toString().trim();
 
               if (result === "> ") {
                 activeStream = stream;

@@ -21,7 +21,7 @@ export default function DefaultChatContainer() {
   useEffect(() => {
     const fetchData = async () => {
       const fetchedMessages = await System.getWelcomeMessages();
-      setFetchedMessages(fetchedMessages);
+      setFetchedMessages(fetchedMessages || []);
     };
     fetchData();
   }, []);

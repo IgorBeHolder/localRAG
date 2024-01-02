@@ -113,14 +113,6 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
     if (mode === "analyst") {
       const print = text.split('\n');
 
-      let _chatHistory = [...chatHistory];
-
-      _chatHistory[_chatHistory.length - 1].userMessage += "\n" + message;
-
-      setChatHistory(_chatHistory);
-
-      console.log('_chatHistory', _chatHistory);
-
       if (typeWriterRef?.current && typeWriterInstance?.state) {
         if (typeWriterIsBusy) {
           console.log('typeWriterIsBusy', typeWriterIsBusy);
@@ -129,7 +121,7 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
           print.forEach(s => {
             typeWriterInstance
               .pauseFor(TYPE_STRING_DELAY)
-              .typeString(s + "\n")
+              .typeString(s)
               .callFunction((e) => {
                 twUpdateScroll(e.elements.container);
               });
@@ -147,7 +139,7 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
         setTypeWriterStack(typeWriterStack.concat(print));
       }
     }
-  }, [typeWriterRef, typeWriterInstance, mode, chatHistory, typeWriterStack, typeWriterIsBusy]);
+  }, [typeWriterRef, typeWriterInstance, mode, typeWriterStack, typeWriterIsBusy]);
 
   if (mode === "analyst" && isCoder) {
     //Public API that will echo messages sent to it back to the client
@@ -155,6 +147,7 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
 
     const onWsMessage = useCallback((msg) => {
       let chatResult = JSON.parse(msg.data);
+      const typeString = chatResult.textResponse;
 
       console.log('onWsMessage', msg, chatHistory, chatResult);
 
@@ -174,13 +167,13 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
         );
       } else {
         chatResult.typeWriter = true;
-        chatResult.textResponse = (chatResult.textResponse.trim());
+        chatResult.textResponse = [...typeWriterStack, typeString.trim()].join("\n");
 
         const remHistory = resetTypewriter(chatHistory.slice(0, -1));
 
         let _chatHistory = [...remHistory];
 
-        console.log("chatResult", chatResult, _chatHistory);
+        console.log("chatResult", chatResult, _chatHistory, typeWriterStack);
 
         // const prevChatHistory = [
         //   ...resetTypewriter(chatHistory),
@@ -227,6 +220,7 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
         //   chatResult.textResponse = chatHistory[0].content + "\n" + chatResult.textResponse;
         // }
 
+
         handleChat(
           chatResult,
           setLoadingResponse,
@@ -235,7 +229,7 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
           _chatHistory
         );
 
-        typeMessage(chatResult.textResponse);
+        typeMessage(typeString);
 
         setChatHistory(_chatHistory);
         setLoadingResponse(false);
