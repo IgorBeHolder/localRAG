@@ -10,7 +10,8 @@ FILETYPES = {
     '.pdf': as_pdf,
     '.docx': as_docx,
     '.odt': as_odt,
-    '.mbox': as_mbox, 
+    '.mbox': as_mbox,
+    '.csv': as_text
 }
 
 ACCEPTED_MIMES = {
