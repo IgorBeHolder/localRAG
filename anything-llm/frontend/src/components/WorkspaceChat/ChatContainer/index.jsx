@@ -22,7 +22,6 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
   const [connAttempt, setConnAttempt] = useState(1);
   const [chatHistory, setChatHistory] = useState(knownHistory);
   const [command, setCommand] = useState("");
-  // const [typeWriterStack, setTypeWriterStack] = useState([]);
   const [typeWriterIsBusy, setTypeWriterIsBusy] = useState(false);
   const [typeWriterRef, setTypeWriterRef] = useState(null);
   const [typeWriterInstance, setTypeWriterInstance] = useState(null);
@@ -53,7 +52,6 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
     return arr.map((m, mi) => {
       if (m.typeWriter) {
         m.typeWriter = false;
-        // m.content = safeTagsReplace(m.content);
       }
 
       return m;
@@ -77,7 +75,6 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
       if (ref?.current) {
         const tw = new Typewriter(ref.current, {
           delay: TYPE_EFFECT_DELAY,
-          // skipAddStyles: true,
           autoStart: false,
           stringSplitter
         });
@@ -175,51 +172,7 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
 
         console.log("chatResult", chatResult, _chatHistory, typeWriterStack);
 
-        // const prevChatHistory = [
-        //   ...resetTypewriter(chatHistory),
-        //   {
-        //     ...chatResult
-        // content: safeTagsReplace(chatResult.textResponse),
-        // role: "assistant",
-        // typeWriter: false,
-        // pending: false,
-        // userMessage: message,
-        // animate: false
-        //   }
-        // ];
-
-        // setChatHistory(prevChatHistory);
-
-        // handleChat(
-        //   chatResult,
-        //   setLoadingResponse,
-        //   setChatHistory,
-        //   remHistory,
-        //   _chatHistory
-        // );
-
         console.log('lastChatMessage', chatHistory, _chatHistory);
-
-        // if (_chatHistory.length) {
-        //   let lastChatMessage = _chatHistory[_chatHistory.length - 1];
-        //
-        //   if (lastChatMessage.role === "assistant") {
-        //     _chatHistory[_chatHistory.length - 1].content += ("\n" + chatResult.textResponse);
-        //
-        //     console.log('lastChatMessage', lastChatMessage, _chatHistory);
-        //   } else {
-        // handleChat(
-        //   chatResult,
-        //   setLoadingResponse,
-        //   setChatHistory,
-        //   remHistory,
-        //   _chatHistory
-        // );
-        // }
-        // } else if (chatHistory.length === 1) {
-        //   chatResult.textResponse = chatHistory[0].content + "\n" + chatResult.textResponse;
-        // }
-
 
         handleChat(
           chatResult,
@@ -395,6 +348,53 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
         userMessage: message,
         animate: true
       }
+    ];
+
+    setChatHistory(prevChatHistory);
+    setMessage("");
+
+    if (mode === "analyst") {
+      setNewWsMessage(true);
+      setCommand(message);
+    } else {
+      setLoadingResponse(true);
+    }
+  };
+
+  return (
+    <div
+      className="main-content flex-1 lg:max-w-[var(--max-content)] relative bg-white dark:bg-black-900 lg:h-full"
+    >
+
+      <div className="main-box relative flex flex-col w-full h-full overflow-y-auto p-[16px] lg:p-[32px] !pb-0">
+        <div className="flex flex-col flex-1 w-full bg-white shadow-md relative">
+          {
+            (ID_DEV && mode === "analyst" && connStatus !== "Open") ?
+              <div className="flex flex-col w-full flex-grow-1 p-1 md:p-8 lg:p-[50px]">
+                WS Status: {connStatus}
+              </div> :
+              <ChatHistory mode={mode} history={chatHistory} workspace={workspace} analyst={mode === "analyst"}
+                           lastMessageRef={lastMessageRef}/>
+          }
+        </div>
+      </div>
+      <PromptInput
+        analyst={mode === "analyst"}
+        resetChatSSH={resetChatSSH}
+        sendEnterSSH={sendEnterSSH}
+        sendCtrlCSSH={sendCtrlCSSH}
+        submit={handleSubmit}
+        mode={mode}
+        isCoder={isCoder}
+        workspace={workspace}
+        message={message}
+        onChange={handleMessageChange}
+        inputDisabled={loadingResponse}
+        buttonDisabled={loadingResponse}
+      />
+    </div>
+  );
+}
     ];
 
     setChatHistory(prevChatHistory);
