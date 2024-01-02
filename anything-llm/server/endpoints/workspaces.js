@@ -8,7 +8,6 @@ const {getVectorDbClass, fixEncoding, serverLog} = require("../utils/helpers");
 const {setupMulter} = require("../utils/files/multer");
 const {
   checkPythonAppAlive,
-  processCsvDocument,
   processDocument
 } = require("../utils/files/documentProcessor");
 const {validatedRequest} = require("../utils/middleware/validatedRequest");
@@ -94,35 +93,6 @@ function workspaceEndpoints(app) {
       );
       await Telemetry.sendTelemetry("document_uploaded");
       response.status(200).json({success: true, error: null});
-    }
-  );
-
-  const DEST_DIR = '../storage/coder/';
-
-  app.post(
-    "/save_csv",
-    handleUploads.single("file"),
-    async function (request, response) {
-      if (!request.file) {
-        response.status(400).json({success: false, error: "No file uploaded"}).end();
-        return;
-      }
-
-      const {originalname, path: tempPath} = request.file;
-
-      // Construct the destination file path
-      const destFilePath = path.join(DEST_DIR, originalname);
-
-      try {
-        // Move the file from the temp path to the destination directory
-        fs.renameSync(tempPath, destFilePath);
-
-        serverLog(`CSV file ${originalname} saved successfully in ${DEST_DIR}.`);
-        response.status(200).json({success: true, error: null});
-      } catch (e) {
-        serverLog(e.message, e);
-        response.status(500).json({success: false, error: "Error saving file"}).end();
-      }
     }
   );
 

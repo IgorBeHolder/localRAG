@@ -1,22 +1,22 @@
-import {API_BASE, ID_DEV, PYTHON_API} from "../utils/constants";
-import {baseHeaders} from "../utils/request";
+import { API_BASE, ID_DEV, PYTHON_API } from "../utils/constants";
+import { baseHeaders } from "../utils/request";
 
 const Workspace = {
   new: async function (data = {}) {
-    const {workspace, message} = await fetch(`${API_BASE}/workspace/new`, {
+    const { workspace, message } = await fetch(`${API_BASE}/workspace/new`, {
       method: "POST",
       body: JSON.stringify(data),
       headers: baseHeaders()
     })
       .then((res) => res.json())
       .catch((e) => {
-        return {workspace: null, message: e.message};
+        return { workspace: null, message: e.message };
       });
 
-    return {workspace, message};
+    return { workspace, message };
   },
   update: async function (slug, data = {}) {
-    const {workspace, message} = await fetch(
+    const { workspace, message } = await fetch(
       `${API_BASE}/workspace/${slug}/update`,
       {
         method: "POST",
@@ -26,13 +26,13 @@ const Workspace = {
     )
       .then((res) => res.json())
       .catch((e) => {
-        return {workspace: null, message: e.message};
+        return { workspace: null, message: e.message };
       });
 
-    return {workspace, message};
+    return { workspace, message };
   },
   modifyEmbeddings: async function (slug, changes = {}) {
-    const {workspace, message} = await fetch(
+    const { workspace, message } = await fetch(
       `${API_BASE}/workspace/${slug}/update-embeddings`,
       {
         method: "POST",
@@ -42,10 +42,10 @@ const Workspace = {
     )
       .then((res) => res.json())
       .catch((e) => {
-        return {workspace: null, message: e.message};
+        return { workspace: null, message: e.message };
       });
 
-    return {workspace, message};
+    return { workspace, message };
   },
   chatHistory: async function (slug) {
     return await fetch(`${API_BASE}/workspace/${slug}/chats`, {
@@ -56,10 +56,10 @@ const Workspace = {
       .then((res) => res.history || [])
       .catch(() => []);
   },
-  sendChat: async function ({slug}, message, mode = "query") {
+  sendChat: async function ({ slug }, message, mode = "query") {
     return await fetch(`${API_BASE}/workspace/${slug}/chat`, {
       method: "POST",
-      body: JSON.stringify({message, mode}),
+      body: JSON.stringify({ message, mode }),
       headers: baseHeaders()
     })
       .then((res) => res.json())
@@ -68,10 +68,10 @@ const Workspace = {
         return null;
       });
   },
-  sendCoder: async function ({slug}, message, mode = "analyst") {
+  sendCoder: async function ({ slug }, message, mode = "analyst") {
     return await fetch(`${API_BASE}/analyst/${slug}/analyst`, {
       method: "POST",
-      body: JSON.stringify({message, mode}),
+      body: JSON.stringify({ message, mode }),
       headers: baseHeaders()
     })
       .then((res) => res.json())
@@ -113,17 +113,27 @@ const Workspace = {
     });
 
     const data = await response.json();
-    return {response, data};
+    return { response, data };
   },
-  uploadCsvFile: async function (slug, formData) {
+
+  uploadCsvFile: async function (slug, file) {
+    // Create a FormData object
+    const formData = new FormData();
+    formData.append('file', file); // Append the file with key 'file'
+
+    // Fetch configuration
+    let headers = baseHeaders();
+    // Make sure Content-Type is not set, or remove it
+    delete headers['Content-Type']; // Adjust this based on the structure of baseHeaders
+
     const response = await fetch(`${(ID_DEV ? PYTHON_API : API_BASE)}/save_csv`, {
       method: "POST",
       body: formData,
-      headers: baseHeaders() 
+      headers: headers
     });
 
     const data = await response.json();
-    return {response, data};
+    return { response, data };
   }
 };
 
