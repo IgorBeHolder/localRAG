@@ -116,11 +116,7 @@ const Workspace = {
     return { response, data };
   },
 
-  uploadCsvFile: async function (slug, file) {
-    // Create a FormData object
-    const formData = new FormData();
-    formData.append('file', file); // Append the file with key 'file'
-
+  uploadCsvFile: async function (slug, formData) {
     // Fetch configuration
     let headers = baseHeaders();
     // Make sure Content-Type is not set, or remove it
@@ -135,6 +131,7 @@ const Workspace = {
     const data = await response.json();
     return { response, data };
   }
+
 };
 
 export default Workspace;
