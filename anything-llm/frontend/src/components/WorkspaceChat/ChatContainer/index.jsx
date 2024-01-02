@@ -10,13 +10,19 @@ import {ID_DEV, TYPE_EFFECT_DELAY, TYPE_STRING_DELAY, WS_RECONNECT_ATTEMPTS, WS_
 import {safeTagsReplace} from "../../../utils/functions.js";
 import renderMarkdown from "../../../utils/chat/markdown.js";
 
+let typeWriterStack = [];
+
+const setTypeWriterStack = (arr) => {
+  typeWriterStack = [...arr];
+}
+
 export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
   const [message, setMessage] = useState("");
   const [connStatus, setConnStatus] = useState("");
   const [connAttempt, setConnAttempt] = useState(1);
   const [chatHistory, setChatHistory] = useState(knownHistory);
   const [command, setCommand] = useState("");
-  const [typeWriterStack, setTypeWriterStack] = useState([]);
+  // const [typeWriterStack, setTypeWriterStack] = useState([]);
   const [typeWriterIsBusy, setTypeWriterIsBusy] = useState(false);
   const [typeWriterRef, setTypeWriterRef] = useState(null);
   const [typeWriterInstance, setTypeWriterInstance] = useState(null);
@@ -75,7 +81,7 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
 
           typeWriterStack.forEach(str => {
             tw
-              .typeString((str))
+              .typeString(str + "\n")
               .callFunction((e) => {
                 setTimeout(() => {
                   e.elements.container.scrollIntoView({behavior: "smooth", block: "start"});
@@ -111,7 +117,7 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
           print.forEach(s => {
             typeWriterInstance
               .pauseFor(TYPE_STRING_DELAY)
-              .typeString(s)
+              .typeString(s + "\n")
               .callFunction((e) => {
                 setTimeout(() => {
                   e.elements.container.scrollIntoView({behavior: "smooth", block: "start"});
