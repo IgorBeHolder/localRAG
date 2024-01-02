@@ -27,7 +27,7 @@ export default function PromptInput({
   const dispatch = useDispatch();
   const [showMenu, setShowMenu] = useState(false);
   const formRef = useRef(null);
-  const [_, setFocused] = useState(false);
+  const [isFocused, setFocused] = useState(false);
   const handleSubmit = (e) => {
     setFocused(false);
     submit(e);
