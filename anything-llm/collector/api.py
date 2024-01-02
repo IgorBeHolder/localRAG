@@ -51,44 +51,44 @@ def root():
 # DEST_DIRECTORY = os.getenv("CODER_DIR")
 
 
-DEST_DIRECTORY = "./server/storage/coder"
+# DEST_DIRECTORY = "./server/storage/coder"
 
 
-@api.route("/save_csv", methods=["POST"])
-def save_csv_file():
-    api.logger.info("Received request to /save_csv")
+# @api.route("/save_csv", methods=["POST"])
+# def save_csv_file():
+#     api.logger.info("Received request to /save_csv")
 
-    if "file" not in request.files:
-        api.logger.error("No file part in the request")
-        return jsonify({"message": "No file part in the request"}), 400
+#     if "file" not in request.files:
+#         api.logger.error("No file part in the request")
+#         return jsonify({"message": "No file part in the request"}), 400
 
-    file = request.files["file"]
-    file_path = os.path.join(DEST_DIRECTORY, file.filename)
+#     file = request.files["file"]
+#     file_path = os.path.join(DEST_DIRECTORY, file.filename)
 
-    api.logger.info(f"Received file: {file.filename}")
+#     api.logger.info(f"Received file: {file.filename}")
 
-    if file.filename == "":
-        api.logger.error("No file selected")
-        return jsonify({"message": "Файл не выбран"}), 400
+#     if file.filename == "":
+#         api.logger.error("No file selected")
+#         return jsonify({"message": "Файл не выбран"}), 400
 
-    if file and file.filename.endswith(".csv"):
-        api.logger.info(f"File is a CSV: {file.filename}")
+#     if file and file.filename.endswith(".csv"):
+#         api.logger.info(f"File is a CSV: {file.filename}")
 
-        if not os.path.exists(DEST_DIRECTORY):
-            try:
-                os.makedirs(DEST_DIRECTORY)
-                api.logger.info(f"Created directory: {DEST_DIRECTORY}")
-            except Exception as e:
-                api.logger.error(f"Error creating directory: {e}")
-                return jsonify({"message": "Internal Server Error"}), 500
+#         if not os.path.exists(DEST_DIRECTORY):
+#             try:
+#                 os.makedirs(DEST_DIRECTORY)
+#                 api.logger.info(f"Created directory: {DEST_DIRECTORY}")
+#             except Exception as e:
+#                 api.logger.error(f"Error creating directory: {e}")
+#                 return jsonify({"message": "Internal Server Error"}), 500
 
-        try:
-            file.save(file_path)
-            api.logger.info(f"File saved successfully: {file_path}")
-            return jsonify({"message": f"Файл {file.filename} успешно загружен"}), 200
-        except Exception as e:
-            api.logger.error(f"Error saving file: {e}")
-            return jsonify({"message": "Internal Server Error"}), 500
+#         try:
+#             file.save(file_path)
+#             api.logger.info(f"File saved successfully: {file_path}")
+#             return jsonify({"message": f"Файл {file.filename} успешно загружен"}), 200
+#         except Exception as e:
+#             api.logger.error(f"Error saving file: {e}")
+#             return jsonify({"message": "Internal Server Error"}), 500
 
-    api.logger.error(f"Unsupported file type: {file.filename}")
-    return jsonify({"message": "Тип файла не поддерживается"}), 400
+#     api.logger.error(f"Unsupported file type: {file.filename}")
+#     return jsonify({"message": "Тип файла не поддерживается"}), 400
