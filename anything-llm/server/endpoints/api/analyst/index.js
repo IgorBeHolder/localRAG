@@ -510,7 +510,7 @@ function apiAnalystEndpoints(app) {
     }
   );
 
-  const DEST_DIR = '../storage/coder/';
+  const DEST_DIR = './storage/coder/';
 
   app.post(
     "/save_csv",
