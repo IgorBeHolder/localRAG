@@ -172,8 +172,8 @@ export default function WorkspaceSettings({workspace}) {
               </div>
               <textarea
                 name="openAiPrompt"
-                maxLength={512}
-                rows={5}
+                maxLength={2048}
+                rows={7}
                 defaultValue={workspace?.openAiPrompt ?? DEFAULT_CHAT_OPTIONS.openAiPrompt}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-stone-600 dark:border-stone-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Учитывая следующий разговор, соответствующий контекст и дополнительный вопрос, ответьте на текущий вопрос, который задает пользователь. Отправьте только свой ответ на вопрос с учетом приведенной выше информации, следуя инструкциям пользователя по мере необходимости."

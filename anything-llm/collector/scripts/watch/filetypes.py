@@ -18,5 +18,6 @@ ACCEPTED_MIMES = {
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
     'application/vnd.oasis.opendocument.text': ['.odt'],
     'application/pdf': ['.pdf'],
-    'application/mbox': ['.mbox'], 
+    'application/mbox': ['.mbox'],
+    'text/csv': ['.csv']  # Added CSV MIME type
 }
