@@ -49,18 +49,25 @@ async function v1_chat_completions(messages, temperature) {
   const F_PENALTY = process.env.F_PENALTY;
   const P_PENALTY = process.env.P_PENALTY;
   const L_PENALTY = process.env.L_PENALTY;
+  const MAX_TOKENS = process.env.MAX_TOKENS;
   const TOP_P = process.env.TOP_P;
+  const TOP_K = process.env.TOP_K;
+  const STOP = ["<|im_end|>", "<|im_start|>", "<|end_of_turn|>"];
   const compl_model = global.COMPLETION_MODEL_NAME;
 
 
   console.log('v1_chat_completions: *** url:', url);
   console.log('v1_chat_completions: *** completion_model:', compl_model);
   console.log('v1_chat_completions: *** temperature:', temperature);
-  console.log('v1_chat_completions: *** repeat_penalty R_PENALTY:', R_PENALTY);
+  console.log('v1_chat_completions: *** repetition_penalty R_PENALTY:', R_PENALTY);
   console.log('v1_chat_completions: *** frequency_penalty F_PENALTY:', F_PENALTY);
   console.log('v1_chat_completions: *** presence_penalty P_PENALTY:', P_PENALTY);
   console.log('v1_chat_completions: *** length_penalty L_PENALTY:', L_PENALTY);
+  console.log('v1_chat_completions: *** max_tokens:', MAX_TOKENS);
   console.log('v1_chat_completions: *** top_p:', TOP_P);
+  console.log('v1_chat_completions: *** top_k:', TOP_K);
+  console.log('v1_chat_completions: *** stop:', STOP);
+
 
   console.log('v1_chat_completions: *** messages:', messages2string);
 
@@ -70,19 +77,20 @@ async function v1_chat_completions(messages, temperature) {
     "messages": messages2string,
     "temperature": temperature,
     "top_p": TOP_P,
-    "repeat_penalty": R_PENALTY,
+    "top_k": TOP_K,
+    "repetition_penalty": R_PENALTY,
     "frequency_penalty": F_PENALTY,
-    "presence_penalty": P_PENALTY,    
-    "length_penalty": L_PENALTY
-  };
-  // The presence penalty is a one - off additive contribution that applies to all tokens that
-  // have been sampled at least once and the frequency penalty is a contribution that is proportional
-  // to how often a particular token has already been sampled.
+    "max_tokens": MAX_TOKENS,
+    "presence_penalty": P_PENALTY,
+    // "length_penalty": L_PENALTY,
+    // "tokenizer.ggml.add_bos_token": "false",
+    "stop": STOP,
+    "spaces_between_special_tokens": "False"
 
-  // Reasonable values for the penalty coefficients are around 0.1 to 1 if the aim is to just reduce
-  // repetitive samples somewhat.If the aim is to strongly suppress repetition, then one can increase
-  // the coefficients up to 2, but this can noticeably degrade the quality of samples.Negative values
-  // can be used to increase the likelihood of repetition.
+  };
+
+  // https://github.com/vllm-project/vllm/blob/main/vllm/sampling_params.py
+  
   try {
     const response = await axios.post(url, payload,
       {

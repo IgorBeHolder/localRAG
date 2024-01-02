@@ -36,10 +36,12 @@ echo "Copying db file..."
 cp ./client-files/anythingllm.db ./anything-llm/server/storage/anythingllm.db
 chmod 777 ./anything-llm/server/storage/anythingllm.db
 
-  echo "Starting the WEB server..."
+
 container_id=$(docker ps -a -q -f name=^/anyth$)
 if [ ! -z "$container_id" ]; then
-  docker start "$container_id"
+
+  # docker start "$container_id"
+    echo "Starting the WEB server..."
 else
   docker run -d --restart always \
     --name anyth \
@@ -53,7 +55,9 @@ else
     -p 3001:3001 \
     --network llm-net \
     anyth:last_com
+
+  echo -e "Web server started.\n-----------------------------"
 fi
-echo -e "Web server started.\n-----------------------------"
+
 
 

@@ -265,7 +265,7 @@ const LanceDb = {
       context,
       {
         role: "user",
-        content: input
+        content: '\nОтвечайте только на основании фактов из КОНТЕКСТа. Если в КОНТЕКСТе нет ответа, то ответьте "не знаю".\n Вопрос:' + input
       }];
     // console.log('LanceDb:QUERY memory:272', memory_list);
     const responseText = await LLMConnector.getChatCompletion(memory_list, {

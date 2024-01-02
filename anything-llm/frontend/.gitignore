@@ -24,3 +24,5 @@ dist-ssr
 *.sw?
 bundleinspector.html
 .env.production
+.vite/
+
