@@ -44,7 +44,7 @@ const HistoricalMessage = forwardRef(
         <div
           className={MSG_STYLE() + " bg-gray-400 dark:bg-stone-700 border border-gray-700"}>
           <div
-            className="break-all-in-children overflow-auto whitespace-pre-line text-slate-800 dark:text-slate-200 font-[500] md:font-semibold text-sm md:text-base flex flex-col gap-y-1"
+            className="brea-k-all-in-children overflow-auto whitespace-pre-line text-slate-800 dark:text-slate-200 font-[500] md:font-semibold text-sm md:text-base flex flex-col gap-y-1"
             dangerouslySetInnerHTML={{__html: renderMarkdown(message)}}
           />
           <Citations sources={sources}/>

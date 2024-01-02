@@ -87,7 +87,7 @@ if (process.env.IS_CODER === 'TRUE') {
       if (activeStream) {
         serverLog("@@@@@@@@@@ activeStream", command);
 
-        activeStream.write(command + "\n");
+        activeStream.write(command);
       } else {
         sshConnection.exec(command, (err, stream) => {
           if (err) {
@@ -99,9 +99,9 @@ if (process.env.IS_CODER === 'TRUE') {
           let result = "";
           stream
             .on("data", (data) => {
-              serverLog("@@@@@@@@@@ CommandOutput:", data, `'${data.toString()}'`);
+              serverLog("@@@@@@@@@@ CommandOutput:", data, `${data.toString()}`);
 
-              result = data.toString();
+              result = data.toString().trim();
 
               if (result === "> ") {
                 activeStream = stream;

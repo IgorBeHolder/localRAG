@@ -14,6 +14,7 @@ export default function PromptInput({
                                       analyst = false,
                                       resetChatSSH,
                                       sendEnterSSH,
+                                      sendCtrlCSSH,
                                       mode,
                                       workspace,
                                       message,
@@ -74,6 +75,9 @@ export default function PromptInput({
   const sendEnter = () => {
     sendEnterSSH();
   };
+  const sendCtrlC = () => {
+    sendCtrlCSSH();
+  };
   const openFile = () => {
     console.log("openFile");
 
@@ -114,6 +118,15 @@ export default function PromptInput({
       <div className={"bg-white pt-2 pb-8"}>
         {analyst ? <div
           className="ssh-controls relative flex flex-wrap justify-center gap-2 lg:gap-4 whitespace-nowrap">
+          <button
+            disabled={inputDisabled || buttonDisabled}
+            onClick={() => {
+              sendCtrlC();
+            }}
+            className={MENU_ITEM_STYLE(inputDisabled || buttonDisabled)}
+          >
+            <span>Ctrl+C</span>
+          </button>
           <button
             disabled={inputDisabled || buttonDisabled}
             onClick={() => {
