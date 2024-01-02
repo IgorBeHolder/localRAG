@@ -244,21 +244,21 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
         onWsMessage(msg);
       },
       //attemptNumber will be 0 the first time it attempts to reconnect, so this equation results in a reconnect pattern of 1 second, 2 seconds, 4 seconds, 8 seconds, and then caps at 10 seconds until the maximum number of attempts is reached
+      const MAX_RECONNECT_INTERVAL = 10000;
+      const BASE_RECONNECT_INTERVAL = 1000;
+      const BASE_RECONNECT_ATTEMPTS = 2;
+      
       reconnectInterval: (attemptNumber) => {
         console.log("reconnectInterval", attemptNumber);
-
+      
         if ((attemptNumber + 1) < WS_RECONNECT_ATTEMPTS) {
           setConnAttempt(attemptNumber + 1);
         } else {
           setConnAttempt(WS_RECONNECT_ATTEMPTS);
         }
-
-        Math.min(Math.pow(2, attemptNumber) * 1000, 10000)
+      
+        Math.min(Math.pow(BASE_RECONNECT_ATTEMPTS, attemptNumber) * BASE_RECONNECT_INTERVAL, MAX_RECONNECT_INTERVAL)
       }
-    });
-
-    const connectionStatus = {
-      [ReadyState.CONNECTING]: "Connecting... attempt: " + connAttempt,
       [ReadyState.OPEN]: "Open",
       [ReadyState.CLOSING]: "Closing",
       [ReadyState.CLOSED]: "Closed",
