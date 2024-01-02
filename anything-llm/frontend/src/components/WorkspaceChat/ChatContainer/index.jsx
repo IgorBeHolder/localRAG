@@ -72,92 +72,81 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
   };
 
   const lastMessageRef = useCallback((ref) => {
-    console.log('lastMessageRef', ref);
-    if (mode === "analyst") {
-      if (ref?.current) {
-        const tw = new Typewriter(ref.current, {
-          delay: TYPE_EFFECT_DELAY,
-          // skipAddStyles: true,
-          autoStart: false,
-          stringSplitter
-        });
-
-        if (typeWriterStack.length) {
-          setTypeWriterIsBusy(true);
-
-          typeWriterStack.forEach((s, si) => {
+      if (mode === "analyst") {
+        if (ref?.current) {
+          const tw = new Typewriter(ref.current, {
+            delay: TYPE_EFFECT_DELAY,
+            autoStart: false,
+            stringSplitter
+          });
+  
+          if (typeWriterStack.length) {
+            setTypeWriterIsBusy(true);
+  
+            typeWriterStack.forEach((s, si) => {
+              tw
+                .typeString(s + (si === typeWriterStack.length - 1 ? "" : "\n"))
+                .callFunction((e) => {
+                  twUpdateScroll(e.elements.container);
+                })
+                .pauseFor(TYPE_STRING_DELAY);
+            });
+  
             tw
-              .typeString(s + (si === typeWriterStack.length - 1 ? "" : "\n"))
               .callFunction((e) => {
-                twUpdateScroll(e.elements.container);
+                setTypeWriterIsBusy(false);
+                setTypeWriterStack([]);
               })
-              .pauseFor(TYPE_STRING_DELAY);
-          });
-
-          tw
-            .callFunction((e) => {
-              setTypeWriterIsBusy(false);
-              setTypeWriterStack([]);
-            })
-            .start();
+              .start();
+          }
+  
+          setTypeWriterRef(ref);
+          setTypeWriterInstance(tw);
         }
-
-        setTypeWriterRef(ref);
-        setTypeWriterInstance(tw);
       }
-    }
-  }, [mode, typeWriterStack, typeWriterIsBusy]);
-
-  const typeMessage = useCallback((text) => {
-    console.log('typeMessage', typeWriterRef, typeWriterInstance?.state.elements.container, text);
-    if (mode === "analyst") {
-      const print = text.split('\n');
-
-      if (typeWriterRef?.current && typeWriterInstance?.state) {
-        if (typeWriterIsBusy) {
-          console.log('typeWriterIsBusy', typeWriterIsBusy);
-          setTypeWriterStack(typeWriterStack.concat(print));
-        } else {
-          print.forEach(s => {
+    }, [mode, typeWriterStack, typeWriterIsBusy]);
+  
+    const typeMessage = useCallback((text) => {
+      if (mode === "analyst") {
+        const print = text.split('\n');
+  
+        if (typeWriterRef?.current && typeWriterInstance?.state) {
+          if (typeWriterIsBusy) {
+            setTypeWriterStack(typeWriterStack.concat(print));
+          } else {
+            print.forEach(s => {
+              typeWriterInstance
+                .pauseFor(TYPE_STRING_DELAY)
+                .typeString(s)
+                .callFunction((e) => {
+                  twUpdateScroll(e.elements.container);
+                });
+            });
+  
             typeWriterInstance
-              .pauseFor(TYPE_STRING_DELAY)
-              .typeString(s)
               .callFunction((e) => {
-                twUpdateScroll(e.elements.container);
-              });
-          });
-
-          typeWriterInstance
-            .callFunction((e) => {
-              setTypeWriterIsBusy(false);
-              setTypeWriterStack([]);
-            })
-            .start();
+                setTypeWriterIsBusy(false);
+                setTypeWriterStack([]);
+              })
+              .start();
+          }
+        } else {
+          setTypeWriterStack(typeWriterStack.concat(print));
         }
-      } else {
-        console.log('repeat');
-        setTypeWriterStack(typeWriterStack.concat(print));
       }
-    }
-  }, [typeWriterRef, typeWriterInstance, mode, typeWriterStack, typeWriterIsBusy]);
-
-  if (mode === "analyst" && isCoder) {
-    //Public API that will echo messages sent to it back to the client
-    const [socketUrl, setSocketUrl] = useState(WS_URL);
-
+    }, [typeWriterRef, typeWriterInstance, mode, typeWriterStack, typeWriterIsBusy]);
+  
     const onWsMessage = useCallback((msg) => {
       let chatResult = JSON.parse(msg.data);
       const typeString = chatResult.textResponse;
-
-      console.log('onWsMessage', msg, chatHistory, chatResult);
-
+  
       if (chatResult.error) {
         chatResult.type = "abort";
-
+  
         const remHistory = resetTypewriter([...chatHistory]);
-
+  
         let _chatHistory = [...remHistory];
-
+  
         handleChat(
           chatResult,
           setLoadingResponse,
@@ -168,52 +157,63 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
       } else {
         chatResult.typeWriter = true;
         chatResult.textResponse = [...typeWriterStack, typeString.trim()].join("\n");
-
+  
         const remHistory = resetTypewriter(chatHistory.slice(0, -1));
-
+  
         let _chatHistory = [...remHistory];
-
-        console.log("chatResult", chatResult, _chatHistory, typeWriterStack);
-
-        // const prevChatHistory = [
-        //   ...resetTypewriter(chatHistory),
-        //   {
-        //     ...chatResult
-        // content: safeTagsReplace(chatResult.textResponse),
-        // role: "assistant",
-        // typeWriter: false,
-        // pending: false,
-        // userMessage: message,
-        // animate: false
-        //   }
-        // ];
-
-        // setChatHistory(prevChatHistory);
-
-        // handleChat(
-        //   chatResult,
-        //   setLoadingResponse,
-        //   setChatHistory,
-        //   remHistory,
-        //   _chatHistory
-        // );
-
-        console.log('lastChatMessage', chatHistory, _chatHistory);
-
-        // if (_chatHistory.length) {
-        //   let lastChatMessage = _chatHistory[_chatHistory.length - 1];
-        //
-        //   if (lastChatMessage.role === "assistant") {
-        //     _chatHistory[_chatHistory.length - 1].content += ("\n" + chatResult.textResponse);
-        //
-        //     console.log('lastChatMessage', lastChatMessage, _chatHistory);
-        //   } else {
-        // handleChat(
-        //   chatResult,
-        //   setLoadingResponse,
-        //   setChatHistory,
-        //   remHistory,
-        //   _chatHistory
+  
+        handleChat(
+          chatResult,
+          setLoadingResponse,
+          setChatHistory,
+          remHistory,
+          _chatHistory
+        );
+  
+        typeMessage(typeString);
+  
+        setChatHistory(_chatHistory);
+        setLoadingResponse(false);
+      }
+    }, [setLoadingResponse, setChatHistory, chatHistory]);
+  
+    const reconnectInterval = (attemptNumber) => {
+      if ((attemptNumber + 1) < WS_RECONNECT_ATTEMPTS) {
+        setConnAttempt(attemptNumber + 1);
+      } else {
+        setConnAttempt(WS_RECONNECT_ATTEMPTS);
+      }
+  
+      Math.min(Math.pow(2, attemptNumber) * 1000, 10000)
+    }
+  
+    const handleSubmit = async (event) => {
+      event.preventDefault();
+  
+      if (!message || message === "") return false;
+  
+      const prevChatHistory = [
+        ...resetTypewriter(chatHistory),
+        {content: message, role: "user"},
+        {
+          content: "",
+          role: "assistant",
+          pending: true,
+          userMessage: message,
+          animate: true
+        }
+      ];
+  
+      setChatHistory(prevChatHistory);
+      setMessage("");
+  
+      if (mode === "analyst") {
+        setNewWsMessage(true);
+        setCommand(message);
+      } else {
+        setLoadingResponse(true);
+      }
+    };
         // );
         // }
         // } else if (chatHistory.length === 1) {
