@@ -65,6 +65,12 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
     return splitter.splitGraphemes(string);
   };
 
+  const twUpdateScroll = (twContainer) => {
+    setTimeout(() => {
+      twContainer.scrollIntoView({behavior: "smooth", block: "end"});
+    }, 10 + TYPE_STRING_DELAY);
+  };
+
   const lastMessageRef = useCallback((ref) => {
     console.log('lastMessageRef', ref);
     if (mode === "analyst") {
@@ -79,13 +85,11 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
         if (typeWriterStack.length) {
           setTypeWriterIsBusy(true);
 
-          typeWriterStack.forEach(str => {
+          typeWriterStack.forEach((s, si) => {
             tw
-              .typeString(str + "\n")
+              .typeString(s + (si === typeWriterStack.length - 1 ? "" : "\n"))
               .callFunction((e) => {
-                setTimeout(() => {
-                  e.elements.container.scrollIntoView({behavior: "smooth", block: "start"});
-                }, 10 + TYPE_STRING_DELAY);
+                twUpdateScroll(e.elements.container);
               })
               .pauseFor(TYPE_STRING_DELAY);
           });
@@ -119,9 +123,7 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
               .pauseFor(TYPE_STRING_DELAY)
               .typeString(s + "\n")
               .callFunction((e) => {
-                setTimeout(() => {
-                  e.elements.container.scrollIntoView({behavior: "smooth", block: "start"});
-                }, 10 + TYPE_STRING_DELAY);
+                twUpdateScroll(e.elements.container);
               });
           });
 
