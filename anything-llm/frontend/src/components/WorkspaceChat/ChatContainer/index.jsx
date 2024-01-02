@@ -113,6 +113,14 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
     if (mode === "analyst") {
       const print = text.split('\n');
 
+      let _chatHistory = [...chatHistory];
+
+      _chatHistory[_chatHistory.length - 1].userMessage += "\n" + message;
+
+      setChatHistory(_chatHistory);
+
+      console.log('_chatHistory', _chatHistory);
+
       if (typeWriterRef?.current && typeWriterInstance?.state) {
         if (typeWriterIsBusy) {
           console.log('typeWriterIsBusy', typeWriterIsBusy);
@@ -139,7 +147,7 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
         setTypeWriterStack(typeWriterStack.concat(print));
       }
     }
-  }, [typeWriterRef, typeWriterInstance, mode, typeWriterStack, typeWriterIsBusy]);
+  }, [typeWriterRef, typeWriterInstance, mode, chatHistory, typeWriterStack, typeWriterIsBusy]);
 
   if (mode === "analyst" && isCoder) {
     //Public API that will echo messages sent to it back to the client
@@ -189,6 +197,36 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
 
         // setChatHistory(prevChatHistory);
 
+        // handleChat(
+        //   chatResult,
+        //   setLoadingResponse,
+        //   setChatHistory,
+        //   remHistory,
+        //   _chatHistory
+        // );
+
+        console.log('lastChatMessage', chatHistory, _chatHistory);
+
+        // if (_chatHistory.length) {
+        //   let lastChatMessage = _chatHistory[_chatHistory.length - 1];
+        //
+        //   if (lastChatMessage.role === "assistant") {
+        //     _chatHistory[_chatHistory.length - 1].content += ("\n" + chatResult.textResponse);
+        //
+        //     console.log('lastChatMessage', lastChatMessage, _chatHistory);
+        //   } else {
+        // handleChat(
+        //   chatResult,
+        //   setLoadingResponse,
+        //   setChatHistory,
+        //   remHistory,
+        //   _chatHistory
+        // );
+        // }
+        // } else if (chatHistory.length === 1) {
+        //   chatResult.textResponse = chatHistory[0].content + "\n" + chatResult.textResponse;
+        // }
+
         handleChat(
           chatResult,
           setLoadingResponse,
@@ -197,38 +235,12 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
           _chatHistory
         );
 
-        // if (_chatHistory.length) {
-        //   let lastChatMessage = _chatHistory[_chatHistory.length - 1];
-        //
-        //   if (lastChatMessage.role === "assistant") {
-        //     _chatHistory[_chatHistory.length - 1].content += safeTagsReplace(chatResult.textResponse);
-        //
-        //     console.log('lastChatMessage', lastChatMessage, _chatHistory);
-        //   } else {
-        //     handleChat(
-        //       chatResult,
-        //       setLoadingResponse,
-        //       setChatHistory,
-        //       remHistory,
-        //       _chatHistory
-        //     );
-        //   }
-        // } else {
-        //   handleChat(
-        //     chatResult,
-        //     setLoadingResponse,
-        //     setChatHistory,
-        //     remHistory,
-        //     _chatHistory
-        //   );
-        // }
-
-        typeMessage(((chatResult.textResponse)));
+        typeMessage(chatResult.textResponse);
 
         setChatHistory(_chatHistory);
         setLoadingResponse(false);
       }
-    }, [setLoadingResponse, setChatHistory, chatHistory, typeWriterRef, typeWriterInstance]);
+    }, [setLoadingResponse, setChatHistory, chatHistory]);
 
     const {sendMessage, lastMessage, readyState} = useWebSocket(socketUrl, {
       shouldReconnect: (closeEvent) => true,
@@ -341,6 +353,33 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
     }
   }, [chatHistory]);
 
+  const sendCtrlCSSH = useCallback(() => {
+    if (mode === "analyst") {
+      let chatResult = {
+        type: "textResponse",
+        textResponse: "Ctrl+C",
+        sources: [],
+        error: null,
+        close: false,
+        typeWriter: true
+      };
+
+      const remHistory = resetTypewriter([...chatHistory]);
+
+      let _chatHistory = [...remHistory];
+
+      handleChat(
+        chatResult,
+        setLoadingResponse,
+        setChatHistory,
+        remHistory,
+        _chatHistory
+      );
+
+      setCommand("\x03");
+    }
+  }, [chatHistory]);
+
   const handleMessageChange = (event) => {
     setMessage(event.target.value);
   };
@@ -401,11 +440,12 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
         analyst={mode === "analyst"}
         resetChatSSH={resetChatSSH}
         sendEnterSSH={sendEnterSSH}
+        sendCtrlCSSH={sendCtrlCSSH}
+        submit={handleSubmit}
         mode={mode}
         isCoder={isCoder}
         workspace={workspace}
         message={message}
-        submit={handleSubmit}
         onChange={handleMessageChange}
         inputDisabled={loadingResponse}
         buttonDisabled={loadingResponse}
