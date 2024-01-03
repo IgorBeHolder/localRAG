@@ -16,7 +16,8 @@ const {validatedRequest} = require("../utils/middleware/validatedRequest");
 const {SystemSettings} = require("../models/systemSettings");
 const {Telemetry} = require("../models/telemetry");
 const {handleUploads} = setupMulter();
-const DEST_DIR = './storage/coder/';
+
+const CODER_DIR = "./storage/coder";
 
 function workspaceEndpoints(app) {
   if (!app) return;
@@ -77,11 +78,13 @@ function workspaceEndpoints(app) {
       }
 
       const {originalname, path: tempPath} = request.file;
-      const destFilePath = path.join(DEST_DIR, originalname);
+      const destFilePath = path.join(CODER_DIR, originalname);
+
+      serverLog('destFilePath', destFilePath, tempPath, originalname, CODER_DIR);
 
       try {
         fs.renameSync(tempPath, destFilePath);
-        serverLog(`CSV file ${originalname} saved successfully in ${DEST_DIR}.`);
+        serverLog(`CSV file ${originalname} saved successfully in ${CODER_DIR}.`);
         response.status(200).json({success: true, error: null});
       } catch (e) {
         serverLog(`Error saving file: ${e.message}`, e);

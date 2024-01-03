@@ -1,7 +1,6 @@
 const {Client} = require("ssh2");
-const {serverLog} = require("../utils/helpers");
-const SSH_HOST = process.env.SSH_HOST || "coder";
-const SSH_PORT = process.env.SSH_PORT || 22;
+const {SSH_HOST, SSH_PORT} = require("../helpers/constants");
+const {serverLog} = require("../helpers");
 
 function sshMiddleware(req, res, next) {
   const sshConfig = {

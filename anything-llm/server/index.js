@@ -1,14 +1,6 @@
 process.env.NODE_ENV === "development"
   ? require("dotenv").config({path: `.env.${process.env.NODE_ENV}`})
   : require("dotenv").config();
-console.log("*** SSH_HOST", process.env.SSH_HOST);
-console.log("*** SSH_PORT", process.env.SSH_PORT);
-console.log("*** WS_PORT", process.env.WS_PORT);
-console.log("*** IS_CODER", process.env.IS_CODER);
-console.log("*** USE_SEM_SEARCH", process.env.USE_SEM_SEARCH);
-console.log("*** COMPLETION_MODEL_ENDPOINT", process.env.COMPLETION_MODEL_ENDPOINT);
-console.log("*** EMBEDDING_MODEL_ENDPOINT", process.env.EMBEDDING_MODEL_ENDPOINT);
-console.log("*** EMBEDDING_MODEL_NAME", process.env.EMBEDDING_MODEL_NAME);
 
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -18,7 +10,7 @@ const path = require("path");
 
 const http = require("http");
 const WebSocket = require("ws");
-const sshMiddleware = require("./endpoints/sshMiddleware");
+const sshMiddleware = require("./utils/middleware/sshMiddleware");
 const {reqBody} = require("./utils/http");
 const {systemEndpoints} = require("./endpoints/system");
 const {workspaceEndpoints} = require("./endpoints/workspaces");
@@ -32,13 +24,19 @@ const {Telemetry} = require("./models/telemetry");
 const {developerEndpoints} = require("./endpoints/api");
 const setupTelemetry = require("./utils/telemetry");
 const {v4: uuidv4} = require("uuid");
+const {SSH_HOST, SSH_PORT, WS_PORT, FILE_LIMIT, APP_PORT, NO_MATCHES_PHRASE} = require("./utils/helpers/constants");
 
 const app = express();
 const apiRouter = express.Router();
-const FILE_LIMIT = "3GB";
 
-const NO_MATCHES_PHRASE = "нет точного соответствия";
-const WS_PORT = process.env.WS_PORT || 3006;
+console.log("*** IS_CODER", process.env.IS_CODER);
+console.log("*** USE_SEM_SEARCH", process.env.USE_SEM_SEARCH);
+console.log("*** COMPLETION_MODEL_ENDPOINT", process.env.COMPLETION_MODEL_ENDPOINT);
+console.log("*** EMBEDDING_MODEL_ENDPOINT", process.env.EMBEDDING_MODEL_ENDPOINT);
+console.log("*** EMBEDDING_MODEL_NAME", process.env.EMBEDDING_MODEL_NAME);
+console.log("*** SSH_HOST", SSH_HOST);
+console.log("*** SSH_PORT", SSH_PORT);
+console.log("*** WS_PORT", WS_PORT);
 
 app.use(cors({
   // origin: 'http://localhost:3000',
@@ -56,8 +54,6 @@ app.use(
 );
 
 app.use("/api", apiRouter);
-
-const APP_PORT = process.env.SERVER_PORT || 3001;
 
 // WS+SSH FOR CODER MODE
 if (process.env.IS_CODER === 'TRUE') {
