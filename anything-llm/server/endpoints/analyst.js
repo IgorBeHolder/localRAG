@@ -270,7 +270,7 @@ function analystEndpoints(app) {
     }
   );
 
-  const DEST_DIR = '../storage/coder/';
+  const DEST_DIR = 'app/server/storage/coder/';
 
   app.post(
     "/save_csv",
