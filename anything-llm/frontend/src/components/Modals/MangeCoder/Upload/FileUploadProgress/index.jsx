@@ -27,7 +27,7 @@ function FileUploadProgressComponent({
       }, 100);
 
       // Chunk streaming not working in production, so we just sit and wait
-      const {response, data} = await Workspace.uploadCsvFile(slug, formData);
+      const {response, data} = await Workspace.uploadCsvFile(formData);
       if (!response.ok) {
         setStatus("failed");
         clearInterval(timer);

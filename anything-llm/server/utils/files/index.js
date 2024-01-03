@@ -103,8 +103,6 @@ async function viewCoderFiles() {
       : path.resolve(process.env.CODER_DIR, "../../content");
   const dirExists = fs.existsSync(folder);
 
-  console.log('viewCoderFiles', folder, dirExists);
-
   if (!dirExists) fs.mkdirSync(folder);
 
   const directory = {
