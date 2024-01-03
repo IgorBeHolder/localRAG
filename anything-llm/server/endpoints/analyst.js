@@ -1,20 +1,22 @@
-const { reqBody, multiUserMode, userFromSession } = require("../utils/http");
-const { Analyst } = require("../models/analyst");
-const { Document } = require("../models/documents");
-const { DocumentVectors } = require("../models/vectors");
-const { AnalystChats } = require("../models/analystChats");
+const path = require("path");
+const fs = require("fs");
+const {reqBody, multiUserMode, userFromSession} = require("../utils/http");
+const {Analyst} = require("../models/analyst");
+const {Document} = require("../models/documents");
+const {DocumentVectors} = require("../models/vectors");
+const {AnalystChats} = require("../models/analystChats");
 const Client = require("ssh2").Client;
-const { convertToChatHistory } = require("../utils/chats");
-const { getVectorDbClass } = require("../utils/helpers");
-const { setupMulter } = require("../utils/files/multer");
+const {convertToChatHistory} = require("../utils/chats");
+const {getVectorDbClass, serverLog} = require("../utils/helpers");
+const {setupMulter} = require("../utils/files/multer");
 const {
   checkPythonAppAlive,
   processDocument
 } = require("../utils/files/documentProcessor");
-const { validatedRequest } = require("../utils/middleware/validatedRequest");
-const { SystemSettings } = require("../models/systemSettings");
-const { Telemetry } = require("../models/telemetry");
-const { handleUploads } = setupMulter();
+const {validatedRequest} = require("../utils/middleware/validatedRequest");
+const {SystemSettings} = require("../models/systemSettings");
+const {Telemetry} = require("../models/telemetry");
+const {handleUploads} = setupMulter();
 
 const conn = new Client();
 
@@ -40,8 +42,8 @@ conn.on("ready", () => {
         console.log("STDOUT: " + data);
       })
       .stderr.on("data", (data) => {
-        console.log("STDERR: " + data);
-      });
+      console.log("STDERR: " + data);
+    });
   });
 });
 
@@ -59,14 +61,14 @@ function analystEndpoints(app) {
   app.post("/analyst/new", [validatedRequest], async (request, response) => {
     try {
       const user = await userFromSession(request, response);
-      const { name = null } = reqBody(request);
-      const { analyst, message } = await Analyst.new(name, user?.id);
+      const {name = null} = reqBody(request);
+      const {analyst, message} = await Analyst.new(name, user?.id);
       await Telemetry.sendTelemetry("analyst_created", {
         multiUserMode: multiUserMode(response),
         LLMSelection: process.env.LLM_PROVIDER || "openai",
         VectorDbSelection: process.env.VECTOR_DB || "lancedb"
       });
-      response.status(200).json({ analyst, message });
+      response.status(200).json({analyst, message});
     } catch (e) {
       console.log(e.message, e);
       response.sendStatus(500).end();
@@ -79,22 +81,22 @@ function analystEndpoints(app) {
     async (request, response) => {
       try {
         const user = await userFromSession(request, response);
-        const { slug = null } = request.params;
+        const {slug = null} = request.params;
         const data = reqBody(request);
         const currAnalyst = multiUserMode(response)
-          ? await Analyst.getWithUser(user, { slug })
-          : await Analyst.get({ slug });
+          ? await Analyst.getWithUser(user, {slug})
+          : await Analyst.get({slug});
 
         if (!currAnalyst) {
           response.sendStatus(400).end();
           return;
         }
 
-        const { analyst, message } = await Analyst.update(
+        const {analyst, message} = await Analyst.update(
           currAnalyst.id,
           data
         );
-        response.status(200).json({ analyst, message });
+        response.status(200).json({analyst, message});
       } catch (e) {
         console.log(e.message, e);
         response.sendStatus(500).end();
@@ -106,7 +108,7 @@ function analystEndpoints(app) {
     "/analyst/:slug/upload",
     handleUploads.single("file"),
     async function (request, response) {
-      const { originalname } = request.file;
+      const {originalname} = request.file;
       const processingOnline = await checkPythonAppAlive();
 
       if (!processingOnline) {
@@ -120,9 +122,9 @@ function analystEndpoints(app) {
         return;
       }
 
-      const { success, reason } = await processDocument(originalname);
+      const {success, reason} = await processDocument(originalname);
       if (!success) {
-        response.status(500).json({ success: false, error: reason }).end();
+        response.status(500).json({success: false, error: reason}).end();
         return;
       }
 
@@ -130,7 +132,7 @@ function analystEndpoints(app) {
         `Document ${originalname} uploaded processed and successfully. It is now available in documents.`
       );
       await Telemetry.sendTelemetry("document_uploaded");
-      response.status(200).json({ success: true, error: null });
+      response.status(200).json({success: true, error: null});
     }
   );
 
@@ -140,11 +142,11 @@ function analystEndpoints(app) {
     async (request, response) => {
       try {
         const user = await userFromSession(request, response);
-        const { slug = null } = request.params;
-        const { adds = [], deletes = [] } = reqBody(request);
+        const {slug = null} = request.params;
+        const {adds = [], deletes = []} = reqBody(request);
         const currAnalyst = multiUserMode(response)
-          ? await Analyst.getWithUser(user, { slug })
-          : await Analyst.get({ slug });
+          ? await Analyst.getWithUser(user, {slug})
+          : await Analyst.get({slug});
 
         if (!currAnalyst) {
           response.sendStatus(400).end();
@@ -153,8 +155,8 @@ function analystEndpoints(app) {
 
         await Document.removeDocuments(currAnalyst, deletes);
         await Document.addDocuments(currAnalyst, adds);
-        const updatedAnalyst = await Analyst.get({ id: currAnalyst.id });
-        response.status(200).json({ analyst: updatedAnalyst });
+        const updatedAnalyst = await Analyst.get({id: currAnalyst.id});
+        response.status(200).json({analyst: updatedAnalyst});
       } catch (e) {
         console.log(e.message, e);
         response.sendStatus(500).end();
@@ -167,12 +169,12 @@ function analystEndpoints(app) {
     [validatedRequest],
     async (request, response) => {
       try {
-        const { slug = "" } = request.params;
+        const {slug = ""} = request.params;
         const user = await userFromSession(request, response);
         const VectorDb = getVectorDbClass();
         const analyst = multiUserMode(response)
-          ? await Analyst.getWithUser(user, { slug })
-          : await Analyst.get({ slug });
+          ? await Analyst.getWithUser(user, {slug})
+          : await Analyst.get({slug});
 
         if (!analyst) {
           response.sendStatus(400).end();
@@ -181,7 +183,7 @@ function analystEndpoints(app) {
 
         if (multiUserMode(response) && user.role !== "admin") {
           const canDelete =
-            (await SystemSettings.get({ label: "users_can_delete_analysts" }))
+            (await SystemSettings.get({label: "users_can_delete_analysts"}))
               ?.value === "true";
           if (!canDelete) {
             response.sendStatus(500).end();
@@ -189,13 +191,13 @@ function analystEndpoints(app) {
           }
         }
 
-        await AnalystChats.delete({ analystId: Number(analyst.id) });
+        await AnalystChats.delete({analystId: Number(analyst.id)});
         await DocumentVectors.deleteForAnalyst(analyst.id);
-        await Document.delete({ analystId: Number(analyst.id) });
-        await Analyst.delete({ id: Number(analyst.id) });
+        await Document.delete({analystId: Number(analyst.id)});
+        await Analyst.delete({id: Number(analyst.id)});
 
         try {
-          await VectorDb["delete-namespace"]({ namespace: slug });
+          await VectorDb["delete-namespace"]({namespace: slug});
         } catch (e) {
           console.error(e.message);
         }
@@ -214,7 +216,7 @@ function analystEndpoints(app) {
         ? await Analyst.whereWithUser(user)
         : await Analyst.where();
 
-      response.status(200).json({ analysts });
+      response.status(200).json({analysts});
     } catch (e) {
       console.log(e.message, e);
       response.sendStatus(500).end();
@@ -245,11 +247,11 @@ function analystEndpoints(app) {
     [validatedRequest],
     async (request, response) => {
       try {
-        const { slug } = request.params;
+        const {slug} = request.params;
         const user = await userFromSession(request, response);
         const analyst = multiUserMode(response)
-          ? await Analyst.getWithUser(user, { slug })
-          : await Analyst.get({ slug });
+          ? await Analyst.getWithUser(user, {slug})
+          : await Analyst.get({slug});
 
         if (!analyst) {
           response.sendStatus(400).end();
@@ -260,7 +262,7 @@ function analystEndpoints(app) {
           ? await AnalystChats.forAnalystByUser(analyst.id, user.id)
           : await AnalystChats.forAnalyst(analyst.id);
 
-        response.status(200).json({ history: convertToChatHistory(history) });
+        response.status(200).json({history: convertToChatHistory(history)});
       } catch (e) {
         console.log(e.message, e);
         response.sendStatus(500).end();
@@ -275,25 +277,23 @@ function analystEndpoints(app) {
     handleUploads.single("file"),
     async function (request, response) {
       if (!request.file) {
-        response.status(400).json({ success: false, error: "No file uploaded" }).end();
+        response.status(400).json({success: false, error: "No file uploaded"}).end();
         return;
       }
 
-      const { originalname, path: tempPath } = request.file;
+      const {originalname, path: tempPath} = request.file;
       const destFilePath = path.join(DEST_DIR, originalname);
 
       try {
         fs.renameSync(tempPath, destFilePath);
         serverLog(`CSV file ${originalname} saved successfully in ${DEST_DIR}.`);
-        response.status(200).json({ success: true, error: null });
+        response.status(200).json({success: true, error: null});
       } catch (e) {
         serverLog(`Error saving file: ${e.message}`, e);
-        response.status(500).json({ success: false, error: `Error saving file: ${e.message}` }).end();
+        response.status(500).json({success: false, error: `Error saving file: ${e.message}`}).end();
       }
     }
   );
-
-
 }
 
-module.exports = { analystEndpoints };
+module.exports = {analystEndpoints};
