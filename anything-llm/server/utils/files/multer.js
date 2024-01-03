@@ -17,7 +17,7 @@ function setupMulter() {
     },
   });
 
-  return { handleUploads: multer({ storage }) };
+  return {handleUploads: multer({storage})};
 }
 
 function setupDataImports() {
@@ -25,7 +25,7 @@ function setupDataImports() {
   const storage = multer.diskStorage({
     destination: function (_, _, cb) {
       const uploadOutput = path.resolve(__dirname, `../../storage/imports`);
-      fs.mkdirSync(uploadOutput, { recursive: true });
+      fs.mkdirSync(uploadOutput, {recursive: true});
       return cb(null, uploadOutput);
     },
     filename: function (_, file, cb) {
@@ -33,7 +33,7 @@ function setupDataImports() {
     },
   });
 
-  return { handleImports: multer({ storage }) };
+  return {handleImports: multer({storage})};
 }
 
 function setupLogoUploads() {
@@ -41,7 +41,7 @@ function setupLogoUploads() {
   const storage = multer.diskStorage({
     destination: function (_, _, cb) {
       const uploadOutput = path.resolve(__dirname, `../../storage/assets`);
-      fs.mkdirSync(uploadOutput, { recursive: true });
+      fs.mkdirSync(uploadOutput, {recursive: true});
       return cb(null, uploadOutput);
     },
     filename: function (_, file, cb) {
@@ -49,7 +49,7 @@ function setupLogoUploads() {
     },
   });
 
-  return { handleLogoUploads: multer({ storage }) };
+  return {handleLogoUploads: multer({storage})};
 }
 
 module.exports = {
