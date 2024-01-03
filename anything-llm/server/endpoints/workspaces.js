@@ -8,6 +8,7 @@ const {WorkspaceChats} = require("../models/workspaceChats");
 const {convertToChatHistory} = require("../utils/chats");
 const {getVectorDbClass, fixEncoding, serverLog} = require("../utils/helpers");
 const {setupMulter} = require("../utils/files/multer");
+const {setupMulterCsv} = require("../utils/files/multerCsv");
 const {
   checkPythonAppAlive,
   processDocument
@@ -16,6 +17,7 @@ const {validatedRequest} = require("../utils/middleware/validatedRequest");
 const {SystemSettings} = require("../models/systemSettings");
 const {Telemetry} = require("../models/telemetry");
 const {handleUploads} = setupMulter();
+const {handleUploadsCsv} = setupMulterCsv();
 
 const CODER_DIR = "./storage/coder";
 
@@ -70,7 +72,7 @@ function workspaceEndpoints(app) {
 
   app.post(
     "/save_csv",
-    handleUploads.single("file"),
+    handleUploadsCsv.single("file"),
     async function (request, response) {
       if (!request.file) {
         response.status(400).json({success: false, error: "No file uploaded"}).end();
@@ -78,18 +80,10 @@ function workspaceEndpoints(app) {
       }
 
       const {originalname, path: tempPath} = request.file;
-      const destFilePath = path.join(CODER_DIR, originalname);
 
-      serverLog('destFilePath', destFilePath, tempPath, originalname, CODER_DIR);
+      serverLog(`CSV file ${originalname} saved successfully in ${tempPath}.`);
 
-      try {
-        fs.renameSync(tempPath, destFilePath);
-        serverLog(`CSV file ${originalname} saved successfully in ${CODER_DIR}.`);
-        response.status(200).json({success: true, error: null});
-      } catch (e) {
-        serverLog(`Error saving file: ${e.message}`, e);
-        response.status(500).json({success: false, error: `Error saving file: ${e.message}`}).end();
-      }
+      response.status(200).json({success: true, error: null});
     }
   );
 
