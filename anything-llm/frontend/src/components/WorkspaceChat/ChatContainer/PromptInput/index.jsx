@@ -79,8 +79,6 @@ export default function PromptInput({
     sendCtrlCSSH();
   };
   const openFile = () => {
-    console.log("openFile");
-
     dispatch(showModal("modalCoderFiles"));
   };
   const closeChat = () => {

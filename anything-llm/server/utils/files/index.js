@@ -113,10 +113,7 @@ async function viewCoderFiles() {
   };
 
   for (const file of fs.readdirSync(folder)) {
-    const folderPath =
-      process.env.NODE_ENV === "development"
-        ? path.resolve(__dirname, `../../../../coder/content/${file}`)
-        : path.resolve(process.env.STORAGE_DIR, `../../content/${file}`);
+    const folderPath = `${folder}/${file}`;
 
     const isFolder = fs.lstatSync(folderPath).isDirectory();
 

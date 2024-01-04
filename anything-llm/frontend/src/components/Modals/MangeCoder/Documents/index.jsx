@@ -18,7 +18,6 @@ export default function DocumentSettings({workspace}) {
   const [selectedFiles, setSelectFiles] = useState([]);
   const [hasFiles, setHasFiles] = useState(true);
   const [canDelete, setCanDelete] = useState(false);
-
   async function fetchKeys(refetchWorkspace = false) {
     const coderFiles = await System.coderFiles();
 
@@ -152,7 +151,7 @@ export default function DocumentSettings({workspace}) {
         <div className="p-6 flex h-full w-full max-h-[80vh] overflow-y-scroll">
           <div className="flex flex-col gap-y-1 w-full">
             <p className="text-slate-200 dark:text-stone-300 text-center">
-              загрузка файлов рабочего пространства
+              загрузка файлов аналитики
             </p>
           </div>
         </div>
