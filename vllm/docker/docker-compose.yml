@@ -25,7 +25,7 @@ services:
       # - "--trust_remote_code=True"
       # - "--quantization=gptq"
       # - "--dtype=float16"
-      - "--quantization=awq"
+      # - "--quantization=awq"
       - "--dtype=auto"
       # - "--chat-template=${CHAT_TEMPLATE}"
     volumes:
