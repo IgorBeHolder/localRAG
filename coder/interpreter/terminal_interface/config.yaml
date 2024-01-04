@@ -27,8 +27,11 @@ api_base: "http://194.135.112.219:3003/v1"
 # model: "openai//app/model-store/TheBloke/dolphin-2.5-mixtral-8x7b-GGUF/dolphin-2.5-mixtral-8x7b.Q6_K.gguf"
 # model_name: "/app/model-store/TheBloke/dolphin-2.5-mixtral-8x7b-GGUF/dolphin-2.5-mixtral-8x7b.Q6_K.gguf"
 
-model: "openai/openchat_3.5"
-model_name: "openchat_3.5"
+model_name: "/model-store/TheBloke/Mixtral-8x7B-Instruct-v0.1-AWQ"
+model: "openai//model-store/TheBloke/Mixtral-8x7B-Instruct-v0.1-AWQ"
+
+# model: "openai/openchat_3.5"
+# model_name: "openchat_3.5"
 
 # model: "openai/openchat_v3.2_mistral"
 # model_name: "openchat_v3.2_mistral"
@@ -45,6 +48,7 @@ model_name: "openchat_3.5"
 
 # model: "openai//app/model-store/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/mistral-7b-instruct-v0.2.Q6_K.gguf"
 # model_name: "/model-store/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/mistral-7b-instruct-v0.2.Q6_K.gguf"
+
 
 
 context_window: 8192
