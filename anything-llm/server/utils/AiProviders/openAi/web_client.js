@@ -26,6 +26,7 @@ function format_messages(messages = []) {
 
 
 async function v1_chat_completions(messages, temperature) {
+  
   const base_url = process.env.COMPLETION_MODEL_ENDPOINT;
   const url_ = base_url + '/v1/models';
   fetchModelName(url_)
