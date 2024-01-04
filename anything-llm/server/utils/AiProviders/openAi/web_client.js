@@ -26,7 +26,7 @@ function format_messages(messages = []) {
 
 
 async function v1_chat_completions(messages, temperature) {
-  
+
   const base_url = process.env.COMPLETION_MODEL_ENDPOINT;
   const url_ = base_url + '/v1/models';
   fetchModelName(url_)
@@ -79,14 +79,14 @@ async function v1_chat_completions(messages, temperature) {
     "temperature": temperature,
     "top_p": TOP_P,
     "top_k": TOP_K,
-    "repetition_penalty": R_PENALTY,
-    "frequency_penalty": F_PENALTY,
-    "max_tokens": MAX_TOKENS,
-    "presence_penalty": P_PENALTY,
+    // "repetition_penalty": R_PENALTY,
+    // "frequency_penalty": F_PENALTY,
+    // "max_tokens": MAX_TOKENS,
+    // "presence_penalty": P_PENALTY,
     // "length_penalty": L_PENALTY,
     // "tokenizer.ggml.add_bos_token": "false",
-    "stop": STOP,
-    "spaces_between_special_tokens": "False"
+    "stop": STOP
+    // "spaces_between_special_tokens": "False"
 
   };
 
