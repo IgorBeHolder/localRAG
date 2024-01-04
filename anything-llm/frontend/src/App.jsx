@@ -31,6 +31,10 @@ export default function App() {
             path="/analyst/:slug"
             element={<PrivateRoute analystRoute={true} Component={WorkspaceChat}/>}
           />
+          <Route
+            path="/term/:slug"
+            element={<PrivateRoute termRoute={true} analystRoute={true} Component={WorkspaceChat}/>}
+          />
           <Route path="/accept-invite/:code" element={<InvitePage/>}/>
 
           {/* Admin Routes */}

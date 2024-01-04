@@ -54,11 +54,7 @@ export default function Directory({
             <Folder className="w-6 h-6"/>
           ) : (
             <button onClick={() => toggleSelection(files.name)}>
-              {isSelected(files.name) ? (
-                <FolderMinus className="w-6 h-6 stroke-red-800 hover:fill-red-500"/>
-              ) : (
-                <FolderPlus className="w-6 h-6 hover:stroke-green-800 hover:fill-green-500"/>
-              )}
+              <Folder className="w-6 h-6"/>
             </button>
           )}
 

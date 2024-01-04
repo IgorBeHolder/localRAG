@@ -70,8 +70,6 @@ const TerminalComponent = ({handleSubmit, toggleMenu, setTextCommand, children})
           console.warn("SSH SENT NON ZERO RESPONSE", response);
         }
       } else {
-        debugger;
-
         const lines = response.textResponse.split("\n").filter((l, li) => {
           return l.length && !(li && l.trim() === ">");
         });

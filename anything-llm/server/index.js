@@ -3,6 +3,7 @@ process.env.NODE_ENV === "development"
   : require("dotenv").config();
 
 const express = require("express");
+const chardet = require("chardet");
 const bodyParser = require("body-parser");
 const serveIndex = require("serve-index");
 const cors = require("cors");
@@ -83,7 +84,7 @@ if (process.env.IS_CODER === 'TRUE') {
       if (activeStream) {
         serverLog("@@@@@@@@@@ activeStream", command);
 
-        activeStream.write(command);
+        activeStream.write(command + "\n");
       } else {
         sshConnection.exec(command, (err, stream) => {
           if (err) {
@@ -95,11 +96,17 @@ if (process.env.IS_CODER === 'TRUE') {
           let result = "";
           stream
             .on("data", (data) => {
-              serverLog("@@@@@@@@@@ CommandOutput:", data, `${data.toString()}`);
+              const detectedEncoding = chardet.detect(data);
+              // const types = ['ascii', 'utf8', 'utf16le', 'ucs2', 'base64', 'base64url', 'latin1', 'binary', 'hex', detectedEncoding];
+
+              // for (let i = 0; i < types.length; i++) {
+              //   const type = types[i];
+              serverLog("@@@@@@@@@@ CommandOutput:", detectedEncoding, `${data.toString(detectedEncoding)}`);
+              // }
 
               result = data.toString().trim();
 
-              if (result === "> ") {
+              if (result === ">") {
                 activeStream = stream;
               }
 
@@ -211,7 +218,7 @@ if (process.env.IS_CODER === 'TRUE') {
     ws.on("message", (message) => {
       const command = message.toString();
 
-      serverLog("##################### WS message", command);
+      serverLog("##################### WS message", process.env.USE_SEM_SEARCH === "TRUE", command, activeStream);
 
       if (activeStream) {
         // Получаем команду от клиента и выполняем ее на сервере SSH
