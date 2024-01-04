@@ -8,6 +8,7 @@ source ./client-files/.env
 set +a
 echo -e "Environment variables loaded.\nBuild for $DEVICE.\n$COMPLETION_MODEL_NAME\n-----------------------------"
 echo -e "\nR_PENALTY: $R_PENALTY.  F_PENALTY: $F_PENALTY  P_PENALTY: $P_PENALTY TOP_P: $TOP_P\n"
+echo -e "\ntensor_parallel_size: $TP_SIZE.\n"
 
 cd vllm/docker
 git checkout main
