@@ -23,8 +23,9 @@ services:
       - "--model=/model-store/${COMPLETION_MODEL_NAME}"
       - "--tensor-parallel-size=${TP_SIZE}"
       - "--trust_remote_code=True"
+      - "--quantization=gptq"
       # - "--quantization=awq"
-      - "--chat-template=${CHAT_TEMPLATE}"
+      # - "--chat-template=${CHAT_TEMPLATE}"
     volumes:
       - "../../model-store/:/model-store"
     ports:
