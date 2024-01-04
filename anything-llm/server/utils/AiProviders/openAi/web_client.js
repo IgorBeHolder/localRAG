@@ -3,9 +3,6 @@ const {prompt_templates} = require('../../vectorDbProviders/lance/index');
 const {fetchModelName} = require("./model_name_fetch");
 const {BOS, EOS, assistance_prefix, end_of_turn, user_prefix} = prompt_templates();
 
-const base_url = process.env.COMPLETION_MODEL_ENDPOINT;
-const url = base_url + '/v1/models';
-
 
 function format_messages(messages = []) {
   const formattedHistory = [];
@@ -29,7 +26,8 @@ function format_messages(messages = []) {
 
 
 async function v1_chat_completions(messages, temperature) {
-  
+  const base_url = process.env.COMPLETION_MODEL_ENDPOINT;
+  const url = base_url + '/v1/models';
   fetchModelName(url)
   .then(modelId => {
     if (modelId) {
