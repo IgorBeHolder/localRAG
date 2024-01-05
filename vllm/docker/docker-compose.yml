@@ -28,7 +28,7 @@ services:
       # - "--dtype=float16"
       - "--quantization=awq"
       - "--dtype=auto"
-      # - "--chat-template=${CHAT_TEMPLATE}"
+      - "--chat-template=${CHAT_TEMPLATE}"
     volumes:
       - "../../model-store/:/model-store"
     ports:
