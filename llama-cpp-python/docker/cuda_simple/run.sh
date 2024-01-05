@@ -10,6 +10,6 @@ python3 -m llama_cpp.server \
     --model "/app/model-store/$COMPLETION_MODEL_NAME" \
     --host $HOST \
     --port $MM_PORT \
-    # --n_gpu_layers $N_GPU_LAYERS \
-    --chat_template $CHAT_FORMAT \
+    --n_gpu_layers $N_GPU_LAYERS \
+    --chat_template $CHAT_TEMPLATE \
     # --n_ctx $N_CTX
