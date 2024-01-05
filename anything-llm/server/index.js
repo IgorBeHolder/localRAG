@@ -58,7 +58,6 @@ app.use("/api", apiRouter);
 
 // WS+SSH FOR CODER MODE
 if (process.env.IS_CODER === 'TRUE') {
-  const {sem_search} = require("./utils/AiProviders/openAi/pseudo_search");
 
   let activeStream = null;
 
@@ -84,12 +83,48 @@ if (process.env.IS_CODER === 'TRUE') {
       if (activeStream) {
         serverLog("@@@@@@@@@@ activeStream", command);
 
-        activeStream.write(command + "\n");
+        activeStream.write(command.trim() + "\n");
       } else {
+        // xterm: Один из наиболее распространенных типов терминалов в системах Unix.
+        // xterm-256color: Расширение xterm, поддерживающее 256 цветов.
+        // rxvt: Другой популярный терминал.
+        // gnome-terminal: Используется в графической оболочке GNOME.
+        // konsole: Терминал в KDE.
+        // tmux-256color: Для использования с tmux, поддерживающим 256 цветов.
+        // screen: Для использования с программой screen.
+        // vt220: Эмуляция терминала DEC VT220.
+
+        // sshConnection.shell({
+        //   // term: 'xterm-color',
+        //   term: 'rxvt'
+        // }, (err, stream) => {
+        // if (err) {
+        //   throw err;
+        // }
+        //
+        // stream.on('close', () => {
+        //   console.log('Stream :: close');
+        //
+        // }).on('data', (data) => {
+        //   console.log('OUTPUT: ' + data);
+        // });
+
         sshConnection.exec(command, (err, stream) => {
+          serverLog("xterm-color", err, stream);
+
           if (err) {
             serverLog("Error executing command:", err);
-            ws.send("Error executing command");
+
+            let chatResult = {
+              id: uuidv4(),
+              type: "abort",
+              textResponse: "Error executing SSH command",
+              sources: [],
+              error: JSON.stringify(err),
+              close: true
+            };
+
+            ws.send(JSON.stringify(chatResult));
             return;
           }
 
@@ -101,7 +136,7 @@ if (process.env.IS_CODER === 'TRUE') {
 
               // for (let i = 0; i < types.length; i++) {
               //   const type = types[i];
-              serverLog("@@@@@@@@@@ CommandOutput:", detectedEncoding, `${data.toString(detectedEncoding)}`);
+              serverLog("@@@@@@@@@@ CommandOutput:", detectedEncoding, `${data.toString()}`);
               // }
 
               result = data.toString().trim();
@@ -153,7 +188,14 @@ if (process.env.IS_CODER === 'TRUE') {
 
               //sshConnection.end();
             });
+
+          activeStream = stream;
+
+          // activeStream.write("interpreter\n");
+
         });
+
+        // });
       }
     } catch (e) {
       serverLog("@@@@@@@ executeSSHCommand", e);
@@ -213,7 +255,7 @@ if (process.env.IS_CODER === 'TRUE') {
 
     activeStream = null;
 
-    executeSSHCommand("interpreter\n", sshConnection, ws);
+    executeSSHCommand("interpreter", sshConnection, ws);
 
     ws.on("message", (message) => {
       const command = message.toString();
@@ -224,6 +266,8 @@ if (process.env.IS_CODER === 'TRUE') {
         // Получаем команду от клиента и выполняем ее на сервере SSH
 
         if (process.env.USE_SEM_SEARCH === "TRUE") {
+          const {sem_search} = require("./utils/AiProviders/openAi/pseudo_search");
+
           sem_search(command, NO_MATCHES_PHRASE, function (s) {
             if (s.error) {
               serverLog("##################### WS sem_search", s.error);

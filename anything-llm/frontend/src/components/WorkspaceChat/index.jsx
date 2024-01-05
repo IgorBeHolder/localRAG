@@ -73,5 +73,5 @@ export default function WorkspaceChat({loading, workspace, analystRoute, termRou
     );
   }
 
-  return <ChatContainer isCoder={isCoder} workspace={workspace} knownHistory={history}/>;
+  return <ChatContainer isCoder={isCoder} termRoute={termRoute} workspace={workspace} knownHistory={history}/>;
 }

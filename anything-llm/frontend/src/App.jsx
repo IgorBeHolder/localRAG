@@ -4,6 +4,7 @@ import {ContextWrapper} from "./AuthContext";
 import PrivateRoute, {AdminRoute} from "./components/PrivateRoute";
 import {ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import SSHTerminal from "./components/AnalystChat/ChatContainer/ChatHistory/Terminal/xxxterm.jsx";
 
 const Main = lazy(() => import("./pages/Main"));
 const InvitePage = lazy(() => import("./pages/Invite"));
@@ -33,7 +34,7 @@ export default function App() {
           />
           <Route
             path="/term/:slug"
-            element={<PrivateRoute termRoute={true} analystRoute={true} Component={WorkspaceChat}/>}
+            element={<PrivateRoute termRoute={true} analystRoute={true} Component={SSHTerminal}/>}
           />
           <Route path="/accept-invite/:code" element={<InvitePage/>}/>
 

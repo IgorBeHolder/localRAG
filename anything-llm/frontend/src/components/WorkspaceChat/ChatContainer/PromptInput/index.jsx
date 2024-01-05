@@ -1,4 +1,4 @@
-import React, {useState, useRef, memo, useEffect} from "react";
+import React, {useState, useRef, memo, useEffect, useCallback} from "react";
 import {isMobile} from "react-device-detect";
 import {Loader, Menu, X} from "react-feather";
 import {CHAT_MAX_LENGTH} from "../../../../utils/constants.js";
@@ -12,6 +12,7 @@ const MENU_ITEM_STYLE = (disabled) => {
 
 export default function PromptInput({
                                       analyst = false,
+                                      termRoute = false,
                                       resetChatSSH,
                                       sendEnterSSH,
                                       sendCtrlCSSH,
@@ -114,8 +115,8 @@ export default function PromptInput({
     <div
       className={"absolute main-form p-1 md:p-8 bottom-0 left-0 right-0 !pb-0"}>
       <div className={"bg-white pt-2 pb-8"}>
-        {analyst ? <div
-          className="ssh-controls relative flex flex-wrap justify-center gap-2 lg:gap-4 whitespace-nowrap">
+        {(analyst || termRoute) ? <div
+          className={"ssh-controls relative flex flex-wrap justify-center gap-2 lg:gap-4 whitespace-nowrap relative z-[1]" + (termRoute ? " mb-[-48px] px-12 lg:px-16" : "")}>
           <button
             disabled={inputDisabled || buttonDisabled}
             onClick={() => {
@@ -194,54 +195,59 @@ export default function PromptInput({
                   setShowMenu(!showMenu);
                 }}
                 type="button"
-                className={MENU_ITEM_STYLE()}
+                className={MENU_ITEM_STYLE() + " relative + z-[2]" + (termRoute ? " mt-2 lg:mt-0" : "")}
               >
                 <Menu className="w-4 h-4 md:h-6 md:w-6"/>
               </button>
             </OutsideClickHandler>
 
-            <textarea
-              onKeyUp={adjustTextArea}
-              onKeyDown={captureEnter}
-              onChange={onChange}
-              required={true}
-              maxLength={CHAT_MAX_LENGTH}
-              disabled={inputDisabled}
-              onFocus={() => setFocused(true)}
-              onBlur={(e) => {
-                setFocused(false);
-                adjustTextArea(e);
-              }}
-              value={message}
-              className="cursor-text disabled:cursor-not-allowed max-h-[100px] md:min-h-[40px] block mx-2 md:mx-4 p-2.5 w-full text-[16px] md:text-sm rounded-lg border bg-gray-50 border-gray-300 placeholder-gray-200 text-gray-900 dark:text-white dark:bg-stone-600 dark:border-stone-700 dark:placeholder-stone-400"
-              placeholder={
-                isMobile
-                  ? "Введите ваше сообщение здесь."
-                  : "Shift + Enter для новой строки. Enter, чтобы отправить."
-              }
-            />
-            <button
-              ref={formRef}
-              type="submit"
-              disabled={buttonDisabled}
-              className={"transition-all duration-300 inline-flex justify-center p-0 md:p-2 rounded-full cursor-pointer text-gray-200 dark:text-slate-200 group disabled:cursor-default" + (buttonDisabled ? "" : " hover:bg-blue-100 hover:text-blue-600 dark:hover:bg-stone-500")}
-            >
-              {buttonDisabled ? (
-                <Loader className="w-6 h-6 animate-spin"/>
-              ) : (
-                <svg
-                  aria-hidden="true"
-                  className="w-6 h-6 rotate-45"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
+            {termRoute ?
+              null
+              :
+              <>
+              <textarea
+                onKeyUp={adjustTextArea}
+                onKeyDown={captureEnter}
+                onChange={onChange}
+                required={true}
+                maxLength={CHAT_MAX_LENGTH}
+                disabled={inputDisabled}
+                onFocus={() => setFocused(true)}
+                onBlur={(e) => {
+                  setFocused(false);
+                  adjustTextArea(e);
+                }}
+                value={message}
+                className="cursor-text disabled:cursor-not-allowed max-h-[100px] md:min-h-[40px] block mx-2 md:mx-4 p-2.5 w-full text-[16px] md:text-sm rounded-lg border bg-gray-50 border-gray-300 placeholder-gray-200 text-gray-900 dark:text-white dark:bg-stone-600 dark:border-stone-700 dark:placeholder-stone-400"
+                placeholder={
+                  isMobile
+                    ? "Введите ваше сообщение здесь."
+                    : "Shift + Enter для новой строки. Enter, чтобы отправить."
+                }
+              />
+                <button
+                  ref={formRef}
+                  type="submit"
+                  disabled={buttonDisabled}
+                  className={"transition-all duration-300 inline-flex justify-center p-0 md:p-2 rounded-full cursor-pointer text-gray-200 dark:text-slate-200 group disabled:cursor-default" + (buttonDisabled ? "" : " hover:bg-blue-100 hover:text-blue-600 dark:hover:bg-stone-500")}
                 >
-                  <path
-                    d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path>
-                </svg>
-              )}
-              <span className="sr-only">Отправить сообщение</span>
-            </button>
+                  {buttonDisabled ? (
+                    <Loader className="w-6 h-6 animate-spin"/>
+                  ) : (
+                    <svg
+                      aria-hidden="true"
+                      className="w-6 h-6 rotate-45"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path>
+                    </svg>
+                  )}
+                  <span className="sr-only">Отправить сообщение</span>
+                </button>
+              </>}
           </div>
           <Tracking workspaceSlug={workspace.slug}/>
         </form>

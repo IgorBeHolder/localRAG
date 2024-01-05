@@ -314,6 +314,7 @@ dialog::backdrop {
 }
 
 div.terminal-base {
+  position: relative;
   height: 100%;
   min-height: 100%;
   max-width: 100%;

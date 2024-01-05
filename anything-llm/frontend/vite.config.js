@@ -57,7 +57,8 @@ export default defineConfig({
     }
   },
   optimizeDeps: {
-    exclude: ["fsevents"],
+    exclude: ["fsevents", "cpu-features", "ssh2"],
+    include: ["xterm", "xterm-addon-fit"],
     esbuildOptions: {
       define: {
         global: "globalThis"
