@@ -18,6 +18,7 @@ services:
       TP_SIZE: ${TP_SIZE}
       CMAKE_ARGS: "-DLLAMA_CUBLAS=on"
       FORCE_CMAKE: 1
+      TRANSFORMERS_OFFLINE: 1
     build:
       context: .
       dockerfile: ./Dockerfile
