@@ -11,6 +11,7 @@ python3 -m llama_cpp.server \
     --host $HOST \
     --port $MM_PORT \
     --n_gpu_layers $N_GPU_LAYERS \
+    --chat_format $CHAT_FORMAT 
     # --main-gpu 0
     # --n_ctx $N_CTX
     # --tensor_split $TP_SIZE \
