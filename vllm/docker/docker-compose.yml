@@ -25,7 +25,7 @@ services:
       # - "--tensor-parallel-size=${TP_SIZE}"
       # - "--trust_remote_code=True"
       - "--quantization=gptq"
-      # - "--dtype=float16"
+      - "--dtype=float16"
       # - "--quantization=awq"
       # - "--dtype=auto"
       - "--chat-template=${CHAT_TEMPLATE}"
