@@ -52,6 +52,7 @@
     "ssh2": "^1.14.0",
     "swagger-autogen": "^2.23.5",
     "swagger-ui-express": "^5.0.0",
+    "sync-request": "^6.1.0",
     "uuid": "^9.0.0",
     "uuid-apikey": "^1.5.3",
     "vectordb": "0.3.11",

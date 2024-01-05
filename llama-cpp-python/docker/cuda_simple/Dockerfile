@@ -22,7 +22,11 @@ RUN python3 -m pip install --upgrade pip pytest cmake scikit-build setuptools fa
 
 # Install llama-cpp-python (build with cuda)
 # RUN CMAKE_ARGS="-DLLAMA_CUBLAS=on" pip install llama-cpp-python
-RUN CMAKE_ARGS="-DLLAMA_CUBLAS=on" FORCE_CMAKE=1 pip install llama-cpp-python
+# a100
+# RUN CMAKE_ARGS="-DLLAMA_CUBLAS=on" FORCE_CMAKE=1 pip install llama-cpp-python
+
+# a10
+RUN CMAKE_ARGS="-DLLAMA_CUBLAS=1 -DLLAMA_AVX=OFF -DLLAMA_AVX2=OFF -DLLAMA_F16C=OFF -DLLAMA_FMA=OFF" FORCE_CMAKE=1 pip install llama-cpp-python
 
 # Run the server
 # CMD python3 -m llama_cpp.server
