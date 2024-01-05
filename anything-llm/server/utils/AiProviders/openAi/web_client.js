@@ -74,7 +74,7 @@ async function v1_chat_completions(messages, temperature) {
 
   const payload = {
     // add the prefix to the model name like '/app'
-    "model": "/model-store/TheBloke/Mixtral-8x7B-Instruct-v0.1-AWQ", //compl_model,
+    "model": compl_model,
     "messages": messages2string,
     "temperature": temperature,
     "top_p": TOP_P,
