@@ -16,6 +16,7 @@ services:
       NVIDIA_VISIBLE_DEVICES: all
       TP_SIZE: ${TP_SIZE}
       CHAT_TEMPLATE: ${CHAT_TEMPLATE}
+      TRANSFORMERS_OFFLINE: 1
     ipc: host
     command:
       - "--host=${HOST}"
