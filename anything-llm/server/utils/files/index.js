@@ -45,10 +45,7 @@ async function fileData(filePath = null) {
 }
 
 async function viewLocalFiles() {
-  const folder =
-    process.env.NODE_ENV === "development"
-      ? path.resolve(__dirname, `../../storage/documents`)
-      : path.resolve(process.env.STORAGE_DIR, `documents`);
+  const folder = path.resolve(process.env.STORAGE_DIR, `documents`);
 
   const dirExists = fs.existsSync(folder);
   if (!dirExists) fs.mkdirSync(folder);
@@ -95,10 +92,7 @@ async function viewLocalFiles() {
 }
 
 async function viewCoderFiles() {
-  const folder =
-    process.env.NODE_ENV === "development"
-      ? path.resolve(__dirname, "../../" + process.env.CODER_DIR)
-      : path.resolve(process.env.CODER_DIR);
+  const folder = path.resolve(process.env.CODER_DIR);
 
   const dirExists = fs.existsSync(folder);
 

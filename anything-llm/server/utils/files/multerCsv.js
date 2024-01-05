@@ -6,10 +6,7 @@ function setupMulterCsv() {
   // Handle File uploads for auto-uploading.
   const storage = multer.diskStorage({
     destination: function (_, _, cb) {
-      const uploadOutput =
-        process.env.NODE_ENV === "development"
-          ? path.resolve(__dirname, "../../" + process.env.CODER_DIR)
-          : path.resolve(process.env.CODER_DIR);
+      const uploadOutput = path.resolve(process.env.CODER_DIR);
 
       cb(null, uploadOutput);
     },
