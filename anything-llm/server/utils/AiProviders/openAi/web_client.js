@@ -1,21 +1,21 @@
 const axios = require('axios');
-const {prompt_templates} = require('../../vectorDbProviders/lance/index');
-const {fetchModelName} = require("./model_name_fetch");
-const {BOS, EOS, assistance_prefix, end_of_turn, user_prefix} = prompt_templates();
+const { prompt_templates } = require('../../vectorDbProviders/lance/index');
+const { fetchModelName } = require("./model_name_fetch");
+const { BOS, EOS, assistance_prefix, end_of_turn, user_prefix } = prompt_templates();
 
 
 function format_messages(messages = []) {
   const formattedHistory = [];
 
   messages.forEach((messagesItem) => {
-    const {role, content} = messagesItem;
+    const { role, content } = messagesItem;
 
     // Determine the prefix based on the role
     const prefix = role === "user" ? user_prefix : (role === "system" ? BOS : assistance_prefix);
     EOT = role === "system" ? EOS : end_of_turn;
 
     // Add the formatted item to the history array
-    formattedHistory.push({role: role, content: prefix + content + EOT});
+    formattedHistory.push({ role: role, content: prefix + content + EOT });
   });
 
   // Extract the content from each item and join them into a string
@@ -29,18 +29,33 @@ async function v1_chat_completions(messages, temperature) {
 
   const base_url = process.env.COMPLETION_MODEL_ENDPOINT;
   const url_ = base_url + '/v1/models';
-  fetchModelName(url_)
-  .then(modelId => {
+  // async mode
+  // fetchModelName(url_)
+  // .then(modelId => {
+  //   if (modelId) {
+  //     global.COMPLETION_MODEL_NAME = modelId;
+  //     console.log("*** COMPLETION_MODEL_NAME", modelId);
+  //   } else {
+  //     console.log('No model ID returned or error occurred');
+  //   }
+  // })
+  // .catch(error => {
+  //   console.error('Error in fetching model:', error);
+  // });
+
+  // sync mode
+  try {
+    const modelId = fetchModelName(url_);
     if (modelId) {
       global.COMPLETION_MODEL_NAME = modelId;
       console.log("*** COMPLETION_MODEL_NAME", modelId);
     } else {
       console.log('No model ID returned or error occurred');
     }
-  })
-  .catch(error => {
+  } catch (error) {
     console.error('Error in fetching model:', error);
-  });
+  }
+
 
   // const messages2string = format_messages(messages);
   const messages2string = messages;  // skip the formatting
@@ -91,7 +106,7 @@ async function v1_chat_completions(messages, temperature) {
   };
 
   // https://github.com/vllm-project/vllm/blob/main/vllm/sampling_params.py
-  
+
   try {
     const response = await axios.post(url, payload,
       {
@@ -119,7 +134,7 @@ async function v1_embeddings_openllm(textInput) {
   const url = base_url + '/v1/embeddings';
   console.log('url:', url);
   try {
-    const {data: {data}} = await axios.post(url, {
+    const { data: { data } } = await axios.post(url, {
       'model': model,
       'input': textInput
     }, {
@@ -129,8 +144,8 @@ async function v1_embeddings_openllm(textInput) {
       }
     });
     return data.length > 0 &&
-    // return an array of embeddings
-    data.every((embd) => embd.hasOwnProperty("embedding"))
+      // return an array of embeddings
+      data.every((embd) => embd.hasOwnProperty("embedding"))
       ? data.map((embd) => embd.embedding)
       : null;
   } catch (error) {
