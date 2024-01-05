@@ -99,7 +99,7 @@ async function viewLocalFiles() {
 async function viewCoderFiles() {
   const folder =
     process.env.NODE_ENV === "development"
-      ? path.resolve(__dirname, "../../../" + process.env.CODER_DIR)
+      ? path.resolve(__dirname, "../../" + process.env.CODER_DIR)
       : path.resolve(process.env.CODER_DIR);
 
   const dirExists = fs.existsSync(folder);
