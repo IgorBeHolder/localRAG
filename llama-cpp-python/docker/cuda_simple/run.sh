@@ -11,10 +11,10 @@ python3 -m llama_cpp.server \
     --host $HOST \
     --port $MM_PORT \
     --n_gpu_layers $N_GPU_LAYERS \
-    --tensor_split $TP_SIZE \
     --main-gpu 0
     # --n_ctx $N_CTX
-
+    # --tensor_split $TP_SIZE \
+    
 # usage: __main__.py [-h] [--model MODEL] [--model_alias MODEL_ALIAS]
 #                    [--n_gpu_layers N_GPU_LAYERS] [--main_gpu MAIN_GPU]
 #                    [--tensor_split [TENSOR_SPLIT ...]]
