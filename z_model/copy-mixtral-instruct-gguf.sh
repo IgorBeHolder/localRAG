@@ -12,6 +12,7 @@ declare -a files=(
   ".gitattributes" "README.md" "config.json" 
   "mixtral-8x7b-instruct-v0.1.Q5_K_M.gguf"
   # SHA256: af12961e014037ee8c5c9f3bf7cf9fd99cadc9dabd50f528a4248c4a8ee8fe77
+  
   # "mixtral-8x7b-instruct-v0.1.Q6_K.gguf"
   # SHA256: 56638f9853b8fff80ac1fd4a91434a1c15c21d4c910811c5458df9ef092615fd
 )
