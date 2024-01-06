@@ -282,8 +282,6 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
     useEffect(() => {
       const promptMessage = chatHistory.length > 0 ? chatHistory[chatHistory.length - 1] : null;
 
-      console.log('chatHistory', workspace, promptMessage, chatHistory);
-
       async function fetchReply() {
         return await Workspace.sendChat(
           workspace,

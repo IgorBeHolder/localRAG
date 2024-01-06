@@ -4,7 +4,7 @@ import LoadingChat from "./LoadingChat";
 import ChatContainer from "./ChatContainer";
 import paths from "../../utils/paths";
 
-export default function WorkspaceChat({loading, workspace, analystRoute, isCoder}) {
+export default function WorkspaceChat({loading, workspace, analystRoute, termRoute, isCoder}) {
   const [history, setHistory] = useState([]);
   const [loadingHistory, setLoadingHistory] = useState(true);
   const storageKey = workspace ? `workspace_chat_mode_${workspace.slug}` : "";
@@ -44,7 +44,7 @@ export default function WorkspaceChat({loading, workspace, analystRoute, isCoder
           <dialog
             open={true}
             style={{zIndex: 100}}
-            className="fixed top-0 flex bg-black bg-opacity-50 w-[100vw] h-full items-center justify-center "
+            className="fixed top-0 flex bg-black bg-opacity-50 w-[100vw] h-full items-center justify-center"
           >
             <div
               className="w-fit px-10 p-4 w-1/4 rounded-lg bg-white shadow dark:bg-stone-700 text-black dark:text-slate-200">

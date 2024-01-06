@@ -54,11 +54,7 @@ export default function Directory({
             <Folder className="w-6 h-6"/>
           ) : (
             <button onClick={() => toggleSelection(files.name)}>
-              {isSelected(files.name) ? (
-                <FolderMinus className="w-6 h-6 stroke-red-800 hover:fill-red-500"/>
-              ) : (
-                <FolderPlus className="w-6 h-6 hover:stroke-green-800 hover:fill-green-500"/>
-              )}
+              <Folder className="w-6 h-6"/>
             </button>
           )}
 
@@ -74,7 +70,7 @@ export default function Directory({
           </div>
         </div>
         {isExpanded &&
-          files.items.map((item) => (
+          files.items.sort((a, b) => a.type === "folder" ? -1 : 1).map((item) => (
             <Directory
               key={item.name}
               parent={files.name}

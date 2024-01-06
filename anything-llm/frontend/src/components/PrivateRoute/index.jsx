@@ -64,11 +64,12 @@ export function AdminRoute({Component}) {
 }
 
 export default function PrivateRoute(props) {
-  const {Component, analystRoute} = props;
+  const {Component, analystRoute, termRoute} = props;
   const userAuth = useIsAuthenticated();
   const authed = userAuth.isAuthd;
   const isCoder = userAuth.isCoder;
   if (authed === null) return <FullScreenLoader/>;
 
-  return authed ? <Component isCoder={isCoder} analystRoute={analystRoute}/> : <Navigate to={paths.home()}/>;
+  return authed ? <Component isCoder={isCoder} termRoute={termRoute} analystRoute={analystRoute}/> :
+    <Navigate to={paths.home()}/>;
 }
