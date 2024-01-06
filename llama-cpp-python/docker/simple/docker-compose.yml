@@ -12,7 +12,7 @@ services:
       DEVICE: ${DEVICE}
       N_CTX: ${N_CTX}
       COMPLETION_MODEL_NAME: ${COMPLETION_MODEL_NAME}
-      N_GPU_LAYERS: ${N_GPU_LAYERS}
+      # N_GPU_LAYERS: ${N_GPU_LAYERS}
       CHAT_FORMAT: ${CHAT_FORMAT}    
       TRANSFORMERS_OFFLINE: 1
     build:
