@@ -3,6 +3,7 @@ process.env.NODE_ENV === "development"
   : require("dotenv").config();
 
 const express = require("express");
+const chardet = require("chardet");
 const bodyParser = require("body-parser");
 const serveIndex = require("serve-index");
 const cors = require("cors");
@@ -57,7 +58,6 @@ app.use("/api", apiRouter);
 
 // WS+SSH FOR CODER MODE
 if (process.env.IS_CODER === 'TRUE') {
-  const {sem_search} = require("./utils/AiProviders/openAi/pseudo_search");
 
   let activeStream = null;
 
@@ -83,23 +83,39 @@ if (process.env.IS_CODER === 'TRUE') {
       if (activeStream) {
         serverLog("@@@@@@@@@@ activeStream", command);
 
-        activeStream.write(command);
+        activeStream.write(command.trim() + "\n");
       } else {
         sshConnection.exec(command, (err, stream) => {
           if (err) {
             serverLog("Error executing command:", err);
-            ws.send("Error executing command");
+
+            let chatResult = {
+              id: uuidv4(),
+              type: "abort",
+              textResponse: "Error executing SSH command",
+              sources: [],
+              error: JSON.stringify(err),
+              close: true
+            };
+
+            ws.send(JSON.stringify(chatResult));
             return;
           }
 
           let result = "";
           stream
             .on("data", (data) => {
-              serverLog("@@@@@@@@@@ CommandOutput:", data, `${data.toString()}`);
+              const detectedEncoding = chardet.detect(data);
+              // const types = ['ascii', 'utf8', 'utf16le', 'ucs2', 'base64', 'base64url', 'latin1', 'binary', 'hex', detectedEncoding];
+
+              // for (let i = 0; i < types.length; i++) {
+              //   const type = types[i];
+              serverLog("@@@@@@@@@@ CommandOutput:", detectedEncoding, `${data.toString(detectedEncoding)}`);
+              // }
 
               result = data.toString().trim();
 
-              if (result === "> ") {
+              if (result === ">") {
                 activeStream = stream;
               }
 
@@ -206,17 +222,19 @@ if (process.env.IS_CODER === 'TRUE') {
 
     activeStream = null;
 
-    executeSSHCommand("interpreter\n", sshConnection, ws);
+    executeSSHCommand("interpreter", sshConnection, ws);
 
     ws.on("message", (message) => {
       const command = message.toString();
 
-      serverLog("##################### WS message", command);
+      serverLog("##################### WS message", process.env.USE_SEM_SEARCH === "TRUE", command, activeStream);
 
       if (activeStream) {
         // Получаем команду от клиента и выполняем ее на сервере SSH
 
         if (process.env.USE_SEM_SEARCH === "TRUE") {
+          const {sem_search} = require("./utils/AiProviders/openAi/pseudo_search");
+
           sem_search(command, NO_MATCHES_PHRASE, function (s) {
             if (s.error) {
               serverLog("##################### WS sem_search", s.error);

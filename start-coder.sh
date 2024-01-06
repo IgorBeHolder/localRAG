@@ -12,5 +12,5 @@ if [ ! -z "$container_id" ]; then
 fi
 
 cd coder && docker-compose -p localrag up -d --build
-# cd coder && docker-compose -p localrag up -d 
-) 
+# cd coder && docker-compose -p localrag up -d
+)

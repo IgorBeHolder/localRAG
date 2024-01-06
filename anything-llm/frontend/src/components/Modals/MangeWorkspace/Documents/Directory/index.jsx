@@ -69,7 +69,7 @@ export default function Directory({
           </div>
         </div>
         {isExpanded &&
-          files.items.map((item) => (
+          files.items.sort((a, b) => a.type === "folder" ? -1 : 1).map((item) => (
             <Directory
               key={item.name}
               parent={files.name}

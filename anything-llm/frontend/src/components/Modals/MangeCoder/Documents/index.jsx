@@ -22,8 +22,6 @@ export default function DocumentSettings({workspace}) {
   async function fetchKeys(refetchWorkspace = false) {
     const coderFiles = await System.coderFiles();
 
-    console.log('coderFiles', coderFiles);
-
     const currentWorkspace = refetchWorkspace
       ? await Workspace.bySlug(slug ?? workspace.slug)
       : workspace;
@@ -84,8 +82,11 @@ export default function DocumentSettings({workspace}) {
 
   const confirmChanges = (e) => {
     e.preventDefault();
-    const changes = docChanges();
-    changes.adds.length > 0 ? setShowConfirmation(true) : updateWorkspace(e);
+
+    console.log("confirmChanges");
+
+    // const changes = docChanges();
+    // changes.adds.length > 0 ? setShowConfirmation(true) : updateWorkspace(e);
   };
 
   const updateWorkspace = async (e) => {
@@ -141,7 +142,7 @@ export default function DocumentSettings({workspace}) {
         newDocs = [filepath];
       }
 
-      const combined = [...selectedFiles, ...newDocs];
+      const combined = [...newDocs];
       setSelectFiles([...new Set(combined)]);
     }
   };
@@ -152,7 +153,7 @@ export default function DocumentSettings({workspace}) {
         <div className="p-6 flex h-full w-full max-h-[80vh] overflow-y-scroll">
           <div className="flex flex-col gap-y-1 w-full">
             <p className="text-slate-200 dark:text-stone-300 text-center">
-              загрузка файлов рабочего пространства
+              загрузка файлов аналитики
             </p>
           </div>
         </div>
@@ -207,10 +208,10 @@ export default function DocumentSettings({workspace}) {
         className={`flex items-center flex-wrap justify-end p-4 md:p-6 space-x-4 border-t border-gray-200 rounded-b dark:border-gray-600`}>
         <div className="flex items-center">
           <button
-            disabled={saving}
+            disabled={saving || !selectedFiles.length}
             onClick={confirmChanges}
             type="submit"
-            className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+            className={"text-gray-500 bg-white rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 disabled:cursor-not-allowed" + (saving || !selectedFiles.length ? "" : " hover:bg-gray-100 hover:text-gray-900 focus:ring-4 focus:outline-none focus:ring-blue-300 focus:z-10 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600")}
           >
             {saving ? "Обработка..." : "Выбрать"}
           </button>
