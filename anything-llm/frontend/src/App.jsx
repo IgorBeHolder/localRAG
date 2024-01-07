@@ -34,6 +34,10 @@ export default function App() {
           />
           <Route
             path="/term/:slug"
+            element={<PrivateRoute termRoute={true} analystRoute={true} Component={WorkspaceChat}/>}
+          />
+          <Route
+            path="/xterm/:slug"
             element={<PrivateRoute termRoute={true} analystRoute={true} Component={SSHTerminal}/>}
           />
           <Route path="/accept-invite/:code" element={<InvitePage/>}/>

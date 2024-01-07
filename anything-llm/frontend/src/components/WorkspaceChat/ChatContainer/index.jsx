@@ -3,6 +3,7 @@ import ChatHistory from "./ChatHistory";
 import PromptInput from "./PromptInput";
 import Typewriter from "typewriter-effect/dist/core";
 import Convert from "ansi-to-html";
+import ansiHTML from "ansi-html";
 import GraphemeSplitter from "grapheme-splitter";
 import Workspace from "../../../models/workspace";
 import handleChat from "../../../utils/chat";
@@ -27,6 +28,8 @@ export default function ChatContainer({workspace, termRoute, isCoder, knownHisto
   const [connAttempt, setConnAttempt] = useState(1);
   const [chatHistory, setChatHistory] = useState(knownHistory);
   const [command, setCommand] = useState("");
+  const [termOutput, setTermOutput] = useState([]);
+
   // const [typeWriterStack, setTypeWriterStack] = useState([]);
   const [typeWriterIsBusy, setTypeWriterIsBusy] = useState(false);
   const [typeWriterRef, setTypeWriterRef] = useState(null);
@@ -152,7 +155,13 @@ export default function ChatContainer({workspace, termRoute, isCoder, knownHisto
 
     const onWsMessage = useCallback((msg) => {
       let chatResult = JSON.parse(msg.data);
-      console.log(chatResult.textResponse);
+      const htmlText = ansiHTML(chatResult.textResponse);
+
+      const ansiFormattedText = ansiHTML('\x1b[31mThis is \x1b[1mbold\x1b[0m and \x1b[34mblue\x1b[0m text.');
+
+      setTermOutput([...termOutput, ansiFormattedText, htmlText]);
+
+      console.log('onWsMessage', ansiFormattedText, htmlText, chatResult);
     }, [setLoadingResponse, setChatHistory, chatHistory]);
 
     const {sendMessage, lastMessage, readyState} = useWebSocket(socketUrl, {
@@ -469,9 +478,11 @@ export default function ChatContainer({workspace, termRoute, isCoder, knownHisto
     }
   };
 
-  const defaultCommandHandler = useCallback((cmd) => {
+  const defaultCommandHandler = useCallback((cmd, print) => {
     // console.log('defaultCommandHandler', cmd);
     setCommand(cmd.join(" "));
+
+    // print(`-PassedThrough:${cmd}: command not found`);
   }, [handleSubmit]);
 
   return (
@@ -482,8 +493,10 @@ export default function ChatContainer({workspace, termRoute, isCoder, knownHisto
         <Terminal
           key={"terminal_" + terminalKey}
           ref={terminalRef}
+          output={termOutput}
           watchConsoleLogging={true} // todo need a normal function to set text in terminal
-          promptSymbol=">"
+          // promptSymbol=">"
+          promptSymbol="👉"
           color="green"
           backgroundColor="black"
           barColor="black"

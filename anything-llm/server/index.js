@@ -94,22 +94,15 @@ if (process.env.IS_CODER === 'TRUE') {
         // screen: Для использования с программой screen.
         // vt220: Эмуляция терминала DEC VT220.
 
-        // sshConnection.shell({
-        //   // term: 'xterm-color',
-        //   term: 'rxvt'
-        // }, (err, stream) => {
-        // if (err) {
-        //   throw err;
-        // }
-        //
-        // stream.on('close', () => {
-        //   console.log('Stream :: close');
-        //
-        // }).on('data', (data) => {
-        //   console.log('OUTPUT: ' + data);
-        // });
+        sshConnection.shell({
+          term: 'xterm-color',
+          // term: 'xterm-256color'
+        }, (err, stream) => {
+          if (err) {
+            throw err;
+          }
 
-        sshConnection.exec(command, (err, stream) => {
+          // sshConnection.exec(command, (err, stream) => {
           serverLog("xterm-color", err, stream);
 
           if (err) {

@@ -11,6 +11,8 @@ import {WS_RECONNECT_ATTEMPTS, WS_URL} from "../../../../../utils/constants.js";
 const SSH_HOST = process.env.SSH_HOST || "coder";
 const SSH_PORT = process.env.SSH_PORT || 22;
 
+let command = "";
+
 const SSHTerminal = () => {
   const terminalRef = useRef(null);
   const term = new Terminal({
@@ -20,28 +22,30 @@ const SSHTerminal = () => {
   });
   const fitAddonRef = useRef(new FitAddon());
 
-  const socket = new WebSocket(WS_URL);
+  // const socket = new WebSocket(WS_URL);
 
-  socket.addEventListener('open', (event) => {
-    console.warn('WebSocket connection opened');
+  // socket.addEventListener('open', (event) => {
+  //   console.warn('WebSocket connection opened');
+  //
+  //   const attachAddon = new AttachAddon(socket, {
+  //     bidirectional: true
+  //   });
+  //   term.loadAddon(attachAddon);
+  //
+  //   // Отправка сообщения на сервер
+  //   // socket.send('Hello, server!');
+  // });
+  //
+  // socket.addEventListener('message', (event) => {
+  //   console.warn(`Message from server: ${event.data}`);
+  //   // Обработка полученных данных от сервера
+  // });
+  //
+  // socket.addEventListener('close', (event) => {
+  //   console.warn('WebSocket connection closed');
+  // });
 
-    const attachAddon = new AttachAddon(socket);
-    term.loadAddon(attachAddon);
-
-    // Отправка сообщения на сервер
-    // socket.send('Hello, server!');
-  });
-
-  socket.addEventListener('message', (event) => {
-    console.warn(`Message from server: ${event.data}`);
-    // Обработка полученных данных от сервера
-  });
-
-  socket.addEventListener('close', (event) => {
-    console.warn('WebSocket connection closed');
-  });
-
-  // const {sendMessage, lastMessage, readyState, getWebSocket} = useWebSocket(WS_URL, {
+  // const {sendMessage, lastMessage, readyState} = useWebSocket(WS_URL, {
   //   shouldReconnect: (closeEvent) => true,
   //   share: true,
   //   reconnectAttempts: WS_RECONNECT_ATTEMPTS,
@@ -55,7 +59,7 @@ const SSHTerminal = () => {
   //     Math.min(Math.pow(2, attemptNumber) * 1000, 10000)
   //   }
   // });
-  //
+
   // const connectionStatus = {
   //   [ReadyState.CONNECTING]: "Connecting...",
   //   [ReadyState.OPEN]: "Open",
@@ -93,13 +97,20 @@ const SSHTerminal = () => {
     term.open(terminalRef.current);
 
     term.onKey(({key, domEvent}) => {
+      const code = key.charCodeAt(0);
       console.log('onKey', key, domEvent);
       console.log(key.charCodeAt(0));
-      if (key.charCodeAt(0) == 13) {
-        term.write('\n');
 
+      if (code === 127) {   // Backspace
+        term.write("\b \b");
+      } else if (code === 13) { // Enter
+        term.write('\r\n');
 
+        // sendMessage();
       } else {
+
+        command += key;
+
         term.write(key);
       }
     });
@@ -110,7 +121,7 @@ const SSHTerminal = () => {
     return () => {
       term.dispose();
     };
-  }, []);
+  }, [ ]);
 
   // useEffect(() => {
   //   console.warn('lastMessage', lastMessage);
