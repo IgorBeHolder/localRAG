@@ -68,7 +68,7 @@ async function v1_chat_completions(messages, temperature) {
   const MAX_TOKENS = process.env.MAX_TOKENS;
   const TOP_P = process.env.TOP_P;
   const TOP_K = process.env.TOP_K;
-  const STOP = ["<|im_end|>", "<|im_start|>", "<|end_of_turn|>"];
+  const STOP = ["<|im_end|>", "<|im_start|>", "<|end_of_turn|>", "<|prompter|>", "<|assistant|>"];
   const compl_model = global.COMPLETION_MODEL_NAME;
 
 
