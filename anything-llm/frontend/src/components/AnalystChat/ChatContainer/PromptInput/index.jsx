@@ -155,7 +155,7 @@ function CommandMenu({workspace, show, handleClick, hide}) {
     },
     {
       cmd: "/conversation",
-      description: "- перейти в режим чата (запоминает недавнюю историю чата)."
+      description: "- перейти в режим диалога (запоминает недавнюю историю чата)."
     },
     {
       cmd: "/query",

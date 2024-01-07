@@ -50,8 +50,8 @@ export default function PromptInput({
   };
 
   const simpleMode = (command, storageKey) => {
-    if (command === "/conversation") {
-      window.localStorage.setItem(storageKey, "conversation");
+    if (command === "/chat") {
+      window.localStorage.setItem(storageKey, "chat");
       window.dispatchEvent(new Event("workspace_chat_mode_update"));
       window.location = "/workspace/" + workspace.name;
       return false;
@@ -289,8 +289,8 @@ function CommandMenu({workspace, show, handleClick, hide, mode, isCoder}) {
   if (!show) return null;
   const COMMANDS = [
     {
-      cmd: "/conversation",
-      description: "- перейти в режим чата (запоминает недавнюю историю чата)."
+      cmd: "/chat",
+      description: "- перейти в режим диалога (запоминает недавнюю историю чата)."
     },
     {
       cmd: "/query",
