@@ -127,7 +127,7 @@ async function chatWithWorkspace(
         message,
         workspace
       );
-      const data = { text: response, sources: [], type: "query" };
+      const data = { text: response, sources: [], type: chatMode };
 
       await WorkspaceChats.new({
         workspaceId: workspace.id,
