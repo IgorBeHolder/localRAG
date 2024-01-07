@@ -76,6 +76,9 @@ COPY interpreter/core/llm/setup_openai_coding_llm.py \
 COPY interpreter/core/llm/convert_to_coding_llm.py \
     /usr/local/lib/python3.11/site-packages/interpreter/core/llm/convert_to_coding_llm.py
 
+# COPY interpreter/core/core.py \
+#     /usr/local/lib/python3.11/site-packages/interpreter/core/core.py
+
 
     # RUN echo "interpreter && %reset" >> /home/coder/.bashrc
 
