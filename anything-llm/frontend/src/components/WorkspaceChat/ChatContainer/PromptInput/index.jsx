@@ -50,8 +50,8 @@ export default function PromptInput({
   };
 
   const simpleMode = (command, storageKey) => {
-    if (command === "/conversation") {
-      window.localStorage.setItem(storageKey, "conversation");
+    if (command === "/chat") {
+      window.localStorage.setItem(storageKey, "chat");
       window.dispatchEvent(new Event("workspace_chat_mode_update"));
       window.location = "/workspace/" + workspace.name;
       return false;
@@ -276,7 +276,7 @@ const Tracking = memo(({workspaceSlug}) => {
     <div className="flex flex-col md:flex-row w-full justify-center items-center gap-2 mb-2 px-4 mx:px-0">
       <p
         className="whitespace-nowrap bg-gray-200 dark:bg-stone-600 text-gray-800 dark:text-slate-400 text-xs px-2 rounded-lg font-mono text-center">
-        Режим чата: {chatMode === "conversation" ? "chat" : chatMode}
+        Режим диалога: {chatMode === "chat" ? "chat" : chatMode}
       </p>
       <p className="text-slate-400 text-xs text-center">
         Ответы системы могут быть неточными или недействительными. Используйте их с осторожностью.
@@ -289,7 +289,7 @@ function CommandMenu({workspace, show, handleClick, hide, mode, isCoder}) {
   if (!show) return null;
   const COMMANDS = [
     {
-      cmd: "/conversation",
+      cmd: "/chat",
       description: "- перейти в режим чата (запоминает недавнюю историю чата)."
     },
     {
