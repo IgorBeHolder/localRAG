@@ -159,7 +159,7 @@ function CommandMenu({workspace, show, handleClick, hide}) {
     },
     {
       cmd: "/query",
-      description: "- перейти в режим запроса (не запоминает предыдущие чаты)."
+      description: "- перейти в режим вопрос-ответ (не запоминает предыдущие чаты)."
     },
     {
       cmd: "/reset",
