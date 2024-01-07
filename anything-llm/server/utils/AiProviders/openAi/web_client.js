@@ -12,10 +12,10 @@ function format_messages(messages = []) {
 
     // Determine the prefix based on the role
     const prefix = role === "user" ? user_prefix : (role === "system" ? BOS : assistance_prefix);
-    EOT = role === "system" ? EOS : end_of_turn;
+    postfix = role === "system" ? EOS : end_of_turn;
 
     // Add the formatted item to the history array
-    formattedHistory.push({ role: role, content: prefix + content + EOT });
+    formattedHistory.push({ role: role, content: prefix + content + postfix });
   });
 
   // Extract the content from each item and join them into a string
@@ -88,7 +88,6 @@ async function v1_chat_completions(messages, temperature) {
   console.log('v1_chat_completions: *** messages:', messages2string);
 
   const payload = {
-    // add the prefix to the model name like '/app'
     "model": compl_model,
     "messages": messages2string,
     "temperature": temperature,
