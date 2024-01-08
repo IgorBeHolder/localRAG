@@ -89,7 +89,7 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
             tw
               .typeString(s + (si === typeWriterStack.length - 1 ? "" : "\n"))
               .callFunction((e) => {
-                twUpdateScroll(e.elements.container);
+                twUpdateScroll(e.elements.cursor);
               })
               .pauseFor(TYPE_STRING_DELAY);
           });
@@ -123,7 +123,7 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
               .pauseFor(TYPE_STRING_DELAY)
               .typeString(s)
               .callFunction((e) => {
-                twUpdateScroll(e.elements.container);
+                twUpdateScroll(e.elements.cursor);
               });
           });
 
@@ -315,6 +315,7 @@ export default function ChatContainer({workspace, isCoder, knownHistory = []}) {
   const resetChatSSH = () => {
     if (mode === "analyst") {
       setCommand("%reset\n");
+      setChatHistory([]);
     }
   };
 
