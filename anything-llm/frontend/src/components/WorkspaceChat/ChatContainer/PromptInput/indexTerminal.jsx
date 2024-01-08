@@ -223,11 +223,11 @@ function CommandMenu({workspace, show, handleClick, hide, mode, isCoder}) {
   const COMMANDS = [
     {
       cmd: "/chat",
-      description: "- перейти в режим чата (запоминает недавнюю историю чата)."
+      description: "- перейти в режим чата (запоминает историю диалога)."
     },
     {
       cmd: "/query",
-      description: "- перейти в режим вопрос-ответ (не запоминает предыдущие чаты)."
+      description: "- перейти в режим вопрос-ответ (не запоминает историю диалога)."
     },
     {
       cmd: "/reset",
