@@ -95,8 +95,8 @@ if (process.env.IS_CODER === 'TRUE') {
         // vt220: Эмуляция терминала DEC VT220.
 
         sshConnection.shell({
-          term: 'xterm-color',
-          // term: 'xterm-256color'
+          // term: 'xterm-color',
+          term: 'xterm-256color'
         }, (err, stream) => {
           if (err) {
             throw err;

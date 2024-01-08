@@ -10,9 +10,12 @@ import handleChat from "../../../utils/chat";
 import useWebSocket, {ReadyState} from "react-use-websocket";
 import {ID_DEV, TYPE_EFFECT_DELAY, TYPE_STRING_DELAY, WS_RECONNECT_ATTEMPTS, WS_URL} from "../../../utils/constants.js";
 import {safeTagsReplace} from "../../../utils/functions.js";
+
+import Terminal from "../../../utils/termin-all/bundle/terminal-react.js";
+
 import renderMarkdown from "../../../utils/chat/markdown.js";
 
-import Terminal from "terminal-in-react/lib/bundle/terminal-react";
+// import Terminal from "terminal-in-react/lib/bundle/terminal-react";
 
 let typeWriterStack = [];
 
@@ -202,6 +205,17 @@ export default function ChatContainer({workspace, termRoute, isCoder, knownHisto
     useEffect(() => {
       sendCommand();
     }, [command]);
+
+    useEffect(() => {
+      console.log('terminalRef', terminalRef.current);
+
+      if (terminalRef.current) {
+        terminalRef.current.printToActive('#############################################');
+
+        terminalRef.current.printToActive('<span style="color:#ff0000;">This is <span style="font-weight:bold;">bold<span style="font-weight:normal;opacity:1;color:#fff;background:#000;"> and <span style="color:#0000ff;">blue</span> text.</span></span></span>');
+      }
+
+    }, [terminalRef]);
 
     useEffect(() => {
       setConnStatus(connectionStatus);
@@ -508,7 +522,7 @@ export default function ChatContainer({workspace, termRoute, isCoder, knownHisto
           descriptions={{
             popup: "alert"
           }}
-          msg="You can write anything here. Example - Hello! My name is Foo and I like Bar."
+          msg={`\x1b[31mThis is \x1b[1mbold\x1b[0m and \x1b[34mblue\x1b[0m text.`}
         />
         :
         <div className="main-box relative flex flex-col w-full h-full overflow-y-auto p-[16px] lg:p-[32px] !pb-0">

@@ -1,7 +1,8 @@
 import React, {useEffect, useRef, useCallback, useState} from "react";
 import useWebSocket, {ReadyState} from "react-use-websocket";
 import {WS_URL} from "../../../../../utils/constants.js";
-import Terminal from "terminal-in-react/lib/bundle/terminal-react";
+import Terminal from "terminal-in-react/lib/js";
+
 import {showModal} from "../../../../../store/popupSlice.js";
 import {useDispatch} from "react-redux";
 import {Menu} from "react-feather";
@@ -128,7 +129,7 @@ const TerminalComponent = ({handleSubmit, toggleMenu, setTextCommand, children})
         descriptions={{
           popup: "alert"
         }}
-        msg="You can write anything here. Example - Hello! My name is Foo and I like Bar."
+        msg="\x1b[31mThis is \x1b[1mbold\x1b[0m and \x1b[34mblue\x1b[0m text."
       /> : <span>WS Status: {connectionStatus}</span>}
     </div>
 
